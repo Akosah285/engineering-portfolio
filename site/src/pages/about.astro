@@ -1,0 +1,33 @@
+---
+/**
+ * /about/ route (plan §7.17, #6).
+ *
+ * Renders the about.mdx content via Astro 5's content collection.
+ * No JS, no demos — pure prose.
+ */
+import Layout from "../layouts/Layout.astro";
+import { getEntry, render } from "astro:content";
+
+const entry = await getEntry("about", "main");
+if (!entry) {
+  throw new Error(
+    "About entry missing — site/src/content/about/main.mdx required.",
+  );
+}
+const { Content } = await render(entry);
+const { title, description } = entry.data;
+---
+
+<Layout title={title} description={description} pagefindType="about">
+  <article class="about">
+    <Content />
+  </article>
+</Layout>
+
+<style>
+  .about {
+    max-width: 720px;
+    margin: 3rem auto 5rem;
+    padding: 0 1.25rem;
+  }
+</style>

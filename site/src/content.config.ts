@@ -41,4 +41,19 @@ const courses = defineCollection({
     }),
 });
 
-export const collections = { courses };
+const about = defineCollection({
+  type: "content",
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    photo: z.string().optional(),
+    photoAlt: z.string().optional(),
+    linkedinUrl: z.string().url(),
+    githubUrl: z.string().url(),
+    /** True once the 13-question interview has been answered + woven in. */
+    interviewComplete: z.boolean().default(false),
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { courses, about };

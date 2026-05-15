@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180" role="img" aria-label="Placeholder portrait silhouette in Pine green on Bone background">
+  <rect width="180" height="180" fill="#F5F1EA"/>
+  <circle cx="90" cy="72" r="32" fill="#1F4F45"/>
+  <path d="M30 180 C30 130, 60 110, 90 110 C120 110, 150 130, 150 180 Z" fill="#1F4F45"/>
+  <text x="90" y="170" text-anchor="middle" font-family="Inter, sans-serif" font-size="9" font-weight="600" fill="#F5F1EA" letter-spacing="1">PHOTO PENDING</text>
+</svg>

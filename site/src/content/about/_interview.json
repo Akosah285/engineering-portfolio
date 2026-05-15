@@ -1,0 +1,35 @@
+{
+  "$schema": "./_interview.schema.json",
+  "purpose": "13 questions sourced verbatim from plan §7.17. Author runs through these once when ready, paraphrases the answers into the matching MDX section, then sets `interviewComplete: true` in about.mdx frontmatter.",
+  "interviewComplete": false,
+  "sections": {
+    "bio": {
+      "wordTarget": "3-line bio",
+      "questions": [
+        "In one sentence, who are you and what do you do? (No 'engineer at a top company' — what makes YOU you?)",
+        "What's the one thing you'd want a recruiter to know about you in the first 5 seconds of landing on this page?",
+        "If you had to summarize your engineering identity in 3 words, what would they be?"
+      ]
+    },
+    "letter": {
+      "wordTarget": "150-250 words",
+      "questions": [
+        "Why does this site exist? (What problem does it solve for *you*, not for the recruiter?)",
+        "Who is this site really for? (Be honest — is it a recruiter, future you, your community, all three?)",
+        "What's the one thing you hope visitors take away from spending time here?"
+      ]
+    },
+    "journey": {
+      "wordTarget": "600-1000 words",
+      "questions": [
+        "Walk me through how you got into engineering. What was the spark? (Specific moment if you can remember one.)",
+        "What was the hardest moment in your engineering education or early career? What did you learn from it?",
+        "What's a project or course that fundamentally changed how you think? Why?",
+        "Tell me about a moment when something clicked. The 'aha' you remember most vividly.",
+        "What's a failure or mistake you're glad happened, in retrospect?",
+        "Where do you want to be in 5-10 years, and why? (Avoid generic; be specific about the *kind* of work.)",
+        "What's the one piece of advice you'd give a younger version of yourself entering this field?"
+      ]
+    }
+  }
+}

@@ -1,0 +1,34 @@
+---
+/**
+ * <Letter> — 150-250 words on why this site exists (plan §7.17 / #6).
+ */
+---
+
+<section class="letter" aria-labelledby="letter-heading">
+  <h2 id="letter-heading">A letter</h2>
+  <div class="letter__body">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .letter {
+    margin: 3rem 0;
+  }
+  .letter h2 {
+    font-family: "Source Serif 4 Variable", Georgia, serif;
+    font-size: 1.5rem;
+    margin: 0 0 1rem;
+    color: var(--color-text);
+  }
+  .letter__body {
+    font-family: "Source Serif 4 Variable", Georgia, serif;
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: var(--color-text);
+    max-width: 65ch;
+  }
+  .letter__body :global(p) {
+    margin: 0 0 1rem;
+  }
+</style>

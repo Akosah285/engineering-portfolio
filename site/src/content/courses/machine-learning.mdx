@@ -61,8 +61,71 @@ Every pixel gets mapped to its cluster's mean colour, so small K = aggressive
 compression (and a posterised look), large K = near-original fidelity. The
 palette under the panes is the K colours K-means picked.
 
+## Featured problems
+
+import FeaturedProblem from "../../components/FeaturedProblem.astro";
+import MathExpression from "../../components/demo-kit/MathExpression.astro";
+
+<FeaturedProblem
+  kind="Featured Solution"
+  title="Bias–variance decomposition for a polynomial fit"
+  attribution="Adapted from Dartmouth ENGS 89, SP20 — placeholder restatement pending author interview."
+  placeholder={true}
+>
+  <p>
+    *Paraphrased problem statement, in author's voice, will replace this
+    paragraph after the v1 ML interview (see issue #27).* Roughly: given
+    noisy samples drawn from a smooth underlying function, decompose the
+    expected squared prediction error of a polynomial fit of degree
+    <MathExpression latex="d" /> into bias², variance, and irreducible noise
+    terms — and reason about which side of the trade-off you sit on.
+  </p>
+  <p>
+    The starting point is the textbook decomposition for a fixed
+    <MathExpression latex="x" />:
+  </p>
+  <MathExpression
+    latex="\mathbb{E}\left[ \left( y - \hat f(x) \right)^2 \right] = \underbrace{\left( \mathbb{E}[\hat f(x)] - f(x) \right)^2}_{\text{bias}^2} + \underbrace{\mathrm{Var}\bigl(\hat f(x)\bigr)}_{\text{variance}} + \sigma^2"
+    display={true}
+  />
+  <p>
+    *Solution narrative + numerical example will be filled in by the author
+    so the reasoning is in their voice rather than reproduced from the
+    course solution. The interactive polynomial-regression demo above
+    already lets a reader feel the same trade-off without the algebra.*
+  </p>
+</FeaturedProblem>
+
+<FeaturedProblem
+  kind="Featured Reflection"
+  title="Why K-Nearest Neighbors is principled, not just intuitive"
+  attribution="Adapted from Dartmouth ENGS 89, SP20 — placeholder restatement pending author interview."
+  placeholder={true}
+>
+  <p>
+    *Paraphrased reflection, in author's voice, will replace this paragraph
+    after the v1 ML interview.* The honest version of the lesson: KNN felt
+    like a hand-wave the first time the author saw it — "just compare to
+    the nearest points" — and it took the longest of any algorithm in the
+    course to feel like a principled estimator rather than a heuristic.
+  </p>
+  <p>
+    The piece that finally clicked: KNN is a non-parametric estimate of the
+    posterior class probability, with a bandwidth controlled by
+    <MathExpression latex="k" />:
+  </p>
+  <MathExpression
+    latex="\hat P(y = c \mid x) = \frac{1}{k} \sum_{i \in N_k(x)} \mathbb{1}\{y_i = c\}"
+    display={true}
+  />
+  <p>
+    *Author's reflection on why this reframing changed the way they think
+    about lazy learners more generally is pending.*
+  </p>
+</FeaturedProblem>
+
 ## What's coming
 
-More featured problems and a written reflection are in development.
+A written reflection from the author's interview is in development.
 Track progress at
 [github.com/Akosah285/engineering-portfolio](https://github.com/Akosah285/engineering-portfolio).

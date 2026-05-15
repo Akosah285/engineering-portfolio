@@ -1,0 +1,74 @@
+---
+/**
+ * <Bio> — square photo + 3-line bio (plan §7.17 / #6).
+ *
+ * Photo path is read from the parent page's frontmatter; <Bio> just renders
+ * the wrapper. Children come from the MDX <Bio>...</Bio> slot.
+ */
+import { Image } from "astro:assets";
+
+interface Props {
+  photo?: string;
+  photoAlt?: string;
+}
+
+const { photo, photoAlt } = Astro.props;
+---
+
+<section class="bio" aria-labelledby="bio-heading">
+  <h2 id="bio-heading" class="visually-hidden">Bio</h2>
+  {photo && (
+    <img
+      src={photo}
+      alt={photoAlt ?? "Portrait"}
+      class="bio__photo"
+      width="180"
+      height="180"
+      loading="eager"
+    />
+  )}
+  <div class="bio__text">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .bio {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.5rem;
+    align-items: center;
+    margin: 2rem 0 3rem;
+  }
+  @media (max-width: 600px) {
+    .bio {
+      grid-template-columns: 1fr;
+      justify-items: center;
+      text-align: center;
+    }
+  }
+  .bio__photo {
+    width: 180px;
+    height: 180px;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 1px solid var(--color-text-muted);
+  }
+  .bio__text {
+    font-family: "Source Serif 4 Variable", Georgia, serif;
+    font-size: 1.125rem;
+    line-height: 1.55;
+    color: var(--color-text);
+  }
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>

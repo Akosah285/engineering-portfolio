@@ -1,0 +1,72 @@
+---
+/**
+ * <Closing> — LinkedIn + GitHub URLs + the "Built with Astro, Claude, and
+ * a lot of old PDFs" line (plan §7.17 / #6).
+ */
+
+interface Props {
+  linkedinUrl: string;
+  githubUrl: string;
+}
+
+const { linkedinUrl, githubUrl } = Astro.props;
+---
+
+<section class="closing" aria-labelledby="closing-heading">
+  <h2 id="closing-heading">Get in touch</h2>
+  <ul class="closing__links">
+    <li>
+      <a href={linkedinUrl} rel="noopener noreferrer" target="_blank">
+        LinkedIn
+      </a>
+    </li>
+    <li>
+      <a href={githubUrl} rel="noopener noreferrer" target="_blank">
+        GitHub
+      </a>
+    </li>
+  </ul>
+  <p class="closing__colophon">
+    Built with Astro, Claude, and a lot of old PDFs.
+  </p>
+</section>
+
+<style>
+  .closing {
+    margin: 3rem 0 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-text-muted);
+  }
+  .closing h2 {
+    font-family: "Source Serif 4 Variable", Georgia, serif;
+    font-size: 1.5rem;
+    margin: 0 0 1rem;
+    color: var(--color-text);
+  }
+  .closing__links {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem;
+    display: flex;
+    gap: 1.5rem;
+  }
+  .closing__links a {
+    color: var(--color-accent);
+    text-decoration: none;
+    font-family: "Inter Variable", sans-serif;
+    font-size: 1rem;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.15s ease;
+  }
+  .closing__links a:hover,
+  .closing__links a:focus-visible {
+    border-bottom-color: var(--color-accent);
+  }
+  .closing__colophon {
+    font-family: "Inter Variable", sans-serif;
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+    margin: 0;
+  }
+</style>

@@ -1,0 +1,118 @@
+---
+/**
+ * <FeaturedProblem> — typeset highlighted problem from coursework (#27).
+ *
+ * Structure (per plan §7.18):
+ *   - "Featured Solution" or "Featured Reflection" label
+ *   - Paraphrased problem statement (author's voice)
+ *   - Solution / reflection body (KaTeX-typeset math via <MathExpression>)
+ *   - Attribution line: "Adapted from Dartmouth ENGS XX, [term]"
+ *   - Optional `placeholder={true}` flag adds a visible "Author hasn't
+ *     verified this section in their own voice yet" notice — used until
+ *     the author runs the interview.
+ *
+ * Author can opt to mark the kind as "Featured Reflection" when the
+ * lesson is from a wrong answer; "Featured Solution" is reserved for
+ * answers the author endorses.
+ */
+
+interface Props {
+  kind: "Featured Solution" | "Featured Reflection";
+  title: string;
+  attribution: string;
+  placeholder?: boolean;
+}
+
+const { kind, title, attribution, placeholder = false } = Astro.props;
+---
+
+<aside
+  class:list={["featured-problem", { "featured-problem--placeholder": placeholder }]}
+  aria-labelledby={`fp-${title.replace(/[^a-z0-9]/gi, '-').toLowerCase()}-heading`}
+>
+  <header class="featured-problem__header">
+    <span class="featured-problem__kind">{kind}</span>
+    {placeholder && (
+      <span class="featured-problem__badge" aria-label="Awaiting author interview">
+        Placeholder · awaiting interview
+      </span>
+    )}
+  </header>
+  <h3
+    id={`fp-${title.replace(/[^a-z0-9]/gi, '-').toLowerCase()}-heading`}
+    class="featured-problem__title"
+  >
+    {title}
+  </h3>
+  <div class="featured-problem__body">
+    <slot />
+  </div>
+  <footer class="featured-problem__footer">
+    <small>{attribution}</small>
+  </footer>
+</aside>
+
+<style>
+  .featured-problem {
+    margin: 2.5rem 0;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid color-mix(in srgb, var(--color-accent) 30%, var(--color-text-muted));
+    border-left: 4px solid var(--color-accent);
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--color-accent) 4%, var(--color-surface));
+  }
+  .featured-problem--placeholder {
+    border-left-color: var(--color-text-muted);
+    background: color-mix(in srgb, var(--color-text-muted) 8%, var(--color-surface));
+  }
+  .featured-problem__header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+  .featured-problem__kind {
+    font-family: "Inter Variable", sans-serif;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-accent);
+  }
+  .featured-problem--placeholder .featured-problem__kind {
+    color: var(--color-text-muted);
+  }
+  .featured-problem__badge {
+    padding: 0.125rem 0.5rem;
+    border-radius: 999px;
+    background: var(--color-text-muted);
+    color: var(--color-bg);
+    font-family: "Inter Variable", sans-serif;
+    font-size: 0.6875rem;
+    font-weight: 500;
+  }
+  .featured-problem__title {
+    margin: 0 0 1rem;
+    font-family: "Source Serif 4 Variable", Georgia, serif;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+  .featured-problem__body {
+    color: var(--color-text);
+    font-family: "Source Serif 4 Variable", Georgia, serif;
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+  .featured-problem__body :global(p) {
+    margin: 0 0 0.875rem;
+  }
+  .featured-problem__footer {
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px dashed var(--color-text-muted);
+    color: var(--color-text-muted);
+    font-family: "Inter Variable", sans-serif;
+    font-size: 0.8125rem;
+  }
+</style>

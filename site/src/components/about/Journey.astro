@@ -1,0 +1,45 @@
+---
+/**
+ * <Journey> — 600-1000 words autobiographical engineering arc (plan §7.17 / #6).
+ *
+ * MDX heading levels (## headings inside <Journey>) become <h3> via prose
+ * styling, so the Journey itself stays a single <h2> in the page outline.
+ */
+---
+
+<section class="journey" aria-labelledby="journey-heading">
+  <h2 id="journey-heading">The journey</h2>
+  <div class="journey__body">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .journey {
+    margin: 3rem 0;
+  }
+  .journey h2 {
+    font-family: "Source Serif 4 Variable", Georgia, serif;
+    font-size: 1.5rem;
+    margin: 0 0 1.5rem;
+    color: var(--color-text);
+  }
+  .journey__body {
+    font-family: "Source Serif 4 Variable", Georgia, serif;
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: var(--color-text);
+    max-width: 65ch;
+  }
+  .journey__body :global(h2) {
+    /* MDX ## inside <Journey> renders one level down semantically. */
+    font-family: "Source Serif 4 Variable", Georgia, serif;
+    font-size: 1.1875rem;
+    font-weight: 600;
+    margin: 1.75rem 0 0.75rem;
+    color: var(--color-accent);
+  }
+  .journey__body :global(p) {
+    margin: 0 0 1rem;
+  }
+</style>
