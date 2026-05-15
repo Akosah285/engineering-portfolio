@@ -5,6 +5,7 @@
     "ridge-regression",
     "lasso-regression",
     "k-means-clustering",
+    "k-nearest-neighbors",
     "monte-carlo",
     "rk4-integration",
     "newton-raphson",

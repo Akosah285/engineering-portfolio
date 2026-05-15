@@ -1,0 +1,29 @@
+{
+  "course": "machine-learning",
+  "displayName": "Machine Learning & Statistical Data Analysis",
+  "term": "SP20",
+  "interviewedOn": "2026-05-15",
+  "interviewer": "Copilot CLI (HITL session)",
+  "answers": [
+    {
+      "question": "In your own words, what was Machine Learning & Statistical Data Analysis about?",
+      "answer": "Machine learning and statistical data analysis thought us the foundations of machine learning and the math behind it."
+    },
+    {
+      "question": "What was the hardest piece of the course for you?",
+      "answer": "The math steps were fine as I had taken Linear Algebra in a previous term. I guess the hardest concept for me to grab was K-Nearest neighbors"
+    },
+    {
+      "question": "What did you build in the course?",
+      "answer": "Spam dectection, price prediction, cancer classification,etc"
+    },
+    {
+      "question": "What stuck with you after the course ended?",
+      "answer": "Having the correct model comes with iteration and finding the right balance for the problem you are trying to solve. A big thing that stuck with me and something that applies generally was thinking about bias"
+    },
+    {
+      "question": "What would you do differently if you took the course again?",
+      "answer": "This was during covid but I think I would have pushed deeper on the final project and do a lot of extra credit stuff"
+    }
+  ]
+}
