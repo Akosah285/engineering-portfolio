@@ -14,9 +14,11 @@ import { PresetCarouselShakedown } from "../../components/demo-kit/PresetCarouse
 import { DemoKitShakedown } from "../../components/demo-kit/DemoKitShakedown";
 import { GradientDescentVisualizer } from "../../components/demos/machine-learning/gradient-descent/GradientDescentVisualizer";
 import { PolynomialRegression } from "../../components/demos/machine-learning/polynomial-regression/PolynomialRegression";
+import { KMeansImageCompression } from "../../components/demos/machine-learning/k-means/KMeansImageCompression";
 import algorithmSource from "../../components/demo-kit/__sample__/algorithm.ts?raw";
 import gdAlgorithmSource from "../../components/demos/machine-learning/gradient-descent/algorithm.ts?raw";
 import polyAlgorithmSource from "../../components/demos/machine-learning/polynomial-regression/algorithm.ts?raw";
+import kmeansAlgorithmSource from "../../components/demos/machine-learning/k-means/algorithm.ts?raw";
 import samplePage from "../../assets/sample-favorite-page.png";
 ---
 
@@ -205,6 +207,38 @@ import samplePage from "../../assets/sample-favorite-page.png";
       <code>selectBestDegree</code> — all deterministic, all unit-tested.
     </p>
     <CodeReveal code={polyAlgorithmSource} lang="typescript" />
+
+    <h2>
+      <code>&lt;KMeansImageCompression&gt;</code> — third ML demo (#26)
+    </h2>
+    <p>
+      K-means clustering of RGB pixels. Pick a sample (or upload your own),
+      slide K from 2 to 32, watch the image quantise to K colours.
+      k-means++ initialisation + Lloyd's algorithm, deterministic given a seed.
+    </p>
+
+    <DemoChrome
+      title="K-Means Image Compression"
+      shareable={true}
+      demoSourcePath="site/src/components/demos/machine-learning/k-means/KMeansImageCompression.tsx"
+      narration="K-means clustering on RGB pixels. Visitor picks one of four bundled images (or uploads their own), slides K between 2 and 32, and sees the image quantised to K mean colours."
+    >
+      <KMeansImageCompression client:visible />
+      <Fragment slot="about">
+        Demonstrates K-means as colour quantisation. The right pane re-renders
+        every pixel in its cluster's mean colour, so smaller K = more
+        compression. The palette below the canvases shows the K colours the
+        algorithm picked.
+      </Fragment>
+    </DemoChrome>
+
+    <h3>Algorithm source (toggle to view)</h3>
+    <p>
+      Pure k-means with k-means++ initialisation, Lloyd's iteration, and a
+      deterministic Mulberry32 PRNG — exported from a separate module so the
+      visualizer imports the same code that's displayed below.
+    </p>
+    <CodeReveal code={kmeansAlgorithmSource} lang="typescript" />
   </article>
 </Layout>
 

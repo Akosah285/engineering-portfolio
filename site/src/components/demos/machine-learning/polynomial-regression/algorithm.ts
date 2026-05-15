@@ -131,13 +131,13 @@ function solveLinearSystem(A: number[][], b: number[]): number[] {
  */
 function gramMatrix(X: readonly number[][]): number[][] {
   const n = X.length;
-  const p = X[0]?.length;
+  const p = X[0]!.length;
   const G: number[][] = Array.from({ length: p }, () => new Array<number>(p).fill(0));
   for (let i = 0; i < p; i++) {
     for (let j = 0; j < p; j++) {
       let sum = 0;
       for (let k = 0; k < n; k++) {
-        sum += X[k]?.[i]! * X[k]?.[j]!;
+        sum += X[k]![i]! * X[k]![j]!;
       }
       G[i]![j] = sum;
     }
@@ -150,12 +150,12 @@ function gramMatrix(X: readonly number[][]): number[][] {
  */
 function transposeTimesVector(X: readonly number[][], y: readonly number[]): number[] {
   const n = X.length;
-  const p = X[0]?.length;
+  const p = X[0]!.length;
   const out = new Array<number>(p).fill(0);
   for (let j = 0; j < p; j++) {
     let sum = 0;
     for (let i = 0; i < n; i++) {
-      sum += X[i]?.[j]! * y[i]!;
+      sum += X[i]![j]! * y[i]!;
     }
     out[j] = sum;
   }
@@ -218,7 +218,7 @@ function fitLasso(
   lambda: number,
 ): number[] {
   const n = X.length;
-  const p = X[0]?.length;
+  const p = X[0]!.length;
   const beta = new Array<number>(p).fill(0);
 
   // Pre-compute column norms for the coordinate-descent updates.
@@ -226,7 +226,7 @@ function fitLasso(
   for (let j = 0; j < p; j++) {
     let s = 0;
     for (let i = 0; i < n; i++) {
-      s += X[i]?.[j]! * X[i]?.[j]!;
+      s += X[i]![j]! * X[i]![j]!;
     }
     colNormSq[j] = s;
   }
@@ -248,7 +248,7 @@ function fitLasso(
       // ρ_j = Xᵀ_j · (residuals + X_j · β_j) = Xᵀ_j · residuals + ||X_j||² β_j
       let rho = 0;
       for (let i = 0; i < n; i++) {
-        rho += X[i]?.[j]! * residuals[i]!;
+        rho += X[i]![j]! * residuals[i]!;
       }
       rho += norm * oldBeta;
 
@@ -264,7 +264,7 @@ function fitLasso(
       if (delta !== 0) {
         // Update residuals: residuals -= X_j * delta
         for (let i = 0; i < n; i++) {
-          residuals[i]! -= X[i]?.[j]! * delta;
+          residuals[i]! -= X[i]![j]! * delta;
         }
         beta[j] = newBeta;
         if (Math.abs(delta) > maxChange) maxChange = Math.abs(delta);

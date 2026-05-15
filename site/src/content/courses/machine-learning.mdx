@@ -20,6 +20,7 @@ draft: false
 
 import { GradientDescentVisualizer } from "../../components/demos/machine-learning/gradient-descent/GradientDescentVisualizer";
 import { PolynomialRegression } from "../../components/demos/machine-learning/polynomial-regression/PolynomialRegression";
+import { KMeansImageCompression } from "../../components/demos/machine-learning/k-means/KMeansImageCompression";
 
 <GradientDescentVisualizer client:idle />
 
@@ -51,8 +52,17 @@ starts chasing the noise instead of the signal. Then turn on **Ridge** or
 **Lasso** with a small λ and watch the same high-degree fit smooth back out.
 Lasso pushes most coefficients exactly to zero — sparsity for free.
 
+## K-means image compression — clustering as quantisation
+
+<KMeansImageCompression client:visible />
+
+Pick a sample (or upload your own image), then slide **K** between 2 and 32.
+Every pixel gets mapped to its cluster's mean colour, so small K = aggressive
+compression (and a posterised look), large K = near-original fidelity. The
+palette under the panes is the K colours K-means picked.
+
 ## What's coming
 
-More interactive demos and featured problems for this course are in
-development (K-Means Image Compression). Track progress at
+More featured problems and a written reflection are in development.
+Track progress at
 [github.com/Akosah285/engineering-portfolio](https://github.com/Akosah285/engineering-portfolio).
