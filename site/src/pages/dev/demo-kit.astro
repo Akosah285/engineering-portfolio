@@ -10,6 +10,7 @@ import Layout from "../../layouts/Layout.astro";
 import CodeReveal from "../../components/demo-kit/CodeReveal.astro";
 import FavoritePage from "../../components/demo-kit/FavoritePage.astro";
 import DemoChrome from "../../components/demo-kit/DemoChrome.astro";
+import { PresetCarouselShakedown } from "../../components/demo-kit/PresetCarouselShakedown";
 import algorithmSource from "../../components/demo-kit/__sample__/algorithm.ts?raw";
 import samplePage from "../../assets/sample-favorite-page.png";
 ---
@@ -85,6 +86,27 @@ import samplePage from "../../assets/sample-favorite-page.png";
       <Fragment slot="about">
         Some demos opt out of URL-fragment sharing because their state isn't
         meaningfully shareable (e.g., a pure animation with no parameters).
+      </Fragment>
+    </DemoChrome>
+
+    <h2><code>&lt;PresetCarousel&gt;</code> React island</h2>
+    <p>
+      Chip-based preset selector with ◀ Prev / Next ▶ controls. Doubles as
+      desktop preset selector and touch-device fallback for canvas-drag demos.
+      Hydrates on first visible.
+    </p>
+
+    <DemoChrome
+      title="PresetCarousel shakedown"
+      shareable={false}
+      demoSourcePath="site/src/components/demo-kit/PresetCarousel.tsx"
+      narration="Three named presets — Slow, Medium, Fast — selectable via chip clicks or the Prev/Next buttons. The current selection is reflected below the carousel."
+    >
+      <PresetCarouselShakedown client:visible />
+      <Fragment slot="about">
+        Demonstrates the demo-kit's preset-carousel primitive: keyboard-
+        accessible chips with ≥44×44 px tap targets, wrap-around Prev/Next, and
+        a React 19 island hydrated on visibility.
       </Fragment>
     </DemoChrome>
   </article>

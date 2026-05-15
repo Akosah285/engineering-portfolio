@@ -20,11 +20,17 @@
  */
 import { Code } from "astro:components";
 
+type CodeLang = Parameters<typeof Code>[0] extends infer P
+  ? P extends { lang?: infer L }
+    ? L
+    : string
+  : string;
+
 interface Props {
   /** Source code to display. Typically `import code from "./algorithm.ts?raw"`. */
   code: string;
   /** Language hint forwarded to Shiki (e.g., "typescript", "python", "javascript"). */
-  lang: string;
+  lang: NonNullable<CodeLang>;
   /** Override the default summary text shown when the block is collapsed. */
   summary?: string;
 }
