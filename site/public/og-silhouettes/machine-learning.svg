@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ML hero-demo silhouette — Gradient Descent Visualizer (closes #29).
+
+  Monochrome Pine (#00693e) silhouette evoking a contour-plot loss surface
+  with a gradient-descent trajectory tracing a path toward the minimum.
+
+  Used in:
+    1. The templated OG card for the Machine Learning course
+       (rendered to PNG at build time, embedded as the `logo` image).
+    2. Optionally on the live course page hero.
+
+  Geometry: 480 × 480 logical units; concentric ellipses around (260, 240)
+  representing a tilted bowl, plus a 5-step descent polyline from
+  (90, 90) → (252, 234).
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 480 480"
+  fill="none"
+  stroke="#00693e"
+  stroke-width="2.5"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <title>Gradient descent on a bowl-shaped loss surface</title>
+
+  <!-- Contour rings (concentric tilted ellipses) -->
+  <g opacity="0.55">
+    <ellipse cx="260" cy="240" rx="200" ry="150" transform="rotate(-18 260 240)" />
+    <ellipse cx="260" cy="240" rx="160" ry="118" transform="rotate(-18 260 240)" />
+    <ellipse cx="260" cy="240" rx="120" ry="88"  transform="rotate(-18 260 240)" />
+    <ellipse cx="260" cy="240" rx="80"  ry="58"  transform="rotate(-18 260 240)" />
+    <ellipse cx="260" cy="240" rx="42"  ry="30"  transform="rotate(-18 260 240)" />
+  </g>
+
+  <!-- Descent trajectory: zig-zag toward the minimum -->
+  <polyline
+    points="90,90 130,160 178,200 215,228 240,236 252,234"
+    stroke-width="4"
+    opacity="0.95"
+  />
+
+  <!-- Trajectory dots -->
+  <g fill="#00693e" stroke="none" opacity="0.95">
+    <circle cx="90"  cy="90"  r="6" />
+    <circle cx="130" cy="160" r="5" />
+    <circle cx="178" cy="200" r="5" />
+    <circle cx="215" cy="228" r="5" />
+    <circle cx="240" cy="236" r="5" />
+    <circle cx="252" cy="234" r="7" />
+  </g>
+
+  <!-- Cross-hair on the minimum -->
+  <g opacity="0.65">
+    <line x1="240" y1="234" x2="264" y2="234" />
+    <line x1="252" y1="222" x2="252" y2="246" />
+  </g>
+</svg>
