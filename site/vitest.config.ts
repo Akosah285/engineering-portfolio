@@ -5,5 +5,10 @@ export default defineConfig({
     globals: true,
     environment: "node",
     include: ["src/**/*.{test,spec}.{ts,tsx}", "src/**/__tests__/**/*.{test,spec}.{ts,tsx}"],
+    environmentMatchGlobs: [
+      ["src/lib/__tests__/**", "jsdom"],
+      ["src/components/**/__tests__/**", "jsdom"],
+    ],
   },
 });
+

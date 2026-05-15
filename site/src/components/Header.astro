@@ -1,0 +1,82 @@
+---
+const base = import.meta.env.BASE_URL;
+const navItems = [
+  { href: `${base}courses/`, label: "Courses" },
+  { href: `${base}about/`, label: "About" },
+  { href: `${base}search/`, label: "Search" },
+];
+---
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="wordmark" href={base}>
+      <span class="wordmark__name">Akwasi Akosah</span>
+      <span class="wordmark__descriptor">engineering portfolio</span>
+    </a>
+
+    <input
+      type="checkbox"
+      id="nav-toggle"
+      class="nav-toggle"
+      aria-label="Toggle navigation menu"
+    />
+    <label class="nav-toggle__button" for="nav-toggle" aria-hidden="true">
+      <span></span><span></span><span></span>
+    </label>
+
+    <nav class="site-nav" aria-label="Primary">
+      <ul>
+        {
+          navItems.map((item) => (
+            <li>
+              <a href={item.href}>{item.label}</a>
+            </li>
+          ))
+        }
+        <li>
+          <button
+            id="theme-toggle"
+            type="button"
+            class="theme-toggle"
+            aria-label="Toggle color theme"
+            title="Toggle color theme"
+          >
+            <span aria-hidden="true" data-theme-icon-light>☀</span>
+            <span aria-hidden="true" data-theme-icon-dark>☾</span>
+            <span class="visually-hidden">Toggle theme</span>
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script>
+  import {
+    applyTheme,
+    getStoredPreference,
+    resolveTheme,
+    setStoredPreference,
+    type ResolvedTheme,
+  } from "../lib/theme";
+
+  const button = document.getElementById("theme-toggle");
+  if (button) {
+    button.addEventListener("click", () => {
+      const current: ResolvedTheme =
+        document.documentElement.getAttribute("data-theme") === "dark"
+          ? "dark"
+          : "light";
+      const next: ResolvedTheme = current === "dark" ? "light" : "dark";
+      applyTheme(next);
+      setStoredPreference(next);
+    });
+  }
+
+  const mql = window.matchMedia("(prefers-color-scheme: dark)");
+  mql.addEventListener("change", () => {
+    if (getStoredPreference() === "system") {
+      applyTheme(resolveTheme("system"));
+    }
+  });
+</script>
