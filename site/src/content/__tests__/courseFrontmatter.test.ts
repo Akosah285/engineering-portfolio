@@ -243,6 +243,66 @@ describe("buildFrontmatterValidator — heroDemoLabel rules", () => {
   });
 });
 
+describe("buildFrontmatterValidator — techTags rules", () => {
+  it("defaults techTags to [] when omitted", () => {
+    const v = mkValidator();
+    const out = v.validate(valid());
+    expect(out.techTags).toEqual([]);
+  });
+
+  it("accepts an array of non-empty strings", () => {
+    const v = mkValidator();
+    const out = v.validate(
+      valid({ techTags: ["Python", "NumPy", "scikit-learn"] }),
+    );
+    expect(out.techTags).toEqual(["Python", "NumPy", "scikit-learn"]);
+  });
+
+  it("rejects non-array techTags", () => {
+    const v = mkValidator();
+    expect(() => v.validate(valid({ techTags: "Python" }))).toThrow(
+      CourseFrontmatterError,
+    );
+  });
+
+  it("rejects non-string entries", () => {
+    const v = mkValidator();
+    expect(() => v.validate(valid({ techTags: ["Python", 42] }))).toThrow(
+      CourseFrontmatterError,
+    );
+  });
+
+  it("rejects empty-string entries", () => {
+    const v = mkValidator();
+    expect(() => v.validate(valid({ techTags: ["Python", ""] }))).toThrow(
+      CourseFrontmatterError,
+    );
+  });
+
+  it("rejects whitespace-only entries", () => {
+    const v = mkValidator();
+    expect(() => v.validate(valid({ techTags: ["Python", "   "] }))).toThrow(
+      CourseFrontmatterError,
+    );
+  });
+
+  it("deduplicates while preserving order", () => {
+    const v = mkValidator();
+    const out = v.validate(
+      valid({ techTags: ["Python", "NumPy", "Python", "scikit-learn"] }),
+    );
+    expect(out.techTags).toEqual(["Python", "NumPy", "scikit-learn"]);
+  });
+
+  it("rejects more than 8 techTags", () => {
+    const v = mkValidator();
+    const tooMany = Array.from({ length: 9 }, (_, i) => `T${i}`);
+    expect(() => v.validate(valid({ techTags: tooMany }))).toThrow(
+      CourseFrontmatterError,
+    );
+  });
+});
+
 describe("buildFrontmatterValidator — bulk shape", () => {
   it("rejects non-object input", () => {
     const v = mkValidator();

@@ -61,6 +61,19 @@ const heading = displayName ?? frontmatter.title;
     }
 
     {
+      frontmatter.techTags.length > 0 && (
+        <section class="course-tech" aria-labelledby="tech-heading">
+          <h2 id="tech-heading">Tech</h2>
+          <ul class="course-tech__list" role="list">
+            {frontmatter.techTags.map((tag) => (
+              <li class="course-tech__tag">{tag}</li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {
       frontmatter.heroDemoLabel && (
         <aside class="course-hero-demo" aria-label="Hero demo placeholder">
           <p class="course-hero-demo__label">Hero demo</p>
@@ -167,6 +180,35 @@ const heading = displayName ?? frontmatter.title;
   .course-concepts__tag a:focus {
     background: var(--color-accent);
     color: var(--color-bg);
+  }
+
+  .course-tech {
+    margin: 2rem 0 3rem;
+  }
+  .course-tech h2 {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text-muted);
+    margin: 0 0 0.75rem;
+    font-weight: 600;
+  }
+  .course-tech__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .course-tech__tag {
+    display: inline-block;
+    padding: 0.25rem 0.625rem;
+    border: 1px solid var(--color-text-muted);
+    border-radius: 4px;
+    color: var(--color-text);
+    font-size: 0.8125rem;
+    font-family: "JetBrains Mono Variable", monospace;
   }
 
   .course-hero-demo {

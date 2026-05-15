@@ -31,6 +31,7 @@ export interface CourseFrontmatter {
   term: string;
   oneLineTakeaway: string;
   concepts: string[];
+  techTags: string[];
   heroDemoLabel?: string;
   publishedAt: string | null;
   draft: boolean;
@@ -50,6 +51,7 @@ export interface FrontmatterValidator {
 const TERM_RE = /^(SP|SU|FA|WI)\d{2}$/;
 const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const MAX_TAKEAWAY_LEN = 200;
+const MAX_TECH_TAGS = 8;
 
 function isPlainObject(x: unknown): x is Record<string, unknown> {
   return (
@@ -91,6 +93,39 @@ function parsePublishedAt(value: unknown): string | null {
     );
   }
   return value;
+}
+
+function parseTechTags(value: unknown): string[] {
+  if (value === undefined || value === null) return [];
+  if (!Array.isArray(value)) {
+    throw new CourseFrontmatterError(
+      `techTags: expected array, got ${typeof value}`,
+    );
+  }
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const t of value) {
+    if (typeof t !== "string") {
+      throw new CourseFrontmatterError(
+        `techTags: each entry must be a string, got ${typeof t}`,
+      );
+    }
+    if (t.trim() === "") {
+      throw new CourseFrontmatterError(
+        `techTags: entries must be non-empty / non-whitespace`,
+      );
+    }
+    if (!seen.has(t)) {
+      seen.add(t);
+      out.push(t);
+    }
+  }
+  if (out.length > MAX_TECH_TAGS) {
+    throw new CourseFrontmatterError(
+      `techTags: at most ${MAX_TECH_TAGS} entries, got ${out.length}`,
+    );
+  }
+  return out;
 }
 
 export function buildFrontmatterValidator(
@@ -153,6 +188,8 @@ export function buildFrontmatterValidator(
         );
       }
 
+      const techTags = parseTechTags(input.techTags);
+
       const publishedAt = parsePublishedAt(input.publishedAt);
 
       let draft = false;
@@ -170,6 +207,7 @@ export function buildFrontmatterValidator(
         term: termRaw,
         oneLineTakeaway: takeaway,
         concepts,
+        techTags,
         ...(heroDemoLabel !== undefined ? { heroDemoLabel } : {}),
         publishedAt,
         draft,

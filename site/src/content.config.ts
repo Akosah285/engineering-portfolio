@@ -24,6 +24,7 @@ const courses = defineCollection({
       term: z.string(),
       oneLineTakeaway: z.string(),
       concepts: z.array(z.string()).default([]),
+      techTags: z.array(z.string()).default([]),
       heroDemoLabel: z.string().optional(),
       publishedAt: z.string().nullable().default(null),
       draft: z.boolean().default(false),
