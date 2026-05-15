@@ -32,6 +32,8 @@ const heading = displayName ?? frontmatter.title;
   title={`${heading} — Engineering Portfolio`}
   description={frontmatter.oneLineTakeaway}
   ogType="article"
+  ogImage={`https://akosah285.github.io${base}og/courses/${slug}.png`}
+  ogImageAlt={`OG card for ${heading} — ${frontmatter.term}`}
   pagefindType="course"
   pagefindCourse={slug}
 >
