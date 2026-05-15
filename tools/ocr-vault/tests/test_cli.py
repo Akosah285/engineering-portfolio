@@ -869,3 +869,101 @@ class TestCropCommand:
         err = capsys.readouterr().err
         assert rc == 1
         assert "PDF not found" in err
+
+
+# ───────────────── re-ocr (#40) ─────────────────────────────────────────────
+
+
+class TestReocrCommand:
+    def test_dry_run_default_no_apply_says_so(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        ml_dir = tmp_path / "sidecars" / "machine-learning" / "hw1"
+        _write_rich_sidecar(ml_dir, page=1, confidence=0.4)
+        rc = main(
+            [
+                "re-ocr",
+                "--course",
+                "machine-learning",
+                "--low-confidence",
+                "--data-dir",
+                str(tmp_path),
+            ]
+        )
+        out = capsys.readouterr().out
+        assert rc == 0
+        assert "dry-run" in out.lower()
+        assert "pages selected" in out.lower()
+        assert "estimated cost" in out.lower()
+
+    def test_no_selector_errors_with_helpful_message(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        ml_dir = tmp_path / "sidecars" / "machine-learning" / "hw1"
+        _write_rich_sidecar(ml_dir, page=1)
+        rc = main(
+            [
+                "re-ocr",
+                "--course",
+                "machine-learning",
+                "--data-dir",
+                str(tmp_path),
+            ]
+        )
+        err = capsys.readouterr().err
+        assert rc == 1
+        assert "selector" in err.lower() or "filter" in err.lower()
+
+    def test_apply_with_mock_provider_runs_and_writes_sidecar(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        ml_dir = tmp_path / "sidecars" / "machine-learning" / "hw1"
+        img_dir = tmp_path / "page-images" / "machine-learning" / "hw1"
+        img_dir.mkdir(parents=True)
+        _write_rich_sidecar(ml_dir, page=1, confidence=0.4)
+        (img_dir / "page-1.png").write_bytes(b"PNGDATA")
+
+        rc = main(
+            [
+                "re-ocr",
+                "--course",
+                "machine-learning",
+                "--low-confidence",
+                "--apply",
+                "--provider",
+                "mock",
+                "--data-dir",
+                str(tmp_path),
+            ]
+        )
+        out = capsys.readouterr().out
+        assert rc == 0
+        assert "complete" in out.lower()
+        assert "pages re-ocr'd : 1" in out
+
+    def test_keep_history_archives_old_sidecar(
+        self, tmp_path: Path
+    ) -> None:
+        ml_dir = tmp_path / "sidecars" / "machine-learning" / "hw1"
+        img_dir = tmp_path / "page-images" / "machine-learning" / "hw1"
+        img_dir.mkdir(parents=True)
+        _write_rich_sidecar(ml_dir, page=1, confidence=0.4)
+        (img_dir / "page-1.png").write_bytes(b"PNG")
+
+        rc = main(
+            [
+                "re-ocr",
+                "--course",
+                "machine-learning",
+                "--low-confidence",
+                "--apply",
+                "--keep-history",
+                "--provider",
+                "mock",
+                "--data-dir",
+                str(tmp_path),
+            ]
+        )
+        assert rc == 0
+        assert (ml_dir / "page-1.v1.0.0.json").exists()
+        assert (ml_dir / "page-1.json").exists()

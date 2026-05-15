@@ -42,6 +42,15 @@ from ocr_vault.listings import (
 from ocr_vault.ocr_config import OcrConfig, OcrConfigError, load_ocr_config
 from ocr_vault.pdf_loader import MockPdfLoader, PdfLoader
 from ocr_vault.provider import ProviderError, get_provider
+from ocr_vault.reocr_orchestrator import (
+    ReocrOrchestrator,
+    ReocrOrchestratorError,
+)
+from ocr_vault.reocr_planner import (
+    ReocrFilter,
+    ReocrPlannerError,
+    build_reocr_plan,
+)
 from ocr_vault.search_index import SearchError
 from ocr_vault.sidecar_schema import (
     Sidecar,
@@ -512,6 +521,119 @@ def _cmd_crop(args: argparse.Namespace) -> int:
     return 0
 
 
+# ────────────────── command: re-ocr (#40) ─────────────────────────────────
+
+
+_REOCR_CONFIRM_THRESHOLD_USD = Decimal("5.00")
+_REOCR_ESTIMATED_COST_PER_PAGE_USD = Decimal("0.03")
+
+
+def _cmd_reocr(args: argparse.Namespace) -> int:
+    data_dir = Path(args.data_dir)
+
+    def _warn(m: str) -> None:
+        sys.stderr.write(f"[warn] {m}\n")
+
+    sidecars_by_course = _scan_sidecars(data_dir, warn=_warn)
+    config = _load_config(data_dir, warn=_warn)
+
+    threshold = config.threshold_for(args.course or "")
+
+    filter_ = ReocrFilter(
+        course=args.course,
+        low_confidence=args.low_confidence,
+        needs_review=args.needs_review,
+        from_version=args.from_version,
+        page_hash=args.page_hash,
+        featured_only=args.featured_only,
+        all=args.all,
+    )
+
+    try:
+        plan = build_reocr_plan(
+            sidecars_by_course,
+            filter_=filter_,
+            low_confidence_threshold=threshold,
+            estimated_cost_per_page_usd=_REOCR_ESTIMATED_COST_PER_PAGE_USD,
+        )
+    except ReocrPlannerError as e:
+        sys.stderr.write(f"[error] {e}\n")
+        return 1
+
+    sys.stdout.write(
+        "ocr-vault re-ocr — plan\n"
+        f"  pages selected     : {len(plan.pages)}\n"
+        f"  estimated cost     : ${plan.estimated_cost_usd}\n"
+        f"  est. per page      : ${_REOCR_ESTIMATED_COST_PER_PAGE_USD}\n"
+        f"  low-conf threshold : {threshold:.2f}\n"
+    )
+    if plan.sample_page is not None:
+        sys.stdout.write(
+            f"\nsample page (for diff preview): "
+            f"{plan.sample_page.course}/{plan.sample_page.sidecar.source.pdf} "
+            f"page {plan.sample_page.sidecar.source.page} "
+            f"({plan.sample_page.reason})\n"
+        )
+
+    if not args.apply:
+        sys.stdout.write(
+            "\n[dry-run] no API calls made. Re-run with --apply to execute.\n"
+        )
+        return 0
+
+    if (
+        plan.estimated_cost_usd > _REOCR_CONFIRM_THRESHOLD_USD
+        and not args.confirm
+    ):
+        sys.stderr.write(
+            f"[error] estimated cost ${plan.estimated_cost_usd} exceeds "
+            f"${_REOCR_CONFIRM_THRESHOLD_USD} — re-run with --confirm to proceed.\n"
+        )
+        return 1
+
+    if not plan.pages:
+        sys.stdout.write("\nno pages selected — nothing to do.\n")
+        return 0
+
+    try:
+        provider = get_provider(args.provider)
+    except ProviderError as e:
+        sys.stderr.write(f"[error] {e}\n")
+        return 1
+
+    ledger = CostLedger(
+        hard_cap_usd=Decimal(str(args.max_cost)),
+        soft_warn_usd=Decimal(str(args.warn_cost)),
+    )
+    index_path = data_dir / "index.sqlite"
+    index_path.parent.mkdir(parents=True, exist_ok=True)
+    index = SqliteIndex.open(index_path)
+
+    orch = ReocrOrchestrator(
+        provider=provider,
+        ledger=ledger,
+        index=index,
+        data_dir=data_dir,
+        provider_family=args.provider,
+    )
+
+    try:
+        result = orch.run(plan.pages, keep_history=args.keep_history)
+    except ReocrOrchestratorError as e:
+        sys.stderr.write(f"[error] {e}\n")
+        index.close()
+        return 1
+
+    sys.stdout.write(
+        "\nocr-vault re-ocr — complete\n"
+        f"  pages re-ocr'd : {result.pages_redone}\n"
+        f"  pages skipped  : {result.pages_skipped}\n"
+        f"  total cost     : ${result.cost_total_usd}\n"
+    )
+    index.close()
+    return 0
+
+
 # ────────────────── parser + main ──────────────────────────────────────────
 
 
@@ -713,6 +835,85 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Path to PDF originals (default: ./archive/originals).",
     )
     p_crop.set_defaults(func=_cmd_crop)
+
+    # ─── re-ocr (#40) ──────────────────────────────────────────────────
+    p_reocr = sub.add_parser(
+        "re-ocr",
+        help="Re-run OCR on filtered pages. Dry-run by default; --apply to execute.",
+    )
+    p_reocr.add_argument(
+        "--course",
+        default=None,
+        help="Limit to a single course slug (combine with another selector).",
+    )
+    p_reocr.add_argument(
+        "--low-confidence",
+        action="store_true",
+        help="Pick pages with confidence below the configured threshold.",
+    )
+    p_reocr.add_argument(
+        "--needs-review",
+        action="store_true",
+        help="Pick pages flagged needs_review.",
+    )
+    p_reocr.add_argument(
+        "--from-version",
+        default=None,
+        help="Pick pages whose sidecar.model.ocr_version matches exactly.",
+    )
+    p_reocr.add_argument(
+        "--page-hash",
+        default=None,
+        help="Pick a single specific page by sha256 page_hash.",
+    )
+    p_reocr.add_argument(
+        "--featured-only",
+        action="store_true",
+        help="Pick only pages whose blocks contain a problem_statement.",
+    )
+    p_reocr.add_argument(
+        "--all",
+        action="store_true",
+        help="Pick every sidecar (requires --confirm above the cost threshold).",
+    )
+    p_reocr.add_argument(
+        "--keep-history",
+        action="store_true",
+        help="Archive the prior sidecar to page-N.v<old-version>.json before overwriting.",
+    )
+    p_reocr.add_argument(
+        "--apply",
+        action="store_true",
+        help="Actually run the re-ocr (default is dry-run).",
+    )
+    p_reocr.add_argument(
+        "--confirm",
+        action="store_true",
+        help=f"Required when estimated cost > ${_REOCR_CONFIRM_THRESHOLD_USD}.",
+    )
+    p_reocr.add_argument(
+        "--provider",
+        default="mock",
+        help="OCR provider for re-extraction (default: mock).",
+    )
+    p_reocr.add_argument(
+        "--max-cost",
+        type=float,
+        default=50.0,
+        help="Hard cost cap in USD (default: 50).",
+    )
+    p_reocr.add_argument(
+        "--warn-cost",
+        type=float,
+        default=10.0,
+        help="Soft warning cost in USD (default: 10).",
+    )
+    p_reocr.add_argument(
+        "--data-dir",
+        default="data",
+        help="Path to the data/ root (default: ./data).",
+    )
+    p_reocr.set_defaults(func=_cmd_reocr)
 
     return parser
 
