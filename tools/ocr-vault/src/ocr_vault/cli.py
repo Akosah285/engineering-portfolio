@@ -26,6 +26,7 @@ from ocr_vault.cost_ledger import CostLedger
 from ocr_vault.ocr_config import OcrConfig, OcrConfigError, load_ocr_config
 from ocr_vault.pdf_loader import MockPdfLoader, PdfLoader
 from ocr_vault.provider import ProviderError, get_provider
+from ocr_vault.search_index import SearchError
 from ocr_vault.sidecar_schema import (
     Sidecar,
     SidecarValidationError,
@@ -167,6 +168,42 @@ def _cmd_add(args: argparse.Namespace) -> int:
     return 0
 
 
+# ────────────────── command: search ────────────────────────────────────────
+
+
+def _cmd_search(args: argparse.Namespace) -> int:
+    data_dir = Path(args.data_dir)
+    index_path = data_dir / "index.sqlite"
+
+    if not index_path.exists():
+        sys.stderr.write(
+            f"[error] no index at {index_path} — run `ocr-vault add` first.\n"
+        )
+        return 1
+
+    index = SqliteIndex.open(index_path)
+    course = args.course if args.course else None
+    try:
+        hits = index.search(args.query, course=course, limit=args.limit)
+    except SearchError as e:
+        sys.stderr.write(f"[error] {e}\n")
+        index.close()
+        return 1
+
+    if not hits:
+        sys.stdout.write(f"no matches for {args.query!r}\n")
+        index.close()
+        return 0
+
+    for h in hits:
+        sys.stdout.write(
+            f"{h.course}  {h.pdf}  page {h.page}  (score {h.score:.2f})\n"
+            f"    {h.snippet}\n"
+        )
+    index.close()
+    return 0
+
+
 # ────────────────── parser + main ──────────────────────────────────────────
 
 
@@ -233,6 +270,35 @@ def _build_parser() -> argparse.ArgumentParser:
         ),
     )
     p_add.set_defaults(func=_cmd_add)
+
+    p_search = sub.add_parser(
+        "search",
+        help=(
+            "Full-text search across OCR'd prose, LaTeX, and topics. "
+            "Supports phrase queries, OR / NOT, and column filters."
+        ),
+    )
+    p_search.add_argument(
+        "query",
+        help='FTS5 query string (e.g., "fourier OR convolution", "\\"gradient descent\\"").',
+    )
+    p_search.add_argument(
+        "--course",
+        default="",
+        help="Restrict matches to a single course slug (default: all).",
+    )
+    p_search.add_argument(
+        "--limit",
+        type=int,
+        default=10,
+        help="Maximum hits to print (default: 10).",
+    )
+    p_search.add_argument(
+        "--data-dir",
+        default="data",
+        help="Path to the data/ root (default: ./data).",
+    )
+    p_search.set_defaults(func=_cmd_search)
 
     return parser
 

@@ -273,3 +273,10 @@ class AddOrchestrator:
             cost_usd=response.cost_usd,
             is_re_ocr=False,
         )
+        # Also index for FTS5 full-text search (#38). validate_sidecar
+        # already returned a typed Sidecar above; re-validate here so the
+        # orchestrator stays decoupled from the typed object's lifetime.
+        self.index.index_sidecar(
+            course=course_slug,
+            sidecar=validate_sidecar(sidecar_payload),
+        )

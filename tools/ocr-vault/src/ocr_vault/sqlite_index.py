@@ -21,6 +21,18 @@ from decimal import Decimal
 from pathlib import Path
 from typing import Any
 
+from ocr_vault.search_index import (
+    SearchHit,
+    init_search_table,
+)
+from ocr_vault.search_index import (
+    index_sidecar as _fts_index_sidecar,
+)
+from ocr_vault.search_index import (
+    search as _fts_search,
+)
+from ocr_vault.sidecar_schema import Sidecar
+
 
 class SqliteIndexError(RuntimeError):
     """Raised on operations against a closed or unhealthy index."""
@@ -72,6 +84,7 @@ class SqliteIndex:
         conn = sqlite3.connect(str(path))
         conn.row_factory = sqlite3.Row
         conn.executescript(_SCHEMA)
+        init_search_table(conn)
         conn.commit()
         return cls(conn)
 
@@ -178,6 +191,24 @@ class SqliteIndex:
             (course, threshold),
         ).fetchall()
         return [_row_to_page(r) for r in rows]
+
+    # ─── search (FTS5 — see search_index module) ────────────────────────
+
+    def index_sidecar(self, *, course: str, sidecar: Sidecar) -> None:
+        """Index a sidecar's prose + latex + topics for full-text search."""
+        conn = self._check_open()
+        _fts_index_sidecar(conn, course=course, sidecar=sidecar)
+
+    def search(
+        self,
+        query: str,
+        *,
+        course: str | None = None,
+        limit: int = 10,
+    ) -> list[SearchHit]:
+        """Run an FTS5 MATCH query. See :func:`search_index.search`."""
+        conn = self._check_open()
+        return _fts_search(conn, query, course=course, limit=limit)
 
     # ─── api_calls ──────────────────────────────────────────────────────
 

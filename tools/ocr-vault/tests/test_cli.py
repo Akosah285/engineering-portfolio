@@ -265,3 +265,78 @@ class TestAddCommand:
         assert rc2 == 0
         assert "pages cached    : 2" in out
         assert "pages processed : 0" in out
+
+
+class TestSearchCommand:
+    """Behavior of the `ocr-vault search` subcommand."""
+
+    def _ingest(self, tmp_path: Path) -> Path:
+        """Run a mock `add` to populate the index, return the data dir."""
+        data_dir = tmp_path / "data"
+        rc = main(
+            [
+                "add",
+                str(tmp_path / "hw1.pdf"),
+                "--course",
+                "ml",
+                "--provider",
+                "mock",
+                "--data-dir",
+                str(data_dir),
+                "--mock-pages",
+                "2",
+            ]
+        )
+        assert rc == 0
+        return data_dir
+
+    def test_search_finds_indexed_content(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        data_dir = self._ingest(tmp_path)
+        capsys.readouterr()
+        # MockProvider deterministic prose contains "mock OCR".
+        rc = main(
+            ["search", "mock", "--data-dir", str(data_dir)]
+        )
+        out = capsys.readouterr().out
+        assert rc == 0
+        assert "ml" in out
+        assert "mock" in out
+
+    def test_search_returns_zero_for_no_matches(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        data_dir = self._ingest(tmp_path)
+        capsys.readouterr()
+        rc = main(
+            [
+                "search",
+                "thisspecificwordwillneverappear",
+                "--data-dir",
+                str(data_dir),
+            ]
+        )
+        out = capsys.readouterr().out
+        assert rc == 0
+        assert "no matches" in out
+
+    def test_search_errors_when_no_index(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        rc = main(
+            ["search", "anything", "--data-dir", str(tmp_path / "missing")]
+        )
+        err = capsys.readouterr().err
+        assert rc == 1
+        assert "no index" in err
+
+    def test_search_invalid_query_returns_nonzero(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        data_dir = self._ingest(tmp_path)
+        capsys.readouterr()
+        rc = main(
+            ["search", '"unmatched', "--data-dir", str(data_dir)]
+        )
+        assert rc == 1
