@@ -1,0 +1,72 @@
+# Source originals (~2GB; never committed)
+archive/originals/
+
+# Private OCR data (full local archive; only public-relevant pages committed under data/)
+data/sidecars-private/
+data/page-images-private/
+data/index-private.sqlite
+
+# Node / pnpm
+node_modules/
+.pnpm-store/
+pnpm-debug.log*
+.npm/
+
+# Astro
+site/.astro/
+site/dist/
+.cache/
+
+# Python (ocr-vault)
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.tox/
+.venv/
+venv/
+.python-version
+
+# uv
+.uv-cache/
+
+# Environment / secrets
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+
+# IDE
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Build artifacts
+*.log
+*.tmp
+.turbo/
+
+# Pagefind output (regenerated at build)
+site/dist/pagefind/
+
+# OCR cost logs (regenerated; SQLite is the source of truth)
+ocr-cost-*.log
+
+# Local lighthouse reports
+.lighthouseci/
