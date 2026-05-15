@@ -165,3 +165,103 @@ class TestStatusCommand:
         assert rc == 0
         out = capsys.readouterr().out
         assert "ocr-vault status" in out
+
+
+# ───────────────── add command ─────────────────────────────────────────────
+
+
+class TestAddCommand:
+    def test_add_requires_mock_pages_until_real_loader_lands(
+        self,
+        tmp_path: Path,
+        capsys: pytest.CaptureFixture[str],
+    ) -> None:
+        rc = main(
+            [
+                "add",
+                str(tmp_path / "hw1.pdf"),
+                "--course",
+                "machine-learning",
+                "--data-dir",
+                str(tmp_path / "data"),
+            ]
+        )
+        captured = capsys.readouterr()
+        assert rc != 0
+        assert "mock-pages" in (captured.out + captured.err).lower()
+
+    def test_add_with_mock_pages_writes_sidecars(
+        self,
+        tmp_path: Path,
+        capsys: pytest.CaptureFixture[str],
+    ) -> None:
+        data_dir = tmp_path / "data"
+        rc = main(
+            [
+                "add",
+                str(tmp_path / "hw1.pdf"),
+                "--course",
+                "machine-learning",
+                "--provider",
+                "mock",
+                "--data-dir",
+                str(data_dir),
+                "--mock-pages",
+                "2",
+            ]
+        )
+        out = capsys.readouterr().out
+        assert rc == 0
+        assert "pages processed : 2" in out
+        sidecar_dir = data_dir / "sidecars" / "machine-learning" / "hw1"
+        assert (sidecar_dir / "page-1.json").exists()
+        assert (sidecar_dir / "page-2.json").exists()
+        assert (data_dir / "index.sqlite").exists()
+
+    def test_add_invalid_course_slug_returns_nonzero(
+        self,
+        tmp_path: Path,
+        capsys: pytest.CaptureFixture[str],
+    ) -> None:
+        rc = main(
+            [
+                "add",
+                str(tmp_path / "hw1.pdf"),
+                "--course",
+                "Machine Learning!",
+                "--provider",
+                "mock",
+                "--data-dir",
+                str(tmp_path / "data"),
+                "--mock-pages",
+                "1",
+            ]
+        )
+        assert rc != 0
+
+    def test_add_re_run_uses_cache(
+        self,
+        tmp_path: Path,
+        capsys: pytest.CaptureFixture[str],
+    ) -> None:
+        data_dir = tmp_path / "data"
+        argv = [
+            "add",
+            str(tmp_path / "hw1.pdf"),
+            "--course",
+            "ml",
+            "--provider",
+            "mock",
+            "--data-dir",
+            str(data_dir),
+            "--mock-pages",
+            "2",
+        ]
+        rc1 = main(argv)
+        capsys.readouterr()  # discard
+        rc2 = main(argv)
+        out = capsys.readouterr().out
+        assert rc1 == 0
+        assert rc2 == 0
+        assert "pages cached    : 2" in out
+        assert "pages processed : 0" in out
