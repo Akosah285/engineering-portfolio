@@ -1,0 +1,110 @@
+---
+/**
+ * <CodeReveal> — collapsible Shiki-highlighted code block.
+ *
+ * Pattern (plan §7.13 + #17):
+ *   demos/{course}/{name}/
+ *     ComponentName.tsx   ← imports algorithm.ts (run) AND algorithm.ts?raw (display)
+ *     algorithm.ts        ← single source of truth for the demo's core math
+ *     presets.ts          ← named starting points
+ *
+ * Use:
+ *   ---
+ *   import CodeReveal from "../../components/demo-kit/CodeReveal.astro";
+ *   import algorithmSource from "./algorithm.ts?raw";
+ *   ---
+ *   <CodeReveal code={algorithmSource} lang="typescript" />
+ *
+ * Highlighting runs at build via Astro's bundled Shiki — zero JS at runtime.
+ * Themes follow plan §6.10: Catppuccin Latte (light) / Mocha (dark).
+ */
+import { Code } from "astro:components";
+
+interface Props {
+  /** Source code to display. Typically `import code from "./algorithm.ts?raw"`. */
+  code: string;
+  /** Language hint forwarded to Shiki (e.g., "typescript", "python", "javascript"). */
+  lang: string;
+  /** Override the default summary text shown when the block is collapsed. */
+  summary?: string;
+}
+
+const { code, lang, summary = "Show algorithm code" } = Astro.props;
+---
+
+<details class="code-reveal">
+  <summary class="code-reveal__summary">
+    <span class="code-reveal__chevron" aria-hidden="true">›</span>
+    <span class="code-reveal__label">{summary}</span>
+  </summary>
+  <div class="code-reveal__body">
+    <Code code={code} lang={lang} />
+  </div>
+</details>
+
+<style>
+  .code-reveal {
+    margin: 1.5rem 0;
+    border: 1px solid var(--color-text-muted);
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--color-code-bg);
+  }
+
+  .code-reveal__summary {
+    cursor: pointer;
+    padding: 0.75rem 1rem;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: "JetBrains Mono Variable", monospace;
+    font-size: 0.875rem;
+    color: var(--color-text);
+    user-select: none;
+  }
+
+  /* Hide the default disclosure triangle in WebKit. */
+  .code-reveal__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .code-reveal__chevron {
+    display: inline-block;
+    transition: transform 0.2s ease;
+    transform: rotate(0deg);
+    font-size: 1.125rem;
+    color: var(--color-accent);
+    line-height: 1;
+  }
+
+  .code-reveal[open] > .code-reveal__summary .code-reveal__chevron {
+    transform: rotate(90deg);
+  }
+
+  .code-reveal__body {
+    padding: 0 1rem 1rem;
+    overflow-x: auto;
+  }
+
+  /* Astro's <Code> emits a <pre.astro-code>; tame its default styling. */
+  .code-reveal__body :global(pre) {
+    margin: 0;
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 0.8125rem;
+    line-height: 1.55;
+    font-family: "JetBrains Mono Variable", monospace;
+  }
+
+  /* Dark-mode swap for the dual-theme Shiki output (Astro emits
+     CSS variables on .astro-code when configured with `themes`). */
+  :global([data-theme="dark"]) .code-reveal__body :global(.astro-code),
+  :global([data-theme="dark"]) .code-reveal__body :global(.astro-code span) {
+    color: var(--shiki-dark) !important;
+    background-color: var(--shiki-dark-bg) !important;
+    font-style: var(--shiki-dark-font-style) !important;
+    font-weight: var(--shiki-dark-font-weight) !important;
+    text-decoration: var(--shiki-dark-text-decoration) !important;
+  }
+</style>

@@ -17,6 +17,12 @@ export default defineConfig({
   markdown: {
     remarkPlugins: [remarkMath],
     rehypePlugins: [[rehypeKatex, { strict: "ignore", output: "html" }]],
+    shikiConfig: {
+      themes: {
+        light: "catppuccin-latte",
+        dark: "catppuccin-mocha",
+      },
+    },
   },
   vite: {
     // Vitest looks at vitest.config.ts; nothing extra here.
