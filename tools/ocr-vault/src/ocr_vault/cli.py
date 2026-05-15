@@ -23,6 +23,11 @@ from pathlib import Path
 
 from ocr_vault.add_orchestrator import AddOrchestrator, OrchestratorError
 from ocr_vault.cost_ledger import CostLedger
+from ocr_vault.exporter import (
+    ExportFormat,
+    ExportNotFoundError,
+    export_problem,
+)
 from ocr_vault.listings import (
     list_pii,
     list_problems,
@@ -371,6 +376,48 @@ def _cmd_cost(args: argparse.Namespace) -> int:
     return 0
 
 
+# ────────────────── command: export (#42) ─────────────────────────────────
+
+
+def _cmd_export(args: argparse.Namespace) -> int:
+    data_dir = Path(args.data_dir)
+    course_slug: str = args.course
+    problem_id: str = args.problem_id
+    fmt = ExportFormat(args.format)
+
+    warnings: list[str] = []
+    sidecars = _course_sidecars(
+        data_dir, course_slug, warn=lambda m: warnings.append(m)
+    )
+    if not sidecars:
+        sys.stderr.write(
+            f"[error] no sidecars found for course {course_slug!r} in {data_dir}\n"
+        )
+        for w in warnings:
+            sys.stderr.write(f"[warn] {w}\n")
+        return 1
+
+    try:
+        snippet = export_problem(
+            sidecars,
+            course_slug=course_slug,
+            problem_id=problem_id,
+            fmt=fmt,
+        )
+    except ExportNotFoundError as e:
+        sys.stderr.write(f"[error] {e}\n")
+        for w in warnings:
+            sys.stderr.write(f"[warn] {w}\n")
+        return 1
+
+    sys.stdout.write(snippet)
+    if not snippet.endswith("\n"):
+        sys.stdout.write("\n")
+    for w in warnings:
+        sys.stderr.write(f"[warn] {w}\n")
+    return 0
+
+
 # ────────────────── parser + main ──────────────────────────────────────────
 
 
@@ -521,6 +568,28 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Also print a per-course cost table.",
     )
     p_cost.set_defaults(func=_cmd_cost)
+
+    # ─── export (#42) ──────────────────────────────────────────────────
+    p_export = sub.add_parser(
+        "export",
+        help="Export a featured problem as MDX / JSON / raw-text.",
+    )
+    p_export.add_argument("--course", required=True, help="Course slug.")
+    p_export.add_argument(
+        "--problem-id", required=True, help='Problem id (e.g. "3a").'
+    )
+    p_export.add_argument(
+        "--format",
+        choices=[f.value for f in ExportFormat],
+        default=ExportFormat.MDX.value,
+        help="Output format (default: mdx).",
+    )
+    p_export.add_argument(
+        "--data-dir",
+        default="data",
+        help="Path to the data/ root (default: ./data).",
+    )
+    p_export.set_defaults(func=_cmd_export)
 
     return parser
 

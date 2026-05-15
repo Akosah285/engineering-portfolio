@@ -664,3 +664,138 @@ class TestCostCommand:
         assert "by course" in out
         assert "ml" in out
         assert "fourier" in out
+
+
+# ───────────────── export (#42) ──────────────────────────────────────────
+
+
+class TestExportCommand:
+    """ocr-vault export reads sidecars and emits MDX / JSON / raw-text."""
+
+    def _seed_problem_sidecar(self, tmp_path: Path) -> Path:
+        ml_dir = tmp_path / "sidecars" / "machine-learning" / "hw1"
+        _write_rich_sidecar(
+            ml_dir,
+            page=1,
+            blocks=[
+                {
+                    "type": "problem_statement",
+                    "problem_id": "1a",
+                    "prose": "Compute the gradient of f.",
+                    "latex": r"\nabla f(x) = 2x",
+                },
+                {
+                    "type": "solution_step",
+                    "problem_id": "1a",
+                    "prose": "Apply the power rule.",
+                    "latex": "",
+                },
+            ],
+        )
+        return tmp_path
+
+    def test_emits_mdx_by_default(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        data_root = self._seed_problem_sidecar(tmp_path)
+        rc = main(
+            [
+                "export",
+                "--course",
+                "machine-learning",
+                "--problem-id",
+                "1a",
+                "--data-dir",
+                str(data_root),
+            ]
+        )
+        out = capsys.readouterr().out
+        assert rc == 0
+        assert "<FeaturedProblem" in out
+        assert "Compute the gradient" in out
+        assert "PARAPHRASE" in out
+        assert "Adapted from" in out
+
+    def test_emits_json(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        import json as _json
+
+        data_root = self._seed_problem_sidecar(tmp_path)
+        rc = main(
+            [
+                "export",
+                "--course",
+                "machine-learning",
+                "--problem-id",
+                "1a",
+                "--format",
+                "json",
+                "--data-dir",
+                str(data_root),
+            ]
+        )
+        out = capsys.readouterr().out
+        assert rc == 0
+        parsed = _json.loads(out)
+        assert parsed["problem_id"] == "1a"
+        assert parsed["course"] == "machine-learning"
+
+    def test_emits_raw_text(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        data_root = self._seed_problem_sidecar(tmp_path)
+        rc = main(
+            [
+                "export",
+                "--course",
+                "machine-learning",
+                "--problem-id",
+                "1a",
+                "--format",
+                "raw-text",
+                "--data-dir",
+                str(data_root),
+            ]
+        )
+        out = capsys.readouterr().out
+        assert rc == 0
+        assert "Compute the gradient" in out
+        assert "<FeaturedProblem" not in out
+
+    def test_missing_problem_id_errors(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        data_root = self._seed_problem_sidecar(tmp_path)
+        rc = main(
+            [
+                "export",
+                "--course",
+                "machine-learning",
+                "--problem-id",
+                "99zz",
+                "--data-dir",
+                str(data_root),
+            ]
+        )
+        err = capsys.readouterr().err
+        assert rc == 1
+        assert "99zz" in err
+
+    def test_missing_course_errors(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        rc = main(
+            [
+                "export",
+                "--course",
+                "nonexistent",
+                "--problem-id",
+                "1a",
+                "--data-dir",
+                str(tmp_path),
+            ]
+        )
+        err = capsys.readouterr().err
+        assert rc == 1
+        assert "no sidecars" in err
