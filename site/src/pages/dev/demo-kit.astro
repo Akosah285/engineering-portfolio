@@ -9,6 +9,7 @@
 import Layout from "../../layouts/Layout.astro";
 import CodeReveal from "../../components/demo-kit/CodeReveal.astro";
 import FavoritePage from "../../components/demo-kit/FavoritePage.astro";
+import DemoChrome from "../../components/demo-kit/DemoChrome.astro";
 import algorithmSource from "../../components/demo-kit/__sample__/algorithm.ts?raw";
 import samplePage from "../../assets/sample-favorite-page.png";
 ---
@@ -44,6 +45,48 @@ import samplePage from "../../assets/sample-favorite-page.png";
       src={samplePage}
       caption="My first attempt at Problem 3a — Gradient Descent on a parabola, learning the update rule by hand."
     />
+
+    <h2><code>&lt;DemoChrome&gt;</code> with share + GitHub link + about</h2>
+    <p>
+      Pine-tinted bordered card with title, "Try it" badge, share button (when
+      <code>shareable</code>), always-present "View on GitHub" link, collapsed
+      "About this demo" details, and a <code>&lt;noscript&gt;</code> fallback.
+    </p>
+
+    <DemoChrome
+      title="Sample shakedown demo"
+      shareable={true}
+      demoSourcePath="site/src/pages/dev/demo-kit.astro"
+      narration="A placeholder demo that does nothing visual, used to verify the demo-kit chrome renders correctly with all of its optional pieces enabled."
+    >
+      <div
+        style="display:flex;align-items:center;justify-content:center;min-height:120px;background:var(--color-math-bg);border-radius:8px;font-style:italic;color:var(--color-text-muted);"
+      >
+        (your interactive demo would render here)
+      </div>
+      <Fragment slot="about">
+        This is a placeholder description that would normally explain the
+        pedagogical purpose of the demo, list the controls, and note the
+        relevant equations.
+      </Fragment>
+    </DemoChrome>
+
+    <h3>Chrome with sharing disabled</h3>
+    <DemoChrome
+      title="Non-shareable variant"
+      shareable={false}
+      demoSourcePath="site/src/pages/dev/demo-kit.astro"
+    >
+      <div
+        style="display:flex;align-items:center;justify-content:center;min-height:80px;background:var(--color-math-bg);border-radius:8px;font-style:italic;color:var(--color-text-muted);"
+      >
+        (no share button should appear in the footer)
+      </div>
+      <Fragment slot="about">
+        Some demos opt out of URL-fragment sharing because their state isn't
+        meaningfully shareable (e.g., a pure animation with no parameters).
+      </Fragment>
+    </DemoChrome>
   </article>
 </Layout>
 
@@ -54,7 +97,8 @@ import samplePage from "../../assets/sample-favorite-page.png";
     padding: 0 1rem;
   }
   .dev-page h1,
-  .dev-page h2 {
+  .dev-page h2,
+  .dev-page h3 {
     font-family: "Source Serif 4 Variable", Georgia, serif;
   }
   .dev-page h2 {

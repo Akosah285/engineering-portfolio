@@ -1,0 +1,38 @@
+---
+/**
+ * <DemoNoScriptFallback> — accessibility / progressive-enhancement net.
+ *
+ * Every interactive demo wraps its content with this fallback so visitors
+ * without JavaScript (or with a failed script load) still get a textual
+ * description of what the demo does. The narration text doubles as the
+ * Pagefind search index entry (plan §6.14) and the <DemoNarration>
+ * aria-live region (plan §6.3).
+ *
+ * Renders inside <noscript> so it's *only* visible when JS is disabled.
+ */
+interface Props {
+  /** A short paragraph describing what the demo does in plain English. */
+  narration: string;
+}
+
+const { narration } = Astro.props;
+---
+
+<noscript>
+  <p class="demo-noscript">
+    <strong>Enable JavaScript to interact.</strong>{" "}
+    {narration}
+  </p>
+</noscript>
+
+<style is:global>
+  .demo-noscript {
+    margin: 1rem 0;
+    padding: 1rem;
+    border-left: 3px solid var(--color-accent);
+    background: var(--color-math-bg, var(--color-surface));
+    color: var(--color-text);
+    font-style: italic;
+    line-height: 1.55;
+  }
+</style>

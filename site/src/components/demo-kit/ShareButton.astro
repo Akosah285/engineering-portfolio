@@ -1,0 +1,103 @@
+---
+/**
+ * <ShareButton> — copies the current page URL to clipboard.
+ *
+ * Auto-rendered by <DemoChrome> when the demo opts in via
+ * `useDemoState({ shareable: true })`. The current URL includes the
+ * URL-fragment-serialized demo state (plan §6.1), so sharing the URL
+ * shares the exact same demo configuration.
+ *
+ * Shows "Copied!" for 2 seconds on success, "Copy failed" on failure
+ * (e.g., when the page is loaded over insecure HTTP and the Clipboard
+ * API is blocked). Reverts to the original label after the timeout.
+ *
+ * Zero hydration cost — the inline <script> attaches a click handler
+ * directly. No framework runtime needed.
+ */
+interface Props {
+  /** Optional label override. Defaults to "Share". */
+  label?: string;
+}
+
+const { label = "Share" } = Astro.props;
+---
+
+<button
+  type="button"
+  class="share-button"
+  data-share-button
+  data-default-label={label}
+  aria-live="polite"
+>
+  {label}
+</button>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>(
+    "[data-share-button]",
+  );
+
+  const resetDelay = 2000;
+
+  for (const button of buttons) {
+    const defaultLabel = button.dataset.defaultLabel ?? button.textContent ?? "Share";
+
+    button.addEventListener("click", async () => {
+      const url = window.location.href;
+      try {
+        await navigator.clipboard.writeText(url);
+        button.textContent = "Copied!";
+        button.classList.add("share-button--success");
+      } catch {
+        button.textContent = "Copy failed";
+        button.classList.add("share-button--error");
+      }
+      window.setTimeout(() => {
+        button.textContent = defaultLabel;
+        button.classList.remove(
+          "share-button--success",
+          "share-button--error",
+        );
+      }, resetDelay);
+    });
+  }
+</script>
+
+<style>
+  .share-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.375rem 0.75rem;
+    border: 1px solid var(--color-text-muted);
+    border-radius: 6px;
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-family: inherit;
+    font-size: 0.8125rem;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease,
+      border-color 0.15s ease;
+  }
+
+  .share-button:hover {
+    background: var(--color-math-bg, var(--color-surface));
+    border-color: var(--color-accent);
+  }
+
+  .share-button:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .share-button--success {
+    background: var(--color-accent);
+    color: var(--color-bg);
+    border-color: var(--color-accent);
+  }
+
+  .share-button--error {
+    border-color: #b3261e;
+    color: #b3261e;
+  }
+</style>
