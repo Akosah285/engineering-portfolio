@@ -1,6 +1,6 @@
 # Issue tracker: GitHub
 
-Issues and PRDs for this repo live as GitHub issues at `akwasiakosah-microsoft/engineering-portfolio`. Use the `gh` CLI for all operations.
+Issues and PRDs for this repo live as GitHub issues at `Akosah285/engineering-portfolio`. Use the `gh` CLI for all operations.
 
 ## Conventions
 

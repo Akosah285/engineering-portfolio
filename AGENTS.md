@@ -4,7 +4,7 @@ This file configures the engineering skills (`to-prd`, `to-issues`, `triage`, `t
 
 ## Issue tracker
 
-Issues and PRDs live as **GitHub Issues** in this repository (`akwasiakosah-microsoft/engineering-portfolio`). Use the `gh` CLI for all operations. See [`docs/agents/issue-tracker.md`](docs/agents/issue-tracker.md).
+Issues and PRDs live as **GitHub Issues** in this repository (`Akosah285/engineering-portfolio`). Use the `gh` CLI for all operations. See [`docs/agents/issue-tracker.md`](docs/agents/issue-tracker.md).
 
 ## Triage labels
 

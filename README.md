@@ -5,7 +5,8 @@ A public, polished, intensively-interactive engineering portfolio capturing **9 
 > **Status:** building in public. v0 spine in progress.
 
 **Author:** Akwasi Akosah · Dartmouth BA '21, TH '21
-**Live site:** https://akwasiakosah-microsoft.github.io/engineering-portfolio/ *(pending v0 deploy)*
+**Live site:** https://akosah285.github.io/engineering-portfolio/ *(pending v0 deploy)*
+**Repo:** https://github.com/Akosah285/engineering-portfolio
 
 ---
 
