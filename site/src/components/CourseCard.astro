@@ -1,0 +1,37 @@
+---
+import type { Course } from "../content/resolver";
+
+interface Props {
+  course: Course;
+  href: string;
+  isNew: boolean;
+}
+
+const { course, href, isNew } = Astro.props;
+const isPublished = course.publishedAt !== null;
+const preview =
+  course.comingSoonPreview ??
+  `Coming soon: bespoke interactive demos for ${course.displayName}.`;
+---
+
+{
+  isPublished ? (
+    <a class="course-card course-card--published" href={href}>
+      <span class="course-card__term">{course.term}</span>
+      <h3 class="course-card__title">{course.displayName}</h3>
+      {isNew && <span class="course-card__pill">New</span>}
+    </a>
+  ) : (
+    <div
+      class="course-card course-card--coming-soon"
+      aria-disabled="true"
+      tabindex="0"
+      title={preview}
+    >
+      <span class="course-card__term">{course.term}</span>
+      <h3 class="course-card__title">{course.displayName}</h3>
+      <span class="course-card__status">Coming soon</span>
+      <span class="course-card__preview">{preview}</span>
+    </div>
+  )
+}

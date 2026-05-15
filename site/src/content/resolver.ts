@@ -21,6 +21,11 @@ export interface Course {
    * "Coming Soon" placeholder and isPublished is false.
    */
   publishedAt: string | null;
+  /**
+   * One-sentence preview shown on hover/long-press of a Coming-Soon card.
+   * Optional; when missing, the card hover falls back to a generic phrase.
+   */
+  comingSoonPreview?: string;
 }
 
 export class CourseNotFoundError extends Error {

@@ -1,46 +1,210 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import MathExpression from "../components/demo-kit/MathExpression.astro";
+import CourseCard from "../components/CourseCard.astro";
+import { buildCourseResolver, type Course } from "../content/resolver";
+import { isNew } from "../content/isNew";
+import coursesData from "../content/_courses.json";
+
+const courses = coursesData as Course[];
+const resolver = buildCourseResolver(courses);
+const ordered = resolver.inOrder();
+const now = new Date();
+const base = import.meta.env.BASE_URL;
 ---
 
 <Layout title="Engineering Portfolio — Akwasi Akosah">
-  <h1>Engineering Portfolio</h1>
-  <p>
-    A public, interactive showcase of Dartmouth Thayer School engineering coursework
-    by <strong>Akwasi Akosah</strong>. Framed as a portfolio of record, not a job-search
-    site.
-  </p>
+  <section class="hero">
+    <p class="hero__eyebrow">Akwasi Akosah · Dartmouth Thayer School</p>
+    <h1 class="hero__headline">An engineering laboratory in the browser.</h1>
+    <p class="hero__subhead">
+      Nine courses' worth of coursework — from machine learning to mechatronics
+      — transformed into interactive demos, typeset problems, and a personal
+      reflection per course. Built as a portfolio of record.
+    </p>
+  </section>
 
-  <p>
-    Math renders at build time — for example, the kinetic-energy identity
-    <MathExpression latex={String.raw`E = \frac{1}{2} m v^2`} /> or the Gaussian integral
-  </p>
-
-  <MathExpression
-    latex={String.raw`\int_{-\infty}^{\infty} e^{-x^2}\, dx = \sqrt{\pi}`}
-    display={true}
-  />
-
-  <h2>Status</h2>
-  <p>
-    🚧 <em>v0 — scaffold deployed.</em> The full site is under construction; follow
-    progress at
-    <a href="https://github.com/Akosah285/engineering-portfolio/issues"
-      >github.com/Akosah285/engineering-portfolio</a
-    >.
-  </p>
-
-  <h2>Coming soon — 9 courses</h2>
-  <ul>
-    <li>Machine Learning &amp; Statistical Data Analysis</li>
-    <li>Fourier Transforms &amp; Complex Variables</li>
-    <li>Discrete &amp; Probabilistic Systems</li>
-    <li>Computational Methods</li>
-    <li>Solid Mechanics</li>
-    <li>Distributed Systems &amp; Fields</li>
-    <li>Mechatronics</li>
-    <li>Digital Electronics</li>
-    <li>Embedded Systems</li>
+  <h2 class="courses-heading">Courses</h2>
+  <ul class="course-grid" role="list">
+    {
+      ordered.map((c) => (
+        <li>
+          <CourseCard
+            course={c}
+            href={`${base}courses/${c.slug}/`}
+            isNew={isNew(c.publishedAt, now)}
+          />
+        </li>
+      ))
+    }
   </ul>
+
+  <p class="landing-footnote">
+    🚧 The site is being built in public — most courses are still
+    <em>Coming Soon</em>. Follow progress at
+    <a href="https://github.com/Akosah285/engineering-portfolio/issues">
+      github.com/Akosah285/engineering-portfolio
+    </a>.
+  </p>
 </Layout>
+
+<style>
+  .hero {
+    padding: 1rem 0 1.5rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2.5rem;
+  }
+  .hero__eyebrow {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0 0 0.5rem;
+  }
+  .hero__headline {
+    font-family: var(--font-serif);
+    font-size: clamp(2.2rem, 5vw + 1rem, 3.6rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin: 0 0 1.25rem;
+  }
+  .hero__subhead {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    max-width: 56ch;
+    margin: 0;
+  }
+
+  .courses-heading {
+    font-family: var(--font-serif);
+    margin: 0 0 1.25rem;
+  }
+
+  .course-grid {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 3rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+  .course-grid > li {
+    display: contents;
+  }
+  @media (max-width: 900px) {
+    .course-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 560px) {
+    .course-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .landing-footnote {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    border-top: 1px solid var(--border);
+    padding-top: 1.5rem;
+  }
+</style>
+
+<style is:global>
+  /* Course cards (global so the component selectors land in the same scope). */
+  .course-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.25rem 1.25rem 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    color: var(--text);
+    text-decoration: none;
+    min-height: 8rem;
+    transition:
+      border-color 120ms ease,
+      transform 120ms ease,
+      box-shadow 160ms ease;
+  }
+
+  .course-card__term {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-faint);
+    letter-spacing: 0.04em;
+  }
+
+  .course-card__title {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 1.15rem;
+    line-height: 1.25;
+    margin: 0;
+    color: var(--text);
+  }
+
+  .course-card--published:hover,
+  .course-card--published:focus-visible {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px var(--shadow);
+  }
+
+  .course-card--coming-soon {
+    color: var(--text-muted);
+    background: transparent;
+    cursor: not-allowed;
+  }
+  .course-card--coming-soon .course-card__title {
+    color: var(--text-muted);
+  }
+
+  .course-card__status {
+    font-size: 0.78rem;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-top: auto;
+  }
+
+  .course-card__preview {
+    position: absolute;
+    inset: auto 0.75rem 0.5rem 0.75rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.7rem 0.85rem;
+    color: var(--text);
+    font-size: 0.85rem;
+    line-height: 1.4;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(4px);
+    transition: opacity 140ms ease, transform 140ms ease;
+    box-shadow: 0 8px 24px var(--shadow);
+  }
+  .course-card--coming-soon:hover .course-card__preview,
+  .course-card--coming-soon:focus-visible .course-card__preview,
+  .course-card--coming-soon:focus-within .course-card__preview {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .course-card__pill {
+    position: absolute;
+    top: 0.7rem;
+    right: 0.7rem;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+  }
+</style>
+
 

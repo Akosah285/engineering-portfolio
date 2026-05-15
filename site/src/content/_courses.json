@@ -4,62 +4,72 @@
     "displayName": "Machine Learning & Statistical Data Analysis",
     "term": "SP20",
     "displayOrder": 4,
-    "publishedAt": null
+    "publishedAt": null,
+    "comingSoonPreview": "Gradient descent visualizer, polynomial regression with regularization, K-means image compression."
   },
   {
     "slug": "fourier-transforms",
     "displayName": "Fourier Transforms & Complex Variables",
     "term": "FA20",
     "displayOrder": 5,
-    "publishedAt": null
+    "publishedAt": null,
+    "comingSoonPreview": "Epicycle drawing animation, Fourier series builder, convolution, complex domain coloring + 4 more."
   },
   {
     "slug": "discrete-probability",
     "displayName": "Discrete & Probabilistic Systems",
     "term": "FA19",
     "displayOrder": 6,
-    "publishedAt": null
+    "publishedAt": null,
+    "comingSoonPreview": "Markov chain visualizer, Bayes' theorem, central limit theorem, PageRank toy + 6 more."
   },
   {
     "slug": "computational-methods",
     "displayName": "Computational Methods",
     "term": "SP20",
     "displayOrder": 3,
-    "publishedAt": null
+    "publishedAt": null,
+    "comingSoonPreview": "Lorenz solver, Newton's method, Gaussian elimination, eigenvalue power iteration + 7 more."
   },
   {
     "slug": "solid-mechanics",
     "displayName": "Solid Mechanics",
     "term": "FA20",
     "displayOrder": 7,
-    "publishedAt": null
+    "publishedAt": null,
+    "comingSoonPreview": "Interactive truss analyzer, beam deflection, Mohr's circle, 3D stress state + 6 more."
   },
   {
     "slug": "distributed-systems",
     "displayName": "Distributed Systems & Fields",
     "term": "WI20",
     "displayOrder": 8,
-    "publishedAt": null
+    "publishedAt": null,
+    "comingSoonPreview": "Charge field plotter, 1D wave equation, heat equation, Biot-Savart B-field + 5 more."
   },
   {
     "slug": "mechatronics",
     "displayName": "Mechatronics",
     "term": "SP21",
     "displayOrder": 1,
-    "publishedAt": null
+    "publishedAt": null,
+    "comingSoonPreview": "Robot drive/turn/maze/wall-follow video reel + PID simulator + 2-link inverse kinematics + 6 more."
   },
   {
     "slug": "digital-electronics",
     "displayName": "Digital Electronics",
     "term": "SP20",
     "displayOrder": 9,
-    "publishedAt": null
+    "publishedAt": null,
+    "comingSoonPreview": "Stopwatch FSM simulator, K-map minimizer, VHDL → waveform, ALU bit-slice + 5 more."
   },
   {
     "slug": "embedded-systems",
     "displayName": "Embedded Systems",
     "term": "WI21",
     "displayOrder": 2,
-    "publishedAt": null
+    "publishedAt": null,
+    "comingSoonPreview": "Solar tracker, traffic crossing, RPM display video reel + accelerometer + I²C/PWM/MQTT + 6 more."
   }
 ]
+
