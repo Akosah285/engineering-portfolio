@@ -23,6 +23,12 @@ from pathlib import Path
 
 from ocr_vault.add_orchestrator import AddOrchestrator, OrchestratorError
 from ocr_vault.cost_ledger import CostLedger
+from ocr_vault.cropper import (
+    BBox,
+    CropError,
+    PypdfiumPageRenderer,
+    crop_favorite_page,
+)
 from ocr_vault.exporter import (
     ExportFormat,
     ExportNotFoundError,
@@ -418,6 +424,94 @@ def _cmd_export(args: argparse.Namespace) -> int:
     return 0
 
 
+# ────────────────── command: crop (#41) ───────────────────────────────────
+
+
+def _parse_bbox(spec: str) -> BBox:
+    parts = spec.split(",")
+    if len(parts) != 4:
+        raise ValueError(
+            f"--bbox must be x,y,w,h (4 comma-separated ints), got {spec!r}"
+        )
+    try:
+        x, y, w, h = (int(p.strip()) for p in parts)
+    except ValueError as e:
+        raise ValueError(f"--bbox values must be integers: {spec!r}") from e
+    return BBox(x=x, y=y, width=w, height=h)
+
+
+def _find_sidecar_by_page_hash(
+    data_dir: Path, page_hash: str
+) -> tuple[str, Sidecar] | None:
+    """Walk all course sidecars; return (course_slug, Sidecar) on match."""
+    by_course = _scan_sidecars(data_dir, warn=lambda _m: None)
+    for course_slug, sidecars in by_course.items():
+        for sc in sidecars:
+            if sc.source.page_hash == page_hash:
+                return course_slug, sc
+    return None
+
+
+def _cmd_crop(args: argparse.Namespace) -> int:
+    data_dir = Path(args.data_dir)
+    archive_dir = Path(args.archive_dir)
+
+    try:
+        bbox = _parse_bbox(args.bbox)
+    except ValueError as e:
+        sys.stderr.write(f"[error] {e}\n")
+        return 1
+
+    found = _find_sidecar_by_page_hash(data_dir, args.page_hash)
+    if found is None:
+        sys.stderr.write(
+            f"[error] no sidecar found for page_hash={args.page_hash!r}\n"
+        )
+        return 1
+
+    course_slug, sidecar = found
+    pdf_stem = Path(sidecar.source.pdf).stem
+    pdf_path = archive_dir / course_slug / sidecar.source.pdf
+    if not pdf_path.exists():
+        # Fall back to a flat archive layout.
+        flat_pdf = archive_dir / sidecar.source.pdf
+        if flat_pdf.exists():
+            pdf_path = flat_pdf
+        else:
+            sys.stderr.write(
+                f"[error] source PDF not found at {pdf_path} or {flat_pdf}\n"
+            )
+            return 1
+
+    out_dir = data_dir / "page-images" / course_slug / pdf_stem
+    out_dir.mkdir(parents=True, exist_ok=True)
+    out_path = out_dir / f"page-{sidecar.source.page}-favorite.png"
+
+    renderer = PypdfiumPageRenderer()
+    try:
+        png = crop_favorite_page(
+            renderer=renderer,
+            pdf_path=pdf_path,
+            page_index=sidecar.source.page - 1,  # 1-indexed → 0-indexed
+            bbox=bbox,
+            sidecar=sidecar,
+            rotation_degrees=args.rotation,
+            redaction_regions=[],
+        )
+    except CropError as e:
+        sys.stderr.write(f"[error] crop failed: {e}\n")
+        return 1
+    except Exception as e:
+        sys.stderr.write(f"[error] PDF render failed: {e}\n")
+        return 1
+
+    out_path.write_bytes(png)
+    sys.stdout.write(
+        f"ocr-vault crop — wrote {out_path} ({len(png)} bytes)\n"
+    )
+    return 0
+
+
 # ────────────────── parser + main ──────────────────────────────────────────
 
 
@@ -590,6 +684,35 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Path to the data/ root (default: ./data).",
     )
     p_export.set_defaults(func=_cmd_export)
+
+    # ─── crop (#41) ────────────────────────────────────────────────────
+    p_crop = sub.add_parser(
+        "crop",
+        help="Re-render a PDF page at 400 DPI, crop to bbox, write favorite PNG.",
+    )
+    p_crop.add_argument("--page-hash", required=True, help="sha256:... page hash.")
+    p_crop.add_argument(
+        "--bbox",
+        required=True,
+        help="Crop bbox in 400-DPI pixels: x,y,w,h (e.g. 100,200,800,1066).",
+    )
+    p_crop.add_argument(
+        "--rotation",
+        type=int,
+        default=0,
+        help="Rotate the page CCW by this many degrees (0/90/180/270).",
+    )
+    p_crop.add_argument(
+        "--data-dir",
+        default="data",
+        help="Path to the data/ root (default: ./data).",
+    )
+    p_crop.add_argument(
+        "--archive-dir",
+        default="archive/originals",
+        help="Path to PDF originals (default: ./archive/originals).",
+    )
+    p_crop.set_defaults(func=_cmd_crop)
 
     return parser
 

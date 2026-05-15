@@ -799,3 +799,73 @@ class TestExportCommand:
         err = capsys.readouterr().err
         assert rc == 1
         assert "no sidecars" in err
+
+
+# ───────────────── crop (#41) ────────────────────────────────────────────
+
+
+class TestCropCommand:
+    """ocr-vault crop resolves a sidecar by page_hash and crops the PDF."""
+
+    def test_no_sidecar_for_hash_errors(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        rc = main(
+            [
+                "crop",
+                "--page-hash",
+                "sha256:doesnotexist",
+                "--bbox",
+                "0,0,100,100",
+                "--data-dir",
+                str(tmp_path),
+                "--archive-dir",
+                str(tmp_path / "archive"),
+            ]
+        )
+        err = capsys.readouterr().err
+        assert rc == 1
+        assert "no sidecar" in err
+
+    def test_invalid_bbox_errors(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        rc = main(
+            [
+                "crop",
+                "--page-hash",
+                "sha256:abc",
+                "--bbox",
+                "not,a,bbox",
+                "--data-dir",
+                str(tmp_path),
+                "--archive-dir",
+                str(tmp_path / "archive"),
+            ]
+        )
+        err = capsys.readouterr().err
+        assert rc == 1
+        assert "bbox" in err.lower()
+
+    def test_missing_pdf_errors(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        # Stage a sidecar referencing a PDF we did NOT create.
+        ml_dir = tmp_path / "sidecars" / "machine-learning" / "hw1"
+        _write_rich_sidecar(ml_dir, page=1)
+        rc = main(
+            [
+                "crop",
+                "--page-hash",
+                "sha256:" + ("0" * 63 + "1"),
+                "--bbox",
+                "0,0,100,100",
+                "--data-dir",
+                str(tmp_path),
+                "--archive-dir",
+                str(tmp_path / "archive"),
+            ]
+        )
+        err = capsys.readouterr().err
+        assert rc == 1
+        assert "PDF not found" in err
