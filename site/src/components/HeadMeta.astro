@@ -1,0 +1,75 @@
+---
+/**
+ * <HeadMeta> — shared head component (plan §7.13).
+ *
+ * Emits canonical URL, Open Graph, Twitter card, and basic descriptive
+ * meta tags. Defaults are sensible for the site — pages can override
+ * any of: title, description, ogType, ogImage, ogImageAlt, canonical.
+ *
+ * Per plan §7.16: NO RSS feed. NO analytics. NO comments.
+ *
+ * Usage (from Layout.astro):
+ *   <HeadMeta title={title} description={description} />
+ *
+ * Course pages can pass `ogType="article"` and a course-specific OG image
+ * once the templated OG card pipeline ships (#8).
+ */
+import { canonicalUrl } from "../lib/canonicalUrl";
+
+export interface Props {
+  title: string;
+  description: string;
+  /** "website" for landing/about/concept pages, "article" for course pages. */
+  ogType?: "website" | "article" | undefined;
+  /** Absolute URL to a 1200x630 OG image. Optional until #8 lands. */
+  ogImage?: string | undefined;
+  /** Alt text for the OG image; required when ogImage is provided. */
+  ogImageAlt?: string | undefined;
+  /** Override the auto-derived canonical URL (rare). */
+  canonical?: string | undefined;
+}
+
+const SITE_NAME = "Akwasi Akosah · Engineering Portfolio";
+const SITE_ORIGIN = "https://akosah285.github.io";
+
+const {
+  title,
+  description,
+  ogType = "website",
+  ogImage,
+  ogImageAlt,
+  canonical,
+} = Astro.props;
+
+const base = import.meta.env.BASE_URL;
+const computedCanonical =
+  canonical ?? canonicalUrl({ origin: SITE_ORIGIN, base }, Astro.url.pathname);
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={computedCanonical} />
+
+<!-- Open Graph -->
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:type" content={ogType} />
+<meta property="og:url" content={computedCanonical} />
+<meta property="og:site_name" content={SITE_NAME} />
+{
+  ogImage && (
+    <>
+      <meta property="og:image" content={ogImage} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      {ogImageAlt && <meta property="og:image:alt" content={ogImageAlt} />}
+    </>
+  )
+}
+
+<!-- Twitter -->
+<meta name="twitter:card" content={ogImage ? "summary_large_image" : "summary"} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+{ogImage && <meta name="twitter:image" content={ogImage} />}
+{ogImageAlt && <meta name="twitter:image:alt" content={ogImageAlt} />}

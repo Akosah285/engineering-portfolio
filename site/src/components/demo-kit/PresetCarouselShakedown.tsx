@@ -12,8 +12,10 @@ const SAMPLE_PRESETS = [
   { name: "Fast", state: { rate: 10.0, label: "Fast" } satisfies SamplePresetState },
 ];
 
-const FIRST_PRESET: SamplePresetState =
-  SAMPLE_PRESETS[0]?.state ?? { rate: 0, label: "" };
+const FIRST_PRESET: SamplePresetState = SAMPLE_PRESETS[0]?.state ?? {
+  rate: 0,
+  label: "",
+};
 
 /**
  * Shakedown consumer for <PresetCarousel> — used on /dev/demo-kit/ to verify

@@ -6,15 +6,22 @@ import "katex/dist/katex.min.css";
 import "../styles/global.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import HeadMeta from "../components/HeadMeta.astro";
 
 interface Props {
   title: string;
   description?: string;
+  ogType?: "website" | "article";
+  ogImage?: string;
+  ogImageAlt?: string;
 }
 
 const {
   title,
   description = "Akwasi Akosah — a public, interactive engineering portfolio of Dartmouth Thayer School coursework.",
+  ogType = "website",
+  ogImage,
+  ogImageAlt,
 } = Astro.props;
 
 const themeBootstrap = `
@@ -36,13 +43,18 @@ const themeBootstrap = `
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content={description} />
     <link
       rel="icon"
       type="image/svg+xml"
       href={`${import.meta.env.BASE_URL}favicon.svg`}
     />
-    <title>{title}</title>
+    <HeadMeta
+      title={title}
+      description={description}
+      ogType={ogType}
+      ogImage={ogImage}
+      ogImageAlt={ogImageAlt}
+    />
     <script is:inline set:html={themeBootstrap} />
   </head>
   <body>
