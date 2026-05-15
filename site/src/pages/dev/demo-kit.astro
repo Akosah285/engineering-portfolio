@@ -12,7 +12,9 @@ import FavoritePage from "../../components/demo-kit/FavoritePage.astro";
 import DemoChrome from "../../components/demo-kit/DemoChrome.astro";
 import { PresetCarouselShakedown } from "../../components/demo-kit/PresetCarouselShakedown";
 import { DemoKitShakedown } from "../../components/demo-kit/DemoKitShakedown";
+import { GradientDescentVisualizer } from "../../components/demos/machine-learning/gradient-descent/GradientDescentVisualizer";
 import algorithmSource from "../../components/demo-kit/__sample__/algorithm.ts?raw";
+import gdAlgorithmSource from "../../components/demos/machine-learning/gradient-descent/algorithm.ts?raw";
 import samplePage from "../../assets/sample-favorite-page.png";
 ---
 
@@ -136,6 +138,40 @@ import samplePage from "../../assets/sample-favorite-page.png";
         <code>&lt;DemoNarration&gt;</code> (aria-live transcript).
       </Fragment>
     </DemoChrome>
+
+    <h2>
+      <code>&lt;GradientDescentVisualizer&gt;</code> — first real ML demo (#24)
+    </h2>
+    <p>
+      The first hero ML demo, wired together from every demo-kit primitive:
+      preset carousel, sized canvas with contour-shaded loss surface and
+      animated trajectory, four sliders, KaTeX HUD, and aria-live narration.
+      State serializes to the URL fragment via <code>useDemoState</code>.
+    </p>
+
+    <DemoChrome
+      title="Gradient Descent Visualizer"
+      shareable={true}
+      demoSourcePath="site/src/components/demos/machine-learning/gradient-descent/GradientDescentVisualizer.tsx"
+      narration="Interactive gradient descent on four named loss surfaces (Quadratic, Saddle, Rosenbrock, Plateau). Pick a preset or drag the sliders to explore how learning rate and momentum affect convergence."
+    >
+      <GradientDescentVisualizer client:visible />
+      <Fragment slot="about">
+        Shows momentum-augmented gradient descent on four canonical
+        loss surfaces. Drag the sliders or pick a preset to see how
+        learning rate (η) and momentum (β) interact, then watch the
+        trajectory descend toward the minimum.
+      </Fragment>
+    </DemoChrome>
+
+    <h3>Algorithm source (toggle to view)</h3>
+    <p>
+      The pure algorithm — <code>gradientDescentStep</code>,
+      <code>isConverged</code>, <code>runDescent</code> — is exported from a
+      separate module so the visualizer imports the same code that's displayed
+      below.
+    </p>
+    <CodeReveal code={gdAlgorithmSource} lang="typescript" />
   </article>
 </Layout>
 

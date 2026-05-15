@@ -75,13 +75,10 @@ const heading = displayName ?? frontmatter.title;
 
     {
       frontmatter.heroDemoLabel && (
-        <aside class="course-hero-demo" aria-label="Hero demo placeholder">
-          <p class="course-hero-demo__label">Hero demo</p>
-          <p class="course-hero-demo__title">{frontmatter.heroDemoLabel}</p>
-          <p class="course-hero-demo__placeholder">
-            Interactive demo coming soon.
-          </p>
-        </aside>
+        <p class="course-hero-demo-label">
+          <span class="course-hero-demo-label__kicker">Hero demo</span>
+          {" "}{frontmatter.heroDemoLabel}
+        </p>
       )
     }
 
@@ -211,30 +208,19 @@ const heading = displayName ?? frontmatter.title;
     font-family: "JetBrains Mono Variable", monospace;
   }
 
-  .course-hero-demo {
-    margin: 2rem 0 3rem;
-    padding: 1.25rem 1.5rem;
-    border: 1px solid var(--color-accent);
-    border-radius: 12px;
-    background: var(--color-math-bg);
+  .course-hero-demo-label {
+    margin: 1.5rem 0 0.5rem;
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
   }
-  .course-hero-demo__label {
+  .course-hero-demo-label__kicker {
+    display: inline-block;
     text-transform: uppercase;
     font-size: 0.7rem;
     letter-spacing: 0.1em;
     color: var(--color-accent);
-    margin: 0 0 0.25rem;
     font-weight: 600;
-  }
-  .course-hero-demo__title {
-    margin: 0 0 0.25rem;
-    font-weight: 600;
-    font-size: 1.125rem;
-  }
-  .course-hero-demo__placeholder {
-    margin: 0;
-    color: var(--color-text-muted);
-    font-size: 0.875rem;
+    margin-right: 0.5rem;
   }
 
   .course-body :global(h2) {
