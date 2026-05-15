@@ -1,0 +1,246 @@
+---
+/**
+ * Dynamic route: /concepts/{tag}/
+ *
+ * Auto-generated for every tag in `_tags.json`. Lists every course (and,
+ * eventually, every demo and featured problem) that touches the tag.
+ *
+ * Plan §7.15: master list lives in `_tags.json`; opt-in Akwasi-authored
+ * definitions and reflections live in `src/content/concepts/{tag}.mdx`
+ * once authored (none exist yet at v0).
+ */
+import { getCollection, type CollectionEntry } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import {
+  buildTagIndex,
+  lookupTag,
+  type CourseLike,
+} from "../../content/concepts/tagIndex";
+import tagsData from "../../content/concepts/_tags.json";
+import coursesData from "../../content/_courses.json";
+import {
+  buildCourseResolver,
+  type Course,
+} from "../../content/resolver";
+
+type CourseEntry = CollectionEntry<"courses">;
+
+interface TagsJson {
+  tags: readonly string[];
+}
+
+export async function getStaticPaths() {
+  const vocabulary = (tagsData as TagsJson).tags;
+  return vocabulary.map((tag) => ({ params: { tag } }));
+}
+
+const { tag } = Astro.params as { tag: string };
+const base = import.meta.env.BASE_URL;
+const vocabulary = (tagsData as TagsJson).tags;
+
+const courses = coursesData as Course[];
+const resolver = buildCourseResolver(courses);
+const entries = (await getCollection("courses")) as CourseEntry[];
+
+// Only include courses that:
+//   1. Have a published MDX entry (not draft)
+//   2. Are listed in _courses.json with a publishedAt date
+const courseLikes: CourseLike[] = entries
+  .filter((entry) => {
+    const slug = entry.slug;
+    const course = courses.find((c) => c.slug === slug);
+    if (!course) return false;
+    if (course.publishedAt === null) return false;
+    if (entry.data.draft === true) return false;
+    return true;
+  })
+  .map((entry) => ({
+    slug: entry.slug,
+    concepts: entry.data.concepts,
+  }));
+
+const index = buildTagIndex(courseLikes, vocabulary);
+const entry = lookupTag(index, tag);
+
+const courseDetails =
+  entry?.courses.map((slug) => ({
+    slug,
+    displayName: resolver.toCourse(slug).displayName,
+    term: resolver.toCourse(slug).term,
+  })) ?? [];
+
+const titleCase = tag
+  .split("-")
+  .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+  .join(" ");
+---
+
+<Layout
+  title={`${titleCase} — Concept — Engineering Portfolio`}
+  description={`Courses, demos, and featured problems touching ${titleCase}.`}
+>
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href={base}>Home</a>
+    <span aria-hidden="true">/</span>
+    <span aria-current="page">Concept · {titleCase}</span>
+  </nav>
+
+  <article class="concept-page">
+    <header class="concept-header">
+      <p class="concept-header__kicker">Concept</p>
+      <h1 class="concept-header__title">{titleCase}</h1>
+      <p class="concept-header__slug">
+        <code>{tag}</code>
+      </p>
+    </header>
+
+    <section class="concept-courses" aria-labelledby="courses-heading">
+      <h2 id="courses-heading">Courses that touch this concept</h2>
+      {
+        courseDetails.length === 0 ? (
+          <p class="concept-courses__empty">
+            No published courses touch this concept yet. As more courses ship,
+            they'll appear here automatically.
+          </p>
+        ) : (
+          <ul class="concept-courses__list" role="list">
+            {courseDetails.map((c) => (
+              <li class="concept-courses__item">
+                <a href={`${base}courses/${c.slug}/`}>
+                  <span class="concept-courses__name">{c.displayName}</span>
+                  <span class="concept-courses__term">{c.term}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </section>
+
+    <p class="concept-back">
+      <a href={base}>← Back to all courses</a>
+    </p>
+  </article>
+</Layout>
+
+<style>
+  .breadcrumb {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    margin: 1rem 0 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  .breadcrumb a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px dotted currentColor;
+  }
+  .breadcrumb a:hover,
+  .breadcrumb a:focus {
+    color: var(--color-accent);
+  }
+  .breadcrumb [aria-current="page"] {
+    color: var(--color-text);
+  }
+
+  .concept-page {
+    max-width: 60ch;
+    margin: 0 auto;
+    padding: 0 1rem 4rem;
+  }
+
+  .concept-header {
+    margin: 2rem 0 3rem;
+  }
+  .concept-header__kicker {
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.75rem;
+    color: var(--color-accent);
+    margin: 0 0 0.5rem;
+    font-weight: 600;
+  }
+  .concept-header__title {
+    font-family: "Source Serif 4 Variable", Georgia, serif;
+    font-size: clamp(1.75rem, 5vw, 2.5rem);
+    line-height: 1.15;
+    margin: 0 0 0.5rem;
+    font-weight: 600;
+  }
+  .concept-header__slug code {
+    font-family: "JetBrains Mono Variable", monospace;
+    background: var(--color-code-bg);
+    padding: 0.125rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
+  }
+
+  .concept-courses {
+    margin: 2rem 0 3rem;
+  }
+  .concept-courses h2 {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text-muted);
+    margin: 0 0 1rem;
+    font-weight: 600;
+  }
+  .concept-courses__empty {
+    color: var(--color-text-muted);
+    font-style: italic;
+    margin: 0;
+  }
+  .concept-courses__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .concept-courses__item a {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--color-text-muted);
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--color-text);
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .concept-courses__item a:hover,
+  .concept-courses__item a:focus {
+    border-color: var(--color-accent);
+    background: color-mix(in srgb, var(--color-accent) 6%, transparent);
+  }
+  .concept-courses__name {
+    font-weight: 500;
+  }
+  .concept-courses__term {
+    font-family: "JetBrains Mono Variable", monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-muted);
+  }
+
+  .concept-back {
+    margin: 2rem 0 0;
+    font-size: 0.875rem;
+  }
+  .concept-back a {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+  .concept-back a:hover,
+  .concept-back a:focus {
+    text-decoration: underline;
+  }
+</style>
