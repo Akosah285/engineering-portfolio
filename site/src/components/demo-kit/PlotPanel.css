@@ -1,0 +1,64 @@
+.plot-panel {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  grid-template-rows: 1fr max-content;
+  gap: 0.25rem;
+  font-family: "Inter Variable", "Inter", system-ui, sans-serif;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.plot-panel__y-axis {
+  position: relative;
+  width: 3.5rem;
+}
+.plot-panel__y-tick {
+  position: absolute;
+  right: 0.25rem;
+  transform: translateY(-50%);
+  white-space: nowrap;
+}
+
+.plot-panel__canvas-wrap {
+  position: relative;
+  background: var(--color-math-bg, #f8f5ee);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.plot-panel__canvas-wrap canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.plot-panel__x-axis {
+  position: relative;
+  height: 1.5rem;
+  grid-column: 2;
+}
+.plot-panel__x-tick {
+  position: absolute;
+  top: 0.25rem;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.plot-panel__x-label,
+.plot-panel__y-label {
+  font-weight: 600;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text);
+}
+.plot-panel__y-label {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  text-align: center;
+  align-self: center;
+  justify-self: center;
+}
+.plot-panel__x-label {
+  text-align: center;
+  grid-column: 2;
+}
