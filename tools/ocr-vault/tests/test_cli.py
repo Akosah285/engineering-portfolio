@@ -340,3 +340,251 @@ class TestSearchCommand:
             ["search", '"unmatched', "--data-dir", str(data_dir)]
         )
         assert rc == 1
+
+
+# ───────────────── list-problems / list-pii / list-candidates (#39) ────────
+
+
+def _write_rich_sidecar(
+    dir_: Path,
+    *,
+    page: int,
+    blocks: list[dict[str, str]] | None = None,
+    confidence: float = 0.9,
+    pii_names: list[str] | None = None,
+    needs_redaction: bool = False,
+    akwasi_present: bool = False,
+) -> Path:
+    """Write a sidecar JSON with custom blocks + PII (unique page_hash per page)."""
+    dir_.mkdir(parents=True, exist_ok=True)
+    page_hash = "sha256:" + (f"{page:x}".rjust(64, "0"))
+    data = {
+        "source": {"pdf": "hw1.pdf", "page": page, "page_hash": page_hash},
+        "extracted": {
+            "blocks": blocks or [],
+            "topics": [],
+            "confidence": confidence,
+            "needs_review": False,
+        },
+        "pii": {
+            "names_detected": pii_names or [],
+            "akwasi_present": akwasi_present,
+            "needs_redaction_review": needs_redaction,
+        },
+        "model": {
+            "provider": "mock",
+            "model_id": "m1",
+            "ocr_version": "1.0.0",
+        },
+    }
+    path = dir_ / f"page-{page}.json"
+    path.write_text(json.dumps(data))
+    return path
+
+
+class TestListProblemsCommand:
+    def test_prints_problem_rows_for_course(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        ml_dir = tmp_path / "sidecars" / "machine-learning" / "hw1"
+        _write_rich_sidecar(
+            ml_dir,
+            page=1,
+            blocks=[
+                {
+                    "type": "problem_statement",
+                    "problem_id": "1a",
+                    "prose": "Compute gradient of f(x).",
+                    "latex": "",
+                }
+            ],
+        )
+        _write_rich_sidecar(
+            ml_dir,
+            page=2,
+            blocks=[
+                {"type": "prose", "problem_id": "", "prose": "intro", "latex": ""}
+            ],
+        )
+        rc = main(
+            [
+                "list-problems",
+                "--course",
+                "machine-learning",
+                "--data-dir",
+                str(tmp_path),
+            ]
+        )
+        out = capsys.readouterr().out
+        assert rc == 0
+        assert "1a" in out
+        assert "gradient" in out
+
+    def test_no_problems_prints_friendly_message(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        rc = main(
+            [
+                "list-problems",
+                "--course",
+                "missing",
+                "--data-dir",
+                str(tmp_path),
+            ]
+        )
+        out = capsys.readouterr().out
+        assert rc == 0
+        assert "no problem statements" in out
+
+
+class TestListPiiCommand:
+    def test_prints_only_flagged_pages(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        ml_dir = tmp_path / "sidecars" / "machine-learning" / "hw1"
+        _write_rich_sidecar(
+            ml_dir,
+            page=1,
+            pii_names=["Alice"],
+            needs_redaction=True,
+            akwasi_present=True,
+        )
+        _write_rich_sidecar(
+            ml_dir,
+            page=2,
+            pii_names=["Bob"],
+            needs_redaction=False,
+        )
+        rc = main(
+            [
+                "list-pii",
+                "--course",
+                "machine-learning",
+                "--data-dir",
+                str(tmp_path),
+            ]
+        )
+        out = capsys.readouterr().out
+        assert rc == 0
+        assert "Alice" in out
+        assert "Bob" not in out
+
+    def test_no_pii_prints_friendly_message(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        rc = main(
+            [
+                "list-pii",
+                "--course",
+                "missing",
+                "--data-dir",
+                str(tmp_path),
+            ]
+        )
+        out = capsys.readouterr().out
+        assert rc == 0
+        assert "no pages flagged" in out
+
+
+class TestListCandidatesCommand:
+    def test_ranks_pages_with_score_breakdown(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        ml_dir = tmp_path / "sidecars" / "machine-learning" / "hw1"
+        _write_rich_sidecar(
+            ml_dir,
+            page=1,
+            blocks=[
+                {"type": "prose", "problem_id": "", "prose": "x" * 500, "latex": ""}
+            ],
+            confidence=0.9,
+        )
+        _write_rich_sidecar(
+            ml_dir,
+            page=2,
+            blocks=[
+                {"type": "prose", "problem_id": "", "prose": "x" * 50, "latex": ""}
+            ],
+            confidence=0.6,
+        )
+        rc = main(
+            [
+                "list-candidates",
+                "--course",
+                "machine-learning",
+                "--data-dir",
+                str(tmp_path),
+            ]
+        )
+        out = capsys.readouterr().out
+        assert rc == 0
+        # Header columns from _print_table.
+        assert "score" in out
+        assert "density" in out
+        assert "pii_penalty" in out
+
+    def test_respects_limit_flag(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        ml_dir = tmp_path / "sidecars" / "machine-learning" / "hw1"
+        for i in range(1, 6):
+            _write_rich_sidecar(
+                ml_dir,
+                page=i,
+                blocks=[
+                    {
+                        "type": "prose",
+                        "problem_id": "",
+                        "prose": "x" * (50 * i),
+                        "latex": "",
+                    }
+                ],
+                confidence=0.9,
+            )
+
+        # Default limit (10) → all 5 ranked.
+        rc_full = main(
+            [
+                "list-candidates",
+                "--course",
+                "machine-learning",
+                "--data-dir",
+                str(tmp_path),
+            ]
+        )
+        out_full = capsys.readouterr().out
+        assert rc_full == 0
+
+        # --limit 2 → strictly fewer rows.
+        rc_lim = main(
+            [
+                "list-candidates",
+                "--course",
+                "machine-learning",
+                "--data-dir",
+                str(tmp_path),
+                "--limit",
+                "2",
+            ]
+        )
+        out_lim = capsys.readouterr().out
+        assert rc_lim == 0
+        assert len(out_lim) < len(out_full)
+
+
+    def test_no_candidates_prints_friendly_message(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        rc = main(
+            [
+                "list-candidates",
+                "--course",
+                "missing",
+                "--data-dir",
+                str(tmp_path),
+            ]
+        )
+        out = capsys.readouterr().out
+        assert rc == 0
+        assert "no favorite-page candidates" in out
+

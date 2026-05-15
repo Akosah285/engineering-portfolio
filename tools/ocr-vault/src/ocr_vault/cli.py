@@ -23,6 +23,11 @@ from pathlib import Path
 
 from ocr_vault.add_orchestrator import AddOrchestrator, OrchestratorError
 from ocr_vault.cost_ledger import CostLedger
+from ocr_vault.listings import (
+    list_pii,
+    list_problems,
+    rank_candidates,
+)
 from ocr_vault.ocr_config import OcrConfig, OcrConfigError, load_ocr_config
 from ocr_vault.pdf_loader import MockPdfLoader, PdfLoader
 from ocr_vault.provider import ProviderError, get_provider
@@ -204,6 +209,122 @@ def _cmd_search(args: argparse.Namespace) -> int:
     return 0
 
 
+# ────────────────── command: list-* (problems / pii / candidates) ─────────
+
+
+def _course_sidecars(
+    data_dir: Path, course_slug: str, *, warn: Callable[[str], None]
+) -> list[Sidecar]:
+    """Load all valid sidecars for a single course."""
+    by_course = _scan_sidecars(data_dir, warn=warn)
+    return by_course.get(course_slug, [])
+
+
+def _print_table(
+    headers: list[str],
+    rows: list[list[str]],
+) -> None:
+    """Print a Rich table to stdout."""
+    from rich.console import Console
+    from rich.table import Table
+
+    console = Console(file=sys.stdout)
+    table = Table(show_header=True, header_style="bold")
+    for h in headers:
+        table.add_column(h)
+    for row in rows:
+        table.add_row(*row)
+    console.print(table)
+
+
+def _cmd_list_problems(args: argparse.Namespace) -> int:
+    data_dir = Path(args.data_dir)
+    course_slug: str = args.course
+    warnings: list[str] = []
+    sidecars = _course_sidecars(
+        data_dir, course_slug, warn=lambda m: warnings.append(m)
+    )
+
+    rows = list_problems(sidecars)
+    if not rows:
+        sys.stdout.write(f"no problem statements detected for course {course_slug!r}\n")
+    else:
+        _print_table(
+            ["pdf", "page", "problem_id", "confidence", "snippet"],
+            [
+                [r.pdf, str(r.page), r.problem_id, f"{r.confidence:.2f}", r.snippet]
+                for r in rows
+            ],
+        )
+    for w in warnings:
+        sys.stderr.write(f"[warn] {w}\n")
+    return 0
+
+
+def _cmd_list_pii(args: argparse.Namespace) -> int:
+    data_dir = Path(args.data_dir)
+    course_slug: str = args.course
+    warnings: list[str] = []
+    sidecars = _course_sidecars(
+        data_dir, course_slug, warn=lambda m: warnings.append(m)
+    )
+
+    rows = list_pii(sidecars)
+    if not rows:
+        sys.stdout.write(f"no pages flagged for PII review in course {course_slug!r}\n")
+    else:
+        _print_table(
+            ["pdf", "page", "names_detected", "akwasi_present"],
+            [
+                [
+                    r.pdf,
+                    str(r.page),
+                    ", ".join(r.names_detected) or "—",
+                    "yes" if r.akwasi_present else "no",
+                ]
+                for r in rows
+            ],
+        )
+    for w in warnings:
+        sys.stderr.write(f"[warn] {w}\n")
+    return 0
+
+
+def _cmd_list_candidates(args: argparse.Namespace) -> int:
+    data_dir = Path(args.data_dir)
+    course_slug: str = args.course
+    limit: int = args.limit
+    warnings: list[str] = []
+    sidecars = _course_sidecars(
+        data_dir, course_slug, warn=lambda m: warnings.append(m)
+    )
+
+    rows = rank_candidates(sidecars, limit=limit)
+    if not rows:
+        sys.stdout.write(
+            f"no favorite-page candidates for course {course_slug!r}\n"
+        )
+    else:
+        _print_table(
+            ["rank", "pdf", "page", "score", "density", "conf", "pii_penalty"],
+            [
+                [
+                    str(i + 1),
+                    r.pdf,
+                    str(r.page),
+                    f"{r.score:.3f}",
+                    f"{r.breakdown['work_density']:.3f}",
+                    f"{r.breakdown['confidence']:.2f}",
+                    f"{r.breakdown['pii_penalty']:.2f}",
+                ]
+                for i, r in enumerate(rows)
+            ],
+        )
+    for w in warnings:
+        sys.stderr.write(f"[warn] {w}\n")
+    return 0
+
+
 # ────────────────── parser + main ──────────────────────────────────────────
 
 
@@ -299,6 +420,44 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Path to the data/ root (default: ./data).",
     )
     p_search.set_defaults(func=_cmd_search)
+
+    # ─── list-problems / list-pii / list-candidates (#39) ─────────────
+    for cmd_name, cmd_help, cmd_fn in (
+        (
+            "list-problems",
+            "Print every detected problem_statement block for a course.",
+            _cmd_list_problems,
+        ),
+        (
+            "list-pii",
+            "Print every page flagged for PII review for a course.",
+            _cmd_list_pii,
+        ),
+        (
+            "list-candidates",
+            "Rank and print top-N favorite-page candidates for a course.",
+            _cmd_list_candidates,
+        ),
+    ):
+        p_list = sub.add_parser(cmd_name, help=cmd_help)
+        p_list.add_argument(
+            "--course",
+            required=True,
+            help="Course slug (e.g., machine-learning).",
+        )
+        p_list.add_argument(
+            "--data-dir",
+            default="data",
+            help="Path to the data/ root (default: ./data).",
+        )
+        if cmd_name == "list-candidates":
+            p_list.add_argument(
+                "--limit",
+                type=int,
+                default=10,
+                help="Number of candidates to print (default: 10).",
+            )
+        p_list.set_defaults(func=cmd_fn)
 
     return parser
 
