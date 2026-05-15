@@ -44,6 +44,6 @@ export function renderMath(latex: string, opts: RenderMathOptions = {}): string 
     `<span class="${wrapperClass}">`,
     `<span data-pagefind-ignore="all">${katexHtml}</span>`,
     `<span class="visually-hidden" data-pagefind-body>${escapeHtml(latex)}</span>`,
-    `</span>`,
+    "</span>",
   ].join("");
 }

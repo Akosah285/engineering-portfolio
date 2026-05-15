@@ -1,11 +1,5 @@
-import {
-  forwardRef,
-  useCallback,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-} from "react";
-import { createDrawLoop, type DrawCallback } from "./drawLoop";
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from "react";
+import { type DrawCallback, createDrawLoop } from "./drawLoop";
 import "./DemoCanvas.css";
 
 /**
@@ -82,8 +76,7 @@ export function useDrawLoop(
         typeof window !== "undefined" && window.cancelAnimationFrame
           ? window.cancelAnimationFrame.bind(window)
           : (handle) => clearTimeout(handle as unknown as ReturnType<typeof setTimeout>),
-      now: () =>
-        typeof performance !== "undefined" ? performance.now() : Date.now(),
+      now: () => (typeof performance !== "undefined" ? performance.now() : Date.now()),
     });
 
     loop.start();

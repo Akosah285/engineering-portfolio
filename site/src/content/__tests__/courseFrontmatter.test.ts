@@ -11,8 +11,8 @@ import { describe, expect, it } from "vitest";
 import { buildTagValidator } from "../concepts/validator";
 import {
   type CourseFrontmatter,
-  buildFrontmatterValidator,
   CourseFrontmatterError,
+  buildFrontmatterValidator,
 } from "../courseFrontmatter";
 
 const VOCAB = ["gradient-descent", "linear-regression", "monte-carlo"];
@@ -85,9 +85,7 @@ describe("buildFrontmatterValidator — happy path", () => {
 
   it("deduplicates the concepts list", () => {
     const v = mkValidator();
-    const out = v.validate(
-      valid({ concepts: ["gradient-descent", "gradient-descent"] }),
-    );
+    const out = v.validate(valid({ concepts: ["gradient-descent", "gradient-descent"] }));
     expect(out.concepts).toEqual(["gradient-descent"]);
   });
 });
@@ -107,9 +105,7 @@ describe("buildFrontmatterValidator — title rules", () => {
 
   it("rejects whitespace-only title", () => {
     const v = mkValidator();
-    expect(() => v.validate(valid({ title: "   " }))).toThrow(
-      CourseFrontmatterError,
-    );
+    expect(() => v.validate(valid({ title: "   " }))).toThrow(CourseFrontmatterError);
   });
 
   it("rejects non-string title", () => {
@@ -168,9 +164,9 @@ describe("buildFrontmatterValidator — oneLineTakeaway rules", () => {
 describe("buildFrontmatterValidator — concepts rules", () => {
   it("rejects unknown tags", () => {
     const v = mkValidator();
-    expect(() =>
-      v.validate(valid({ concepts: ["totally-made-up-tag"] })),
-    ).toThrow(CourseFrontmatterError);
+    expect(() => v.validate(valid({ concepts: ["totally-made-up-tag"] }))).toThrow(
+      CourseFrontmatterError,
+    );
   });
 
   it("rejects non-array concepts", () => {
@@ -252,9 +248,7 @@ describe("buildFrontmatterValidator — techTags rules", () => {
 
   it("accepts an array of non-empty strings", () => {
     const v = mkValidator();
-    const out = v.validate(
-      valid({ techTags: ["Python", "NumPy", "scikit-learn"] }),
-    );
+    const out = v.validate(valid({ techTags: ["Python", "NumPy", "scikit-learn"] }));
     expect(out.techTags).toEqual(["Python", "NumPy", "scikit-learn"]);
   });
 

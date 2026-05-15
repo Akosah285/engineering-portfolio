@@ -4,22 +4,10 @@ import { DemoNarration } from "../../../demo-kit/DemoNarration";
 import { MathHud } from "../../../demo-kit/MathHud";
 import { PresetCarousel } from "../../../demo-kit/PresetCarousel";
 import { SliderRow } from "../../../demo-kit/SliderRow";
-import { useDemoState, type Schema } from "../../../demo-kit/useDemoState";
-import {
-  gradientDescentStep,
-  isConverged,
-  type DescentState,
-} from "./algorithm";
-import {
-  DEFAULT_STATE,
-  PRESETS,
-  type DescentDemoState,
-} from "./presets";
-import {
-  getSurface,
-  type Surface,
-  SURFACE_SLUGS,
-} from "./surfaces";
+import { type Schema, useDemoState } from "../../../demo-kit/useDemoState";
+import { type DescentState, gradientDescentStep, isConverged } from "./algorithm";
+import { DEFAULT_STATE, type DescentDemoState, PRESETS } from "./presets";
+import { SURFACE_SLUGS, type Surface, getSurface } from "./surfaces";
 import "./GradientDescentVisualizer.css";
 
 /**
@@ -63,10 +51,7 @@ function projector(surface: Surface, width: number, height: number) {
 }
 
 /** Render a contour-shaded background of the loss surface to the canvas. */
-function paintContours(
-  ctx: CanvasRenderingContext2D,
-  surface: Surface,
-): void {
+function paintContours(ctx: CanvasRenderingContext2D, surface: Surface): void {
   const { width, height } = ctx.canvas;
   const { xMin, xMax, yMin, yMax } = surface.bounds;
   // Sample at low resolution for cheap shading; 80x60 gridcells max.
@@ -76,8 +61,8 @@ function paintContours(
   const cellH = height / rows;
 
   // Compute loss range over a coarse pre-pass for normalisation.
-  let minL = Infinity;
-  let maxL = -Infinity;
+  let minL = Number.POSITIVE_INFINITY;
+  let maxL = Number.NEGATIVE_INFINITY;
   const samples: number[] = [];
   for (let r = 0; r < rows; r += 1) {
     for (let c = 0; c < cols; c += 1) {
@@ -225,7 +210,12 @@ export function GradientDescentVisualizer() {
   return (
     <div className="gd-visualizer">
       <PresetCarousel
-        presets={PRESETS as readonly { name: string; state: typeof DEFAULT_STATE }[] as { name: string; state: typeof state }[]}
+        presets={
+          PRESETS as readonly { name: string; state: typeof DEFAULT_STATE }[] as {
+            name: string;
+            state: typeof state;
+          }[]
+        }
         onSelect={handlePresetSelect}
         ariaLabel="Gradient descent presets"
       />
@@ -298,11 +288,7 @@ export function GradientDescentVisualizer() {
         >
           {paused ? "▶ Resume" : "⏸ Pause"}
         </button>
-        <button
-          type="button"
-          className="gd-visualizer__btn"
-          onClick={handleReset}
-        >
+        <button type="button" className="gd-visualizer__btn" onClick={handleReset}>
           ↺ Reset
         </button>
         <span className="gd-visualizer__counter" aria-live="off">

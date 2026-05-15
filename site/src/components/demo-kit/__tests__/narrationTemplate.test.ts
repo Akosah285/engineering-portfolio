@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { renderNarration, type NarrationTemplate } from "../narrationTemplate";
+import { type NarrationTemplate, renderNarration } from "../narrationTemplate";
 
 interface DemoState {
   rate: number;
@@ -8,8 +8,7 @@ interface DemoState {
 
 describe("renderNarration", () => {
   it("runs the template with the given state", () => {
-    const tmpl: NarrationTemplate<DemoState> = (s) =>
-      `Rate is ${s.rate} (${s.label}).`;
+    const tmpl: NarrationTemplate<DemoState> = (s) => `Rate is ${s.rate} (${s.label}).`;
     expect(renderNarration({ rate: 1.5, label: "fast" }, tmpl)).toBe(
       "Rate is 1.5 (fast).",
     );
@@ -17,9 +16,7 @@ describe("renderNarration", () => {
 
   it("trims surrounding whitespace from the rendered sentence", () => {
     const tmpl: NarrationTemplate<DemoState> = () => "   leading and trailing   ";
-    expect(renderNarration({ rate: 0, label: "" }, tmpl)).toBe(
-      "leading and trailing",
-    );
+    expect(renderNarration({ rate: 0, label: "" }, tmpl)).toBe("leading and trailing");
   });
 
   it("returns an empty string when the template produces only whitespace", () => {

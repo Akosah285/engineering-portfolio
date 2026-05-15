@@ -90,9 +90,7 @@ export function buildCourseResolver(courses: readonly Course[]): CourseResolver 
       return this.toCourse(slug).displayName;
     },
     inOrder() {
-      return [...bySlug.values()].sort(
-        (a, b) => a.displayOrder - b.displayOrder,
-      );
+      return [...bySlug.values()].sort((a, b) => a.displayOrder - b.displayOrder);
     },
     slugs() {
       return [...bySlug.keys()];

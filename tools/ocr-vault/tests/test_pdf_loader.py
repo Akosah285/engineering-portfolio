@@ -10,6 +10,7 @@ This keeps the orchestrator pure + testable without touching real PDFs.
 
 from __future__ import annotations
 
+import dataclasses
 from pathlib import Path
 
 import pytest
@@ -31,7 +32,8 @@ class TestPageImage:
 
     def test_frozen(self) -> None:
         p = PageImage(page=1, image_bytes=b"x", content_type="image/png")
-        with pytest.raises(Exception):
+        # Frozen dataclasses raise FrozenInstanceError when mutated.
+        with pytest.raises(dataclasses.FrozenInstanceError):
             p.page = 99  # type: ignore[misc]
 
     def test_rejects_non_positive_page(self) -> None:

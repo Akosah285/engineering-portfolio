@@ -28,11 +28,7 @@ describe("serializeState — URL fragment serialization", () => {
     const schema = {
       label: { type: "string" as const, default: "hello" },
     };
-    const fragment = serializeState(
-      { label: "hello world & co" },
-      schema,
-      "demo-x",
-    );
+    const fragment = serializeState({ label: "hello world & co" }, schema, "demo-x");
     expect(fragment).toBe("#demo=demo-x&label=hello+world+%26+co");
   });
 
@@ -57,4 +53,3 @@ describe("serializeState — URL fragment serialization", () => {
     expect(fragment).toBe("#demo=grad&x=-1.5&y=0.001");
   });
 });
-

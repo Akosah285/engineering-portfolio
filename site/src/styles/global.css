@@ -28,12 +28,11 @@
 }
 
 :root {
-  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system,
-    "Segoe UI", Roboto, sans-serif;
-  --font-serif: "Source Serif 4 Variable", ui-serif, Georgia, "Times New Roman",
-    serif;
-  --font-mono: "JetBrains Mono Variable", ui-monospace, "SFMono-Regular",
-    Menlo, Consolas, monospace;
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, sans-serif;
+  --font-serif: "Source Serif 4 Variable", ui-serif, Georgia, "Times New Roman", serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "SFMono-Regular", Menlo, Consolas,
+    monospace;
   --content-width: 72ch;
   color-scheme: light dark;
 }

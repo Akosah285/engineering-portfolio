@@ -47,10 +47,7 @@ export interface FormatOptions {
  * sensible auto-precision based on absolute magnitude when `precision`
  * is omitted.
  */
-export function formatSliderValue(
-  value: number,
-  options: FormatOptions = {},
-): string {
+export function formatSliderValue(value: number, options: FormatOptions = {}): string {
   if (!Number.isFinite(value)) return "—";
 
   const { precision, unit } = options;

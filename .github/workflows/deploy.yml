@@ -1,7 +1,9 @@
-name: Deploy to GitHub Pages
+name: Build, test, and deploy to GitHub Pages
 
 on:
   push:
+    branches: [main]
+  pull_request:
     branches: [main]
   workflow_dispatch:
 
@@ -15,7 +17,8 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build:
+  site:
+    name: Site (lint, test, typecheck, build)
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -36,6 +39,7 @@ jobs:
           pnpm --version
 
       - name: Setup Pages
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         id: pages
         uses: actions/configure-pages@v5
 
@@ -45,7 +49,10 @@ jobs:
       - name: Approve build scripts
         run: pnpm rebuild
 
-      - name: Run tests
+      - name: Lint (Biome)
+        run: pnpm run lint
+
+      - name: Run tests (Vitest)
         run: pnpm run test
 
       - name: Type check
@@ -60,12 +67,42 @@ jobs:
         run: pnpm run build
 
       - name: Upload Pages artifact
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: actions/upload-pages-artifact@v3
         with:
           path: site/dist
 
+  ocr-vault:
+    name: ocr-vault (Python tests)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: tools/ocr-vault
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        run: pip install uv
+
+      - name: Install ocr-vault (with dev extras)
+        run: uv pip install --system -e ".[dev]"
+
+      - name: Run pytest
+        run: pytest -q
+
+      - name: Ruff lint
+        run: ruff check src tests
+
   deploy:
-    needs: build
+    name: Deploy to GitHub Pages
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    needs: [site, ocr-vault]
     runs-on: ubuntu-latest
     environment:
       name: github-pages

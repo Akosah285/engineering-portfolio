@@ -11,6 +11,7 @@ required.
 from __future__ import annotations
 
 import json
+from decimal import Decimal
 from pathlib import Path
 
 import pytest
@@ -21,12 +22,9 @@ from ocr_vault.add_orchestrator import (
     OrchestratorError,
 )
 from ocr_vault.cost_ledger import CostLedger
-from ocr_vault.pdf_loader import MockPdfLoader, PageImage
+from ocr_vault.pdf_loader import MockPdfLoader
 from ocr_vault.provider import MockProvider, ProviderResponse
 from ocr_vault.sqlite_index import SqliteIndex
-
-
-from decimal import Decimal
 
 
 def _ledger() -> CostLedger:

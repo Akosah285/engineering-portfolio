@@ -122,14 +122,14 @@ describe("renderMath", () => {
       const match = html.match(/<span[^>]*data-pagefind-body[^>]*>/);
       expect(match).not.toBeNull();
       const attrs = match?.[0] ?? "";
-      expect(attrs).toMatch(/(class="[^"]*(visually-hidden|sr-only|hidden)|aria-hidden|style="[^"]*display:\s*none|position:\s*absolute)/);
+      expect(attrs).toMatch(
+        /(class="[^"]*(visually-hidden|sr-only|hidden)|aria-hidden|style="[^"]*display:\s*none|position:\s*absolute)/,
+      );
     });
 
     it("the visible katex tree is wrapped in data-pagefind-ignore", () => {
       const html = renderMath("\\sum_{i=1}^n i");
-      const m = html.match(
-        /<span[^>]*data-pagefind-ignore[^>]*>[\s\S]*?<\/span>/,
-      );
+      const m = html.match(/<span[^>]*data-pagefind-ignore[^>]*>[\s\S]*?<\/span>/);
       expect(m).not.toBeNull();
       // Must contain a katex span inside the ignore wrapper.
       expect(m?.[0]).toMatch(/class="[^"]*katex[^"]*"/);

@@ -1,4 +1,4 @@
-import { renderHook, act } from "@testing-library/react";
+import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useIsCoarsePointer } from "../useIsCoarsePointer";
 
@@ -69,9 +69,7 @@ describe("useIsCoarsePointer", () => {
   });
 
   it("updates when the media query result changes", () => {
-    let storedHandler:
-      | ((event: MediaQueryListEvent) => void)
-      | undefined;
+    let storedHandler: ((event: MediaQueryListEvent) => void) | undefined;
 
     const mql = makeMQL(false);
     mql.addEventListener.mockImplementation((event, handler) => {
@@ -98,10 +96,7 @@ describe("useIsCoarsePointer", () => {
 
     unmount();
 
-    expect(mql.removeEventListener).toHaveBeenCalledWith(
-      "change",
-      expect.any(Function),
-    );
+    expect(mql.removeEventListener).toHaveBeenCalledWith("change", expect.any(Function));
   });
 
   it("queries '(pointer: coarse)' specifically", () => {

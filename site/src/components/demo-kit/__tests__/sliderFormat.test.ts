@@ -57,16 +57,14 @@ describe("formatSliderValue", () => {
   });
 
   it("honours an explicit precision", () => {
-    expect(formatSliderValue(3.14159, { precision: 2 })).toBe("3.14");
-    expect(formatSliderValue(3.14159, { precision: 0 })).toBe("3");
-    expect(formatSliderValue(3.14159, { precision: 4 })).toBe("3.1416");
+    expect(formatSliderValue(Math.PI, { precision: 2 })).toBe("3.14");
+    expect(formatSliderValue(Math.PI, { precision: 0 })).toBe("3");
+    expect(formatSliderValue(Math.PI, { precision: 4 })).toBe("3.1416");
   });
 
   it("appends a unit with a non-breaking space when provided", () => {
     expect(formatSliderValue(440, { unit: "Hz" })).toBe("440\u00a0Hz");
-    expect(formatSliderValue(0.5, { precision: 2, unit: "s" })).toBe(
-      "0.50\u00a0s",
-    );
+    expect(formatSliderValue(0.5, { precision: 2, unit: "s" })).toBe("0.50\u00a0s");
   });
 
   it("returns an em-dash for non-finite values", () => {

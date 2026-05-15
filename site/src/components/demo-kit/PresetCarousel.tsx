@@ -76,11 +76,7 @@ export function PresetCarousel<T>({
   if (!hasPresets) return null;
 
   return (
-    <div
-      className="preset-carousel"
-      role="region"
-      aria-label={ariaLabel}
-    >
+    <div className="preset-carousel" role="region" aria-label={ariaLabel}>
       <button
         type="button"
         className="preset-carousel__nav"
@@ -90,7 +86,7 @@ export function PresetCarousel<T>({
         <span aria-hidden="true">◀</span>
       </button>
 
-      <ul className="preset-carousel__chips" role="listbox">
+      <ul className="preset-carousel__chips">
         {chips.map(({ preset, index, isActive }) => (
           <li key={`${preset.name}-${index}`}>
             <button

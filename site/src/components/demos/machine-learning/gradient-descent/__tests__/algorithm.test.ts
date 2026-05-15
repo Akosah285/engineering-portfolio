@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
 import {
+  type DescentState,
+  type GradFn,
   gradientDescentStep,
   isConverged,
   runDescent,
-  type DescentState,
-  type GradFn,
 } from "../algorithm";
 
 // ∇L for L(x, y) = x² + y² → (2x, 2y) — used by most tests
@@ -88,26 +88,14 @@ describe("runDescent", () => {
 
   it("converges for a well-conditioned bowl + small lr", () => {
     const start: DescentState = { x: 1, y: 1, vx: 0, vy: 0 };
-    const traj = runDescent(
-      start,
-      quadGrad,
-      { lr: 0.1, momentum: 0 },
-      500,
-      1e-6,
-    );
+    const traj = runDescent(start, quadGrad, { lr: 0.1, momentum: 0 }, 500, 1e-6);
     const last = traj[traj.length - 1]!;
     expect(Math.hypot(last.x, last.y)).toBeLessThan(1e-3);
   });
 
   it("stops early on convergence", () => {
     const startNearMin: DescentState = { x: 1e-6, y: 1e-6, vx: 0, vy: 0 };
-    const traj = runDescent(
-      startNearMin,
-      quadGrad,
-      { lr: 0.1, momentum: 0 },
-      1000,
-      1e-3,
-    );
+    const traj = runDescent(startNearMin, quadGrad, { lr: 0.1, momentum: 0 }, 1000, 1e-3);
     expect(traj.length).toBeLessThan(5);
   });
 
@@ -125,13 +113,7 @@ describe("runDescent", () => {
     const stretched: GradFn = (x, y) => [0.02 * x, 2 * y] as const;
     const start: DescentState = { x: 5, y: 0.1, vx: 0, vy: 0 };
 
-    const trajVanilla = runDescent(
-      start,
-      stretched,
-      { lr: 0.1, momentum: 0 },
-      400,
-      1e-3,
-    );
+    const trajVanilla = runDescent(start, stretched, { lr: 0.1, momentum: 0 }, 400, 1e-3);
     const trajMomentum = runDescent(
       start,
       stretched,

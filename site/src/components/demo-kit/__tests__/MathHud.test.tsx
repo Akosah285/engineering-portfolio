@@ -4,9 +4,7 @@ import { MathHud } from "../MathHud";
 
 describe("<MathHud>", () => {
   it("renders one line per LaTeX expression", () => {
-    const { container } = render(
-      <MathHud lines={["\\eta = 0.05", "t = 12"]} />,
-    );
+    const { container } = render(<MathHud lines={["\\eta = 0.05", "t = 12"]} />);
     const items = container.querySelectorAll(".math-hud__line");
     expect(items.length).toBe(2);
   });
@@ -23,9 +21,7 @@ describe("<MathHud>", () => {
   });
 
   it("applies corner-specific class by default", () => {
-    const { container } = render(
-      <MathHud lines={["x = 1"]} corner="bottom-left" />,
-    );
+    const { container } = render(<MathHud lines={["x = 1"]} corner="bottom-left" />);
     const hud = container.querySelector(".math-hud");
     expect(hud?.className).toContain("math-hud--bottom-left");
   });
@@ -37,9 +33,7 @@ describe("<MathHud>", () => {
   });
 
   it("honours a custom className override", () => {
-    const { container } = render(
-      <MathHud lines={["x = 1"]} className="my-hud" />,
-    );
+    const { container } = render(<MathHud lines={["x = 1"]} className="my-hud" />);
     expect(container.querySelector(".my-hud")).toBeDefined();
     expect(container.querySelector(".math-hud--top-right")).toBeNull();
   });

@@ -11,11 +11,7 @@
  */
 import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import {
-  useDemoState,
-  type Schema,
-  type StateOf,
-} from "../useDemoState";
+import { type Schema, type StateOf, useDemoState } from "../useDemoState";
 
 const sliderSchema = {
   sigma: { type: "number" as const, default: 10 },
@@ -56,9 +52,7 @@ describe("useDemoState", () => {
         mode: "fast",
       };
 
-      const { result } = renderHook(() =>
-        useDemoState("lorenz", sliderSchema, initial),
-      );
+      const { result } = renderHook(() => useDemoState("lorenz", sliderSchema, initial));
 
       expect(result.current[0]).toEqual(initial);
     });
@@ -72,9 +66,7 @@ describe("useDemoState", () => {
         label: "trace",
         mode: "fast",
       };
-      const { result } = renderHook(() =>
-        useDemoState("lorenz", sliderSchema, initial),
-      );
+      const { result } = renderHook(() => useDemoState("lorenz", sliderSchema, initial));
 
       expect(result.current[0]).toEqual({
         sigma: 20,
@@ -93,9 +85,7 @@ describe("useDemoState", () => {
         label: "trace",
         mode: "fast",
       };
-      const { result } = renderHook(() =>
-        useDemoState("lorenz", sliderSchema, initial),
-      );
+      const { result } = renderHook(() => useDemoState("lorenz", sliderSchema, initial));
 
       expect(result.current[0].sigma).toBe(10);
     });
@@ -109,9 +99,7 @@ describe("useDemoState", () => {
         label: "trace",
         mode: "fast",
       };
-      const { result } = renderHook(() =>
-        useDemoState("lorenz", sliderSchema, initial),
-      );
+      const { result } = renderHook(() => useDemoState("lorenz", sliderSchema, initial));
 
       expect(result.current[0].mode).toBe("fast");
     });
@@ -125,15 +113,16 @@ describe("useDemoState", () => {
         label: "trace",
         mode: "fast",
       };
-      const { result } = renderHook(() =>
-        useDemoState("lorenz", sliderSchema, initial),
-      );
+      const { result } = renderHook(() => useDemoState("lorenz", sliderSchema, initial));
 
       expect(result.current[0].sigma).toBe(20);
       // No "unknown" or "extra" key should appear on the state object.
-      expect(Object.keys(result.current[0]).sort()).toEqual(
-        ["beta", "label", "mode", "sigma"],
-      );
+      expect(Object.keys(result.current[0]).sort()).toEqual([
+        "beta",
+        "label",
+        "mode",
+        "sigma",
+      ]);
     });
   });
 
@@ -145,9 +134,7 @@ describe("useDemoState", () => {
         label: "trace",
         mode: "fast",
       };
-      const { result } = renderHook(() =>
-        useDemoState("lorenz", sliderSchema, initial),
-      );
+      const { result } = renderHook(() => useDemoState("lorenz", sliderSchema, initial));
 
       // Flush the mount-time effect (writes the initial fragment).
       act(() => {
@@ -178,9 +165,7 @@ describe("useDemoState", () => {
         label: "trace",
         mode: "fast",
       };
-      const { result } = renderHook(() =>
-        useDemoState("lorenz", sliderSchema, initial),
-      );
+      const { result } = renderHook(() => useDemoState("lorenz", sliderSchema, initial));
 
       act(() => {
         for (let v = 11; v <= 20; v++) {
@@ -241,9 +226,7 @@ describe("useDemoState", () => {
         label: "trace",
         mode: "fast",
       };
-      const { result } = renderHook(() =>
-        useDemoState("lorenz", sliderSchema, initial),
-      );
+      const { result } = renderHook(() => useDemoState("lorenz", sliderSchema, initial));
 
       act(() => {
         result.current[1]((prev) => ({ ...prev, sigma: prev.sigma + 5 }));
@@ -261,9 +244,7 @@ describe("useDemoState", () => {
         label: "trace",
         mode: "fast",
       };
-      const { result } = renderHook(() =>
-        useDemoState("lorenz", sliderSchema, initial),
-      );
+      const { result } = renderHook(() => useDemoState("lorenz", sliderSchema, initial));
 
       act(() => {
         result.current[1]({ ...result.current[0], sigma: 42 });
@@ -286,9 +267,7 @@ describe("useDemoState", () => {
         label: "trace",
         mode: "fast",
       };
-      const { result } = renderHook(() =>
-        useDemoState("lorenz", sliderSchema, initial),
-      );
+      const { result } = renderHook(() => useDemoState("lorenz", sliderSchema, initial));
 
       act(() => {
         result.current[1]({ ...result.current[0], sigma: 999 });
@@ -309,9 +288,7 @@ describe("useDemoState", () => {
         label: "trace",
         mode: "fast",
       };
-      const { result } = renderHook(() =>
-        useDemoState("lorenz", sliderSchema, initial),
-      );
+      const { result } = renderHook(() => useDemoState("lorenz", sliderSchema, initial));
 
       // Get a fragment written.
       act(() => {

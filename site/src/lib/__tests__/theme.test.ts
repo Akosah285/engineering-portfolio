@@ -1,13 +1,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
+  type ResolvedTheme,
+  STORAGE_KEY,
+  type ThemePreference,
   applyTheme,
   getStoredPreference,
   initTheme,
   resolveTheme,
   setStoredPreference,
-  STORAGE_KEY,
-  type ResolvedTheme,
-  type ThemePreference,
 } from "../theme";
 
 function setMatchMediaPrefersDark(prefersDark: boolean): void {
@@ -113,7 +113,7 @@ describe("theme module", () => {
 
     it("falls back to 'light' when matchMedia missing", () => {
       // @ts-expect-error - intentionally removing
-      delete window.matchMedia;
+      window.matchMedia = undefined;
       expect(resolveTheme("system")).toBe("light");
     });
   });

@@ -1,10 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  getSurface,
-  SURFACES,
-  SURFACE_SLUGS,
-  type SurfaceSlug,
-} from "../surfaces";
+import { SURFACES, SURFACE_SLUGS, type SurfaceSlug, getSurface } from "../surfaces";
 
 describe("SURFACES", () => {
   it("exposes exactly the four named surfaces", () => {

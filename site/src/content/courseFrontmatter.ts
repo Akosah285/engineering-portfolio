@@ -64,9 +64,7 @@ function isPlainObject(x: unknown): x is Record<string, unknown> {
 
 function requireNonEmptyString(value: unknown, field: string): string {
   if (typeof value !== "string") {
-    throw new CourseFrontmatterError(
-      `${field}: expected string, got ${typeof value}`,
-    );
+    throw new CourseFrontmatterError(`${field}: expected string, got ${typeof value}`);
   }
   if (value.trim() === "") {
     throw new CourseFrontmatterError(`${field}: must be non-empty`);
@@ -98,9 +96,7 @@ function parsePublishedAt(value: unknown): string | null {
 function parseTechTags(value: unknown): string[] {
   if (value === undefined || value === null) return [];
   if (!Array.isArray(value)) {
-    throw new CourseFrontmatterError(
-      `techTags: expected array, got ${typeof value}`,
-    );
+    throw new CourseFrontmatterError(`techTags: expected array, got ${typeof value}`);
   }
   const seen = new Set<string>();
   const out: string[] = [];
@@ -112,7 +108,7 @@ function parseTechTags(value: unknown): string[] {
     }
     if (t.trim() === "") {
       throw new CourseFrontmatterError(
-        `techTags: entries must be non-empty / non-whitespace`,
+        "techTags: entries must be non-empty / non-whitespace",
       );
     }
     if (!seen.has(t)) {
@@ -148,10 +144,7 @@ export function buildFrontmatterValidator(
         );
       }
 
-      const takeaway = requireNonEmptyString(
-        input.oneLineTakeaway,
-        "oneLineTakeaway",
-      );
+      const takeaway = requireNonEmptyString(input.oneLineTakeaway, "oneLineTakeaway");
       if (takeaway.length > MAX_TAKEAWAY_LEN) {
         throw new CourseFrontmatterError(
           `oneLineTakeaway: must be ≤ ${MAX_TAKEAWAY_LEN} chars, got ${takeaway.length}`,
@@ -175,17 +168,12 @@ export function buildFrontmatterValidator(
       try {
         concepts = tagValidator.validate(conceptsRaw as string[]);
       } catch (e) {
-        throw new CourseFrontmatterError(
-          `concepts: ${(e as Error).message}`,
-        );
+        throw new CourseFrontmatterError(`concepts: ${(e as Error).message}`);
       }
 
       let heroDemoLabel: string | undefined;
       if (input.heroDemoLabel !== undefined) {
-        heroDemoLabel = requireNonEmptyString(
-          input.heroDemoLabel,
-          "heroDemoLabel",
-        );
+        heroDemoLabel = requireNonEmptyString(input.heroDemoLabel, "heroDemoLabel");
       }
 
       const techTags = parseTechTags(input.techTags);

@@ -20,12 +20,7 @@ describe("<DemoCanvas>", () => {
 
   it("reserves aspect ratio via inline style (zero CLS)", () => {
     const { container } = render(
-      <DemoCanvas
-        width={800}
-        height={400}
-        ariaLabel="aspect"
-        draw={() => undefined}
-      />,
+      <DemoCanvas width={800} height={400} ariaLabel="aspect" draw={() => undefined} />,
     );
     const canvas = container.querySelector("canvas");
     expect(canvas?.getAttribute("style")).toMatch(/aspect-ratio/i);
@@ -41,22 +36,13 @@ describe("<DemoCanvas>", () => {
       />,
     );
     const canvas = container.querySelector("canvas");
-    expect(canvas?.getAttribute("aria-label")).toBe(
-      "Gradient descent trajectory",
-    );
+    expect(canvas?.getAttribute("aria-label")).toBe("Gradient descent trajectory");
     expect(canvas?.getAttribute("role")).toBe("img");
   });
 
   it("invokes the draw callback on at least one animation frame", async () => {
     const draw = vi.fn();
-    render(
-      <DemoCanvas
-        width={100}
-        height={100}
-        ariaLabel="test"
-        draw={draw}
-      />,
-    );
+    render(<DemoCanvas width={100} height={100} ariaLabel="test" draw={draw} />);
     // JSDOM's RAF runs ~asynchronously; wait several frames worth
     await new Promise((resolve) => setTimeout(resolve, 80));
     // JSDOM may not have a full RAF loop, but it does provide one. If draw
@@ -76,15 +62,7 @@ describe("<DemoCanvas>", () => {
 
   it("does not invoke draw when paused", async () => {
     const draw = vi.fn();
-    render(
-      <DemoCanvas
-        width={100}
-        height={100}
-        ariaLabel="paused"
-        draw={draw}
-        paused
-      />,
-    );
+    render(<DemoCanvas width={100} height={100} ariaLabel="paused" draw={draw} paused />);
     await new Promise((resolve) => setTimeout(resolve, 20));
     expect(draw).not.toHaveBeenCalled();
   });

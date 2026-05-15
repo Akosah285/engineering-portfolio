@@ -15,10 +15,7 @@ describe("buildGitHubSourceUrl", () => {
     });
 
     it("uses 'main' as the default branch", () => {
-      const url = buildGitHubSourceUrl(
-        "https://github.com/owner/repo",
-        "src/foo.ts",
-      );
+      const url = buildGitHubSourceUrl("https://github.com/owner/repo", "src/foo.ts");
 
       expect(url).toBe("https://github.com/owner/repo/blob/main/src/foo.ts");
     });
@@ -36,37 +33,25 @@ describe("buildGitHubSourceUrl", () => {
 
   describe("input normalisation", () => {
     it("strips a trailing slash from repoBaseUrl", () => {
-      const url = buildGitHubSourceUrl(
-        "https://github.com/owner/repo/",
-        "src/foo.ts",
-      );
+      const url = buildGitHubSourceUrl("https://github.com/owner/repo/", "src/foo.ts");
 
       expect(url).toBe("https://github.com/owner/repo/blob/main/src/foo.ts");
     });
 
     it("strips multiple trailing slashes from repoBaseUrl", () => {
-      const url = buildGitHubSourceUrl(
-        "https://github.com/owner/repo///",
-        "src/foo.ts",
-      );
+      const url = buildGitHubSourceUrl("https://github.com/owner/repo///", "src/foo.ts");
 
       expect(url).toBe("https://github.com/owner/repo/blob/main/src/foo.ts");
     });
 
     it("strips a leading slash from demoSourcePath", () => {
-      const url = buildGitHubSourceUrl(
-        "https://github.com/owner/repo",
-        "/src/foo.ts",
-      );
+      const url = buildGitHubSourceUrl("https://github.com/owner/repo", "/src/foo.ts");
 
       expect(url).toBe("https://github.com/owner/repo/blob/main/src/foo.ts");
     });
 
     it("strips multiple leading slashes from demoSourcePath", () => {
-      const url = buildGitHubSourceUrl(
-        "https://github.com/owner/repo",
-        "///src/foo.ts",
-      );
+      const url = buildGitHubSourceUrl("https://github.com/owner/repo", "///src/foo.ts");
 
       expect(url).toBe("https://github.com/owner/repo/blob/main/src/foo.ts");
     });
@@ -78,23 +63,19 @@ describe("buildGitHubSourceUrl", () => {
         "/feature/x/",
       );
 
-      expect(url).toBe(
-        "https://github.com/owner/repo/blob/feature/x/src/foo.ts",
-      );
+      expect(url).toBe("https://github.com/owner/repo/blob/feature/x/src/foo.ts");
     });
   });
 
   describe("guards", () => {
     it("throws on empty repoBaseUrl", () => {
-      expect(() =>
-        buildGitHubSourceUrl("", "src/foo.ts"),
-      ).toThrow(/repoBaseUrl/);
+      expect(() => buildGitHubSourceUrl("", "src/foo.ts")).toThrow(/repoBaseUrl/);
     });
 
     it("throws on empty demoSourcePath", () => {
-      expect(() =>
-        buildGitHubSourceUrl("https://github.com/owner/repo", ""),
-      ).toThrow(/demoSourcePath/);
+      expect(() => buildGitHubSourceUrl("https://github.com/owner/repo", "")).toThrow(
+        /demoSourcePath/,
+      );
     });
 
     it("falls back to 'main' if branch is empty after trimming", () => {

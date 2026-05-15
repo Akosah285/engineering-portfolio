@@ -74,12 +74,8 @@ describe("shouldDismissOnSwipeDown", () => {
       const start = { y: 0, t: 0 };
       const end = { y: 100, t: 200 };
 
-      expect(shouldDismissOnSwipeDown(start, end, { minDistance: 150 })).toBe(
-        false,
-      );
-      expect(shouldDismissOnSwipeDown(start, end, { minDistance: 50 })).toBe(
-        true,
-      );
+      expect(shouldDismissOnSwipeDown(start, end, { minDistance: 150 })).toBe(false);
+      expect(shouldDismissOnSwipeDown(start, end, { minDistance: 50 })).toBe(true);
     });
 
     it("honors a custom maxDuration threshold", () => {
@@ -89,9 +85,7 @@ describe("shouldDismissOnSwipeDown", () => {
       // Default maxDuration is 600 — this is too slow.
       expect(shouldDismissOnSwipeDown(start, end)).toBe(false);
       // But with a relaxed 1000ms max, it passes.
-      expect(shouldDismissOnSwipeDown(start, end, { maxDuration: 1000 })).toBe(
-        true,
-      );
+      expect(shouldDismissOnSwipeDown(start, end, { maxDuration: 1000 })).toBe(true);
     });
 
     it("honors a custom minVelocity threshold", () => {
@@ -101,9 +95,7 @@ describe("shouldDismissOnSwipeDown", () => {
 
       expect(shouldDismissOnSwipeDown(start, end)).toBe(true);
       // Bump the threshold above the gesture's velocity.
-      expect(shouldDismissOnSwipeDown(start, end, { minVelocity: 0.5 })).toBe(
-        false,
-      );
+      expect(shouldDismissOnSwipeDown(start, end, { minVelocity: 0.5 })).toBe(false);
     });
   });
 });

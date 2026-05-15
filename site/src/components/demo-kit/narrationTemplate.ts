@@ -20,10 +20,7 @@ export type NarrationTemplate<T> = (state: T) => string;
  * (trimmed). Returns the empty string for templates that produce
  * whitespace-only output so the live region doesn't announce nothing.
  */
-export function renderNarration<T>(
-  state: T,
-  template: NarrationTemplate<T>,
-): string {
+export function renderNarration<T>(state: T, template: NarrationTemplate<T>): string {
   const raw = template(state);
   if (typeof raw !== "string") return "";
   return raw.trim();

@@ -21,7 +21,6 @@ import pytest
 
 from ocr_vault.pii_detector import PiiReport, detect_pii
 
-
 # ----- shape -----
 
 

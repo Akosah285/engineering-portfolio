@@ -12,21 +12,19 @@ const SAMPLE_PRESETS = [
   { name: "Fast", state: { rate: 10.0, label: "Fast" } satisfies SamplePresetState },
 ];
 
+const FIRST_PRESET: SamplePresetState =
+  SAMPLE_PRESETS[0]?.state ?? { rate: 0, label: "" };
+
 /**
  * Shakedown consumer for <PresetCarousel> — used on /dev/demo-kit/ to verify
  * the React island hydrates and click handlers fire end-to-end.
  */
 export function PresetCarouselShakedown() {
-  const [selected, setSelected] = useState<SamplePresetState>(
-    SAMPLE_PRESETS[0]!.state,
-  );
+  const [selected, setSelected] = useState<SamplePresetState>(FIRST_PRESET);
 
   return (
     <div>
-      <PresetCarousel
-        presets={SAMPLE_PRESETS}
-        onSelect={(state) => setSelected(state)}
-      />
+      <PresetCarousel presets={SAMPLE_PRESETS} onSelect={(state) => setSelected(state)} />
       <p
         style={{
           marginTop: "0.75rem",

@@ -22,11 +22,7 @@ import "./MathHud.css";
  *   />
  */
 
-export type HudCorner =
-  | "top-left"
-  | "top-right"
-  | "bottom-left"
-  | "bottom-right";
+export type HudCorner = "top-left" | "top-right" | "bottom-left" | "bottom-right";
 
 export interface MathHudProps {
   /** One LaTeX string per row. */
@@ -37,11 +33,7 @@ export interface MathHudProps {
   className?: string;
 }
 
-export function MathHud({
-  lines,
-  corner = "top-right",
-  className,
-}: MathHudProps) {
+export function MathHud({ lines, corner = "top-right", className }: MathHudProps) {
   const rendered = useMemo(
     () =>
       lines.map((latex) => ({

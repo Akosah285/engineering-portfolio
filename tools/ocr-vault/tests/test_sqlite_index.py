@@ -11,14 +11,13 @@ Tests use ``:memory:`` for speed; production opens a file in
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from decimal import Decimal
 from pathlib import Path
 
 import pytest
 
 from ocr_vault.sqlite_index import SqliteIndex, SqliteIndexError
-
 
 # ───────────────── schema + connection ─────────────────────────────────────
 
@@ -199,7 +198,7 @@ class TestApiCallsTable:
     def test_log_call_records_entry(self) -> None:
         idx = SqliteIndex.open(":memory:")
         idx.log_call(
-            timestamp=datetime(2024, 1, 15, 12, 0, 0, tzinfo=timezone.utc),
+            timestamp=datetime(2024, 1, 15, 12, 0, 0, tzinfo=UTC),
             course="ml",
             model="claude-sonnet-4.5",
             input_tokens=100,
@@ -214,7 +213,7 @@ class TestApiCallsTable:
         idx = SqliteIndex.open(":memory:")
         for cost in [Decimal("0.05"), Decimal("0.10"), Decimal("0.02")]:
             idx.log_call(
-                timestamp=datetime.now(timezone.utc),
+                timestamp=datetime.now(UTC),
                 course="ml",
                 model="claude-sonnet-4.5",
                 input_tokens=100,
@@ -228,17 +227,17 @@ class TestApiCallsTable:
     def test_cost_by_course(self) -> None:
         idx = SqliteIndex.open(":memory:")
         idx.log_call(
-            timestamp=datetime.now(timezone.utc), course="ml",
+            timestamp=datetime.now(UTC), course="ml",
             model="claude", input_tokens=10, output_tokens=20,
             cost_usd=Decimal("0.05"), is_re_ocr=False,
         )
         idx.log_call(
-            timestamp=datetime.now(timezone.utc), course="ml",
+            timestamp=datetime.now(UTC), course="ml",
             model="claude", input_tokens=10, output_tokens=20,
             cost_usd=Decimal("0.10"), is_re_ocr=False,
         )
         idx.log_call(
-            timestamp=datetime.now(timezone.utc), course="fourier",
+            timestamp=datetime.now(UTC), course="fourier",
             model="claude", input_tokens=10, output_tokens=20,
             cost_usd=Decimal("0.02"), is_re_ocr=False,
         )
@@ -249,12 +248,12 @@ class TestApiCallsTable:
     def test_re_ocr_calls_separable(self) -> None:
         idx = SqliteIndex.open(":memory:")
         idx.log_call(
-            timestamp=datetime.now(timezone.utc), course="ml",
+            timestamp=datetime.now(UTC), course="ml",
             model="claude", input_tokens=10, output_tokens=20,
             cost_usd=Decimal("0.05"), is_re_ocr=False,
         )
         idx.log_call(
-            timestamp=datetime.now(timezone.utc), course="ml",
+            timestamp=datetime.now(UTC), course="ml",
             model="claude", input_tokens=10, output_tokens=20,
             cost_usd=Decimal("0.03"), is_re_ocr=True,
         )

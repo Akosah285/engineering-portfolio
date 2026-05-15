@@ -13,12 +13,7 @@
  *   - Enums serialize as their string form.
  */
 
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export type FieldType = "number" | "string" | "enum";
 
@@ -82,16 +77,16 @@ export function deserializeState<S extends Schema>(
     }
     if (field.type === "number") {
       const n = Number(raw);
-      result[key as keyof StateOf<S>] = (Number.isFinite(n)
-        ? n
-        : field.default) as StateOf<S>[keyof StateOf<S>];
+      result[key as keyof StateOf<S>] = (
+        Number.isFinite(n) ? n : field.default
+      ) as StateOf<S>[keyof StateOf<S>];
     } else if (field.type === "string") {
       result[key as keyof StateOf<S>] = raw as StateOf<S>[keyof StateOf<S>];
     } else if (field.type === "enum") {
       const isValid = field.values.includes(raw);
-      result[key as keyof StateOf<S>] = (isValid
-        ? raw
-        : field.default) as StateOf<S>[keyof StateOf<S>];
+      result[key as keyof StateOf<S>] = (
+        isValid ? raw : field.default
+      ) as StateOf<S>[keyof StateOf<S>];
     }
   }
   return result;
@@ -197,11 +192,7 @@ export function useDemoState<S extends Schema>(
       clearTimeout(debounceHandle.current);
     }
     debounceHandle.current = setTimeout(() => {
-      const fragment = serializeState(
-        state,
-        schemaRef.current,
-        demoSlugRef.current,
-      );
+      const fragment = serializeState(state, schemaRef.current, demoSlugRef.current);
       // Use replaceState to avoid polluting history with every slider tick.
       window.history.replaceState(
         null,
@@ -222,11 +213,7 @@ export function useDemoState<S extends Schema>(
   // share() — return current full URL (synchronous, no debounce).
   const share = useCallback((): string => {
     if (typeof window === "undefined") return "";
-    const fragment = serializeState(
-      state,
-      schemaRef.current,
-      demoSlugRef.current,
-    );
+    const fragment = serializeState(state, schemaRef.current, demoSlugRef.current);
     return `${window.location.origin}${window.location.pathname}${window.location.search}${fragment}`;
   }, [state]);
 

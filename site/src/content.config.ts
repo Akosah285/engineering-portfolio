@@ -9,9 +9,9 @@
  * so the rules stay unit-testable without spinning up Astro.
  */
 import { defineCollection, z } from "astro:content";
+import tagsJson from "./content/concepts/_tags.json";
 import { buildTagValidator } from "./content/concepts/validator";
 import { buildFrontmatterValidator } from "./content/courseFrontmatter";
-import tagsJson from "./content/concepts/_tags.json";
 
 const tagValidator = buildTagValidator(tagsJson.tags);
 const frontmatterValidator = buildFrontmatterValidator(tagValidator);

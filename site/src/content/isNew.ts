@@ -44,4 +44,3 @@ export function isNew(
   const ageDays = (nowDay - publishedDay) / DAY_MS;
   return ageDays <= windowDays;
 }
-

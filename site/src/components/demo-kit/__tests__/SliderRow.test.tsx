@@ -149,22 +149,8 @@ describe("<SliderRow>", () => {
   it("auto-generates a unique id when none provided", () => {
     const { container } = render(
       <>
-        <SliderRow
-          label="A"
-          min={0}
-          max={1}
-          step={0.1}
-          value={0}
-          onChange={vi.fn()}
-        />
-        <SliderRow
-          label="B"
-          min={0}
-          max={1}
-          step={0.1}
-          value={0}
-          onChange={vi.fn()}
-        />
+        <SliderRow label="A" min={0} max={1} step={0.1} value={0} onChange={vi.fn()} />
+        <SliderRow label="B" min={0} max={1} step={0.1} value={0} onChange={vi.fn()} />
       </>,
     );
     const inputs = container.querySelectorAll("input");

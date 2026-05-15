@@ -33,13 +33,7 @@ describe("<PresetCarousel>", () => {
 
   it("honours initialIndex when provided", () => {
     const onSelect = vi.fn();
-    render(
-      <PresetCarousel
-        presets={presets}
-        onSelect={onSelect}
-        initialIndex={2}
-      />,
-    );
+    render(<PresetCarousel presets={presets} onSelect={onSelect} initialIndex={2} />);
 
     const fast = screen.getByRole("option", { name: "Fast" });
     expect(fast.getAttribute("aria-selected")).toBe("true");
@@ -52,10 +46,7 @@ describe("<PresetCarousel>", () => {
 
     await user.click(screen.getByRole("option", { name: "Fast" }));
 
-    expect(onSelect).toHaveBeenCalledWith(
-      { rate: 10.0 },
-      presets[2],
-    );
+    expect(onSelect).toHaveBeenCalledWith({ rate: 10.0 }, presets[2]);
   });
 
   it("Next button advances and fires onSelect", async () => {
@@ -65,34 +56,20 @@ describe("<PresetCarousel>", () => {
 
     await user.click(screen.getByRole("button", { name: "Next preset" }));
 
-    expect(onSelect).toHaveBeenCalledWith(
-      { rate: 1.0 },
-      presets[1],
-    );
+    expect(onSelect).toHaveBeenCalledWith({ rate: 1.0 }, presets[1]);
     expect(
-      screen.getByRole("option", { name: "Medium" }).getAttribute(
-        "aria-selected",
-      ),
+      screen.getByRole("option", { name: "Medium" }).getAttribute("aria-selected"),
     ).toBe("true");
   });
 
   it("Next button wraps from last to first", async () => {
     const user = userEvent.setup();
     const onSelect = vi.fn();
-    render(
-      <PresetCarousel
-        presets={presets}
-        onSelect={onSelect}
-        initialIndex={2}
-      />,
-    );
+    render(<PresetCarousel presets={presets} onSelect={onSelect} initialIndex={2} />);
 
     await user.click(screen.getByRole("button", { name: "Next preset" }));
 
-    expect(onSelect).toHaveBeenLastCalledWith(
-      { rate: 0.1 },
-      presets[0],
-    );
+    expect(onSelect).toHaveBeenLastCalledWith({ rate: 0.1 }, presets[0]);
   });
 
   it("Prev button retreats and wraps from first to last", async () => {
@@ -102,17 +79,12 @@ describe("<PresetCarousel>", () => {
 
     await user.click(screen.getByRole("button", { name: "Previous preset" }));
 
-    expect(onSelect).toHaveBeenLastCalledWith(
-      { rate: 10.0 },
-      presets[2],
-    );
+    expect(onSelect).toHaveBeenLastCalledWith({ rate: 10.0 }, presets[2]);
   });
 
   it("returns null for an empty preset list", () => {
     const onSelect = vi.fn();
-    const { container } = render(
-      <PresetCarousel presets={[]} onSelect={onSelect} />,
-    );
+    const { container } = render(<PresetCarousel presets={[]} onSelect={onSelect} />);
 
     expect(container.textContent).toBe("");
   });

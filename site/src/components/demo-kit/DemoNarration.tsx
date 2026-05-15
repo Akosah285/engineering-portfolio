@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { renderNarration, type NarrationTemplate } from "./narrationTemplate";
+import { type NarrationTemplate, renderNarration } from "./narrationTemplate";
 import "./DemoNarration.css";
 
 /**
@@ -47,12 +47,7 @@ export function DemoNarration<T>({
   const cls = className ?? base;
 
   return (
-    <p
-      className={cls}
-      role="status"
-      aria-live="polite"
-      aria-atomic="true"
-    >
+    <p className={cls} role="status" aria-live="polite" aria-atomic="true">
       {text}
     </p>
   );

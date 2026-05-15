@@ -96,9 +96,7 @@ describe("buildTagValidator", () => {
   });
 
   it("rejects duplicate tags in vocabulary at construction time", () => {
-    expect(() => buildTagValidator(["monte-carlo", "monte-carlo"])).toThrow(
-      /duplicate/i,
-    );
+    expect(() => buildTagValidator(["monte-carlo", "monte-carlo"])).toThrow(/duplicate/i);
   });
 
   it("knownTags() returns the vocabulary alphabetically sorted", () => {

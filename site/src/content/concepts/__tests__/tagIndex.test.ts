@@ -23,10 +23,7 @@ describe("buildTagIndex", () => {
       { slug: "c2", concepts: ["alpha"] },
     ];
     const result = buildTagIndex(courses, VOCAB);
-    expect(result.find((e) => e.tag === "alpha")?.courses).toEqual([
-      "c1",
-      "c2",
-    ]);
+    expect(result.find((e) => e.tag === "alpha")?.courses).toEqual(["c1", "c2"]);
     expect(result.find((e) => e.tag === "beta")?.courses).toEqual(["c1"]);
     expect(result.find((e) => e.tag === "gamma")?.courses).toEqual([]);
   });
@@ -38,11 +35,7 @@ describe("buildTagIndex", () => {
       { slug: "c3", concepts: ["alpha"] },
     ];
     const result = buildTagIndex(courses, VOCAB);
-    expect(result.find((e) => e.tag === "alpha")?.courses).toEqual([
-      "c2",
-      "c1",
-      "c3",
-    ]);
+    expect(result.find((e) => e.tag === "alpha")?.courses).toEqual(["c2", "c1", "c3"]);
   });
 
   it("silently ignores unknown tags on a course (validator's job)", () => {
@@ -53,9 +46,7 @@ describe("buildTagIndex", () => {
   });
 
   it("dedupes a course slug if it appears twice with the same tag", () => {
-    const courses = [
-      { slug: "c1", concepts: ["alpha", "alpha"] },
-    ];
+    const courses = [{ slug: "c1", concepts: ["alpha", "alpha"] }];
     const result = buildTagIndex(courses, VOCAB);
     expect(result.find((e) => e.tag === "alpha")?.courses).toEqual(["c1"]);
   });
@@ -68,20 +59,14 @@ describe("buildTagIndex", () => {
     ];
     const result = buildTagIndex(courses, big);
     expect(result).toHaveLength(30);
-    expect(result.find((e) => e.tag === "tag-15")?.courses).toEqual([
-      "c1",
-      "c2",
-    ]);
+    expect(result.find((e) => e.tag === "tag-15")?.courses).toEqual(["c1", "c2"]);
     expect(result.find((e) => e.tag === "tag-1")?.courses).toEqual([]);
   });
 });
 
 describe("lookupTag", () => {
   it("returns the matching entry for a known tag", () => {
-    const index = buildTagIndex(
-      [{ slug: "c1", concepts: ["beta"] }],
-      VOCAB,
-    );
+    const index = buildTagIndex([{ slug: "c1", concepts: ["beta"] }], VOCAB);
     expect(lookupTag(index, "beta")).toEqual({
       tag: "beta",
       courses: ["c1"],

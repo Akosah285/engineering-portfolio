@@ -1,5 +1,5 @@
 import { useId } from "react";
-import { formatSliderValue, type FormatOptions } from "./sliderFormat";
+import { type FormatOptions, formatSliderValue } from "./sliderFormat";
 import "./SliderRow.css";
 
 /**

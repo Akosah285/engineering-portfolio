@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
-import { useState } from "react";
 import userEvent from "@testing-library/user-event";
+import { useState } from "react";
 import { describe, expect, it } from "vitest";
 import { DemoNarration } from "../DemoNarration";
 
@@ -41,10 +41,7 @@ describe("<DemoNarration>", () => {
       return (
         <>
           <DemoNarration state={s} template={template} />
-          <button
-            type="button"
-            onClick={() => setS({ step: 1, loss: 0.5 })}
-          >
+          <button type="button" onClick={() => setS({ step: 1, loss: 0.5 })}>
             step
           </button>
         </>
@@ -59,11 +56,7 @@ describe("<DemoNarration>", () => {
 
   it("renders a visually-hidden variant when visuallyHidden is true", () => {
     const { container } = render(
-      <DemoNarration
-        state={{ step: 0, loss: 1.0 }}
-        template={template}
-        visuallyHidden
-      />,
+      <DemoNarration state={{ step: 0, loss: 1.0 }} template={template} visuallyHidden />,
     );
     const p = container.querySelector("p");
     expect(p?.className).toContain("sr-only");
