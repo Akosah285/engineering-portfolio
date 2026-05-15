@@ -1,0 +1,266 @@
+---
+/**
+ * Cmd-K (Ctrl-K on non-mac) command-palette search modal.
+ *
+ * Plan §7.14 — UI surface 1 of 3. Wraps Pagefind's modular UI in a
+ * `<dialog>` with focus trap. Closed on Esc / backdrop click. Opens on:
+ *   - Cmd-K / Ctrl-K
+ *   - The "/" key (vim-style, when no input is focused)
+ *   - Click on any element with `data-search-trigger`
+ *
+ * The Pagefind bundle is fetched lazily on first open so it does not
+ * block first paint.
+ */
+const base = import.meta.env.BASE_URL;
+---
+
+<link rel="stylesheet" href={`${base}pagefind/pagefind-modular-ui.css`} />
+
+<dialog id="search-modal" class="search-modal" aria-label="Search">
+  <div class="search-modal__panel">
+    <button
+      type="button"
+      class="search-modal__close"
+      aria-label="Close search"
+      data-search-close
+    >
+      ×
+    </button>
+    <div id="search-modal-ui" class="search-modal__ui"></div>
+    <p class="search-modal__hint">
+      <kbd>Esc</kbd> to close · <kbd>↑</kbd> <kbd>↓</kbd> to navigate ·
+      <kbd>↵</kbd> to open
+    </p>
+  </div>
+</dialog>
+
+<script define:vars={{ base }}>
+  const dialog = document.getElementById("search-modal");
+  const closeBtn = dialog?.querySelector("[data-search-close]");
+  let initialized = false;
+  let initPromise = null;
+
+  async function ensureInit() {
+    if (initialized) return;
+    if (initPromise) return initPromise;
+
+    initPromise = (async () => {
+      const mod = await import(`${base}pagefind/pagefind-modular-ui.js`);
+      const Instance =
+        mod.PagefindModularUI?.Instance ??
+        mod.Instance ??
+        mod.default?.Instance;
+      const Input =
+        mod.PagefindModularUI?.Input ?? mod.Input ?? mod.default?.Input;
+      const ResultList =
+        mod.PagefindModularUI?.ResultList ??
+        mod.ResultList ??
+        mod.default?.ResultList;
+      const FilterPills =
+        mod.PagefindModularUI?.FilterPills ??
+        mod.FilterPills ??
+        mod.default?.FilterPills;
+
+      if (!Instance || !Input || !ResultList) {
+        throw new Error("Pagefind modular UI missing expected exports");
+      }
+
+      const root = document.getElementById("search-modal-ui");
+      if (!root) throw new Error("Search modal mount missing");
+      root.innerHTML = `
+        <div class="pf-input"></div>
+        <div class="pf-filters"></div>
+        <div class="pf-results"></div>
+      `;
+
+      const instance = new Instance();
+      instance.add(
+        new Input({
+          inputElement: undefined,
+          containerElement: root.querySelector(".pf-input"),
+          placeholder: "Search the portfolio…",
+          debounceTimeoutMs: 100,
+        }),
+      );
+      if (FilterPills) {
+        try {
+          instance.add(
+            new FilterPills({
+              containerElement: root.querySelector(".pf-filters"),
+              filter: "type",
+              selectMultiple: false,
+            }),
+          );
+        } catch (err) {
+          // FilterPills can throw if the filter is empty in the index
+          console.debug("Pagefind filter pills skipped:", err);
+        }
+      }
+      instance.add(
+        new ResultList({
+          containerElement: root.querySelector(".pf-results"),
+        }),
+      );
+
+      // Focus the input on open
+      const input = root.querySelector(".pf-input input");
+      if (input instanceof HTMLInputElement) {
+        input.focus();
+      }
+
+      initialized = true;
+    })();
+    return initPromise;
+  }
+
+  function openModal() {
+    if (!dialog || dialog.open) return;
+    if (typeof dialog.showModal === "function") {
+      dialog.showModal();
+    } else {
+      dialog.setAttribute("open", "");
+    }
+    ensureInit()
+      .then(() => {
+        const input = dialog.querySelector(".pf-input input");
+        if (input instanceof HTMLInputElement) input.focus();
+      })
+      .catch((err) => {
+        console.error("Search modal init failed:", err);
+        const el = document.getElementById("search-modal-ui");
+        if (el) {
+          el.innerHTML = `<p style="padding:1rem;color:var(--color-text-muted);">Search index unavailable in this preview.</p>`;
+        }
+      });
+  }
+
+  function closeModal() {
+    if (!dialog || !dialog.open) return;
+    if (typeof dialog.close === "function") {
+      dialog.close();
+    } else {
+      dialog.removeAttribute("open");
+    }
+  }
+
+  // Trigger: Cmd-K / Ctrl-K
+  document.addEventListener("keydown", (ev) => {
+    const isCmdK =
+      (ev.metaKey || ev.ctrlKey) && ev.key.toLowerCase() === "k";
+    if (isCmdK) {
+      ev.preventDefault();
+      if (dialog?.open) closeModal();
+      else openModal();
+      return;
+    }
+    // Vim-style: "/" opens search when not typing in another field
+    const target = ev.target;
+    const isTyping =
+      target instanceof HTMLInputElement ||
+      target instanceof HTMLTextAreaElement ||
+      (target instanceof HTMLElement && target.isContentEditable);
+    if (ev.key === "/" && !isTyping && !ev.metaKey && !ev.ctrlKey) {
+      ev.preventDefault();
+      openModal();
+    }
+  });
+
+  // Trigger: any element with data-search-trigger
+  document.addEventListener("click", (ev) => {
+    const target = ev.target;
+    if (
+      target instanceof Element &&
+      target.closest("[data-search-trigger]")
+    ) {
+      ev.preventDefault();
+      openModal();
+    }
+  });
+
+  // Close
+  closeBtn?.addEventListener("click", closeModal);
+  dialog?.addEventListener("click", (ev) => {
+    // Click on backdrop (the dialog itself, not the panel) closes
+    if (ev.target === dialog) closeModal();
+  });
+</script>
+
+<style>
+  .search-modal {
+    border: none;
+    background: transparent;
+    padding: 0;
+    max-width: min(640px, 92vw);
+    width: 100%;
+    margin-top: 10vh;
+  }
+  .search-modal::backdrop {
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(2px);
+  }
+  .search-modal__panel {
+    background: var(--color-surface);
+    color: var(--color-text);
+    border: 1px solid var(--color-text-muted);
+    border-radius: 12px;
+    padding: 1rem 1rem 0.75rem;
+    box-shadow: 0 24px 56px rgba(0, 0, 0, 0.25);
+    position: relative;
+  }
+  .search-modal__close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.75rem;
+    background: transparent;
+    border: none;
+    color: var(--color-text-muted);
+    font-size: 1.5rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0.25rem 0.5rem;
+  }
+  .search-modal__close:hover,
+  .search-modal__close:focus {
+    color: var(--color-accent);
+  }
+  .search-modal__ui {
+    --pagefind-ui-primary: var(--color-accent);
+    --pagefind-ui-text: var(--color-text);
+    --pagefind-ui-background: var(--color-surface);
+    --pagefind-ui-border: var(--color-text-muted);
+    --pagefind-ui-tag: var(--color-code-bg);
+    --pagefind-ui-border-width: 1px;
+    --pagefind-ui-border-radius: 6px;
+    --pagefind-ui-font: inherit;
+  }
+  .search-modal__ui .pf-input input,
+  .search-modal__ui input[type="text"] {
+    width: 100%;
+    padding: 0.625rem 0.75rem;
+    border-radius: 6px;
+    border: 1px solid var(--color-text-muted);
+    background: var(--color-bg);
+    color: var(--color-text);
+    font: inherit;
+  }
+  .search-modal__ui .pf-results {
+    max-height: 60vh;
+    overflow: auto;
+    margin-top: 0.75rem;
+  }
+  .search-modal__hint {
+    margin: 0.75rem 0 0;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    text-align: right;
+  }
+  .search-modal__hint kbd {
+    background: var(--color-code-bg);
+    border: 1px solid var(--color-text-muted);
+    border-radius: 3px;
+    padding: 0.05rem 0.3rem;
+    font-family: "JetBrains Mono Variable", monospace;
+    font-size: 0.7rem;
+    margin: 0 0.1rem;
+  }
+</style>

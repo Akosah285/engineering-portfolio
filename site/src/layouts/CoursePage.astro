@@ -19,9 +19,11 @@ interface Props {
   frontmatter: CourseFrontmatter;
   /** Display name from `_courses.json` — falls back to frontmatter.title. */
   displayName?: string;
+  /** Course slug, used for Pagefind filter facet. */
+  slug: string;
 }
 
-const { frontmatter, displayName } = Astro.props;
+const { frontmatter, displayName, slug } = Astro.props;
 const base = import.meta.env.BASE_URL;
 const heading = displayName ?? frontmatter.title;
 ---
@@ -30,6 +32,8 @@ const heading = displayName ?? frontmatter.title;
   title={`${heading} — Engineering Portfolio`}
   description={frontmatter.oneLineTakeaway}
   ogType="article"
+  pagefindType="course"
+  pagefindCourse={slug}
 >
   <nav class="breadcrumb" aria-label="Breadcrumb">
     <a href={base}>Home</a>

@@ -14,6 +14,8 @@ interface Props {
   ogType?: "website" | "article";
   ogImage?: string;
   ogImageAlt?: string;
+  pagefindType?: string;
+  pagefindCourse?: string;
 }
 
 const {
@@ -22,6 +24,8 @@ const {
   ogType = "website",
   ogImage,
   ogImageAlt,
+  pagefindType = "page",
+  pagefindCourse,
 } = Astro.props;
 
 const themeBootstrap = `
@@ -60,7 +64,12 @@ const themeBootstrap = `
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <Header />
-    <main id="main">
+    <main
+      id="main"
+      data-pagefind-body
+      data-pagefind-meta={`type:${pagefindType}`}
+      data-pagefind-filter={`type:${pagefindType}${pagefindCourse ? `, course:${pagefindCourse}` : ""}`}
+    >
       <slot />
     </main>
     <Footer />

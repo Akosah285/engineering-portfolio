@@ -52,7 +52,7 @@ const Content = showCourse && entry ? (await entry.render()).Content : null;
 
 {
   showCourse && entry && Content ? (
-    <CoursePage frontmatter={entry.data} displayName={course.displayName}>
+    <CoursePage frontmatter={entry.data} displayName={course.displayName} slug={course.slug}>
       <Content />
     </CoursePage>
   ) : (

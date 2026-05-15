@@ -1,9 +1,10 @@
 ---
+import SearchModal from "./SearchModal.astro";
+
 const base = import.meta.env.BASE_URL;
 const navItems = [
   { href: `${base}courses/`, label: "Courses" },
   { href: `${base}about/`, label: "About" },
-  { href: `${base}search/`, label: "Search" },
 ];
 ---
 
@@ -35,6 +36,19 @@ const navItems = [
         }
         <li>
           <button
+            type="button"
+            class="search-trigger"
+            data-search-trigger
+            aria-label="Open search (Cmd+K)"
+            title="Search (⌘K)"
+          >
+            <span aria-hidden="true">⌕</span>
+            <span class="search-trigger__label">Search</span>
+            <kbd class="search-trigger__kbd" aria-hidden="true">⌘K</kbd>
+          </button>
+        </li>
+        <li>
+          <button
             id="theme-toggle"
             type="button"
             class="theme-toggle"
@@ -50,6 +64,8 @@ const navItems = [
     </nav>
   </div>
 </header>
+
+<SearchModal />
 
 <script>
   import {

@@ -248,6 +248,40 @@ hr {
   color: var(--accent);
 }
 
+.search-trigger {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 0.3rem 0.7rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-family: inherit;
+}
+.search-trigger:hover,
+.search-trigger:focus-visible {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.search-trigger__kbd {
+  font-family: "JetBrains Mono Variable", monospace;
+  font-size: 0.7rem;
+  padding: 0.05rem 0.3rem;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  background: transparent;
+}
+@media (max-width: 640px) {
+  .search-trigger__label,
+  .search-trigger__kbd {
+    display: none;
+  }
+}
+
 [data-theme="light"] [data-theme-icon-dark] {
   display: none;
 }
