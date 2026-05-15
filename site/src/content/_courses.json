@@ -1,0 +1,65 @@
+[
+  {
+    "slug": "machine-learning",
+    "displayName": "Machine Learning & Statistical Data Analysis",
+    "term": "SP20",
+    "displayOrder": 4,
+    "publishedAt": null
+  },
+  {
+    "slug": "fourier-transforms",
+    "displayName": "Fourier Transforms & Complex Variables",
+    "term": "FA20",
+    "displayOrder": 5,
+    "publishedAt": null
+  },
+  {
+    "slug": "discrete-probability",
+    "displayName": "Discrete & Probabilistic Systems",
+    "term": "FA19",
+    "displayOrder": 6,
+    "publishedAt": null
+  },
+  {
+    "slug": "computational-methods",
+    "displayName": "Computational Methods",
+    "term": "SP20",
+    "displayOrder": 3,
+    "publishedAt": null
+  },
+  {
+    "slug": "solid-mechanics",
+    "displayName": "Solid Mechanics",
+    "term": "FA20",
+    "displayOrder": 7,
+    "publishedAt": null
+  },
+  {
+    "slug": "distributed-systems",
+    "displayName": "Distributed Systems & Fields",
+    "term": "WI20",
+    "displayOrder": 8,
+    "publishedAt": null
+  },
+  {
+    "slug": "mechatronics",
+    "displayName": "Mechatronics",
+    "term": "SP21",
+    "displayOrder": 1,
+    "publishedAt": null
+  },
+  {
+    "slug": "digital-electronics",
+    "displayName": "Digital Electronics",
+    "term": "SP20",
+    "displayOrder": 9,
+    "publishedAt": null
+  },
+  {
+    "slug": "embedded-systems",
+    "displayName": "Embedded Systems",
+    "term": "WI21",
+    "displayOrder": 2,
+    "publishedAt": null
+  }
+]
