@@ -1,0 +1,13 @@
+---
+import { renderMath } from "./renderMath";
+
+interface Props {
+  latex: string;
+  display?: boolean;
+}
+
+const { latex, display = false } = Astro.props;
+const html = renderMath(latex, { display });
+---
+
+<Fragment set:html={html} />

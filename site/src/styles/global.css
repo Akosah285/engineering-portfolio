@@ -322,3 +322,31 @@ hr {
 .site-footer__built {
   margin: 0;
 }
+
+/* ───── Math (KaTeX SSR) ───── */
+.math-expression {
+  /* inline math: blend with surrounding text */
+}
+
+.math-expression--display {
+  display: block;
+  background: var(--math-bg);
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+.math-expression--display .katex-display {
+  margin: 0;
+}
+
+/* Auto-numbered display equations on the right (when wrapped in a numbered
+   parent). Defaults to no numbering unless the parent opts in. */
+.math-expression--display.numbered::after {
+  content: "(" counter(eq-counter) ")";
+  counter-increment: eq-counter;
+  float: right;
+  color: var(--text-muted);
+  font-size: 0.9em;
+}

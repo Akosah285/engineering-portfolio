@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import MathExpression from "../components/demo-kit/MathExpression.astro";
 ---
 
 <Layout title="Engineering Portfolio — Akwasi Akosah">
@@ -9,6 +10,16 @@ import Layout from "../layouts/Layout.astro";
     by <strong>Akwasi Akosah</strong>. Framed as a portfolio of record, not a job-search
     site.
   </p>
+
+  <p>
+    Math renders at build time — for example, the kinetic-energy identity
+    <MathExpression latex={String.raw`E = \frac{1}{2} m v^2`} /> or the Gaussian integral
+  </p>
+
+  <MathExpression
+    latex={String.raw`\int_{-\infty}^{\infty} e^{-x^2}\, dx = \sqrt{\pi}`}
+    display={true}
+  />
 
   <h2>Status</h2>
   <p>
