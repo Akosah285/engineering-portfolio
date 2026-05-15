@@ -588,3 +588,79 @@ class TestListCandidatesCommand:
         assert rc == 0
         assert "no favorite-page candidates" in out
 
+
+
+# ───────────────── cost (#34) ────────────────────────────────────────────
+
+
+class TestCostCommand:
+    """ocr-vault cost reads the api_calls table and prints totals."""
+
+    def _ingest(self, tmp_path: Path, course: str = "ml") -> Path:
+        data_dir = tmp_path / "data"
+        rc = main(
+            [
+                "add",
+                str(tmp_path / "hw.pdf"),
+                "--course",
+                course,
+                "--provider",
+                "mock",
+                "--data-dir",
+                str(data_dir),
+                "--mock-pages",
+                "2",
+            ]
+        )
+        assert rc == 0
+        return data_dir
+
+    def test_errors_when_no_index(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        rc = main(["cost", "--data-dir", str(tmp_path / "missing")])
+        err = capsys.readouterr().err
+        assert rc == 1
+        assert "no index" in err
+
+    def test_prints_totals_after_add(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        data_dir = self._ingest(tmp_path)
+        capsys.readouterr()
+        rc = main(["cost", "--data-dir", str(data_dir)])
+        out = capsys.readouterr().out
+        assert rc == 0
+        assert "total spend" in out
+        assert "initial pass" in out
+        assert "re-ocr passes" in out
+        assert "api calls" in out
+
+    def test_by_course_flag_prints_per_course_table(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        data_dir = self._ingest(tmp_path, course="ml")
+        # Add a second course so we have multiple rows.
+        capsys.readouterr()
+        rc_add2 = main(
+            [
+                "add",
+                str(tmp_path / "hw2.pdf"),
+                "--course",
+                "fourier",
+                "--provider",
+                "mock",
+                "--data-dir",
+                str(data_dir),
+                "--mock-pages",
+                "1",
+            ]
+        )
+        assert rc_add2 == 0
+        capsys.readouterr()
+        rc = main(["cost", "--data-dir", str(data_dir), "--by-course"])
+        out = capsys.readouterr().out
+        assert rc == 0
+        assert "by course" in out
+        assert "ml" in out
+        assert "fourier" in out

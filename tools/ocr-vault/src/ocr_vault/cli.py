@@ -325,6 +325,52 @@ def _cmd_list_candidates(args: argparse.Namespace) -> int:
     return 0
 
 
+# ────────────────── command: cost (#34) ───────────────────────────────────
+
+
+def _cmd_cost(args: argparse.Namespace) -> int:
+    data_dir = Path(args.data_dir)
+    index_path = data_dir / "index.sqlite"
+    if not index_path.exists():
+        sys.stderr.write(
+            f"[error] no index at {index_path} — run `ocr-vault add` first.\n"
+        )
+        return 1
+
+    index = SqliteIndex.open(index_path)
+    try:
+        total = index.total_cost_usd()
+        initial = index.total_initial_cost_usd()
+        re_ocr = index.total_re_ocr_cost_usd()
+        by_course = index.cost_by_course()
+        n_calls = index.count_calls()
+
+        sys.stdout.write(
+            "ocr-vault cost report\n"
+            f"  total spend     : ${total}\n"
+            f"  initial pass    : ${initial}\n"
+            f"  re-ocr passes   : ${re_ocr}\n"
+            f"  api calls       : {n_calls}\n"
+        )
+
+        if args.by_course and by_course:
+            sys.stdout.write("\nby course:\n")
+            _print_table(
+                ["course", "total_usd"],
+                [
+                    [course, f"${cost}"]
+                    for course, cost in sorted(
+                        by_course.items(), key=lambda kv: -kv[1]
+                    )
+                ],
+            )
+        elif args.by_course:
+            sys.stdout.write("\nno per-course costs recorded yet.\n")
+    finally:
+        index.close()
+    return 0
+
+
 # ────────────────── parser + main ──────────────────────────────────────────
 
 
@@ -458,6 +504,23 @@ def _build_parser() -> argparse.ArgumentParser:
                 help="Number of candidates to print (default: 10).",
             )
         p_list.set_defaults(func=cmd_fn)
+
+    # ─── cost (#34) ────────────────────────────────────────────────────
+    p_cost = sub.add_parser(
+        "cost",
+        help="Print total OCR spend, with optional per-course breakdown.",
+    )
+    p_cost.add_argument(
+        "--data-dir",
+        default="data",
+        help="Path to the data/ root (default: ./data).",
+    )
+    p_cost.add_argument(
+        "--by-course",
+        action="store_true",
+        help="Also print a per-course cost table.",
+    )
+    p_cost.set_defaults(func=_cmd_cost)
 
     return parser
 
