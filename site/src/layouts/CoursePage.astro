@@ -1,0 +1,206 @@
+---
+/**
+ * Course page layout — renders the hero, concepts, optional heroDemoLabel
+ * banner, and the MDX body (passed via the default slot).
+ *
+ * Page contract (plan §2.7):
+ *   1. Hero header (course name, term, one-line takeaway)
+ *   2. Concepts learned (tagged from controlled vocabulary)
+ *   3. Hero demo / video reel — banner placeholder for v0
+ *   4. (Featured problems, tech tags, reflection, code links — body slot)
+ *
+ * Coming-Soon variant lives in `pages/courses/[slug].astro` and bypasses
+ * this layout entirely.
+ */
+import Layout from "./Layout.astro";
+import type { CourseFrontmatter } from "../content/courseFrontmatter";
+
+interface Props {
+  frontmatter: CourseFrontmatter;
+  /** Display name from `_courses.json` — falls back to frontmatter.title. */
+  displayName?: string;
+}
+
+const { frontmatter, displayName } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const heading = displayName ?? frontmatter.title;
+---
+
+<Layout
+  title={`${heading} — Engineering Portfolio`}
+  description={frontmatter.oneLineTakeaway}
+>
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href={base}>Home</a>
+    <span aria-hidden="true">/</span>
+    <a href={`${base}#courses`}>Courses</a>
+    <span aria-hidden="true">/</span>
+    <span aria-current="page">{heading}</span>
+  </nav>
+
+  <article class="course-page">
+    <header class="course-hero">
+      <p class="course-hero__term">{frontmatter.term}</p>
+      <h1 class="course-hero__title">{heading}</h1>
+      <p class="course-hero__takeaway">{frontmatter.oneLineTakeaway}</p>
+    </header>
+
+    {
+      frontmatter.concepts.length > 0 && (
+        <section class="course-concepts" aria-labelledby="concepts-heading">
+          <h2 id="concepts-heading">Concepts learned</h2>
+          <ul class="course-concepts__list" role="list">
+            {frontmatter.concepts.map((tag) => (
+              <li class="course-concepts__tag">
+                <a href={`${base}concepts/${tag}/`}>{tag}</a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      frontmatter.heroDemoLabel && (
+        <aside class="course-hero-demo" aria-label="Hero demo placeholder">
+          <p class="course-hero-demo__label">Hero demo</p>
+          <p class="course-hero-demo__title">{frontmatter.heroDemoLabel}</p>
+          <p class="course-hero-demo__placeholder">
+            Interactive demo coming soon.
+          </p>
+        </aside>
+      )
+    }
+
+    <section class="course-body">
+      <slot />
+    </section>
+  </article>
+</Layout>
+
+<style>
+  .breadcrumb {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    margin: 1rem 0 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  .breadcrumb a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px dotted currentColor;
+  }
+  .breadcrumb a:hover,
+  .breadcrumb a:focus {
+    color: var(--color-accent);
+  }
+  .breadcrumb [aria-current="page"] {
+    color: var(--color-text);
+  }
+
+  .course-page {
+    max-width: 70ch;
+    margin: 0 auto;
+    padding: 0 1rem 4rem;
+  }
+
+  .course-hero {
+    margin: 2rem 0 3rem;
+  }
+  .course-hero__term {
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.75rem;
+    color: var(--color-accent);
+    margin: 0 0 0.5rem;
+    font-weight: 600;
+  }
+  .course-hero__title {
+    font-family: "Source Serif 4 Variable", Georgia, serif;
+    font-size: clamp(1.75rem, 5vw, 2.75rem);
+    line-height: 1.15;
+    margin: 0 0 0.75rem;
+    font-weight: 600;
+  }
+  .course-hero__takeaway {
+    font-size: 1.125rem;
+    line-height: 1.5;
+    color: var(--color-text-muted);
+    margin: 0;
+    font-style: italic;
+  }
+
+  .course-concepts {
+    margin: 2rem 0 3rem;
+  }
+  .course-concepts h2 {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text-muted);
+    margin: 0 0 0.75rem;
+    font-weight: 600;
+  }
+  .course-concepts__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .course-concepts__tag a {
+    display: inline-block;
+    padding: 0.25rem 0.625rem;
+    background: var(--color-code-bg);
+    color: var(--color-text);
+    text-decoration: none;
+    border-radius: 999px;
+    font-size: 0.8125rem;
+    font-family: "JetBrains Mono Variable", monospace;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .course-concepts__tag a:hover,
+  .course-concepts__tag a:focus {
+    background: var(--color-accent);
+    color: var(--color-bg);
+  }
+
+  .course-hero-demo {
+    margin: 2rem 0 3rem;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid var(--color-accent);
+    border-radius: 12px;
+    background: var(--color-math-bg);
+  }
+  .course-hero-demo__label {
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--color-accent);
+    margin: 0 0 0.25rem;
+    font-weight: 600;
+  }
+  .course-hero-demo__title {
+    margin: 0 0 0.25rem;
+    font-weight: 600;
+    font-size: 1.125rem;
+  }
+  .course-hero-demo__placeholder {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+  }
+
+  .course-body :global(h2) {
+    font-family: "Source Serif 4 Variable", Georgia, serif;
+    margin-top: 2.5rem;
+  }
+  .course-body :global(p),
+  .course-body :global(li) {
+    line-height: 1.65;
+  }
+</style>

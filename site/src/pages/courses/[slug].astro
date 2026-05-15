@@ -1,0 +1,170 @@
+---
+/**
+ * Dynamic course route: /courses/{slug}/
+ *
+ * Routes are derived from `_courses.json` (single source of truth). If a
+ * matching MDX exists in `src/content/courses/{slug}.mdx`, it is rendered
+ * inside `<CoursePage>` with its frontmatter. Otherwise a Coming-Soon
+ * placeholder is rendered.
+ *
+ * Build behaviour:
+ *   - Every slug in _courses.json gets a page
+ *   - Missing MDX -> Coming-Soon (no draft / no 404)
+ *   - draft: true frontmatter -> treated as Coming-Soon in production
+ */
+import { getCollection, type CollectionEntry } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import CoursePage from "../../layouts/CoursePage.astro";
+import { buildCourseResolver, type Course } from "../../content/resolver";
+import coursesData from "../../content/_courses.json";
+
+type CourseEntry = CollectionEntry<"courses">;
+
+export async function getStaticPaths() {
+  const courses = coursesData as Course[];
+  const resolver = buildCourseResolver(courses);
+  const entries = (await getCollection("courses")) as CourseEntry[];
+  const entriesBySlug = new Map(entries.map((e) => [e.slug, e]));
+
+  return resolver.slugs().map((slug) => {
+    const course = resolver.toCourse(slug);
+    const entry = entriesBySlug.get(slug);
+    return {
+      params: { slug },
+      props: { course, entry: entry ?? null },
+    };
+  });
+}
+
+interface Props {
+  course: Course;
+  entry: CourseEntry | null;
+}
+
+const { course, entry } = Astro.props as Props;
+const base = import.meta.env.BASE_URL;
+const isPublishedInJson = course.publishedAt !== null;
+const isDraft = entry?.data.draft ?? false;
+const showCourse = entry !== null && isPublishedInJson && !isDraft;
+
+const Content = showCourse && entry ? (await entry.render()).Content : null;
+---
+
+{
+  showCourse && entry && Content ? (
+    <CoursePage frontmatter={entry.data} displayName={course.displayName}>
+      <Content />
+    </CoursePage>
+  ) : (
+    <Layout
+      title={`${course.displayName} — Coming Soon — Engineering Portfolio`}
+      description={
+        course.comingSoonPreview ??
+        `Course writeup coming soon: ${course.displayName}.`
+      }
+    >
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href={base}>Home</a>
+        <span aria-hidden="true">/</span>
+        <a href={base}>Courses</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">{course.displayName}</span>
+      </nav>
+
+      <section class="coming-soon">
+        <p class="coming-soon__term">{course.term}</p>
+        <h1 class="coming-soon__title">{course.displayName}</h1>
+        <p class="coming-soon__label">Coming soon</p>
+        <p class="coming-soon__preview">
+          {course.comingSoonPreview ??
+            `Interactive demos and featured problems for ${course.displayName}, in progress.`}
+        </p>
+        <p class="coming-soon__footnote">
+          The site is being built in public — track progress at{" "}
+          <a href="https://github.com/Akosah285/engineering-portfolio/issues">
+            github.com/Akosah285/engineering-portfolio
+          </a>
+          .
+        </p>
+        <p class="coming-soon__back">
+          <a href={base}>← Back to all courses</a>
+        </p>
+      </section>
+    </Layout>
+  )
+}
+
+<style>
+  .breadcrumb {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    margin: 1rem 0 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  .breadcrumb a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px dotted currentColor;
+  }
+  .breadcrumb [aria-current="page"] {
+    color: var(--color-text);
+  }
+
+  .coming-soon {
+    max-width: 60ch;
+    margin: 4rem auto;
+    padding: 2rem;
+    text-align: center;
+  }
+  .coming-soon__term {
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.75rem;
+    color: var(--color-accent);
+    margin: 0 0 0.5rem;
+    font-weight: 600;
+  }
+  .coming-soon__title {
+    font-family: "Source Serif 4 Variable", Georgia, serif;
+    font-size: clamp(1.5rem, 4.5vw, 2.25rem);
+    line-height: 1.15;
+    margin: 0 0 1.5rem;
+    font-weight: 600;
+  }
+  .coming-soon__label {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: var(--color-math-bg);
+    border: 1px solid var(--color-accent);
+    color: var(--color-accent);
+    border-radius: 999px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+    margin: 0 0 1.5rem;
+  }
+  .coming-soon__preview {
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    color: var(--color-text-muted);
+    margin: 0 0 2rem;
+  }
+  .coming-soon__footnote {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    margin: 0 0 2rem;
+  }
+  .coming-soon__back a {
+    color: var(--color-accent);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .coming-soon__back a:hover,
+  .coming-soon__back a:focus {
+    text-decoration: underline;
+  }
+</style>
