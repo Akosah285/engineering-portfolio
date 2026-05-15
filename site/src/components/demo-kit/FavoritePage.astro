@@ -1,0 +1,305 @@
+---
+/**
+ * <FavoritePage> — handwritten-thumbnail primitive (plan §6.22 + #18).
+ *
+ * Pattern:
+ *   Course pages embed ONE "favorite page" from the original handwritten
+ *   coursework. Hand-cropped to a meaningful region, served via
+ *   `astro:assets` (<Picture> → AVIF + WebP + PNG fallback responsive
+ *   variants), shown small + lazy, expandable into a full-resolution
+ *   lightbox on click.
+ *
+ * Lightbox:
+ *   Built on the native <dialog> element so we get focus-trap + Esc
+ *   for free. We layer on click-outside-to-dismiss and swipe-down-to-
+ *   dismiss (mobile UX). All dismissals call dialog.close().
+ *
+ * Accessibility:
+ *   - Thumbnail is a <button> so it's keyboard-activatable.
+ *   - Caption is associated via aria-describedby on the trigger.
+ *   - Modal labelled via aria-label (the caption).
+ *   - Focus trap is native to <dialog>.showModal().
+ *   - Caption colour uses --color-text (not --color-text-muted) for AA.
+ *
+ * Usage:
+ *   ---
+ *   import FavoritePage from "../../components/demo-kit/FavoritePage.astro";
+ *   import sample from "../../assets/sample-page.png";
+ *   ---
+ *   <FavoritePage src={sample} caption="My first attempt at Problem 3a" />
+ */
+import { Picture } from "astro:assets";
+
+interface Props {
+  /** Imported image from src/assets/ (must be an ImageMetadata, not a path). */
+  src: ImageMetadata;
+  /** Short italic caption (~20 words). */
+  caption: string;
+  /** Alt text. Defaults to caption. */
+  alt?: string;
+  /** Override the displayed thumbnail width. Default: 600px. */
+  width?: number;
+}
+
+const { src, caption, alt = caption, width = 600 } = Astro.props;
+
+// Use a stable id so caption + button reference each other deterministically.
+const fpId = `fp-${Math.random().toString(36).slice(2, 10)}`;
+const captionId = `${fpId}-caption`;
+---
+
+<figure class="favorite-page">
+  <button
+    type="button"
+    class="favorite-page__trigger"
+    data-favorite-page-trigger
+    aria-haspopup="dialog"
+    aria-describedby={captionId}
+  >
+    <Picture
+      src={src}
+      alt={alt}
+      width={width}
+      densities={[1, 2]}
+      formats={["avif", "webp"]}
+      fallbackFormat="png"
+      loading="lazy"
+      decoding="async"
+      class="favorite-page__thumb"
+    />
+    <span class="favorite-page__expand-hint" aria-hidden="true">
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <polyline points="15 3 21 3 21 9"></polyline>
+        <polyline points="9 21 3 21 3 15"></polyline>
+        <line x1="21" y1="3" x2="14" y2="10"></line>
+        <line x1="3" y1="21" x2="10" y2="14"></line>
+      </svg>
+    </span>
+  </button>
+
+  <figcaption id={captionId} class="favorite-page__caption">{caption}</figcaption>
+
+  <dialog
+    class="favorite-page__lightbox"
+    data-favorite-page-lightbox
+    aria-label={caption}
+  >
+    <button
+      type="button"
+      class="favorite-page__close"
+      data-favorite-page-close
+      aria-label="Close"
+    >
+      &times;
+    </button>
+    <Picture
+      src={src}
+      alt={alt}
+      widths={[800, 1200, 1600]}
+      sizes="(max-width: 800px) 95vw, 1200px"
+      formats={["avif", "webp"]}
+      fallbackFormat="png"
+      loading="lazy"
+      class="favorite-page__full"
+    />
+  </dialog>
+</figure>
+
+<script>
+  import { shouldDismissOnSwipeDown } from "./lightboxDismiss.ts";
+
+  const figures = document.querySelectorAll<HTMLElement>(".favorite-page");
+
+  for (const figure of figures) {
+    const trigger = figure.querySelector<HTMLButtonElement>(
+      "[data-favorite-page-trigger]",
+    );
+    const dialog = figure.querySelector<HTMLDialogElement>(
+      "[data-favorite-page-lightbox]",
+    );
+    const close = figure.querySelector<HTMLButtonElement>(
+      "[data-favorite-page-close]",
+    );
+
+    if (!trigger || !dialog) continue;
+
+    trigger.addEventListener("click", () => {
+      if (typeof dialog.showModal === "function") {
+        dialog.showModal();
+      } else {
+        dialog.setAttribute("open", "");
+      }
+    });
+
+    close?.addEventListener("click", () => dialog.close());
+
+    // Click-outside dismissal: native <dialog> backdrop clicks land on the
+    // dialog element itself (its content fills the entire dialog box).
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) {
+        dialog.close();
+      }
+    });
+
+    // Mobile swipe-down dismissal.
+    let touchStart: { y: number; t: number } | null = null;
+    dialog.addEventListener(
+      "touchstart",
+      (event) => {
+        const touch = event.touches[0];
+        if (!touch) return;
+        touchStart = { y: touch.clientY, t: performance.now() };
+      },
+      { passive: true },
+    );
+    dialog.addEventListener(
+      "touchend",
+      (event) => {
+        if (!touchStart) return;
+        const touch = event.changedTouches[0];
+        if (!touch) return;
+        const end = { y: touch.clientY, t: performance.now() };
+        if (shouldDismissOnSwipeDown(touchStart, end)) {
+          dialog.close();
+        }
+        touchStart = null;
+      },
+      { passive: true },
+    );
+  }
+</script>
+
+<style>
+  .favorite-page {
+    margin: 2rem 0;
+    max-width: 600px;
+  }
+
+  .favorite-page__trigger {
+    position: relative;
+    display: block;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    /* Warm-paper backdrop acts as a low-tech LQIP — visible behind the
+       <img> while it streams in. */
+    background: var(--color-math-bg, #f8f5ee);
+    border: 1px solid var(--color-text-muted);
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: zoom-in;
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
+  }
+
+  .favorite-page__trigger:hover,
+  .favorite-page__trigger:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+
+  .favorite-page__trigger:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  .favorite-page__thumb {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .favorite-page__expand-hint {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+
+  .favorite-page__caption {
+    margin-top: 0.5rem;
+    font-style: italic;
+    font-size: 0.9375rem;
+    /* Caption colour uses full --color-text (not --color-text-muted)
+       to clear AA contrast against the warm paper background. */
+    color: var(--color-text);
+    line-height: 1.5;
+    max-width: 55ch;
+  }
+
+  /* ---------- Lightbox ---------- */
+
+  .favorite-page__lightbox {
+    border: none;
+    background: transparent;
+    padding: 0;
+    max-width: 95vw;
+    max-height: 95vh;
+    overflow: visible;
+  }
+
+  .favorite-page__lightbox::backdrop {
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(4px);
+  }
+
+  .favorite-page__lightbox[open] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .favorite-page__full {
+    max-width: 95vw;
+    max-height: 95vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 4px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  }
+
+  .favorite-page__close {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.95);
+    color: #1a1a1a;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .favorite-page__close:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  /* Prevent body scroll when the lightbox is open. */
+  :global(html:has(.favorite-page__lightbox[open])) {
+    overflow: hidden;
+  }
+</style>

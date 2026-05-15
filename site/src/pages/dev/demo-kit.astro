@@ -2,14 +2,15 @@
 /**
  * Demo-kit pattern shakedown page (hidden from production nav).
  *
- * Lives at /_dev/demo-kit/ — only reachable by typing the URL. Used as
- * a build-time verification that the `algorithm.ts?raw` extraction
- * pattern + <CodeReveal> integration produce highlighted, collapsible
- * output with zero runtime JS.
+ * Lives at /dev/demo-kit/ — only reachable by typing the URL. Used as
+ * a build-time verification that the demo-kit primitives compile and
+ * render correctly.
  */
 import Layout from "../../layouts/Layout.astro";
 import CodeReveal from "../../components/demo-kit/CodeReveal.astro";
+import FavoritePage from "../../components/demo-kit/FavoritePage.astro";
 import algorithmSource from "../../components/demo-kit/__sample__/algorithm.ts?raw";
+import samplePage from "../../assets/sample-favorite-page.png";
 ---
 
 <Layout
@@ -19,18 +20,30 @@ import algorithmSource from "../../components/demo-kit/__sample__/algorithm.ts?r
   <article class="dev-page">
     <h1>Demo-kit shakedown</h1>
     <p>
-      This page is a build-time check that the <code>algorithm.ts?raw</code>
-      extraction convention + <code>&lt;CodeReveal&gt;</code> component produce
-      Shiki-highlighted, collapsible output with zero runtime JS.
+      This page is a build-time check that the demo-kit primitives compile,
+      render, and produce the expected HTML output.
     </p>
 
-    <h2>One source of truth</h2>
+    <h2><code>&lt;CodeReveal&gt;</code> + <code>algorithm.ts?raw</code></h2>
     <p>
       The same <code>algorithm.ts</code> file is imported twice — once as a
-      module (executable), once as raw text (displayable).
+      module (executable), once as raw text (displayable) — so what runs is
+      exactly what's shown.
     </p>
 
     <CodeReveal code={algorithmSource} lang="typescript" />
+
+    <h2><code>&lt;FavoritePage&gt;</code> handwritten thumbnail</h2>
+    <p>
+      A small, lazy-loaded thumbnail (AVIF + WebP + PNG via{" "}
+      <code>astro:assets</code>) that opens a native <code>&lt;dialog&gt;</code>
+      lightbox on click. Dismisses on Esc, click-outside, or mobile swipe-down.
+    </p>
+
+    <FavoritePage
+      src={samplePage}
+      caption="My first attempt at Problem 3a — Gradient Descent on a parabola, learning the update rule by hand."
+    />
   </article>
 </Layout>
 
@@ -40,8 +53,12 @@ import algorithmSource from "../../components/demo-kit/__sample__/algorithm.ts?r
     margin: 2rem auto 4rem;
     padding: 0 1rem;
   }
-  .dev-page h1 {
+  .dev-page h1,
+  .dev-page h2 {
     font-family: "Source Serif 4 Variable", Georgia, serif;
+  }
+  .dev-page h2 {
+    margin-top: 3rem;
   }
   .dev-page code {
     font-family: "JetBrains Mono Variable", monospace;
