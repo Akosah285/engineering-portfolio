@@ -13,8 +13,10 @@ import DemoChrome from "../../components/demo-kit/DemoChrome.astro";
 import { PresetCarouselShakedown } from "../../components/demo-kit/PresetCarouselShakedown";
 import { DemoKitShakedown } from "../../components/demo-kit/DemoKitShakedown";
 import { GradientDescentVisualizer } from "../../components/demos/machine-learning/gradient-descent/GradientDescentVisualizer";
+import { PolynomialRegression } from "../../components/demos/machine-learning/polynomial-regression/PolynomialRegression";
 import algorithmSource from "../../components/demo-kit/__sample__/algorithm.ts?raw";
 import gdAlgorithmSource from "../../components/demos/machine-learning/gradient-descent/algorithm.ts?raw";
+import polyAlgorithmSource from "../../components/demos/machine-learning/polynomial-regression/algorithm.ts?raw";
 import samplePage from "../../assets/sample-favorite-page.png";
 ---
 
@@ -172,6 +174,37 @@ import samplePage from "../../assets/sample-favorite-page.png";
       below.
     </p>
     <CodeReveal code={gdAlgorithmSource} lang="typescript" />
+
+    <h2>
+      <code>&lt;PolynomialRegression&gt;</code> — second ML demo (#25)
+    </h2>
+    <p>
+      Polynomial fit to noisy data with optional Ridge / Lasso regularization.
+      Slide degree up to overfit; turn on Ridge or Lasso to tame it. Lasso
+      drives most coefficients to zero — sparsity for free.
+    </p>
+
+    <DemoChrome
+      title="Polynomial Regression with Regularization"
+      shareable={true}
+      demoSourcePath="site/src/components/demos/machine-learning/polynomial-regression/PolynomialRegression.tsx"
+      narration="Polynomial regression with Ridge (L2) and Lasso (L1) regularization. Slide the degree to overfit, then tame it by turning on regularization."
+    >
+      <PolynomialRegression client:visible />
+      <Fragment slot="about">
+        Demonstrates the bias / variance trade-off. High-degree polynomials
+        chase noise; Ridge shrinks coefficients smoothly; Lasso zeroes out
+        unnecessary ones via cyclic coordinate descent with soft-thresholding.
+      </Fragment>
+    </DemoChrome>
+
+    <h3>Algorithm source (toggle to view)</h3>
+    <p>
+      The pure module exports <code>fitPolynomial</code> (OLS / Ridge / Lasso),
+      <code>evaluatePolynomial</code>, <code>generateNoisyData</code>, and
+      <code>selectBestDegree</code> — all deterministic, all unit-tested.
+    </p>
+    <CodeReveal code={polyAlgorithmSource} lang="typescript" />
   </article>
 </Layout>
 
