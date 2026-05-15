@@ -1,0 +1,67 @@
+/**
+ * Styles for <SliderRow> (#15).
+ * Native range input with custom track + thumb sizing for >=44px tap target.
+ */
+
+.slider-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.5rem 0;
+}
+
+.slider-row__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.slider-row__label {
+  font-family: "Inter Variable", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.slider-row__value {
+  font-family: "JetBrains Mono Variable", monospace;
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-accent);
+}
+
+.slider-row__description {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+}
+
+.slider-row__input {
+  width: 100%;
+  min-height: 44px;
+  margin: 0;
+  cursor: pointer;
+  accent-color: var(--color-accent);
+}
+
+.slider-row__input:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.slider-row__input:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.slider-row__ticks {
+  display: flex;
+  justify-content: space-between;
+  font-family: "JetBrains Mono Variable", monospace;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}

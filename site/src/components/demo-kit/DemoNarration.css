@@ -1,0 +1,27 @@
+/**
+ * Styles for <DemoNarration> (#15).
+ * Visible by default; .sr-only variant hides visually but keeps it announced.
+ */
+
+.demo-narration {
+  margin: 0.75rem 0 0;
+  padding: 0.5rem 0.75rem;
+  border-left: 3px solid var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 4%, var(--color-surface));
+  font-family: "Source Serif 4 Variable", Georgia, serif;
+  font-size: 0.9375rem;
+  font-style: italic;
+  color: var(--color-text);
+}
+
+.demo-narration--sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

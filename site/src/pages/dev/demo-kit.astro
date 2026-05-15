@@ -11,6 +11,7 @@ import CodeReveal from "../../components/demo-kit/CodeReveal.astro";
 import FavoritePage from "../../components/demo-kit/FavoritePage.astro";
 import DemoChrome from "../../components/demo-kit/DemoChrome.astro";
 import { PresetCarouselShakedown } from "../../components/demo-kit/PresetCarouselShakedown";
+import { DemoKitShakedown } from "../../components/demo-kit/DemoKitShakedown";
 import algorithmSource from "../../components/demo-kit/__sample__/algorithm.ts?raw";
 import samplePage from "../../assets/sample-favorite-page.png";
 ---
@@ -107,6 +108,32 @@ import samplePage from "../../assets/sample-favorite-page.png";
         Demonstrates the demo-kit's preset-carousel primitive: keyboard-
         accessible chips with ≥44×44 px tap targets, wrap-around Prev/Next, and
         a React 19 island hydrated on visibility.
+      </Fragment>
+    </DemoChrome>
+
+    <h2>
+      <code>&lt;DemoCanvas&gt;</code> + <code>&lt;SliderRow&gt;</code> +
+      <code>&lt;MathHud&gt;</code> + <code>&lt;DemoNarration&gt;</code>
+    </h2>
+    <p>
+      All four #15 primitives wired together: a live oscillator with two slider
+      controls, KaTeX HUD overlay, aria-live narration, and a draw-loop driven
+      canvas with explicit width/height (zero CLS).
+    </p>
+
+    <DemoChrome
+      title="Oscillator shakedown"
+      shareable={false}
+      demoSourcePath="site/src/components/demo-kit/DemoKitShakedown.tsx"
+      narration="A sine wave whose frequency and amplitude are controlled by sliders. The HUD overlays the current parameters as KaTeX, and the narration line announces the state for screen-reader users."
+    >
+      <DemoKitShakedown client:visible />
+      <Fragment slot="about">
+        Validates the four core demo-kit primitives in concert:
+        <code>&lt;DemoCanvas&gt;</code> (sized canvas + RAF draw loop),
+        <code>&lt;SliderRow&gt;</code> (labeled native range with format +
+        ticks), <code>&lt;MathHud&gt;</code> (KaTeX overlay), and
+        <code>&lt;DemoNarration&gt;</code> (aria-live transcript).
       </Fragment>
     </DemoChrome>
   </article>

@@ -1,0 +1,15 @@
+/**
+ * Styles for <DemoCanvas> (#15).
+ * The aspect-ratio is set inline (so SSR HTML reserves the height before
+ * CSS arrives). This file scopes wrapper styling.
+ */
+
+.demo-canvas {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  background: var(--color-bg);
+  border: 1px solid color-mix(in srgb, var(--color-text-muted) 30%, transparent);
+  border-radius: 6px;
+}

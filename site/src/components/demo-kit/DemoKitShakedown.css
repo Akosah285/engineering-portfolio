@@ -1,0 +1,19 @@
+/** Layout-only styles for the dev/demo-kit oscillator shakedown. */
+
+.demo-kit-shakedown {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.demo-kit-shakedown__stage {
+  position: relative;
+  width: 100%;
+}
+
+.demo-kit-shakedown__controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+}

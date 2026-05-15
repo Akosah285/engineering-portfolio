@@ -1,0 +1,34 @@
+/**
+ * Styles for <MathHud> (#15).
+ * Absolute-positioned KaTeX overlay panel; the consuming demo wrapper
+ * must be position: relative for the corner anchoring to work.
+ */
+
+.math-hud {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.5rem 0.625rem;
+  background: color-mix(in srgb, var(--color-surface) 88%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-text-muted) 50%, transparent);
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  color: var(--color-text);
+  pointer-events: none;
+  backdrop-filter: blur(2px);
+}
+
+.math-hud--top-left { top: 0.5rem; left: 0.5rem; }
+.math-hud--top-right { top: 0.5rem; right: 0.5rem; }
+.math-hud--bottom-left { bottom: 0.5rem; left: 0.5rem; }
+.math-hud--bottom-right { bottom: 0.5rem; right: 0.5rem; }
+
+.math-hud__line {
+  display: block;
+}
+
+.math-hud__line .katex {
+  font-size: inherit;
+}
