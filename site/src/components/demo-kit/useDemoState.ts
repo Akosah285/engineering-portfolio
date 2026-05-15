@@ -47,3 +47,45 @@ export function serializeState<S extends Schema>(
   }
   return `#${params.toString()}`;
 }
+
+/**
+ * Parse a URL fragment back into a state object. Unknown keys are ignored.
+ * Missing keys, malformed values, and out-of-range enum values fall back to
+ * the schema's defaults — never throws.
+ *
+ * @param fragment The URL fragment (with or without leading `#`)
+ * @param schema The schema describing each field
+ * @returns The parsed state, with defaults filled in for missing/invalid keys
+ */
+export function deserializeState<S extends Schema>(
+  fragment: string,
+  schema: S,
+): StateOf<S> {
+  const stripped = fragment.startsWith("#") ? fragment.slice(1) : fragment;
+  const params = new URLSearchParams(stripped);
+
+  const result = {} as StateOf<S>;
+  for (const key of Object.keys(schema)) {
+    const field = schema[key];
+    if (!field) continue;
+    const raw = params.get(key);
+    if (raw === null) {
+      result[key as keyof StateOf<S>] = field.default as StateOf<S>[keyof StateOf<S>];
+      continue;
+    }
+    if (field.type === "number") {
+      const n = Number(raw);
+      result[key as keyof StateOf<S>] = (Number.isFinite(n)
+        ? n
+        : field.default) as StateOf<S>[keyof StateOf<S>];
+    } else if (field.type === "string") {
+      result[key as keyof StateOf<S>] = raw as StateOf<S>[keyof StateOf<S>];
+    } else if (field.type === "enum") {
+      const isValid = field.values.includes(raw);
+      result[key as keyof StateOf<S>] = (isValid
+        ? raw
+        : field.default) as StateOf<S>[keyof StateOf<S>];
+    }
+  }
+  return result;
+}
