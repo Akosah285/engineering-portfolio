@@ -87,6 +87,11 @@ const PreviewComponent =
         course.comingSoonPreview ??
         `Course writeup coming soon: ${course.displayName}.`
       }
+      ogType="article"
+      ogImage={`https://akosah285.github.io${base}og/courses/${course.slug}.png`}
+      ogImageAlt={`OG card for ${course.displayName} — ${course.term}`}
+      pagefindType="course"
+      pagefindCourse={course.slug}
     >
       <nav class="breadcrumb" aria-label="Breadcrumb">
         <a href={base}>Home</a>
