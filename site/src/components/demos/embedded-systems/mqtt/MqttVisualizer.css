@@ -1,0 +1,95 @@
+.mqtt-visualizer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mqtt-visualizer__stage {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.mqtt-visualizer__svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: #fafafa;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+}
+
+.mqtt-visualizer__match {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.9rem;
+}
+
+.mqtt-visualizer__match-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.mqtt-visualizer__match-label {
+  font-size: 0.75rem;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.mqtt-visualizer__match-value {
+  font-weight: 600;
+}
+
+.mqtt-visualizer__match-ok {
+  color: #2e7d32;
+}
+
+.mqtt-visualizer__match-bad {
+  color: #c62828;
+}
+
+.mqtt-visualizer__hud {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.85rem;
+  color: #333;
+}
+
+.mqtt-visualizer__controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.mqtt-visualizer__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.mqtt-visualizer__btn {
+  padding: 0.4rem 0.85rem;
+  border: 1px solid #c0c0c0;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+  font: inherit;
+}
+
+.mqtt-visualizer__btn:hover {
+  background: #f0f0f0;
+}
+
+.mqtt-visualizer__counter {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.85rem;
+  color: #555;
+}

@@ -1,0 +1,88 @@
+.vhdl-visualizer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.vhdl-visualizer__stage {
+  position: relative;
+  overflow-x: auto;
+  background: #fafafa;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 0.5rem;
+}
+
+.vhdl-visualizer__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.vhdl-visualizer__lane-label {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  fill: #444;
+}
+
+.vhdl-visualizer__wave {
+  fill: none;
+  stroke: #00693e;
+  stroke-width: 2;
+}
+
+.vhdl-visualizer__wave--clock {
+  stroke: #2a5d9f;
+}
+
+.vhdl-visualizer__lane-bg {
+  fill: #ffffff;
+  stroke: #ececec;
+}
+
+.vhdl-visualizer__cursor {
+  stroke: #cf4f4f;
+  stroke-width: 1.5;
+  stroke-dasharray: 4 3;
+}
+
+.vhdl-visualizer__edge-dot {
+  fill: #e07a1f;
+}
+
+.vhdl-visualizer__hud {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+  color: #333;
+}
+
+.vhdl-visualizer__controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.vhdl-visualizer__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.vhdl-visualizer__btn {
+  font: inherit;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #cfcfcf;
+  background: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.vhdl-visualizer__btn:hover {
+  background: #f3f3f3;
+}
+
+.vhdl-visualizer__counter {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+  color: #555;
+}

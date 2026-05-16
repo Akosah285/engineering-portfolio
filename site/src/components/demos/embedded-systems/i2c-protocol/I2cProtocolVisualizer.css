@@ -1,0 +1,84 @@
+.i2c-visualizer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.i2c-visualizer__stage {
+  position: relative;
+  overflow-x: auto;
+  border: 1px solid #d8d8d8;
+  background: #fafafa;
+  padding: 0.5rem;
+}
+
+.i2c-visualizer__svg {
+  display: block;
+}
+
+.i2c-visualizer__hud {
+  font-family: monospace;
+  font-size: 0.875rem;
+  color: #333;
+}
+
+.i2c-visualizer__decoded {
+  font-family: monospace;
+  font-size: 0.875rem;
+  background: #f0f0f0;
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  word-break: break-all;
+}
+
+.i2c-visualizer__controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.i2c-visualizer__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.i2c-visualizer__btn {
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #888;
+  background: #fff;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.i2c-visualizer__counter {
+  font-family: monospace;
+  font-size: 0.875rem;
+  color: #444;
+}
+
+.i2c-visualizer__label {
+  font-family: monospace;
+  font-size: 10px;
+  fill: #333;
+}
+
+.i2c-visualizer__label--start { fill: #00693e; font-weight: bold; }
+.i2c-visualizer__label--stop { fill: #cf4f4f; font-weight: bold; }
+.i2c-visualizer__label--ack { fill: #2a6ed4; font-weight: bold; }
+
+.i2c-visualizer__lane-label {
+  font-family: monospace;
+  font-size: 12px;
+  fill: #666;
+}
+
+.i2c-visualizer__cursor {
+  stroke: #cf4f4f;
+  stroke-width: 2;
+  stroke-dasharray: 4 3;
+}
+
+.i2c-visualizer__col-bg--start { fill: rgba(0, 105, 62, 0.12); }
+.i2c-visualizer__col-bg--stop { fill: rgba(207, 79, 79, 0.12); }
+.i2c-visualizer__col-bg--ack { fill: rgba(42, 110, 212, 0.12); }
