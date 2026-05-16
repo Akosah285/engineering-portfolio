@@ -1,0 +1,131 @@
+.sw-visualizer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sw-visualizer__stage {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.sw-visualizer__face {
+  position: relative;
+  width: 280px;
+  height: 280px;
+  flex: 0 0 auto;
+}
+
+.sw-visualizer__badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font: 600 11px ui-monospace, Menlo, Consolas, monospace;
+  color: #fff;
+  letter-spacing: 0.05em;
+}
+
+.sw-visualizer__badge--reset {
+  background: #888;
+}
+
+.sw-visualizer__badge--running {
+  background: #00693e;
+}
+
+.sw-visualizer__badge--paused {
+  background: #c08a1a;
+}
+
+.sw-visualizer__laps {
+  flex: 1 1 200px;
+  min-width: 180px;
+  max-height: 280px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  background: #fafaf7;
+}
+
+.sw-visualizer__laps-title {
+  font: 600 12px system-ui, sans-serif;
+  margin: 0 0 0.5rem;
+  color: #444;
+}
+
+.sw-visualizer__lap {
+  font: 12px ui-monospace, Menlo, Consolas, monospace;
+  padding: 2px 0;
+  color: #222;
+}
+
+.sw-visualizer__lap--empty {
+  color: #999;
+  font-style: italic;
+}
+
+.sw-visualizer__tape {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fafaf7;
+}
+
+.sw-visualizer__tape-item {
+  font: 11px ui-monospace, Menlo, Consolas, monospace;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: #eee;
+  color: #555;
+}
+
+.sw-visualizer__tape-item--past {
+  background: #00693e;
+  color: #fff;
+}
+
+.sw-visualizer__hud {
+  display: flex;
+  gap: 1rem;
+  font: 12px ui-monospace, Menlo, Consolas, monospace;
+  color: #444;
+}
+
+.sw-visualizer__controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sw-visualizer__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.sw-visualizer__btn {
+  padding: 6px 14px;
+  border: 1px solid #00693e;
+  background: #fff;
+  color: #00693e;
+  border-radius: 4px;
+  cursor: pointer;
+  font: 12px system-ui, sans-serif;
+}
+
+.sw-visualizer__btn:hover {
+  background: #f0f7f3;
+}
+
+.sw-visualizer__counter {
+  font: 12px ui-monospace, Menlo, Consolas, monospace;
+  color: #444;
+}

@@ -1,0 +1,83 @@
+.lvf-visualizer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.lvf-visualizer__stage {
+  position: relative;
+  background: #fafaf7;
+  border: 1px solid #d9d7cf;
+  border-radius: 6px;
+  padding: 0.5rem;
+  overflow: auto;
+}
+
+.lvf-visualizer__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 640px;
+}
+
+.lvf-visualizer__lane-bg {
+  fill: #ffffff;
+  stroke: #e4e2da;
+  stroke-width: 1;
+}
+
+.lvf-visualizer__lane-divergent {
+  fill: rgba(255, 191, 0, 0.22);
+}
+
+.lvf-visualizer__lane-label {
+  font: 12px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+  fill: #333;
+}
+
+.lvf-visualizer__wave {
+  fill: none;
+  stroke: #00693e;
+  stroke-width: 2;
+}
+
+.lvf-visualizer__cursor {
+  stroke: #b03a2e;
+  stroke-width: 1.5;
+  stroke-dasharray: 3 3;
+}
+
+.lvf-visualizer__hud {
+  font: 13px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: #444;
+}
+
+.lvf-visualizer__controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.lvf-visualizer__actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.lvf-visualizer__btn {
+  font: inherit;
+  padding: 0.4rem 0.8rem;
+  background: #f5f4ef;
+  border: 1px solid #c8c6bd;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.lvf-visualizer__btn:hover {
+  background: #ebe9e1;
+}
+
+.lvf-visualizer__counter {
+  font: 13px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: #444;
+}
