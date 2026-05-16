@@ -1,0 +1,716 @@
+---
+/**
+ * Demo gallery shakedown — every Visualizer on one page (hidden from production nav).
+ *
+ * Lives at /dev/gallery/ — only reachable by typing the URL. Used as a build-time
+ * verification that every demo component compiles, hydrates, and renders without
+ * runtime errors in production mode. Each demo hydrates lazily via client:visible
+ * so initial load stays cheap.
+ */
+import Layout from "../../layouts/Layout.astro";
+import DemoChrome from "../../components/demo-kit/DemoChrome.astro";
+import { BisectionVisualizer } from "../../components/demos/computational-methods/bisection/BisectionVisualizer";
+import { DftVisualizer } from "../../components/demos/computational-methods/dft/DftVisualizer";
+import { GaussianEliminationVisualizer } from "../../components/demos/computational-methods/gaussian-elimination/GaussianEliminationVisualizer";
+import { LagrangeSplineVisualizer } from "../../components/demos/computational-methods/lagrange-spline/LagrangeSplineVisualizer";
+import { LeastSquaresVisualizer } from "../../components/demos/computational-methods/least-squares/LeastSquaresVisualizer";
+import { LuDecompositionVisualizer } from "../../components/demos/computational-methods/lu-decomposition/LuDecompositionVisualizer";
+import { MonteCarloIntegrationVisualizer } from "../../components/demos/computational-methods/monte-carlo-integration/MonteCarloIntegrationVisualizer";
+import { NewtonsMethodVisualizer } from "../../components/demos/computational-methods/newtons-method/NewtonsMethodVisualizer";
+import { PowerIterationVisualizer } from "../../components/demos/computational-methods/power-iteration/PowerIterationVisualizer";
+import { QuadratureVisualizer } from "../../components/demos/computational-methods/quadrature/QuadratureVisualizer";
+import { LorenzVisualizer } from "../../components/demos/computational-methods/rk4-solver/LorenzVisualizer";
+import AluBitSliceVisualizer from "../../components/demos/digital-electronics/alu-bit-slice/AluBitSliceVisualizer";
+import BinaryCounterVisualizer from "../../components/demos/digital-electronics/binary-counter/BinaryCounterVisualizer";
+import DatapathVisualizer from "../../components/demos/digital-electronics/datapath/DatapathVisualizer";
+import FsmSimulatorVisualizer from "../../components/demos/digital-electronics/fsm-simulator/FsmSimulatorVisualizer";
+import KarnaughMinimizerVisualizer from "../../components/demos/digital-electronics/karnaugh-minimizer/KarnaughMinimizerVisualizer";
+import LatchVsFfVisualizer from "../../components/demos/digital-electronics/latch-vs-ff/LatchVsFfVisualizer";
+import StopwatchFsmVisualizer from "../../components/demos/digital-electronics/stopwatch-fsm/StopwatchFsmVisualizer";
+import TruthTableVisualizer from "../../components/demos/digital-electronics/truth-table/TruthTableVisualizer";
+import VhdlWaveformVisualizer from "../../components/demos/digital-electronics/vhdl-waveform/VhdlWaveformVisualizer";
+import { BayesTheoremVisualizer } from "../../components/demos/discrete-probability/bayes-theorem/BayesTheoremVisualizer";
+import { BirthdayParadoxVisualizer } from "../../components/demos/discrete-probability/birthday-paradox/BirthdayParadoxVisualizer";
+import { CentralLimitVisualizer } from "../../components/demos/discrete-probability/central-limit/CentralLimitVisualizer";
+import { CombinatoricsVisualizer } from "../../components/demos/discrete-probability/combinatorics/CombinatoricsVisualizer";
+import { ErdosRenyiVisualizer } from "../../components/demos/discrete-probability/erdos-renyi/ErdosRenyiVisualizer";
+import { GamblersRuinVisualizer } from "../../components/demos/discrete-probability/gamblers-ruin/GamblersRuinVisualizer";
+import { HypothesisTestingVisualizer } from "../../components/demos/discrete-probability/hypothesis-testing/HypothesisTestingVisualizer";
+import { MarkovChainVisualizer } from "../../components/demos/discrete-probability/markov-chain/MarkovChainVisualizer";
+import { MonteCarloPiVisualizer } from "../../components/demos/discrete-probability/monte-carlo-pi/MonteCarloPiVisualizer";
+import { PageRankVisualizer } from "../../components/demos/discrete-probability/page-rank/PageRankVisualizer";
+import BiotSavartVisualizer from "../../components/demos/distributed-systems/biot-savart/BiotSavartVisualizer";
+import ChargeFieldVisualizer from "../../components/demos/distributed-systems/charge-field/ChargeFieldVisualizer";
+import FaradayVisualizer from "../../components/demos/distributed-systems/faraday/FaradayVisualizer";
+import { HeatEquationVisualizer } from "../../components/demos/distributed-systems/heat-equation/HeatEquationVisualizer";
+import LaplaceRectVisualizer from "../../components/demos/distributed-systems/laplace-rect/LaplaceRectVisualizer";
+import RcRlVisualizer from "../../components/demos/distributed-systems/rc-rl/RcRlVisualizer";
+import VectorFieldVisualizer from "../../components/demos/distributed-systems/vector-field/VectorFieldVisualizer";
+import Wave2DVisualizer from "../../components/demos/distributed-systems/wave-2d/Wave2DVisualizer";
+import WaveEquationVisualizer from "../../components/demos/distributed-systems/wave-equation/WaveEquationVisualizer";
+import AccelerometerVisualizer from "../../components/demos/embedded-systems/accelerometer/AccelerometerVisualizer";
+import AdcSamplingVisualizer from "../../components/demos/embedded-systems/adc-sampling/AdcSamplingVisualizer";
+import I2cProtocolVisualizer from "../../components/demos/embedded-systems/i2c-protocol/I2cProtocolVisualizer";
+import InterruptPollingVisualizer from "../../components/demos/embedded-systems/interrupt-polling/InterruptPollingVisualizer";
+import MqttVisualizer from "../../components/demos/embedded-systems/mqtt/MqttVisualizer";
+import { PwmVisualizer } from "../../components/demos/embedded-systems/pwm/PwmVisualizer";
+import RpmVisualizer from "../../components/demos/embedded-systems/rpm/RpmVisualizer";
+import { SevenSegmentVisualizer } from "../../components/demos/embedded-systems/seven-segment/SevenSegmentVisualizer";
+import SolarTrackerVisualizer from "../../components/demos/embedded-systems/solar-tracker/SolarTrackerVisualizer";
+import { TrafficLightVisualizer } from "../../components/demos/embedded-systems/traffic-light/TrafficLightVisualizer";
+import { AudioFilterVisualizer } from "../../components/demos/fourier-transforms/audio-filter/AudioFilterVisualizer";
+import ConformalVisualizer from "../../components/demos/fourier-transforms/conformal/ConformalVisualizer";
+import { ConvolutionVisualizer } from "../../components/demos/fourier-transforms/convolution/ConvolutionVisualizer";
+import DomainColoringVisualizer from "../../components/demos/fourier-transforms/domain-coloring/DomainColoringVisualizer";
+import { EpicycleVisualizer } from "../../components/demos/fourier-transforms/epicycle/EpicycleVisualizer";
+import { FourierSeriesVisualizer } from "../../components/demos/fourier-transforms/fourier-series/FourierSeriesVisualizer";
+import { FtSignalsVisualizer } from "../../components/demos/fourier-transforms/ft-signals/FtSignalsVisualizer";
+import ResidueHelperVisualizer from "../../components/demos/fourier-transforms/residue-helper/ResidueHelperVisualizer";
+import { GradientDescentVisualizer } from "../../components/demos/machine-learning/gradient-descent/GradientDescentVisualizer";
+import { BodePlotVisualizer } from "../../components/demos/mechatronics/bode-plot/BodePlotVisualizer";
+import { DcMotorVisualizer } from "../../components/demos/mechatronics/dc-motor/DcMotorVisualizer";
+import MazePathfindVisualizer from "../../components/demos/mechatronics/maze-pathfind/MazePathfindVisualizer";
+import { PidControllerVisualizer } from "../../components/demos/mechatronics/pid-controller/PidControllerVisualizer";
+import SensorFusionVisualizer from "../../components/demos/mechatronics/sensor-fusion/SensorFusionVisualizer";
+import { StateMachineVisualizer } from "../../components/demos/mechatronics/state-machine/StateMachineVisualizer";
+import StepPositionVisualizer from "../../components/demos/mechatronics/step-position/StepPositionVisualizer";
+import { TwoLinkIkVisualizer } from "../../components/demos/mechatronics/two-link-ik/TwoLinkIkVisualizer";
+import { BeamDeflectionVisualizer } from "../../components/demos/solid-mechanics/beam-deflection/BeamDeflectionVisualizer";
+import BendingStressVisualizer from "../../components/demos/solid-mechanics/bending-stress/BendingStressVisualizer";
+import { EulerBucklingVisualizer } from "../../components/demos/solid-mechanics/euler-buckling/EulerBucklingVisualizer";
+import FailureCriteriaVisualizer from "../../components/demos/solid-mechanics/failure-criteria/FailureCriteriaVisualizer";
+import { MohrCircleVisualizer } from "../../components/demos/solid-mechanics/mohr-circle/MohrCircleVisualizer";
+import ShearMomentVisualizer from "../../components/demos/solid-mechanics/shear-moment/ShearMomentVisualizer";
+import Stress3dVisualizer from "../../components/demos/solid-mechanics/stress-3d/Stress3dVisualizer";
+import { StressStrainVisualizer } from "../../components/demos/solid-mechanics/stress-strain/StressStrainVisualizer";
+import { TorsionVisualizer } from "../../components/demos/solid-mechanics/torsion/TorsionVisualizer";
+import TrussAnalyzerVisualizer from "../../components/demos/solid-mechanics/truss-analyzer/TrussAnalyzerVisualizer";
+---
+
+<Layout
+  title="Demo gallery - Engineering Portfolio"
+  description="Internal page that mounts every demo Visualizer for build-time verification."
+>
+  <article class="dev-page gallery-page">
+    <h1>Demo gallery</h1>
+    <p>
+      Every <code>*Visualizer.tsx</code> in the repo, grouped by course. Each
+      demo hydrates lazily on scroll (<code>client:visible</code>) so this page
+      stays cheap to load. Hidden from production nav - used as a build-time
+      shakedown.
+    </p>
+
+    <nav class="gallery-toc" aria-label="Demos by course">
+      <h2>Contents</h2>
+      <ul>
+      <li><a href="#mechatronics">Mechatronics (8)</a></li>
+      <li><a href="#embedded-systems">Embedded Systems (10)</a></li>
+      <li><a href="#computational-methods">Computational Methods (11)</a></li>
+      <li><a href="#machine-learning">Machine Learning & Statistical Data Analysis (1)</a></li>
+      <li><a href="#fourier-transforms">Fourier Transforms & Complex Variables (8)</a></li>
+      <li><a href="#discrete-probability">Discrete & Probabilistic Systems (10)</a></li>
+      <li><a href="#solid-mechanics">Solid Mechanics (10)</a></li>
+      <li><a href="#distributed-systems">Distributed Systems & Fields (9)</a></li>
+      <li><a href="#digital-electronics">Digital Electronics (9)</a></li>
+      </ul>
+    </nav>
+
+    <section class="gallery-course" id="mechatronics">
+      <h2>Mechatronics</h2>
+      <DemoChrome
+        title="bode-plot"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/mechatronics/bode-plot/BodePlotVisualizer.tsx"
+      >
+        <BodePlotVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="dc-motor"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/mechatronics/dc-motor/DcMotorVisualizer.tsx"
+      >
+        <DcMotorVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="maze-pathfind"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/mechatronics/maze-pathfind/MazePathfindVisualizer.tsx"
+      >
+        <MazePathfindVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="pid-controller"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/mechatronics/pid-controller/PidControllerVisualizer.tsx"
+      >
+        <PidControllerVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="sensor-fusion"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/mechatronics/sensor-fusion/SensorFusionVisualizer.tsx"
+      >
+        <SensorFusionVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="state-machine"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/mechatronics/state-machine/StateMachineVisualizer.tsx"
+      >
+        <StateMachineVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="step-position"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/mechatronics/step-position/StepPositionVisualizer.tsx"
+      >
+        <StepPositionVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="two-link-ik"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/mechatronics/two-link-ik/TwoLinkIkVisualizer.tsx"
+      >
+        <TwoLinkIkVisualizer client:visible />
+      </DemoChrome>
+    </section>
+
+    <section class="gallery-course" id="embedded-systems">
+      <h2>Embedded Systems</h2>
+      <DemoChrome
+        title="accelerometer"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/embedded-systems/accelerometer/AccelerometerVisualizer.tsx"
+      >
+        <AccelerometerVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="adc-sampling"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/embedded-systems/adc-sampling/AdcSamplingVisualizer.tsx"
+      >
+        <AdcSamplingVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="i2c-protocol"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/embedded-systems/i2c-protocol/I2cProtocolVisualizer.tsx"
+      >
+        <I2cProtocolVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="interrupt-polling"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/embedded-systems/interrupt-polling/InterruptPollingVisualizer.tsx"
+      >
+        <InterruptPollingVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="mqtt"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/embedded-systems/mqtt/MqttVisualizer.tsx"
+      >
+        <MqttVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="pwm"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/embedded-systems/pwm/PwmVisualizer.tsx"
+      >
+        <PwmVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="rpm"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/embedded-systems/rpm/RpmVisualizer.tsx"
+      >
+        <RpmVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="seven-segment"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/embedded-systems/seven-segment/SevenSegmentVisualizer.tsx"
+      >
+        <SevenSegmentVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="solar-tracker"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/embedded-systems/solar-tracker/SolarTrackerVisualizer.tsx"
+      >
+        <SolarTrackerVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="traffic-light"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/embedded-systems/traffic-light/TrafficLightVisualizer.tsx"
+      >
+        <TrafficLightVisualizer client:visible />
+      </DemoChrome>
+    </section>
+
+    <section class="gallery-course" id="computational-methods">
+      <h2>Computational Methods</h2>
+      <DemoChrome
+        title="bisection"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/computational-methods/bisection/BisectionVisualizer.tsx"
+      >
+        <BisectionVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="dft"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/computational-methods/dft/DftVisualizer.tsx"
+      >
+        <DftVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="gaussian-elimination"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/computational-methods/gaussian-elimination/GaussianEliminationVisualizer.tsx"
+      >
+        <GaussianEliminationVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="lagrange-spline"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/computational-methods/lagrange-spline/LagrangeSplineVisualizer.tsx"
+      >
+        <LagrangeSplineVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="least-squares"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/computational-methods/least-squares/LeastSquaresVisualizer.tsx"
+      >
+        <LeastSquaresVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="lu-decomposition"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/computational-methods/lu-decomposition/LuDecompositionVisualizer.tsx"
+      >
+        <LuDecompositionVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="monte-carlo-integration"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/computational-methods/monte-carlo-integration/MonteCarloIntegrationVisualizer.tsx"
+      >
+        <MonteCarloIntegrationVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="newtons-method"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/computational-methods/newtons-method/NewtonsMethodVisualizer.tsx"
+      >
+        <NewtonsMethodVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="power-iteration"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/computational-methods/power-iteration/PowerIterationVisualizer.tsx"
+      >
+        <PowerIterationVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="quadrature"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/computational-methods/quadrature/QuadratureVisualizer.tsx"
+      >
+        <QuadratureVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="rk4-solver"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/computational-methods/rk4-solver/LorenzVisualizer.tsx"
+      >
+        <LorenzVisualizer client:visible />
+      </DemoChrome>
+    </section>
+
+    <section class="gallery-course" id="machine-learning">
+      <h2>Machine Learning & Statistical Data Analysis</h2>
+      <DemoChrome
+        title="gradient-descent"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/machine-learning/gradient-descent/GradientDescentVisualizer.tsx"
+      >
+        <GradientDescentVisualizer client:visible />
+      </DemoChrome>
+    </section>
+
+    <section class="gallery-course" id="fourier-transforms">
+      <h2>Fourier Transforms & Complex Variables</h2>
+      <DemoChrome
+        title="audio-filter"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/fourier-transforms/audio-filter/AudioFilterVisualizer.tsx"
+      >
+        <AudioFilterVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="conformal"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/fourier-transforms/conformal/ConformalVisualizer.tsx"
+      >
+        <ConformalVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="convolution"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/fourier-transforms/convolution/ConvolutionVisualizer.tsx"
+      >
+        <ConvolutionVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="domain-coloring"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/fourier-transforms/domain-coloring/DomainColoringVisualizer.tsx"
+      >
+        <DomainColoringVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="epicycle"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/fourier-transforms/epicycle/EpicycleVisualizer.tsx"
+      >
+        <EpicycleVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="fourier-series"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/fourier-transforms/fourier-series/FourierSeriesVisualizer.tsx"
+      >
+        <FourierSeriesVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="ft-signals"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/fourier-transforms/ft-signals/FtSignalsVisualizer.tsx"
+      >
+        <FtSignalsVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="residue-helper"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/fourier-transforms/residue-helper/ResidueHelperVisualizer.tsx"
+      >
+        <ResidueHelperVisualizer client:visible />
+      </DemoChrome>
+    </section>
+
+    <section class="gallery-course" id="discrete-probability">
+      <h2>Discrete & Probabilistic Systems</h2>
+      <DemoChrome
+        title="bayes-theorem"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/discrete-probability/bayes-theorem/BayesTheoremVisualizer.tsx"
+      >
+        <BayesTheoremVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="birthday-paradox"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/discrete-probability/birthday-paradox/BirthdayParadoxVisualizer.tsx"
+      >
+        <BirthdayParadoxVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="central-limit"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/discrete-probability/central-limit/CentralLimitVisualizer.tsx"
+      >
+        <CentralLimitVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="combinatorics"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/discrete-probability/combinatorics/CombinatoricsVisualizer.tsx"
+      >
+        <CombinatoricsVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="erdos-renyi"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/discrete-probability/erdos-renyi/ErdosRenyiVisualizer.tsx"
+      >
+        <ErdosRenyiVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="gamblers-ruin"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/discrete-probability/gamblers-ruin/GamblersRuinVisualizer.tsx"
+      >
+        <GamblersRuinVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="hypothesis-testing"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/discrete-probability/hypothesis-testing/HypothesisTestingVisualizer.tsx"
+      >
+        <HypothesisTestingVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="markov-chain"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/discrete-probability/markov-chain/MarkovChainVisualizer.tsx"
+      >
+        <MarkovChainVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="monte-carlo-pi"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/discrete-probability/monte-carlo-pi/MonteCarloPiVisualizer.tsx"
+      >
+        <MonteCarloPiVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="page-rank"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/discrete-probability/page-rank/PageRankVisualizer.tsx"
+      >
+        <PageRankVisualizer client:visible />
+      </DemoChrome>
+    </section>
+
+    <section class="gallery-course" id="solid-mechanics">
+      <h2>Solid Mechanics</h2>
+      <DemoChrome
+        title="beam-deflection"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/solid-mechanics/beam-deflection/BeamDeflectionVisualizer.tsx"
+      >
+        <BeamDeflectionVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="bending-stress"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/solid-mechanics/bending-stress/BendingStressVisualizer.tsx"
+      >
+        <BendingStressVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="euler-buckling"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/solid-mechanics/euler-buckling/EulerBucklingVisualizer.tsx"
+      >
+        <EulerBucklingVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="failure-criteria"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/solid-mechanics/failure-criteria/FailureCriteriaVisualizer.tsx"
+      >
+        <FailureCriteriaVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="mohr-circle"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/solid-mechanics/mohr-circle/MohrCircleVisualizer.tsx"
+      >
+        <MohrCircleVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="shear-moment"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/solid-mechanics/shear-moment/ShearMomentVisualizer.tsx"
+      >
+        <ShearMomentVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="stress-3d"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/solid-mechanics/stress-3d/Stress3dVisualizer.tsx"
+      >
+        <Stress3dVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="stress-strain"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/solid-mechanics/stress-strain/StressStrainVisualizer.tsx"
+      >
+        <StressStrainVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="torsion"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/solid-mechanics/torsion/TorsionVisualizer.tsx"
+      >
+        <TorsionVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="truss-analyzer"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/solid-mechanics/truss-analyzer/TrussAnalyzerVisualizer.tsx"
+      >
+        <TrussAnalyzerVisualizer client:visible />
+      </DemoChrome>
+    </section>
+
+    <section class="gallery-course" id="distributed-systems">
+      <h2>Distributed Systems & Fields</h2>
+      <DemoChrome
+        title="biot-savart"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/distributed-systems/biot-savart/BiotSavartVisualizer.tsx"
+      >
+        <BiotSavartVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="charge-field"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/distributed-systems/charge-field/ChargeFieldVisualizer.tsx"
+      >
+        <ChargeFieldVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="faraday"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/distributed-systems/faraday/FaradayVisualizer.tsx"
+      >
+        <FaradayVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="heat-equation"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/distributed-systems/heat-equation/HeatEquationVisualizer.tsx"
+      >
+        <HeatEquationVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="laplace-rect"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/distributed-systems/laplace-rect/LaplaceRectVisualizer.tsx"
+      >
+        <LaplaceRectVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="rc-rl"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/distributed-systems/rc-rl/RcRlVisualizer.tsx"
+      >
+        <RcRlVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="vector-field"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/distributed-systems/vector-field/VectorFieldVisualizer.tsx"
+      >
+        <VectorFieldVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="wave-2d"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/distributed-systems/wave-2d/Wave2DVisualizer.tsx"
+      >
+        <Wave2DVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="wave-equation"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/distributed-systems/wave-equation/WaveEquationVisualizer.tsx"
+      >
+        <WaveEquationVisualizer client:visible />
+      </DemoChrome>
+    </section>
+
+    <section class="gallery-course" id="digital-electronics">
+      <h2>Digital Electronics</h2>
+      <DemoChrome
+        title="alu-bit-slice"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/digital-electronics/alu-bit-slice/AluBitSliceVisualizer.tsx"
+      >
+        <AluBitSliceVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="binary-counter"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/digital-electronics/binary-counter/BinaryCounterVisualizer.tsx"
+      >
+        <BinaryCounterVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="datapath"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/digital-electronics/datapath/DatapathVisualizer.tsx"
+      >
+        <DatapathVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="fsm-simulator"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/digital-electronics/fsm-simulator/FsmSimulatorVisualizer.tsx"
+      >
+        <FsmSimulatorVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="karnaugh-minimizer"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/digital-electronics/karnaugh-minimizer/KarnaughMinimizerVisualizer.tsx"
+      >
+        <KarnaughMinimizerVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="latch-vs-ff"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/digital-electronics/latch-vs-ff/LatchVsFfVisualizer.tsx"
+      >
+        <LatchVsFfVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="stopwatch-fsm"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/digital-electronics/stopwatch-fsm/StopwatchFsmVisualizer.tsx"
+      >
+        <StopwatchFsmVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="truth-table"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/digital-electronics/truth-table/TruthTableVisualizer.tsx"
+      >
+        <TruthTableVisualizer client:visible />
+      </DemoChrome>
+      <DemoChrome
+        title="vhdl-waveform"
+        shareable={false}
+        demoSourcePath="site/src/components/demos/digital-electronics/vhdl-waveform/VhdlWaveformVisualizer.tsx"
+      >
+        <VhdlWaveformVisualizer client:visible />
+      </DemoChrome>
+    </section>
+  </article>
+</Layout>
+
+<style>
+  .gallery-page :global(.gallery-course) {
+    margin-block: 3rem 4rem;
+  }
+  .gallery-page :global(.gallery-course h2) {
+    border-bottom: 2px solid var(--color-border, currentColor);
+    padding-bottom: 0.25rem;
+    margin-bottom: 1rem;
+  }
+  .gallery-toc {
+    border: 1px solid var(--color-border, currentColor);
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+    margin-block: 1rem 2rem;
+  }
+  .gallery-toc h2 {
+    margin-top: 0;
+    font-size: 1rem;
+  }
+  .gallery-toc ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    columns: 2;
+  }
+  .gallery-toc li {
+    margin-block: 0.25rem;
+  }
+</style>
