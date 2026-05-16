@@ -162,34 +162,40 @@ export default function InterruptPollingVisualizer() {
 
   const workload: Workload = useMemo(() => getWorkload(state.workload), [state.workload]);
 
-  const pollingCfg: PollingConfig = {
-    pollPeriodMs: state.pollPeriodMs,
-    pollCostMs: POLL_COST_MS,
-    handlerCostMs: HANDLER_COST_MS,
-    simulationDurationMs: SIMULATION_DURATION_MS,
-  };
-  const interruptCfg: InterruptConfig = {
-    interruptLatencyMs: state.interruptLatencyMs,
-    handlerCostMs: HANDLER_COST_MS,
-    simulationDurationMs: SIMULATION_DURATION_MS,
-  };
+  const pollingCfg: PollingConfig = useMemo(
+    () => ({
+      pollPeriodMs: state.pollPeriodMs,
+      pollCostMs: POLL_COST_MS,
+      handlerCostMs: HANDLER_COST_MS,
+      simulationDurationMs: SIMULATION_DURATION_MS,
+    }),
+    [state.pollPeriodMs],
+  );
+  const interruptCfg: InterruptConfig = useMemo(
+    () => ({
+      interruptLatencyMs: state.interruptLatencyMs,
+      handlerCostMs: HANDLER_COST_MS,
+      simulationDurationMs: SIMULATION_DURATION_MS,
+    }),
+    [state.interruptLatencyMs],
+  );
 
   const pollingMetrics = useMemo(
     () => simulatePolling(workload.events, pollingCfg),
-    [workload, pollingCfg.pollPeriodMs],
+    [workload, pollingCfg],
   );
   const interruptMetrics = useMemo(
     () => simulateInterrupts(workload.events, interruptCfg),
-    [workload, interruptCfg.interruptLatencyMs],
+    [workload, interruptCfg],
   );
 
   const pollingTrace = useMemo(
     () => buildPollingTrace(workload.events, pollingCfg),
-    [workload, pollingCfg.pollPeriodMs],
+    [workload, pollingCfg],
   );
   const interruptTrace = useMemo(
     () => buildInterruptTrace(workload.events, interruptCfg),
-    [workload, interruptCfg.interruptLatencyMs],
+    [workload, interruptCfg],
   );
 
   const pollingBetterLatency = pollingMetrics.meanLatency <= interruptMetrics.meanLatency;

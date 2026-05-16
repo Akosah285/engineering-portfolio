@@ -80,6 +80,7 @@ export function PlotPanel({
     ...(tickCount !== undefined ? { tickCount } : {}),
   });
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: width/height are kept in the dep array intentionally so a canvas resize re-fires the draw (canvas.width/height are sampled inside, but their props identity is the trigger)
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;

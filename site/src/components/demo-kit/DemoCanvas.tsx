@@ -92,6 +92,7 @@ export const DemoCanvas = forwardRef<HTMLCanvasElement, DemoCanvasProps>(
     const innerRef = useRef<HTMLCanvasElement | null>(null);
     useImperativeHandle(ref, () => innerRef.current as HTMLCanvasElement);
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: intentional pass-through memoization so useDrawLoop sees a stable identity bound to the current draw closure; bypassing useCallback would re-create the draw fn on every parent render and reset the raf loop
     const drawCb = useCallback(draw, [draw]);
     useDrawLoop(innerRef, drawCb, { paused });
 

@@ -155,6 +155,7 @@ export function useDemoState<S extends Schema>(
 
   // On mount: read the URL fragment and adopt any values it carries.
   // Only runs in the browser (window guarded), and only if shareable.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: mount-only fragment hydration; deliberately ignores subsequent shareable/setStateInternal identity churn (back-button rehydration is out of scope for v0)
   useEffect(() => {
     if (!shareable) return;
     if (typeof window === "undefined") return;
@@ -178,9 +179,6 @@ export function useDemoState<S extends Schema>(
       }
       return changed ? merged : prev;
     });
-    // We deliberately only run this on mount; subsequent fragment edits
-    // (e.g., back-button navigation) are out-of-scope for v0.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Write fragment on state change, debounced.

@@ -226,7 +226,6 @@ export function KMeansImageCompression() {
         <div className="kmeans-demo__palette" aria-label="Cluster palette">
           {result?.centroids.map((c, i) => (
             <span
-              // biome-ignore lint/suspicious/noArrayIndexKey: palette swatches keyed by stable cluster index
               key={i}
               className="kmeans-demo__swatch"
               style={{ background: `rgb(${c[0]}, ${c[1]}, ${c[2]})` }}
