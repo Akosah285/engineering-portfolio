@@ -42,31 +42,40 @@ const courses = coursesData as Course[];
 const resolver = buildCourseResolver(courses);
 const entries = (await getCollection("courses")) as CourseEntry[];
 
-// Only include courses that:
-//   1. Have a published MDX entry (not draft)
-//   2. Are listed in _courses.json with a publishedAt date
-const courseLikes: CourseLike[] = entries
-  .filter((entry) => {
+// Include courses that are EITHER consistently published (catalog +
+// non-draft MDX) OR consistently staged Coming-Soon (catalog publishedAt is
+// null AND MDX is draft: true). The catalog ↔ MDX invariant test guarantees
+// every catalog entry is in exactly one of these two states.
+const courseLikes: Array<CourseLike & { comingSoon: boolean }> = entries
+  .map((entry) => {
     const slug = entry.slug;
     const course = courses.find((c) => c.slug === slug);
-    if (!course) return false;
-    if (course.publishedAt === null) return false;
-    if (entry.data.draft === true) return false;
-    return true;
+    if (!course) return null;
+    const isPublished = course.publishedAt !== null && entry.data.draft !== true;
+    const isComingSoon =
+      course.publishedAt === null && entry.data.draft === true;
+    if (!isPublished && !isComingSoon) return null;
+    return {
+      slug,
+      concepts: entry.data.concepts,
+      comingSoon: isComingSoon,
+    };
   })
-  .map((entry) => ({
-    slug: entry.slug,
-    concepts: entry.data.concepts,
-  }));
+  .filter((c): c is CourseLike & { comingSoon: boolean } => c !== null);
 
 const index = buildTagIndex(courseLikes, vocabulary);
 const entry = lookupTag(index, tag);
+
+const comingSoonBySlug = new Map(
+  courseLikes.map((c) => [c.slug, c.comingSoon]),
+);
 
 const courseDetails =
   entry?.courses.map((slug) => ({
     slug,
     displayName: resolver.toCourse(slug).displayName,
     term: resolver.toCourse(slug).term,
+    comingSoon: comingSoonBySlug.get(slug) ?? false,
   })) ?? [];
 
 const titleCase = tag
@@ -107,7 +116,12 @@ const titleCase = tag
             {courseDetails.map((c) => (
               <li class="concept-courses__item">
                 <a href={`${base}courses/${c.slug}/`}>
-                  <span class="concept-courses__name">{c.displayName}</span>
+                  <span class="concept-courses__name">
+                    {c.displayName}
+                    {c.comingSoon ? (
+                      <span class="concept-courses__badge">Coming soon</span>
+                    ) : null}
+                  </span>
                   <span class="concept-courses__term">{c.term}</span>
                 </a>
               </li>
@@ -222,6 +236,23 @@ const titleCase = tag
   }
   .concept-courses__name {
     font-weight: 500;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .concept-courses__badge {
+    display: inline-block;
+    padding: 0.0625rem 0.5rem;
+    background: var(--color-math-bg);
+    border: 1px solid var(--color-accent);
+    color: var(--color-accent);
+    border-radius: 999px;
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+    white-space: nowrap;
   }
   .concept-courses__term {
     font-family: "JetBrains Mono Variable", monospace;
