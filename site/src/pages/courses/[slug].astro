@@ -17,6 +17,10 @@ import Layout from "../../layouts/Layout.astro";
 import CoursePage from "../../layouts/CoursePage.astro";
 import { buildCourseResolver, type Course } from "../../content/resolver";
 import coursesData from "../../content/_courses.json";
+import {
+  type CoursePreviewSlug,
+  shouldShowPreview,
+} from "../../lib/coursePreviewMap";
 import ComputationalMethodsPreview from "../../components/CoursePreview/computational-methods.astro";
 import DigitalElectronicsPreview from "../../components/CoursePreview/digital-electronics.astro";
 import DiscreteProbabilityPreview from "../../components/CoursePreview/discrete-probability.astro";
@@ -28,6 +32,8 @@ import SolidMechanicsPreview from "../../components/CoursePreview/solid-mechanic
 
 type CourseEntry = CollectionEntry<"courses">;
 
+// `satisfies` enforces that the map covers exactly every CoursePreviewSlug
+// (the test suite then enforces COURSE_PREVIEW_SLUGS matches _courses.json).
 const previewComponents = {
   "computational-methods": ComputationalMethodsPreview,
   "digital-electronics": DigitalElectronicsPreview,
@@ -37,8 +43,7 @@ const previewComponents = {
   "fourier-transforms": FourierTransformsPreview,
   mechatronics: MechatronicsPreview,
   "solid-mechanics": SolidMechanicsPreview,
-} as const;
-type PreviewSlug = keyof typeof previewComponents;
+} satisfies Record<CoursePreviewSlug, unknown>;
 
 export async function getStaticPaths() {
   const courses = coursesData as Course[];
@@ -69,10 +74,9 @@ const showCourse = entry !== null && isPublishedInJson && !isDraft;
 
 const Content = showCourse && entry ? (await entry.render()).Content : null;
 
-const PreviewComponent =
-  !showCourse && course.slug in previewComponents
-    ? previewComponents[course.slug as PreviewSlug]
-    : null;
+const PreviewComponent = shouldShowPreview(course.slug, showCourse)
+  ? previewComponents[course.slug as CoursePreviewSlug]
+  : null;
 ---
 
 {
