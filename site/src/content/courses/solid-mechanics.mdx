@@ -10,10 +10,91 @@ techTags:
   - Python
   - NumPy
 heroDemoLabel: "Interactive Truss Analyzer"
-publishedAt: null
-draft: true
+publishedAt: "2026-05-16"
+draft: false
+interviewPending: true
 ---
+
+import TrussAnalyzerVisualizer from "../../components/demos/solid-mechanics/truss-analyzer/TrussAnalyzerVisualizer";
+import { BeamDeflectionVisualizer } from "../../components/demos/solid-mechanics/beam-deflection/BeamDeflectionVisualizer";
+import BendingStressVisualizer from "../../components/demos/solid-mechanics/bending-stress/BendingStressVisualizer";
+import { EulerBucklingVisualizer } from "../../components/demos/solid-mechanics/euler-buckling/EulerBucklingVisualizer";
+import FailureCriteriaVisualizer from "../../components/demos/solid-mechanics/failure-criteria/FailureCriteriaVisualizer";
+import { MohrCircleVisualizer } from "../../components/demos/solid-mechanics/mohr-circle/MohrCircleVisualizer";
+import ShearMomentVisualizer from "../../components/demos/solid-mechanics/shear-moment/ShearMomentVisualizer";
+import Stress3dVisualizer from "../../components/demos/solid-mechanics/stress-3d/Stress3dVisualizer";
+import { StressStrainVisualizer } from "../../components/demos/solid-mechanics/stress-strain/StressStrainVisualizer";
+import { TorsionVisualizer } from "../../components/demos/solid-mechanics/torsion/TorsionVisualizer";
+
+<TrussAnalyzerVisualizer client:idle />
 
 ## Reflection
 
-_Author reflection pending._
+_Pre-interview preview. Akwasi's first-person reflection on this course is pending —
+track at [issue #47](https://github.com/Akosah285/engineering-portfolio/issues/47)._
+
+## Beam deflection calculator
+
+Cantilever, simply-supported, and fixed-fixed beams under point or distributed
+loads.
+
+<BeamDeflectionVisualizer client:visible />
+
+## Shear & moment diagrams
+
+Place supports and loads; auto-derive the V and M diagrams along the beam.
+
+<ShearMomentVisualizer client:visible />
+
+## Bending stress distribution
+
+σ = My/I across a beam cross-section, with neutral-axis visualisation.
+
+<BendingStressVisualizer client:visible />
+
+## Stress-strain curve
+
+Elastic, yield, plastic, and necking regions for common engineering materials.
+
+<StressStrainVisualizer client:visible />
+
+## Mohr's circle
+
+Drag the stress element; watch the Mohr's circle and principal stresses update.
+
+<MohrCircleVisualizer client:visible />
+
+## 3D stress state visualizer
+
+Stress tensor on a unit cube; rotate to explore principal stresses.
+
+<Stress3dVisualizer client:visible />
+
+## Torsion of shafts
+
+Shear stress and angle of twist for a circular shaft under applied torque.
+
+<TorsionVisualizer client:visible />
+
+## Euler buckling calculator
+
+Critical buckling load vs slenderness ratio for the four classical boundary cases.
+
+<EulerBucklingVisualizer client:visible />
+
+## Failure criteria explorer
+
+Tresca, von Mises, and maximum-normal-stress envelopes in σ₁–σ₂ space.
+
+<FailureCriteriaVisualizer client:visible />
+
+## Featured problems
+
+_Featured-problem writeups for this course are pending the v6 author interview
+— tracked at [issue #47](https://github.com/Akosah285/engineering-portfolio/issues/47).
+Demos above stand on their own in the meantime._
+
+## What's coming
+
+The author's written reflection and 2–4 featured problems land alongside the v6
+interview. The demos above are wired and playable today.

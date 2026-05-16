@@ -17,33 +17,8 @@ import Layout from "../../layouts/Layout.astro";
 import CoursePage from "../../layouts/CoursePage.astro";
 import { buildCourseResolver, type Course } from "../../content/resolver";
 import coursesData from "../../content/_courses.json";
-import {
-  type CoursePreviewSlug,
-  shouldShowPreview,
-} from "../../lib/coursePreviewMap";
-import ComputationalMethodsPreview from "../../components/CoursePreview/computational-methods.astro";
-import DigitalElectronicsPreview from "../../components/CoursePreview/digital-electronics.astro";
-import DiscreteProbabilityPreview from "../../components/CoursePreview/discrete-probability.astro";
-import DistributedSystemsPreview from "../../components/CoursePreview/distributed-systems.astro";
-import EmbeddedSystemsPreview from "../../components/CoursePreview/embedded-systems.astro";
-import FourierTransformsPreview from "../../components/CoursePreview/fourier-transforms.astro";
-import MechatronicsPreview from "../../components/CoursePreview/mechatronics.astro";
-import SolidMechanicsPreview from "../../components/CoursePreview/solid-mechanics.astro";
 
 type CourseEntry = CollectionEntry<"courses">;
-
-// `satisfies` enforces that the map covers exactly every CoursePreviewSlug
-// (the test suite then enforces COURSE_PREVIEW_SLUGS matches _courses.json).
-const previewComponents = {
-  "computational-methods": ComputationalMethodsPreview,
-  "digital-electronics": DigitalElectronicsPreview,
-  "discrete-probability": DiscreteProbabilityPreview,
-  "distributed-systems": DistributedSystemsPreview,
-  "embedded-systems": EmbeddedSystemsPreview,
-  "fourier-transforms": FourierTransformsPreview,
-  mechatronics: MechatronicsPreview,
-  "solid-mechanics": SolidMechanicsPreview,
-} satisfies Record<CoursePreviewSlug, unknown>;
 
 export async function getStaticPaths() {
   const courses = coursesData as Course[];
@@ -73,10 +48,6 @@ const isDraft = entry?.data.draft ?? false;
 const showCourse = entry !== null && isPublishedInJson && !isDraft;
 
 const Content = showCourse && entry ? (await entry.render()).Content : null;
-
-const PreviewComponent = shouldShowPreview(course.slug, showCourse)
-  ? previewComponents[course.slug as CoursePreviewSlug]
-  : null;
 ---
 
 {
@@ -158,8 +129,6 @@ const PreviewComponent = shouldShowPreview(course.slug, showCourse)
           .
         </p>
       </section>
-
-      {PreviewComponent && <PreviewComponent />}
 
       <p class="coming-soon__back">
         <a href={base}>← Back to all courses</a>

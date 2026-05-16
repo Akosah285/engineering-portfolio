@@ -12,10 +12,98 @@ techTags:
   - C
   - Arduino
 heroDemoLabel: "Solar Tracker"
-publishedAt: null
-draft: true
+publishedAt: "2026-05-16"
+draft: false
+interviewPending: true
 ---
+
+import SolarTrackerVisualizer from "../../components/demos/embedded-systems/solar-tracker/SolarTrackerVisualizer";
+import { TrafficLightVisualizer } from "../../components/demos/embedded-systems/traffic-light/TrafficLightVisualizer";
+import AccelerometerVisualizer from "../../components/demos/embedded-systems/accelerometer/AccelerometerVisualizer";
+import AdcSamplingVisualizer from "../../components/demos/embedded-systems/adc-sampling/AdcSamplingVisualizer";
+import I2cProtocolVisualizer from "../../components/demos/embedded-systems/i2c-protocol/I2cProtocolVisualizer";
+import InterruptPollingVisualizer from "../../components/demos/embedded-systems/interrupt-polling/InterruptPollingVisualizer";
+import MqttVisualizer from "../../components/demos/embedded-systems/mqtt/MqttVisualizer";
+import { PwmVisualizer } from "../../components/demos/embedded-systems/pwm/PwmVisualizer";
+import RpmVisualizer from "../../components/demos/embedded-systems/rpm/RpmVisualizer";
+import { SevenSegmentVisualizer } from "../../components/demos/embedded-systems/seven-segment/SevenSegmentVisualizer";
+
+<SolarTrackerVisualizer client:idle />
 
 ## Reflection
 
-_Author reflection pending._
+_Pre-interview preview. Akwasi's first-person reflection on this course is pending —
+track at [issue #51](https://github.com/Akosah285/engineering-portfolio/issues/51).
+The Solar Tracker / Traffic Crossing / RPM Display video reel lands with the
+v10 interview alongside the reflection._
+
+## Traffic light FSM (AIO_MQTT)
+
+Lifted from `AIO_MQTT_traffic_control`; FSM with normal, pedestrian, and night modes.
+
+<TrafficLightVisualizer client:visible />
+
+## ADC sampling / aliasing
+
+Tune the sample rate against the signal frequency; watch aliasing appear past
+Nyquist.
+
+<AdcSamplingVisualizer client:visible />
+
+## PWM visualizer
+
+Tune duty cycle and frequency; watch the average-voltage approximation drive a
+load.
+
+<PwmVisualizer client:visible />
+
+## I²C protocol visualizer
+
+Step through an I²C start / address / data / ack / stop transaction at the bit
+level.
+
+<I2cProtocolVisualizer client:visible />
+
+## Interrupt vs polling
+
+Two side-by-side execution timelines comparing interrupt-driven and polled event
+handling.
+
+<InterruptPollingVisualizer client:visible />
+
+## RPM measurement
+
+Reading rotational speed from encoder pulses or magnetic Hall-effect transitions.
+
+<RpmVisualizer client:visible />
+
+## Seven-segment decoder
+
+Hex digit → segment-encoding map with a live BCD-to-seven-segment lookup.
+
+<SevenSegmentVisualizer client:visible />
+
+## MQTT IoT message flow
+
+Publish / subscribe / broker animation with QoS levels and topic wildcards.
+
+<MqttVisualizer client:visible />
+
+## Accelerometer (DeviceMotion)
+
+Live tilt visualisation using your phone's accelerometer (iOS gesture-unlock
+supported via the standard `DeviceMotionEvent.requestPermission()` flow).
+
+<AccelerometerVisualizer client:visible />
+
+## Featured problems
+
+_Featured-problem writeups for this course are pending the v10 author interview
+— tracked at [issue #51](https://github.com/Akosah285/engineering-portfolio/issues/51).
+Demos above stand on their own in the meantime._
+
+## What's coming
+
+The author's written reflection, the video reel of the lab projects, and 2–4
+featured problems land alongside the v10 interview. The demos above are wired
+and playable today.

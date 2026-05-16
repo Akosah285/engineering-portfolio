@@ -12,10 +12,85 @@ techTags:
   - NumPy
   - Matplotlib
 heroDemoLabel: "Charge Field Plotter"
-publishedAt: null
-draft: true
+publishedAt: "2026-05-16"
+draft: false
+interviewPending: true
 ---
+
+import ChargeFieldVisualizer from "../../components/demos/distributed-systems/charge-field/ChargeFieldVisualizer";
+import BiotSavartVisualizer from "../../components/demos/distributed-systems/biot-savart/BiotSavartVisualizer";
+import FaradayVisualizer from "../../components/demos/distributed-systems/faraday/FaradayVisualizer";
+import { HeatEquationVisualizer } from "../../components/demos/distributed-systems/heat-equation/HeatEquationVisualizer";
+import LaplaceRectVisualizer from "../../components/demos/distributed-systems/laplace-rect/LaplaceRectVisualizer";
+import RcRlVisualizer from "../../components/demos/distributed-systems/rc-rl/RcRlVisualizer";
+import VectorFieldVisualizer from "../../components/demos/distributed-systems/vector-field/VectorFieldVisualizer";
+import Wave2DVisualizer from "../../components/demos/distributed-systems/wave-2d/Wave2DVisualizer";
+import WaveEquationVisualizer from "../../components/demos/distributed-systems/wave-equation/WaveEquationVisualizer";
+
+<ChargeFieldVisualizer client:idle />
 
 ## Reflection
 
-_Author reflection pending._
+_Pre-interview preview. Akwasi's first-person reflection on this course is pending —
+track at [issue #48](https://github.com/Akosah285/engineering-portfolio/issues/48)._
+
+## 1D wave equation (string)
+
+Plucked-string wave equation with reflective boundary conditions.
+
+<WaveEquationVisualizer client:visible />
+
+## 2D wave interference
+
+Two-source interference pattern with adjustable phase, frequency, and source
+separation.
+
+<Wave2DVisualizer client:visible />
+
+## 1D heat equation
+
+Finite-difference solver for heat diffusion along a rod; tune the boundary
+conditions and watch the profile relax.
+
+<HeatEquationVisualizer client:visible />
+
+## Laplace in a rectangle
+
+Iterative Laplace solver on a rectangular domain with mixed Dirichlet boundaries.
+
+<LaplaceRectVisualizer client:visible />
+
+## Vector field visualizer
+
+Type any 2D vector field; render its arrows, divergence, and curl.
+
+<VectorFieldVisualizer client:visible />
+
+## RC / RL step response
+
+First-order circuit step response paired with its frequency response.
+
+<RcRlVisualizer client:visible />
+
+## Biot-Savart B-field
+
+Magnetic field from a current loop or coil, visualised as field lines and arrows.
+
+<BiotSavartVisualizer client:visible />
+
+## Faraday's law / induced EMF
+
+Slide a magnet through a coil; live flux and induced EMF traces.
+
+<FaradayVisualizer client:visible />
+
+## Featured problems
+
+_Featured-problem writeups for this course are pending the v7 author interview
+— tracked at [issue #48](https://github.com/Akosah285/engineering-portfolio/issues/48).
+Demos above stand on their own in the meantime._
+
+## What's coming
+
+The author's written reflection and 2–4 featured problems land alongside the v7
+interview. The demos above are wired and playable today.

@@ -24,17 +24,26 @@ describe("shouldShowPreview", () => {
     expect(shouldShowPreview("machine-learning", true)).toBe(false);
   });
 
-  it("returns true for a known preview slug on a Coming-Soon page", () => {
-    expect(shouldShowPreview("fourier-transforms", false)).toBe(true);
-    expect(shouldShowPreview("discrete-probability", false)).toBe(true);
+  it("returns true for any slug in COURSE_PREVIEW_SLUGS on a Coming-Soon page", () => {
+    // When all courses are promoted to published, COURSE_PREVIEW_SLUGS is
+    // empty and this assertion is vacuously true — that's by design. When
+    // a new Coming-Soon course is added, registering it here exercises the
+    // happy path.
+    for (const slug of COURSE_PREVIEW_SLUGS) {
+      expect(shouldShowPreview(slug, false)).toBe(true);
+    }
   });
 
   it("returns false for an unknown slug, even on a Coming-Soon page", () => {
     expect(shouldShowPreview("does-not-exist", false)).toBe(false);
   });
 
-  it("returns false for the published-by-default ML course slug", () => {
+  it("returns false for any published-by-default course slug on a Coming-Soon page", () => {
+    // Published slugs MUST NOT appear in COURSE_PREVIEW_SLUGS, so the
+    // dispatch refuses to render a preview even if a developer accidentally
+    // forgets to flip isPublished true.
     expect(shouldShowPreview("machine-learning", false)).toBe(false);
+    expect(shouldShowPreview("fourier-transforms", false)).toBe(false);
   });
 });
 

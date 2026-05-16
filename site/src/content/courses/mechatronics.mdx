@@ -11,11 +11,82 @@ techTags:
   - Arduino
   - MATLAB
   - Python
-heroDemoLabel: "Robot Drive / Maze Reel"
-publishedAt: null
-draft: true
+heroDemoLabel: "PID Step Response"
+publishedAt: "2026-05-16"
+draft: false
+interviewPending: true
 ---
+
+import { PidControllerVisualizer } from "../../components/demos/mechatronics/pid-controller/PidControllerVisualizer";
+import { BodePlotVisualizer } from "../../components/demos/mechatronics/bode-plot/BodePlotVisualizer";
+import { DcMotorVisualizer } from "../../components/demos/mechatronics/dc-motor/DcMotorVisualizer";
+import MazePathfindVisualizer from "../../components/demos/mechatronics/maze-pathfind/MazePathfindVisualizer";
+import SensorFusionVisualizer from "../../components/demos/mechatronics/sensor-fusion/SensorFusionVisualizer";
+import { StateMachineVisualizer } from "../../components/demos/mechatronics/state-machine/StateMachineVisualizer";
+import StepPositionVisualizer from "../../components/demos/mechatronics/step-position/StepPositionVisualizer";
+import { TwoLinkIkVisualizer } from "../../components/demos/mechatronics/two-link-ik/TwoLinkIkVisualizer";
+
+<PidControllerVisualizer client:idle />
 
 ## Reflection
 
-_Author reflection pending._
+_Pre-interview preview. Akwasi's first-person reflection on this course is pending —
+track at [issue #49](https://github.com/Akosah285/engineering-portfolio/issues/49).
+The robot video reel (drive_straight, turn_an_angle, wall_follow, maze_navigation)
+lands with the v8 interview alongside the reflection._
+
+## DC motor model
+
+First-order DC motor response to a step voltage with adjustable back-EMF and
+inertia.
+
+<DcMotorVisualizer client:visible />
+
+## Bode plot builder
+
+Compose poles and zeros; live magnitude and phase Bode plots.
+
+<BodePlotVisualizer client:visible />
+
+## Step position control
+
+Step-input position controller with closed-loop tracking visualisation.
+
+<StepPositionVisualizer client:visible />
+
+## Sensor fusion — encoder + IMU
+
+Complementary filter combining wheel encoders and a noisy IMU for heading
+estimation.
+
+<SensorFusionVisualizer client:visible />
+
+## 2-link inverse kinematics
+
+Drag an end-effector target; solve joint angles for a 2-DOF planar arm.
+
+<TwoLinkIkVisualizer client:visible />
+
+## Maze pathfinding
+
+BFS, DFS, and A* search on a small grid maze with frontier visualisation.
+
+<MazePathfindVisualizer client:visible />
+
+## State machine — decision_making
+
+Step through the robot's behaviour FSM transitions, lifted from
+`decision_making.ino`.
+
+<StateMachineVisualizer client:visible />
+
+## Featured problems
+
+_Featured-problem writeups for this course are pending the v8 author interview
+— tracked at [issue #49](https://github.com/Akosah285/engineering-portfolio/issues/49).
+Demos above stand on their own in the meantime._
+
+## What's coming
+
+The author's written reflection, the robot video reel, and 2–4 featured problems
+land alongside the v8 interview. The demos above are wired and playable today.

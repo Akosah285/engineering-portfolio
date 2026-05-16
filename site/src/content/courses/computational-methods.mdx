@@ -13,10 +13,100 @@ techTags:
   - SciPy
   - Matplotlib
 heroDemoLabel: "Lorenz Solver (RK4)"
-publishedAt: null
-draft: true
+publishedAt: "2026-05-16"
+draft: false
+interviewPending: true
 ---
+
+import { LorenzVisualizer } from "../../components/demos/computational-methods/rk4-solver/LorenzVisualizer";
+import { BisectionVisualizer } from "../../components/demos/computational-methods/bisection/BisectionVisualizer";
+import { DftVisualizer } from "../../components/demos/computational-methods/dft/DftVisualizer";
+import { GaussianEliminationVisualizer } from "../../components/demos/computational-methods/gaussian-elimination/GaussianEliminationVisualizer";
+import { LagrangeSplineVisualizer } from "../../components/demos/computational-methods/lagrange-spline/LagrangeSplineVisualizer";
+import { LeastSquaresVisualizer } from "../../components/demos/computational-methods/least-squares/LeastSquaresVisualizer";
+import { LuDecompositionVisualizer } from "../../components/demos/computational-methods/lu-decomposition/LuDecompositionVisualizer";
+import { MonteCarloIntegrationVisualizer } from "../../components/demos/computational-methods/monte-carlo-integration/MonteCarloIntegrationVisualizer";
+import { NewtonsMethodVisualizer } from "../../components/demos/computational-methods/newtons-method/NewtonsMethodVisualizer";
+import { PowerIterationVisualizer } from "../../components/demos/computational-methods/power-iteration/PowerIterationVisualizer";
+import { QuadratureVisualizer } from "../../components/demos/computational-methods/quadrature/QuadratureVisualizer";
+
+<LorenzVisualizer client:idle />
 
 ## Reflection
 
-_Author reflection pending._
+_Pre-interview preview. Akwasi's first-person reflection on this course is pending —
+track at [issue #46](https://github.com/Akosah285/engineering-portfolio/issues/46)._
+
+## Bisection method
+
+Bracket-and-halve root finding with a live convergence trace.
+
+<BisectionVisualizer client:visible />
+
+## Newton's method
+
+Tangent-line iteration with quadratic-convergence visualisation.
+
+<NewtonsMethodVisualizer client:visible />
+
+## Numerical integration comparator
+
+Side-by-side midpoint, trapezoidal, and Simpson's rule error analysis.
+
+<QuadratureVisualizer client:visible />
+
+## Monte Carlo integration
+
+Compare convergence rates of Monte Carlo integration against the trapezoidal
+rule on the same integrand.
+
+<MonteCarloIntegrationVisualizer client:visible />
+
+## Gaussian elimination — step by step
+
+Watch row operations reduce an augmented matrix to row-echelon form.
+
+<GaussianEliminationVisualizer client:visible />
+
+## LU decomposition
+
+Animate the LU factorisation step by step on a 4×4 matrix.
+
+<LuDecompositionVisualizer client:visible />
+
+## Least squares curve fitting
+
+Click to drop points; fit polynomials of varying degree with sum-of-squared-residuals
+shown live.
+
+<LeastSquaresVisualizer client:visible />
+
+## Lagrange vs cubic spline
+
+Add interpolation nodes; compare Runge's-phenomenon-prone Lagrange against
+natural cubic splines.
+
+<LagrangeSplineVisualizer client:visible />
+
+## Eigenvalue power iteration
+
+Iterate Ax → x until the dominant eigenvector emerges.
+
+<PowerIterationVisualizer client:visible />
+
+## Discrete Fourier transform
+
+Stem plots for a signal's DFT amplitude and phase, with windowing options.
+
+<DftVisualizer client:visible />
+
+## Featured problems
+
+_Featured-problem writeups for this course are pending the v5 author interview
+— tracked at [issue #46](https://github.com/Akosah285/engineering-portfolio/issues/46).
+Demos above stand on their own in the meantime._
+
+## What's coming
+
+The author's written reflection and 2–4 featured problems land alongside the v5
+interview. The demos above are wired and playable today.

@@ -13,10 +13,95 @@ techTags:
   - Matplotlib
   - Jupyter
 heroDemoLabel: "Markov Chain Visualizer"
-publishedAt: null
-draft: true
+publishedAt: "2026-05-16"
+draft: false
+interviewPending: true
 ---
+
+import { MarkovChainVisualizer } from "../../components/demos/discrete-probability/markov-chain/MarkovChainVisualizer";
+import { BayesTheoremVisualizer } from "../../components/demos/discrete-probability/bayes-theorem/BayesTheoremVisualizer";
+import { BirthdayParadoxVisualizer } from "../../components/demos/discrete-probability/birthday-paradox/BirthdayParadoxVisualizer";
+import { CentralLimitVisualizer } from "../../components/demos/discrete-probability/central-limit/CentralLimitVisualizer";
+import { CombinatoricsVisualizer } from "../../components/demos/discrete-probability/combinatorics/CombinatoricsVisualizer";
+import { ErdosRenyiVisualizer } from "../../components/demos/discrete-probability/erdos-renyi/ErdosRenyiVisualizer";
+import { GamblersRuinVisualizer } from "../../components/demos/discrete-probability/gamblers-ruin/GamblersRuinVisualizer";
+import { HypothesisTestingVisualizer } from "../../components/demos/discrete-probability/hypothesis-testing/HypothesisTestingVisualizer";
+import { MonteCarloPiVisualizer } from "../../components/demos/discrete-probability/monte-carlo-pi/MonteCarloPiVisualizer";
+import { PageRankVisualizer } from "../../components/demos/discrete-probability/page-rank/PageRankVisualizer";
+
+<MarkovChainVisualizer client:idle />
 
 ## Reflection
 
-_Author reflection pending._
+_Pre-interview preview. Akwasi's first-person reflection on this course is pending —
+track at [issue #45](https://github.com/Akosah285/engineering-portfolio/issues/45)._
+
+## Bayes' theorem
+
+Sliders for prior, likelihood, and false-positive rate; live posterior and 2×2
+table update as you drag.
+
+<BayesTheoremVisualizer client:visible />
+
+## Birthday paradox simulator
+
+Drag the room size and watch the collision probability climb past 50% near
+23 people.
+
+<BirthdayParadoxVisualizer client:visible />
+
+## Central limit theorem
+
+Pick a base distribution, stack the sample means, watch a Gaussian emerge.
+
+<CentralLimitVisualizer client:visible />
+
+## Combinations & permutations
+
+Calculator + visual enumeration for nPk and nCk with small n.
+
+<CombinatoricsVisualizer client:visible />
+
+## Erdős-Rényi random graph
+
+Tune the edge probability p and watch the giant component appear past the
+threshold.
+
+<ErdosRenyiVisualizer client:visible />
+
+## Gambler's ruin / Monte Carlo
+
+Biased coin walks to ruin or fortune; theoretical vs simulated absorption
+probabilities side by side.
+
+<GamblersRuinVisualizer client:visible />
+
+## Hypothesis testing
+
+Visualise α, β, p-values, and effect size for a one-sided z-test.
+
+<HypothesisTestingVisualizer client:visible />
+
+## Monte Carlo π estimator
+
+Drop random darts into a unit square; convergence of 4·hits/total to π.
+
+<MonteCarloPiVisualizer client:visible />
+
+## PageRank toy
+
+A tiny web graph where power iteration converges to the dominant eigenvector
+of the transition matrix.
+
+<PageRankVisualizer client:visible />
+
+## Featured problems
+
+_Featured-problem writeups for this course are pending the v4 author interview
+— tracked at [issue #45](https://github.com/Akosah285/engineering-portfolio/issues/45).
+Demos above stand on their own in the meantime._
+
+## What's coming
+
+The author's written reflection and 2–4 featured problems land alongside the v4
+interview. The demos above are wired and playable today.

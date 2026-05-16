@@ -21,16 +21,7 @@
  *   - The test suite will fail loudly if any of the three steps are skipped.
  */
 
-export const COURSE_PREVIEW_SLUGS = [
-  "computational-methods",
-  "digital-electronics",
-  "discrete-probability",
-  "distributed-systems",
-  "embedded-systems",
-  "fourier-transforms",
-  "mechatronics",
-  "solid-mechanics",
-] as const;
+export const COURSE_PREVIEW_SLUGS = [] as const satisfies readonly string[];
 
 export type CoursePreviewSlug = (typeof COURSE_PREVIEW_SLUGS)[number];
 

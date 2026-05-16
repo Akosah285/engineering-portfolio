@@ -20,7 +20,7 @@
     "displayName": "Discrete & Probabilistic Systems",
     "term": "FA19",
     "displayOrder": 6,
-    "publishedAt": null,
+    "publishedAt": "2026-05-16",
     "comingSoonPreview": "Markov chain visualizer, Bayes' theorem, central limit theorem, PageRank toy + 6 more."
   },
   {
@@ -28,7 +28,7 @@
     "displayName": "Computational Methods",
     "term": "SP20",
     "displayOrder": 3,
-    "publishedAt": null,
+    "publishedAt": "2026-05-16",
     "comingSoonPreview": "Lorenz solver, Newton's method, Gaussian elimination, eigenvalue power iteration + 7 more."
   },
   {
@@ -36,7 +36,7 @@
     "displayName": "Solid Mechanics",
     "term": "FA20",
     "displayOrder": 7,
-    "publishedAt": null,
+    "publishedAt": "2026-05-16",
     "comingSoonPreview": "Interactive truss analyzer, beam deflection, Mohr's circle, 3D stress state + 6 more."
   },
   {
@@ -44,7 +44,7 @@
     "displayName": "Distributed Systems & Fields",
     "term": "WI20",
     "displayOrder": 8,
-    "publishedAt": null,
+    "publishedAt": "2026-05-16",
     "comingSoonPreview": "Charge field plotter, 1D wave equation, heat equation, Biot-Savart B-field + 5 more."
   },
   {
@@ -52,7 +52,7 @@
     "displayName": "Mechatronics",
     "term": "SP21",
     "displayOrder": 1,
-    "publishedAt": null,
+    "publishedAt": "2026-05-16",
     "comingSoonPreview": "Robot drive/turn/maze/wall-follow video reel + PID simulator + 2-link inverse kinematics + 6 more."
   },
   {
@@ -60,7 +60,7 @@
     "displayName": "Digital Electronics",
     "term": "SP20",
     "displayOrder": 9,
-    "publishedAt": null,
+    "publishedAt": "2026-05-16",
     "comingSoonPreview": "Stopwatch FSM simulator, K-map minimizer, VHDL → waveform, ALU bit-slice + 5 more."
   },
   {
@@ -68,7 +68,7 @@
     "displayName": "Embedded Systems",
     "term": "WI21",
     "displayOrder": 2,
-    "publishedAt": null,
+    "publishedAt": "2026-05-16",
     "comingSoonPreview": "Solar tracker, traffic crossing, RPM display video reel + accelerometer + I²C/PWM/MQTT + 6 more."
   }
 ]

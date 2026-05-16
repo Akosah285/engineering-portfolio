@@ -10,11 +10,86 @@ concepts:
   - alu-design
 techTags:
   - VHDL
-heroDemoLabel: "Stopwatch FSM Simulator"
-publishedAt: null
-draft: true
+heroDemoLabel: "FSM Simulator (Stopwatch preset)"
+publishedAt: "2026-05-16"
+draft: false
+interviewPending: true
 ---
+
+import FsmSimulatorVisualizer from "../../components/demos/digital-electronics/fsm-simulator/FsmSimulatorVisualizer";
+import AluBitSliceVisualizer from "../../components/demos/digital-electronics/alu-bit-slice/AluBitSliceVisualizer";
+import BinaryCounterVisualizer from "../../components/demos/digital-electronics/binary-counter/BinaryCounterVisualizer";
+import DatapathVisualizer from "../../components/demos/digital-electronics/datapath/DatapathVisualizer";
+import KarnaughMinimizerVisualizer from "../../components/demos/digital-electronics/karnaugh-minimizer/KarnaughMinimizerVisualizer";
+import LatchVsFfVisualizer from "../../components/demos/digital-electronics/latch-vs-ff/LatchVsFfVisualizer";
+import StopwatchFsmVisualizer from "../../components/demos/digital-electronics/stopwatch-fsm/StopwatchFsmVisualizer";
+import TruthTableVisualizer from "../../components/demos/digital-electronics/truth-table/TruthTableVisualizer";
+import VhdlWaveformVisualizer from "../../components/demos/digital-electronics/vhdl-waveform/VhdlWaveformVisualizer";
+
+<FsmSimulatorVisualizer client:idle />
 
 ## Reflection
 
-_Author reflection pending._
+_Pre-interview preview. Akwasi's first-person reflection on this course is pending —
+track at [issue #50](https://github.com/Akosah285/engineering-portfolio/issues/50)._
+
+## Logic gate truth table builder
+
+Drag-and-drop gates; auto-derive the truth table and a minimal Boolean expression.
+
+<TruthTableVisualizer client:visible />
+
+## Karnaugh map minimizer
+
+Type a Boolean expression; auto-derive the minimal SOP via K-map grouping.
+
+<KarnaughMinimizerVisualizer client:visible />
+
+## VHDL → animated waveform
+
+Pre-compiled VHDL test benches rendered as live waveform animations.
+
+<VhdlWaveformVisualizer client:visible />
+
+## Counter simulator
+
+Synchronous and ripple counters with adjustable modulus and clock visualisation.
+
+<BinaryCounterVisualizer client:visible />
+
+## ALU bit-slice explorer
+
+A 1-bit ALU slice cascaded to 4-bit; toggle the operation lines and watch results
+propagate.
+
+<AluBitSliceVisualizer client:visible />
+
+## Latch vs flip-flop
+
+Level-sensitive latch vs edge-triggered flip-flop, side by side with timing
+diagrams.
+
+<LatchVsFfVisualizer client:visible />
+
+## Datapath visualizer — lab4
+
+Animated datapath for Lab 4 lifted directly from `lab4_datapath.vhd`.
+
+<DatapathVisualizer client:visible />
+
+## Stopwatch FSM animation
+
+Lab 3 stopwatch FSM with start, stop, and reset transitions animated.
+
+<StopwatchFsmVisualizer client:visible />
+
+## Featured problems
+
+_Featured-problem writeups for this course are pending the v9 author interview
+— tracked at [issue #50](https://github.com/Akosah285/engineering-portfolio/issues/50).
+Demos above stand on their own in the meantime._
+
+## What's coming
+
+The author's written reflection and 2–4 featured problems land alongside the v9
+interview. The demos above are wired and playable today.
