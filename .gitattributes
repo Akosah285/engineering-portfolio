@@ -1,0 +1,24 @@
+# Force LF line endings everywhere. Prevents Windows checkouts from
+# materialising files as CRLF and then re-checking them in as LF — the
+# silent churn that polluted the diff before biome started running in CI.
+* text=auto eol=lf
+
+# Binary files — never touch line endings.
+*.png    binary
+*.jpg    binary
+*.jpeg   binary
+*.gif    binary
+*.webp   binary
+*.avif   binary
+*.ico    binary
+*.pdf    binary
+*.woff   binary
+*.woff2  binary
+*.mp4    binary
+*.mov    binary
+*.webm   binary
+*.zip    binary
+*.gz     binary
+*.tar    binary
+*.tar.gz binary
+*.sqlite binary
