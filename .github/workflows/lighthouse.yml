@@ -62,4 +62,14 @@ jobs:
 
       - name: Run Lighthouse CI (${{ matrix.preset }})
         working-directory: site
-        run: lhci autorun --config=./lighthouserc.json --collect.settings.preset=${{ matrix.preset }}
+        env:
+          PRESET: ${{ matrix.preset }}
+        # Lighthouse's "mobile" form factor is the DEFAULT — there is no
+        # `mobile` preset value (valid presets: perf, experimental, desktop).
+        # Pass --collect.settings.preset only for desktop.
+        run: |
+          if [ "$PRESET" = "desktop" ]; then
+            lhci autorun --config=./lighthouserc.json --collect.settings.preset=desktop
+          else
+            lhci autorun --config=./lighthouserc.json
+          fi

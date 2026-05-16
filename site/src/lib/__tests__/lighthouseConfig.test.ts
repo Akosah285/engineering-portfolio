@@ -56,18 +56,15 @@ function thresholdOf(assertion: LhciAssertion): {
   return assertion[1];
 }
 
-function findAssertion(
+function findGlobalAssertion(
   config: LhciConfig,
-  matchingPattern: string | null,
   audit: string,
 ): LhciAssertion | undefined {
+  // After we switched to pure assertMatrix (LHCI rejects mixing the two),
+  // the "global" budget is the entry matching every URL (pattern `.*`).
   const matrix = config.ci.assert.assertMatrix ?? [];
-  if (matchingPattern === null) {
-    const fallback = config.ci.assert.assertions;
-    return fallback?.[audit];
-  }
-  const entry = matrix.find((e) => e.matchingUrlPattern === matchingPattern);
-  return entry?.assertions?.[audit];
+  const globalEntry = matrix.find((e) => e.matchingUrlPattern === ".*");
+  return globalEntry?.assertions?.[audit];
 }
 
 describe("Lighthouse CI configuration (lighthouserc.json)", () => {
@@ -103,17 +100,18 @@ describe("Lighthouse CI configuration (lighthouserc.json)", () => {
   });
 
   describe("assert severity (v3 stage = warn-only per plan §2.13)", () => {
-    it("every assertion in the global block uses severity 'warn' (not 'error')", () => {
+    it("LHCI uses pure assertMatrix (cannot mix with global `assertions`)", () => {
       const config = loadConfig();
-      const globals = config.ci.assert.assertions ?? {};
-      for (const [audit, assertion] of Object.entries(globals)) {
-        expect(severityOf(assertion)).toBe("warn");
-      }
+      // LHCI errors with "Cannot use assertMatrix with other options" if
+      // a sibling `assertions` block is present alongside assertMatrix.
+      expect(config.ci.assert.assertions).toBeUndefined();
+      expect(config.ci.assert.assertMatrix).toBeDefined();
     });
 
     it("every assertion inside assertMatrix entries uses severity 'warn'", () => {
       const config = loadConfig();
       const matrix = config.ci.assert.assertMatrix ?? [];
+      expect(matrix.length).toBeGreaterThan(0);
       for (const entry of matrix) {
         for (const assertion of Object.values(entry.assertions ?? {})) {
           expect(severityOf(assertion)).toBe("warn");
@@ -122,45 +120,45 @@ describe("Lighthouse CI configuration (lighthouserc.json)", () => {
     });
   });
 
-  describe("global budgets match plan §7.5", () => {
+  describe("global budgets match plan §7.5 (assertMatrix `.*` entry)", () => {
     it("performance score ≥ 0.95", () => {
-      const a = findAssertion(loadConfig(), null, "categories:performance");
+      const a = findGlobalAssertion(loadConfig(), "categories:performance");
       expect(a).toBeDefined();
       expect(thresholdOf(a!).minScore).toBe(0.95);
     });
 
     it("accessibility score ≥ 0.95", () => {
-      const a = findAssertion(loadConfig(), null, "categories:accessibility");
+      const a = findGlobalAssertion(loadConfig(), "categories:accessibility");
       expect(a).toBeDefined();
       expect(thresholdOf(a!).minScore).toBe(0.95);
     });
 
     it("best-practices score ≥ 0.95", () => {
-      const a = findAssertion(loadConfig(), null, "categories:best-practices");
+      const a = findGlobalAssertion(loadConfig(), "categories:best-practices");
       expect(a).toBeDefined();
       expect(thresholdOf(a!).minScore).toBe(0.95);
     });
 
     it("seo score ≥ 0.95", () => {
-      const a = findAssertion(loadConfig(), null, "categories:seo");
+      const a = findGlobalAssertion(loadConfig(), "categories:seo");
       expect(a).toBeDefined();
       expect(thresholdOf(a!).minScore).toBe(0.95);
     });
 
     it("CLS ≤ 0.05", () => {
-      const a = findAssertion(loadConfig(), null, "cumulative-layout-shift");
+      const a = findGlobalAssertion(loadConfig(), "cumulative-layout-shift");
       expect(a).toBeDefined();
       expect(thresholdOf(a!).maxNumericValue).toBe(0.05);
     });
 
     it("total-blocking-time ≤ 200ms (INP proxy per rubber-duck note)", () => {
-      const a = findAssertion(loadConfig(), null, "total-blocking-time");
+      const a = findGlobalAssertion(loadConfig(), "total-blocking-time");
       expect(a).toBeDefined();
       expect(thresholdOf(a!).maxNumericValue).toBe(200);
     });
 
     it("LCP default budget for course pages = 1500ms", () => {
-      const a = findAssertion(loadConfig(), null, "largest-contentful-paint");
+      const a = findGlobalAssertion(loadConfig(), "largest-contentful-paint");
       expect(a).toBeDefined();
       expect(thresholdOf(a!).maxNumericValue).toBe(1500);
     });
