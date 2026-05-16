@@ -80,7 +80,9 @@ const titleCase = tag
   <nav class="breadcrumb" aria-label="Breadcrumb">
     <a href={base}>Home</a>
     <span aria-hidden="true">/</span>
-    <span aria-current="page">Concept · {titleCase}</span>
+    <a href={`${base}concepts/`}>Concepts</a>
+    <span aria-hidden="true">/</span>
+    <span aria-current="page">{titleCase}</span>
   </nav>
 
   <article class="concept-page">

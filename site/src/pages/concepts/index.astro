@@ -1,0 +1,270 @@
+---
+/**
+ * /concepts/ — index of all concept tags in the controlled vocabulary.
+ *
+ * Discovery surface: visitors hit a published or Coming-Soon course, click
+ * a concept chip, land on `/concepts/{tag}/`, and then want to ask
+ * "what else is there?" This page answers that.
+ *
+ * Plan §7.15: vocabulary is `_tags.json`. Tags with zero indexable
+ * courses are still listed (so the vocabulary stays browsable as more
+ * courses ship), but visually de-emphasised below the tags that have
+ * coverage today.
+ *
+ * Counts are derived from the same `selectIndexableCourses` +
+ * `buildTagIndex` deep modules the `/concepts/{tag}/` page uses, so the
+ * numbers shown here cannot drift from the per-tag pages.
+ */
+import { getCollection, type CollectionEntry } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import { buildTagIndex } from "../../content/concepts/tagIndex";
+import {
+  selectIndexableCourses,
+  type CatalogEntry,
+} from "../../content/concepts/courseSelector";
+import tagsData from "../../content/concepts/_tags.json";
+import coursesData from "../../content/_courses.json";
+
+type CourseEntry = CollectionEntry<"courses">;
+
+interface TagsJson {
+  tags: readonly string[];
+}
+
+const base = import.meta.env.BASE_URL;
+const vocabulary = (tagsData as TagsJson).tags;
+
+const catalog = coursesData as CatalogEntry[];
+const entries = (await getCollection("courses")) as CourseEntry[];
+
+const indexable = selectIndexableCourses(
+  catalog,
+  entries.map((e) => ({ slug: e.slug, data: e.data })),
+);
+
+const index = buildTagIndex(indexable, vocabulary);
+
+interface TagRow {
+  tag: string;
+  titleCase: string;
+  courseCount: number;
+}
+
+function toTitleCase(tag: string): string {
+  return tag
+    .split("-")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+}
+
+const allRows: TagRow[] = index.map((entry) => ({
+  tag: entry.tag,
+  titleCase: toTitleCase(entry.tag),
+  courseCount: entry.courses.length,
+}));
+
+// Tags with at least one indexable course; alphabetical within group.
+const populated = allRows
+  .filter((r) => r.courseCount > 0)
+  .sort((a, b) => a.titleCase.localeCompare(b.titleCase));
+
+// Tags that no published / Coming-Soon course currently touches.
+const empty = allRows
+  .filter((r) => r.courseCount === 0)
+  .sort((a, b) => a.titleCase.localeCompare(b.titleCase));
+---
+
+<Layout
+  title="Concepts — Engineering Portfolio"
+  description={`Browse the ${vocabulary.length}-tag controlled vocabulary across all engineering courses.`}
+>
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href={base}>Home</a>
+    <span aria-hidden="true">/</span>
+    <span aria-current="page">Concepts</span>
+  </nav>
+
+  <article class="concepts-index">
+    <header class="concepts-header">
+      <p class="concepts-header__kicker">Browse</p>
+      <h1 class="concepts-header__title">Concepts</h1>
+      <p class="concepts-header__lede">
+        A controlled vocabulary of {vocabulary.length} engineering ideas — named
+        theorems, algorithms, and pedagogical chunks that show up across the
+        coursework. Each tag links to a page listing every course that touches it.
+      </p>
+    </header>
+
+    <section class="concepts-section" aria-labelledby="active-heading">
+      <h2 id="active-heading">In play</h2>
+      {
+        populated.length === 0 ? (
+          <p class="concepts-empty">
+            No courses have published or staged concept tags yet.
+          </p>
+        ) : (
+          <ul class="concepts-grid" role="list">
+            {populated.map((row) => (
+              <li>
+                <a class="concept-card" href={`${base}concepts/${row.tag}/`}>
+                  <span class="concept-card__name">{row.titleCase}</span>
+                  <span class="concept-card__count">
+                    {row.courseCount} {row.courseCount === 1 ? "course" : "courses"}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </section>
+
+    {
+      empty.length > 0 ? (
+        <section class="concepts-section concepts-section--empty" aria-labelledby="vocab-heading">
+          <h2 id="vocab-heading">Vocabulary (no course yet)</h2>
+          <p class="concepts-section__lede">
+            Tags reserved in the controlled vocabulary that no course has
+            tagged yet. They'll move up to the "In play" list as courses ship.
+          </p>
+          <ul class="concepts-grid concepts-grid--muted" role="list">
+            {empty.map((row) => (
+              <li>
+                <a class="concept-card concept-card--muted" href={`${base}concepts/${row.tag}/`}>
+                  <span class="concept-card__name">{row.titleCase}</span>
+                  <span class="concept-card__count">0 courses</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null
+    }
+  </article>
+</Layout>
+
+<style>
+  .breadcrumb {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    margin: 1rem 0 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  .breadcrumb a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px dotted currentColor;
+  }
+  .breadcrumb a:hover,
+  .breadcrumb a:focus {
+    color: var(--color-accent);
+  }
+  .breadcrumb [aria-current="page"] {
+    color: var(--color-text);
+  }
+
+  .concepts-index {
+    max-width: 64rem;
+    margin: 0 auto;
+    padding: 0 1rem 4rem;
+  }
+
+  .concepts-header {
+    margin: 2rem 0 2.5rem;
+    max-width: 60ch;
+  }
+  .concepts-header__kicker {
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.75rem;
+    color: var(--color-accent);
+    margin: 0 0 0.5rem;
+    font-weight: 600;
+  }
+  .concepts-header__title {
+    font-family: "Source Serif 4 Variable", Georgia, serif;
+    font-size: clamp(1.75rem, 5vw, 2.5rem);
+    line-height: 1.15;
+    margin: 0 0 1rem;
+    font-weight: 600;
+  }
+  .concepts-header__lede {
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  .concepts-section {
+    margin: 0 0 3rem;
+  }
+  .concepts-section h2 {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text-muted);
+    margin: 0 0 0.5rem;
+    font-weight: 600;
+  }
+  .concepts-section__lede {
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+    margin: 0 0 1rem;
+    max-width: 60ch;
+  }
+  .concepts-empty {
+    color: var(--color-text-muted);
+    font-style: italic;
+    margin: 0;
+  }
+
+  .concepts-grid {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+    gap: 0.5rem;
+  }
+
+  .concept-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--color-text-muted);
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--color-text);
+    background: var(--color-surface);
+    transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+  }
+  .concept-card:hover,
+  .concept-card:focus {
+    border-color: var(--color-accent);
+    background: color-mix(in srgb, var(--color-accent) 6%, transparent);
+    transform: translateY(-1px);
+  }
+  .concept-card__name {
+    font-weight: 500;
+    font-size: 0.9375rem;
+  }
+  .concept-card__count {
+    font-family: "JetBrains Mono Variable", monospace;
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text-muted);
+  }
+
+  .concept-card--muted {
+    opacity: 0.55;
+  }
+  .concept-card--muted:hover,
+  .concept-card--muted:focus {
+    opacity: 1;
+  }
+</style>
