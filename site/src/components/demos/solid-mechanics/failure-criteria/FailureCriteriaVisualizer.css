@@ -1,0 +1,83 @@
+/** Layout styles for the Failure Criteria Visualizer. */
+
+.fc-visualizer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.fc-visualizer__stage {
+  position: relative;
+  width: 100%;
+  background: var(--color-bg);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.fc-visualizer__controls {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+@media (min-width: 720px) {
+  .fc-visualizer__controls {
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 1.5rem;
+  }
+}
+
+.fc-visualizer__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.fc-visualizer__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 1rem;
+  border: 1px solid var(--color-text-muted);
+  border-radius: 8px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-family: "Inter Variable", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 120ms ease, border-color 120ms ease;
+}
+
+.fc-visualizer__btn:hover,
+.fc-visualizer__btn:focus-visible {
+  background: color-mix(in srgb, var(--color-accent) 8%, var(--color-surface));
+  border-color: var(--color-accent);
+}
+
+.fc-visualizer__counter {
+  font-family: "JetBrains Mono Variable", monospace;
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  margin-left: auto;
+}
+
+.fc-visualizer__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  font-family: "JetBrains Mono Variable", monospace;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.fc-visualizer__legend-swatch {
+  display: inline-block;
+  width: 0.75rem;
+  height: 0.75rem;
+  margin-right: 0.25rem;
+  vertical-align: middle;
+  border-radius: 2px;
+}

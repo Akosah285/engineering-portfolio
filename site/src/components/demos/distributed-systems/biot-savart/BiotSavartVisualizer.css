@@ -1,0 +1,79 @@
+.bs-visualizer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.bs-visualizer__stage {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+@media (min-width: 720px) {
+  .bs-visualizer__stage {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.bs-visualizer__panel {
+  position: relative;
+  background: var(--color-bg, #fafafa);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.bs-visualizer__panel-title {
+  font-family: "JetBrains Mono Variable", monospace;
+  font-size: 0.75rem;
+  color: var(--color-text-muted, #666);
+  padding: 0.25rem 0.5rem;
+}
+
+.bs-visualizer__controls {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+@media (min-width: 720px) {
+  .bs-visualizer__controls {
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 1.5rem;
+  }
+}
+
+.bs-visualizer__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.bs-visualizer__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 1rem;
+  border: 1px solid var(--color-text-muted, #888);
+  border-radius: 8px;
+  background: var(--color-surface, #fff);
+  color: var(--color-text, #111);
+  font-family: "Inter Variable", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.bs-visualizer__btn:hover,
+.bs-visualizer__btn:focus-visible {
+  border-color: var(--color-accent, #00693e);
+}
+
+.bs-visualizer__counter {
+  font-family: "JetBrains Mono Variable", monospace;
+  font-size: 0.8125rem;
+  color: var(--color-text-muted, #666);
+  margin-left: auto;
+}
