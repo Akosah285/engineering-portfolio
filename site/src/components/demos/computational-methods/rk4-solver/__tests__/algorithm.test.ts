@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { rk4Step, rk4Integrate, type DerivativeFn } from "../algorithm";
+import { describe, expect, it } from "vitest";
+import { type DerivativeFn, rk4Integrate, rk4Step } from "../algorithm";
 
 describe("rk4Step", () => {
   it("integrates the scalar exponential decay y' = -y to the analytic solution", () => {
@@ -39,7 +39,9 @@ describe("rk4Step", () => {
 
   it("throws RangeError on non-finite dt", () => {
     const f: DerivativeFn = () => [0];
-    expect(() => rk4Step({ f, t: 0, y: [0], dt: Number.POSITIVE_INFINITY })).toThrow(RangeError);
+    expect(() => rk4Step({ f, t: 0, y: [0], dt: Number.POSITIVE_INFINITY })).toThrow(
+      RangeError,
+    );
     expect(() => rk4Step({ f, t: 0, y: [0], dt: Number.NaN })).toThrow(RangeError);
   });
 
@@ -107,13 +109,18 @@ describe("rk4Integrate", () => {
 
   it("throws RangeError when tEnd < t0", () => {
     const f: DerivativeFn = () => [0];
-    expect(() => rk4Integrate({ f, t0: 1, y0: [0], tEnd: 0, dt: 0.1 })).toThrow(RangeError);
+    expect(() => rk4Integrate({ f, t0: 1, y0: [0], tEnd: 0, dt: 0.1 })).toThrow(
+      RangeError,
+    );
   });
 
   it("throws RangeError on non-finite t0 or tEnd", () => {
     const f: DerivativeFn = () => [0];
-    expect(() => rk4Integrate({ f, t0: 0, y0: [0], tEnd: Number.POSITIVE_INFINITY, dt: 0.1 }))
-      .toThrow(RangeError);
-    expect(() => rk4Integrate({ f, t0: Number.NaN, y0: [0], tEnd: 1, dt: 0.1 })).toThrow(RangeError);
+    expect(() =>
+      rk4Integrate({ f, t0: 0, y0: [0], tEnd: Number.POSITIVE_INFINITY, dt: 0.1 }),
+    ).toThrow(RangeError);
+    expect(() => rk4Integrate({ f, t0: Number.NaN, y0: [0], tEnd: 1, dt: 0.1 })).toThrow(
+      RangeError,
+    );
   });
 });

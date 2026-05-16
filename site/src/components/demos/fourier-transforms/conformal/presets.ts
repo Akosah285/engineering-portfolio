@@ -6,19 +6,9 @@
  * full state resets.
  */
 
-import {
-  type Complex,
-  cExp,
-  cSquare,
-  joukowski,
-} from "./algorithm";
+import { type Complex, cExp, cSquare, joukowski } from "./algorithm";
 
-export const MAP_SLUGS = [
-  "identity",
-  "z-squared",
-  "exp-z",
-  "joukowski-1",
-] as const;
+export const MAP_SLUGS = ["identity", "z-squared", "exp-z", "joukowski-1"] as const;
 
 export type MapSlug = (typeof MAP_SLUGS)[number];
 

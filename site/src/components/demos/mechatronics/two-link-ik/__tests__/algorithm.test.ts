@@ -29,8 +29,12 @@ describe("forwardKinematics", () => {
   });
 
   it("RangeError on non-positive link length", () => {
-    expect(() => forwardKinematics({ l1: 0, l2: 1, theta1: 0, theta2: 0 })).toThrow(RangeError);
-    expect(() => forwardKinematics({ l1: 1, l2: -1, theta1: 0, theta2: 0 })).toThrow(RangeError);
+    expect(() => forwardKinematics({ l1: 0, l2: 1, theta1: 0, theta2: 0 })).toThrow(
+      RangeError,
+    );
+    expect(() => forwardKinematics({ l1: 1, l2: -1, theta1: 0, theta2: 0 })).toThrow(
+      RangeError,
+    );
   });
 });
 

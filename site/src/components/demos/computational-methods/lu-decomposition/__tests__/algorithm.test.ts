@@ -147,6 +147,11 @@ describe("decompose — error handling", () => {
   });
 
   it("RangeError on non-square matrix", () => {
-    expect(() => decompose([[1, 2, 3], [4, 5, 6]])).toThrow(RangeError);
+    expect(() =>
+      decompose([
+        [1, 2, 3],
+        [4, 5, 6],
+      ]),
+    ).toThrow(RangeError);
   });
 });

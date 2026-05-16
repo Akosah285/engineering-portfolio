@@ -19,12 +19,7 @@ export interface QuadratureDemoState {
 }
 
 export const FUNC_SLUGS = ["quad", "sine", "gauss", "osc"] as const;
-export const RULE_SLUGS = [
-  "rectangle",
-  "midpoint",
-  "trapezoid",
-  "simpson",
-] as const;
+export const RULE_SLUGS = ["rectangle", "midpoint", "trapezoid", "simpson"] as const;
 
 export interface QuadFunction {
   readonly name: string;

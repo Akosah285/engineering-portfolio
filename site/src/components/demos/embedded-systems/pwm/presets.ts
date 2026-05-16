@@ -5,12 +5,7 @@
  * can jump between common PWM use-cases via <PresetCarousel>.
  */
 
-export const PRESET_SLUGS = [
-  "motor",
-  "heater",
-  "servo",
-  "high-freq",
-] as const;
+export const PRESET_SLUGS = ["motor", "heater", "servo", "high-freq"] as const;
 
 export type PresetSlug = (typeof PRESET_SLUGS)[number];
 

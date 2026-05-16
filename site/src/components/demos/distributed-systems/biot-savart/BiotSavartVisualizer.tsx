@@ -3,12 +3,7 @@ import { DemoCanvas, type DrawFn } from "../../../demo-kit/DemoCanvas";
 import { PresetCarousel } from "../../../demo-kit/PresetCarousel";
 import { SliderRow } from "../../../demo-kit/SliderRow";
 import { type Schema, useDemoState } from "../../../demo-kit/useDemoState";
-import {
-  type Segment,
-  circularLoop,
-  fieldAt,
-  loopAxisField,
-} from "./algorithm";
+import { type Segment, circularLoop, fieldAt, loopAxisField } from "./algorithm";
 import {
   type BiotSavartDemoState,
   CARRIERS,
@@ -135,11 +130,7 @@ function paintCarriers(
   }
 }
 
-function paintAxisPlot(
-  ctx: CanvasRenderingContext2D,
-  R: number,
-  I: number,
-): void {
+function paintAxisPlot(ctx: CanvasRenderingContext2D, R: number, I: number): void {
   const { width, height } = ctx.canvas;
   ctx.fillStyle = "#fafafa";
   ctx.fillRect(0, 0, width, height);
@@ -238,17 +229,21 @@ export default function BiotSavartVisualizer() {
   return (
     <div className="bs-visualizer">
       <PresetCarousel
-        presets={PRESETS as readonly { name: string; state: BiotSavartDemoState }[] as {
-          name: string;
-          state: BiotSavartDemoState;
-        }[]}
+        presets={
+          PRESETS as readonly { name: string; state: BiotSavartDemoState }[] as {
+            name: string;
+            state: BiotSavartDemoState;
+          }[]
+        }
         onSelect={handlePresetSelect}
         ariaLabel="Biot-Savart presets"
       />
 
       <div className="bs-visualizer__stage">
         <div className="bs-visualizer__panel">
-          <div className="bs-visualizer__panel-title">Plan view · |Bz| heatmap (red out, blue in)</div>
+          <div className="bs-visualizer__panel-title">
+            Plan view · |Bz| heatmap (red out, blue in)
+          </div>
           <DemoCanvas
             width={420}
             height={360}
@@ -257,7 +252,9 @@ export default function BiotSavartVisualizer() {
           />
         </div>
         <div className="bs-visualizer__panel">
-          <div className="bs-visualizer__panel-title">On-axis Bz(z) for circular loop · z ∈ [−3R, 3R]</div>
+          <div className="bs-visualizer__panel-title">
+            On-axis Bz(z) for circular loop · z ∈ [−3R, 3R]
+          </div>
           <DemoCanvas
             width={420}
             height={360}

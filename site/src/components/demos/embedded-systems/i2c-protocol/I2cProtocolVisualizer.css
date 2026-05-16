@@ -63,9 +63,18 @@
   fill: #333;
 }
 
-.i2c-visualizer__label--start { fill: #00693e; font-weight: bold; }
-.i2c-visualizer__label--stop { fill: #cf4f4f; font-weight: bold; }
-.i2c-visualizer__label--ack { fill: #2a6ed4; font-weight: bold; }
+.i2c-visualizer__label--start {
+  fill: #00693e;
+  font-weight: bold;
+}
+.i2c-visualizer__label--stop {
+  fill: #cf4f4f;
+  font-weight: bold;
+}
+.i2c-visualizer__label--ack {
+  fill: #2a6ed4;
+  font-weight: bold;
+}
 
 .i2c-visualizer__lane-label {
   font-family: monospace;
@@ -79,6 +88,12 @@
   stroke-dasharray: 4 3;
 }
 
-.i2c-visualizer__col-bg--start { fill: rgba(0, 105, 62, 0.12); }
-.i2c-visualizer__col-bg--stop { fill: rgba(207, 79, 79, 0.12); }
-.i2c-visualizer__col-bg--ack { fill: rgba(42, 110, 212, 0.12); }
+.i2c-visualizer__col-bg--start {
+  fill: rgba(0, 105, 62, 0.12);
+}
+.i2c-visualizer__col-bg--stop {
+  fill: rgba(207, 79, 79, 0.12);
+}
+.i2c-visualizer__col-bg--ack {
+  fill: rgba(42, 110, 212, 0.12);
+}

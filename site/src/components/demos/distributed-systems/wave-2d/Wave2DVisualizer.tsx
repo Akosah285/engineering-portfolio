@@ -75,7 +75,10 @@ export default function Wave2DVisualizer() {
   const r = (state.c * state.dt) / DX;
   const cflViolated = r > CFL_LIMIT + 1e-12;
 
-  const sourceFn = useMemo(() => makeSource(state.source, nx, ny), [state.source, nx, ny]);
+  const sourceFn = useMemo(
+    () => makeSource(state.source, nx, ny),
+    [state.source, nx, ny],
+  );
 
   const uPrevRef = useRef<number[][]>(allocGrid(ny, nx));
   const uCurRef = useRef<number[][]>(allocGrid(ny, nx));
@@ -277,12 +280,9 @@ export default function Wave2DVisualizer() {
         <button type="button" className="w2-visualizer__btn" onClick={handleReset}>
           ↺ Reset
         </button>
-        <span
-          className="w2-visualizer__counter"
-          aria-live="off"
-          data-tick={tick}
-        >
-          step n = {stepRef.current} · max |u| = {maxAmpRef.current.toFixed(3)} · r = {r.toFixed(3)}
+        <span className="w2-visualizer__counter" aria-live="off" data-tick={tick}>
+          step n = {stepRef.current} · max |u| = {maxAmpRef.current.toFixed(3)} · r ={" "}
+          {r.toFixed(3)}
           {cflViolated ? " · CFL violated" : ""}
         </span>
       </div>

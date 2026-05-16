@@ -241,10 +241,12 @@ export function StressStrainVisualizer() {
   return (
     <div className="ss-visualizer">
       <PresetCarousel
-        presets={PRESETS as readonly { name: string; state: StressStrainDemoState }[] as {
-          name: string;
-          state: StressStrainDemoState;
-        }[]}
+        presets={
+          PRESETS as readonly { name: string; state: StressStrainDemoState }[] as {
+            name: string;
+            state: StressStrainDemoState;
+          }[]
+        }
         onSelect={handlePresetSelect}
         ariaLabel="Stress-strain material presets"
       />
@@ -260,7 +262,8 @@ export function StressStrainVisualizer() {
         <MathHud corner="top-right" lines={hudLines} />
         {hasError ? (
           <div className="ss-visualizer__error" role="alert">
-            Invalid parameters — adjust sliders so σ_y/E ≤ plateau-end strain &lt; failure strain.
+            Invalid parameters — adjust sliders so σ_y/E ≤ plateau-end strain &lt; failure
+            strain.
           </div>
         ) : null}
       </div>

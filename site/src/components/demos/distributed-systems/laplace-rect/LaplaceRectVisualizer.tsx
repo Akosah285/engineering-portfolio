@@ -32,10 +32,18 @@ function ramp(t: number): readonly [number, number, number] {
   const clamped = Math.max(0, Math.min(1, t));
   if (clamped < 0.5) {
     const k = clamped * 2;
-    return [Math.round(40 + (245 - 40) * k), Math.round(80 + (245 - 80) * k), Math.round(200 + (245 - 200) * k)];
+    return [
+      Math.round(40 + (245 - 40) * k),
+      Math.round(80 + (245 - 80) * k),
+      Math.round(200 + (245 - 200) * k),
+    ];
   }
   const k = (clamped - 0.5) * 2;
-  return [Math.round(245 + (200 - 245) * k), Math.round(245 + (40 - 245) * k), Math.round(245 + (40 - 245) * k)];
+  return [
+    Math.round(245 + (200 - 245) * k),
+    Math.round(245 + (40 - 245) * k),
+    Math.round(245 + (40 - 245) * k),
+  ];
 }
 
 function paintHeatmap(
@@ -49,8 +57,8 @@ function paintHeatmap(
   const nx = u[0]?.length ?? 0;
   if (nx === 0 || ny === 0) return;
 
-  let lo = Infinity;
-  let hi = -Infinity;
+  let lo = Number.POSITIVE_INFINITY;
+  let hi = Number.NEGATIVE_INFINITY;
   for (let i = 0; i < ny; i += 1) {
     for (let j = 0; j < nx; j += 1) {
       const v = u[i]![j]!;
@@ -171,10 +179,12 @@ export function LaplaceRectVisualizer() {
   return (
     <div className="lp-visualizer">
       <PresetCarousel
-        presets={PRESETS as readonly { name: string; state: LaplaceRectDemoState }[] as {
-          name: string;
-          state: LaplaceRectDemoState;
-        }[]}
+        presets={
+          PRESETS as readonly { name: string; state: LaplaceRectDemoState }[] as {
+            name: string;
+            state: LaplaceRectDemoState;
+          }[]
+        }
         onSelect={handlePresetSelect}
         ariaLabel="Laplace boundary presets"
       />

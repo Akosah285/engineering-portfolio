@@ -10,8 +10,8 @@ import {
   DEFAULT_STATE,
   type LuDemoState,
   MATRIX_SLUGS,
-  PRESET_META,
   PRESETS,
+  PRESET_META,
 } from "./presets";
 import "./LuDecompositionVisualizer.css";
 
@@ -147,14 +147,9 @@ export function LuDecompositionVisualizer() {
       paintPanel(ctx, startX + PANEL_W + PANEL_GAP, startY, "L", lu.L, {
         diagonalHighlight: "unit",
       });
-      paintPanel(
-        ctx,
-        startX + 2 * (PANEL_W + PANEL_GAP),
-        startY,
-        "U",
-        lu.U,
-        { diagonalHighlight: "pivot" },
-      );
+      paintPanel(ctx, startX + 2 * (PANEL_W + PANEL_GAP), startY, "U", lu.U, {
+        diagonalHighlight: "pivot",
+      });
     },
     [meta, lu],
   );

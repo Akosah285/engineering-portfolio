@@ -15,12 +15,8 @@ describe("ErdosRenyiVisualizer", () => {
     ).toBeTruthy();
     expect(screen.getByRole("slider", { name: /^seed/i })).toBeTruthy();
     expect(screen.getByRole("option", { name: /sparse/i })).toBeTruthy();
-    expect(
-      screen.getByRole("option", { name: /phase transition/i }),
-    ).toBeTruthy();
-    expect(
-      screen.getByRole("option", { name: /giant component/i }),
-    ).toBeTruthy();
+    expect(screen.getByRole("option", { name: /phase transition/i })).toBeTruthy();
+    expect(screen.getByRole("option", { name: /giant component/i })).toBeTruthy();
     expect(screen.getByRole("option", { name: /dense/i })).toBeTruthy();
     expect(screen.getByRole("button", { name: /↺ reset/i })).toBeTruthy();
     const narrations = screen.getAllByRole("status");

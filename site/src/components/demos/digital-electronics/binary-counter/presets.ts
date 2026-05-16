@@ -20,12 +20,7 @@ export interface BinaryCounterPreset {
   state: BinaryCounterDemoState;
 }
 
-export const PRESET_SLUGS = [
-  "4-bit-up",
-  "4-bit-down",
-  "8-bit-up",
-  "load-1010",
-] as const;
+export const PRESET_SLUGS = ["4-bit-up", "4-bit-down", "8-bit-up", "load-1010"] as const;
 
 export type PresetSlug = (typeof PRESET_SLUGS)[number];
 

@@ -70,7 +70,10 @@ function I2cProtocolVisualizer() {
     DEFAULT_STATE,
   );
 
-  const input = useMemo(() => getTransactionInput(state.transaction), [state.transaction]);
+  const input = useMemo(
+    () => getTransactionInput(state.transaction),
+    [state.transaction],
+  );
   const frame = useMemo(() => frameTransaction(input), [input]);
   const events: readonly BusEvent[] = frame.events;
   const eventCount = events.length;
@@ -137,8 +140,12 @@ function I2cProtocolVisualizer() {
           aria-label={`I2C waveform for ${txnDisplayName}`}
         >
           {/* Lane labels */}
-          <text x={8} y={SCL_Y_HIGH + 4} className="i2c-visualizer__lane-label">SCL</text>
-          <text x={8} y={SDA_Y_HIGH + 4} className="i2c-visualizer__lane-label">SDA</text>
+          <text x={8} y={SCL_Y_HIGH + 4} className="i2c-visualizer__lane-label">
+            SCL
+          </text>
+          <text x={8} y={SDA_Y_HIGH + 4} className="i2c-visualizer__lane-label">
+            SDA
+          </text>
 
           {/* Column backgrounds + labels */}
           {events.map((ev, i) => {

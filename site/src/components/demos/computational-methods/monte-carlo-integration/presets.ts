@@ -57,9 +57,7 @@ export const INTEGRANDS: readonly Integrand[] = [
   },
 ] as const;
 
-export const INTEGRAND_SLUGS: readonly IntegrandSlug[] = INTEGRANDS.map(
-  (i) => i.slug,
-);
+export const INTEGRAND_SLUGS: readonly IntegrandSlug[] = INTEGRANDS.map((i) => i.slug);
 
 export function getIntegrand(slug: IntegrandSlug): Integrand {
   const found = INTEGRANDS.find((i) => i.slug === slug);
@@ -84,13 +82,11 @@ export const DEFAULT_STATE: MCIntegrationDemoState = {
   seed: 42,
 };
 
-export const PRESETS: readonly MCIntegrationPreset[] = INTEGRANDS.map(
-  (integrand) => ({
-    name: integrand.label,
-    state: {
-      integrandSlug: integrand.slug,
-      nSamples: 1000,
-      seed: 42,
-    },
-  }),
-);
+export const PRESETS: readonly MCIntegrationPreset[] = INTEGRANDS.map((integrand) => ({
+  name: integrand.label,
+  state: {
+    integrandSlug: integrand.slug,
+    nSamples: 1000,
+    seed: 42,
+  },
+}));

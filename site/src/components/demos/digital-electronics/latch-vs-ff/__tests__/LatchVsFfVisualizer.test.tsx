@@ -1,5 +1,5 @@
-import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, it, expect } from "vitest";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 import LatchVsFfVisualizer from "../LatchVsFfVisualizer";
 
 describe("LatchVsFfVisualizer", () => {
@@ -14,7 +14,9 @@ describe("LatchVsFfVisualizer", () => {
     expect(screen.getByRole("slider", { name: /cursor \(sample idx\)/i })).toBeTruthy();
     expect(screen.getByRole("slider", { name: /input pattern/i })).toBeTruthy();
 
-    expect(screen.getByRole("button", { name: /reset latch vs flip-flop/i })).toBeTruthy();
+    expect(
+      screen.getByRole("button", { name: /reset latch vs flip-flop/i }),
+    ).toBeTruthy();
 
     const counter = container.querySelector(".lvf-visualizer__counter");
     expect(counter).not.toBeNull();

@@ -5,12 +5,7 @@ import { MathHud } from "../../../demo-kit/MathHud";
 import { PresetCarousel } from "../../../demo-kit/PresetCarousel";
 import { SliderRow } from "../../../demo-kit/SliderRow";
 import { type Schema, useDemoState } from "../../../demo-kit/useDemoState";
-import {
-  type BeamInput,
-  type PointLoad,
-  type Udl,
-  analyze,
-} from "./algorithm";
+import { type BeamInput, type PointLoad, type Udl, analyze } from "./algorithm";
 import {
   DEFAULT_STATE,
   PRESETS,
@@ -44,10 +39,8 @@ const STATE_SCHEMA = {
 function toBeamInput(state: ShearMomentDemoState): BeamInput {
   const L = state.L;
   const xP = Math.min(Math.max(state.xP, 0), L);
-  const pointLoads: PointLoad[] =
-    state.P > 0 ? [{ x: xP, P: state.P * 1000 }] : [];
-  const udls: Udl[] =
-    state.w > 0 ? [{ xStart: 0, xEnd: L, w: state.w * 1000 }] : [];
+  const pointLoads: PointLoad[] = state.P > 0 ? [{ x: xP, P: state.P * 1000 }] : [];
+  const udls: Udl[] = state.w > 0 ? [{ xStart: 0, xEnd: L, w: state.w * 1000 }] : [];
   return {
     L,
     ...(pointLoads.length > 0 ? { pointLoads } : {}),
@@ -309,12 +302,8 @@ export function ShearMomentVisualizer() {
   );
 
   const samples = result?.samples ?? [];
-  const vMax = samples.length
-    ? Math.max(...samples.map((s) => Math.abs(s.V)))
-    : 0;
-  const mMax = samples.length
-    ? Math.max(...samples.map((s) => Math.abs(s.M)))
-    : 0;
+  const vMax = samples.length ? Math.max(...samples.map((s) => Math.abs(s.V))) : 0;
+  const mMax = samples.length ? Math.max(...samples.map((s) => Math.abs(s.M))) : 0;
   const RA = result?.RA ?? 0;
   const RB = result?.RB ?? 0;
 

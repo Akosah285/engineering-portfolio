@@ -22,6 +22,6 @@ describe("TwoLinkIkVisualizer", () => {
     render(<TwoLinkIkVisualizer />);
     const counter = document.querySelector(".ik-visualizer__counter");
     expect(counter).toBeTruthy();
-    expect((counter?.textContent ?? "")).toMatch(/t\s*=\s*0/);
+    expect(counter?.textContent ?? "").toMatch(/t\s*=\s*0/);
   });
 });

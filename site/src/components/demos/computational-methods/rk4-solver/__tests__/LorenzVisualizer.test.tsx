@@ -12,7 +12,9 @@ describe("LorenzVisualizer", () => {
     expect(screen.getByRole("slider", { name: /^speed/i })).toBeTruthy();
     expect(screen.getByRole("option", { name: /lorenz butterfly/i })).toBeTruthy();
     expect(screen.getByRole("option", { name: /van der pol/i })).toBeTruthy();
-    expect(screen.getAllByRole("option", { name: /pendulum/i }).length).toBeGreaterThan(0);
+    expect(screen.getAllByRole("option", { name: /pendulum/i }).length).toBeGreaterThan(
+      0,
+    );
     expect(screen.getByRole("button", { name: /⏸ pause/i })).toBeTruthy();
     expect(screen.getByRole("button", { name: /↺ reset/i })).toBeTruthy();
     const narrations = screen.getAllByRole("status");

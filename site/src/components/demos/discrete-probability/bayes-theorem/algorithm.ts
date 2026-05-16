@@ -45,10 +45,8 @@ export function bayesTheorem(input: BayesInput): BayesResult {
   const falsePositiveRate = 1 - specificity;
   const falseNegativeRate = 1 - sensitivity;
 
-  const marginalPositive =
-    sensitivity * prior + falsePositiveRate * (1 - prior);
-  const marginalNegative =
-    falseNegativeRate * prior + specificity * (1 - prior);
+  const marginalPositive = sensitivity * prior + falsePositiveRate * (1 - prior);
+  const marginalNegative = falseNegativeRate * prior + specificity * (1 - prior);
 
   // Edge case: if marginalPositive = 0, no positive results possible →
   // posterior is undefined; return 0 by convention so downstream UI can

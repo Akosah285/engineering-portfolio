@@ -4,13 +4,7 @@ import { MathHud } from "../../../demo-kit/MathHud";
 import { PresetCarousel } from "../../../demo-kit/PresetCarousel";
 import { SliderRow } from "../../../demo-kit/SliderRow";
 import { type Schema, useDemoState } from "../../../demo-kit/useDemoState";
-import {
-  astar,
-  bfs,
-  type Cell,
-  type Maze,
-  type PathResult,
-} from "./algorithm";
+import { type Cell, type Maze, type PathResult, astar, bfs } from "./algorithm";
 import {
   type AlgorithmSlug,
   DEFAULT_STATE,

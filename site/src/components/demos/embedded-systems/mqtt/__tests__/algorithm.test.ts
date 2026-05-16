@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
 import {
+  type Subscription,
   createRetainedStore,
   publishFlow,
   topicMatches,
-  type Subscription,
 } from "../algorithm";
 
 describe("topicMatches — exact", () => {
@@ -111,12 +111,7 @@ describe("publishFlow QoS 1", () => {
       messageId: 7,
     });
     expect(ev.length).toBe(4);
-    expect(ev.map((e) => e.kind)).toEqual([
-      "PUBLISH",
-      "PUBACK",
-      "PUBLISH",
-      "PUBACK",
-    ]);
+    expect(ev.map((e) => e.kind)).toEqual(["PUBLISH", "PUBACK", "PUBLISH", "PUBACK"]);
   });
 });
 

@@ -1,10 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  compare,
-  simulateDFlipFlop,
-  simulateDLatch,
-  type Sample,
-} from "../algorithm";
+import { type Sample, compare, simulateDFlipFlop, simulateDLatch } from "../algorithm";
 
 const seq = (input: Array<[number, 0 | 1, 0 | 1]>): Sample[] =>
   input.map(([t, d, ctrl]) => ({ t, d, ctrl }));

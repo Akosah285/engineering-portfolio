@@ -2,17 +2,8 @@ import { useMemo } from "react";
 import { PresetCarousel } from "../../../demo-kit/PresetCarousel";
 import { SliderRow } from "../../../demo-kit/SliderRow";
 import { type Schema, useDemoState } from "../../../demo-kit/useDemoState";
-import {
-  type PublishEvent,
-  publishFlow,
-  topicMatches,
-} from "./algorithm";
-import {
-  SCENARIOS,
-  SCENARIO_SLUGS,
-  type ScenarioSlug,
-  getScenario,
-} from "./presets";
+import { type PublishEvent, publishFlow, topicMatches } from "./algorithm";
+import { SCENARIOS, SCENARIO_SLUGS, type ScenarioSlug, getScenario } from "./presets";
 import "./MqttVisualizer.css";
 
 const DEFAULT_SCENARIO: ScenarioSlug = "qos0-fire-forget";
@@ -94,14 +85,7 @@ function Arrow({ ev, y, active, dim }: ArrowProps) {
   const midX = (x1 + x2) / 2;
   return (
     <g opacity={opacity}>
-      <line
-        x1={x1}
-        y1={y}
-        x2={tipX}
-        y2={y}
-        stroke={color}
-        strokeWidth={stroke}
-      />
+      <line x1={x1} y1={y} x2={tipX} y2={y} stroke={color} strokeWidth={stroke} />
       <polygon
         points={`${tipX},${y} ${headBackX},${y - headSize / 2} ${headBackX},${y + headSize / 2}`}
         fill={color}
@@ -163,10 +147,7 @@ export default function MqttVisualizer() {
   };
 
   const handleScenarioChange = (next: number): void => {
-    const idx = Math.min(
-      SCENARIOS.length - 1,
-      Math.max(0, Math.round(next)),
-    );
+    const idx = Math.min(SCENARIOS.length - 1, Math.max(0, Math.round(next)));
     const picked = SCENARIOS[idx];
     if (!picked) return;
     setState({ scenario: picked.slug, cursor: 0 } as unknown as DemoState);

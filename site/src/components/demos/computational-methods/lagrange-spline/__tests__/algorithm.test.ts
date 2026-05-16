@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { lagrange, buildNaturalSpline, evalSpline } from "../algorithm";
+import { describe, expect, it } from "vitest";
+import { buildNaturalSpline, evalSpline, lagrange } from "../algorithm";
 
 const nodes = [
   { x: 0, y: 0 },

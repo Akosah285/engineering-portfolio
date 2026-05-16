@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { frameTransaction, decodeFrame } from "../algorithm";
+import { describe, expect, it } from "vitest";
+import { decodeFrame, frameTransaction } from "../algorithm";
 
 describe("frameTransaction", () => {
   it("emits START first and STOP last", () => {
@@ -43,9 +43,9 @@ describe("frameTransaction", () => {
   });
 
   it("RangeError on non-integer address", () => {
-    expect(() =>
-      frameTransaction({ address: 0.5, read: false, data: [] }),
-    ).toThrow(RangeError);
+    expect(() => frameTransaction({ address: 0.5, read: false, data: [] })).toThrow(
+      RangeError,
+    );
   });
 });
 
@@ -69,9 +69,7 @@ describe("decodeFrame round-trip", () => {
   });
 
   it("RangeError on frame too short", () => {
-    expect(() =>
-      decodeFrame([{ label: "X", sda: 0, scl: 1 }]),
-    ).toThrow(RangeError);
+    expect(() => decodeFrame([{ label: "X", sda: 0, scl: 1 }])).toThrow(RangeError);
   });
 
   it("RangeError on missing START", () => {

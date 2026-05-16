@@ -7,7 +7,7 @@
  * slug + nSamples in the URL fragment and rebuild on demand.
  */
 
-import { expDecay, rect, type Sample } from "./algorithm";
+import { type Sample, expDecay, rect } from "./algorithm";
 
 export type PairSlug = "rect-rect" | "rect-exp" | "exp-exp" | "wide-narrow";
 

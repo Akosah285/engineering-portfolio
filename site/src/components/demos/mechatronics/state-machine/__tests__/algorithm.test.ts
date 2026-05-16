@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { transition, run, isTerminal } from "../algorithm";
+import { describe, expect, it } from "vitest";
+import { isTerminal, run, transition } from "../algorithm";
 
 describe("transition — decision_making.ino", () => {
   it("SEARCHING + wall_detected_left → WALL_FOLLOWING", () => {

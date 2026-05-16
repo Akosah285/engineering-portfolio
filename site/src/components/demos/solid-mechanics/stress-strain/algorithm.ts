@@ -54,19 +54,13 @@ function checkParams(p: StressStrainParams): void {
     );
   }
   if (p.ultimateStrain <= p.plateauEndStrain) {
-    throw new RangeError(
-      "stressStrain: ultimateStrain must be > plateauEndStrain.",
-    );
+    throw new RangeError("stressStrain: ultimateStrain must be > plateauEndStrain.");
   }
   if (p.failureStrain <= p.ultimateStrain) {
-    throw new RangeError(
-      "stressStrain: failureStrain must be > ultimateStrain.",
-    );
+    throw new RangeError("stressStrain: failureStrain must be > ultimateStrain.");
   }
   if (p.ultimateStress <= p.yieldStress) {
-    throw new RangeError(
-      "stressStrain: ultimateStress must be > yieldStress.",
-    );
+    throw new RangeError("stressStrain: ultimateStress must be > yieldStress.");
   }
   if (p.hardeningSharpness !== undefined) {
     if (!Number.isFinite(p.hardeningSharpness) || p.hardeningSharpness <= 0) {
@@ -109,7 +103,10 @@ export function stressAt(p: StressStrainParams, strain: number): number {
   return 0; // post-fracture
 }
 
-export function curve(p: StressStrainParams, samples: number): { strain: number; stress: number }[] {
+export function curve(
+  p: StressStrainParams,
+  samples: number,
+): { strain: number; stress: number }[] {
   if (!Number.isInteger(samples) || samples < 2) {
     throw new RangeError("stressStrain: samples must be an integer >= 2.");
   }

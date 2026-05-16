@@ -81,9 +81,7 @@ export function simulatePolling(
   missed += events.length - evIdx;
 
   const meanLatency =
-    latencies.length === 0
-      ? 0
-      : latencies.reduce((a, b) => a + b, 0) / latencies.length;
+    latencies.length === 0 ? 0 : latencies.reduce((a, b) => a + b, 0) / latencies.length;
   const maxLatency =
     latencies.length === 0 ? 0 : latencies.reduce((a, b) => Math.max(a, b), 0);
 
@@ -123,9 +121,7 @@ export function simulateInterrupts(
   }
 
   const meanLatency =
-    latencies.length === 0
-      ? 0
-      : latencies.reduce((a, b) => a + b, 0) / latencies.length;
+    latencies.length === 0 ? 0 : latencies.reduce((a, b) => a + b, 0) / latencies.length;
   const maxLatency =
     latencies.length === 0 ? 0 : latencies.reduce((a, b) => Math.max(a, b), 0);
 

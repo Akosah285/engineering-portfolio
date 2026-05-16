@@ -4,11 +4,7 @@ import { PresetCarousel } from "../../../demo-kit/PresetCarousel";
 import { SliderRow } from "../../../demo-kit/SliderRow";
 import { type Schema, useDemoState } from "../../../demo-kit/useDemoState";
 import { type TraceFrame, type TraceInput, trace } from "./algorithm";
-import {
-  type BinaryCounterDemoState,
-  DEFAULT_STATE,
-  PRESETS,
-} from "./presets";
+import { type BinaryCounterDemoState, DEFAULT_STATE, PRESETS } from "./presets";
 import "./BinaryCounterVisualizer.css";
 
 /**
@@ -186,7 +182,10 @@ export function BinaryCounterVisualizer() {
 
   const currentFrame = frames[cursorTick] ?? frames[0]!;
   const decimal = currentFrame.count;
-  const hex = `0x${decimal.toString(16).toUpperCase().padStart(Math.ceil(state.bits / 4), "0")}`;
+  const hex = `0x${decimal
+    .toString(16)
+    .toUpperCase()
+    .padStart(Math.ceil(state.bits / 4), "0")}`;
   const binary = Array.from({ length: state.bits }, (_, i) =>
     currentFrame.bits[state.bits - 1 - i]! === 1 ? "1" : "0",
   ).join("");

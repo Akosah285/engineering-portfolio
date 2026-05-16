@@ -9,9 +9,7 @@ describe("QuadratureVisualizer", () => {
     // Sliders
     expect(screen.getByRole("slider", { name: /lower|a/i })).toBeTruthy();
     expect(screen.getByRole("slider", { name: /upper|b/i })).toBeTruthy();
-    expect(
-      screen.getByRole("slider", { name: /subintervals|n/i }),
-    ).toBeTruthy();
+    expect(screen.getByRole("slider", { name: /subintervals|n/i })).toBeTruthy();
 
     // Function preset chips
     expect(screen.getByRole("option", { name: /quadratic/i })).toBeTruthy();

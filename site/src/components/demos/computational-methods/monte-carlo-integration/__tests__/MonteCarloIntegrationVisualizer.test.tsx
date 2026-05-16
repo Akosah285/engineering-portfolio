@@ -5,19 +5,11 @@ import { MonteCarloIntegrationVisualizer } from "../MonteCarloIntegrationVisuali
 describe("MonteCarloIntegrationVisualizer", () => {
   it("renders sliders + preset chips + canvas", () => {
     render(<MonteCarloIntegrationVisualizer />);
-    expect(
-      screen.getByRole("slider", { name: /^n samples|^samples/i }),
-    ).toBeTruthy();
+    expect(screen.getByRole("slider", { name: /^n samples|^samples/i })).toBeTruthy();
     expect(screen.getByRole("slider", { name: /^seed/i })).toBeTruthy();
-    expect(
-      screen.getByRole("option", { name: /x.*2.*dx|x squared/i }),
-    ).toBeTruthy();
-    expect(
-      screen.getByRole("option", { name: /sin.*x.*dx|sine/i }),
-    ).toBeTruthy();
-    expect(
-      screen.getByRole("option", { name: /e.*x.*dx|exponential/i }),
-    ).toBeTruthy();
+    expect(screen.getByRole("option", { name: /x.*2.*dx|x squared/i })).toBeTruthy();
+    expect(screen.getByRole("option", { name: /sin.*x.*dx|sine/i })).toBeTruthy();
+    expect(screen.getByRole("option", { name: /e.*x.*dx|exponential/i })).toBeTruthy();
     expect(screen.getByRole("option", { name: /runge/i })).toBeTruthy();
     expect(screen.getByRole("button", { name: /↺ reset/i })).toBeTruthy();
     const narrations = screen.getAllByRole("status");

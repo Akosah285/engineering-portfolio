@@ -1,12 +1,12 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
-  rectFT,
-  triangleFT,
-  expTwoSidedFT,
   expCausalFT,
+  expTwoSidedFT,
   gaussianFT,
   magnitude,
+  rectFT,
   sampleFT,
+  triangleFT,
 } from "../algorithm";
 
 describe("rectFT", () => {

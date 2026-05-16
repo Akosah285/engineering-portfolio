@@ -86,9 +86,15 @@ describe("rect", () => {
   });
 
   it("RangeError on non-positive width or bad bounds", () => {
-    expect(() => rect({ width: 0, height: 1, nSamples: 10, tMin: -1, tMax: 1 })).toThrow(RangeError);
-    expect(() => rect({ width: 1, height: 1, nSamples: 1, tMin: -1, tMax: 1 })).toThrow(RangeError);
-    expect(() => rect({ width: 1, height: 1, nSamples: 10, tMin: 1, tMax: -1 })).toThrow(RangeError);
+    expect(() => rect({ width: 0, height: 1, nSamples: 10, tMin: -1, tMax: 1 })).toThrow(
+      RangeError,
+    );
+    expect(() => rect({ width: 1, height: 1, nSamples: 1, tMin: -1, tMax: 1 })).toThrow(
+      RangeError,
+    );
+    expect(() => rect({ width: 1, height: 1, nSamples: 10, tMin: 1, tMax: -1 })).toThrow(
+      RangeError,
+    );
   });
 });
 
@@ -112,8 +118,12 @@ describe("expDecay", () => {
   });
 
   it("RangeError on tau<=0 or bad sample count or bad bounds", () => {
-    expect(() => expDecay({ tau: 0, nSamples: 10, tMin: 0, tMax: 1 })).toThrow(RangeError);
+    expect(() => expDecay({ tau: 0, nSamples: 10, tMin: 0, tMax: 1 })).toThrow(
+      RangeError,
+    );
     expect(() => expDecay({ tau: 1, nSamples: 1, tMin: 0, tMax: 1 })).toThrow(RangeError);
-    expect(() => expDecay({ tau: 1, nSamples: 10, tMin: 1, tMax: 0 })).toThrow(RangeError);
+    expect(() => expDecay({ tau: 1, nSamples: 10, tMin: 1, tMax: 0 })).toThrow(
+      RangeError,
+    );
   });
 });

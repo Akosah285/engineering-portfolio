@@ -24,11 +24,21 @@ describe("leapfrogStep", () => {
   });
 
   it("RangeError on grid <3 / mismatched arrays / non-positive params", () => {
-    expect(() => leapfrogStep({ uPrev: [0, 0], uCurr: [0, 0], c: 1, dx: 0.1, dt: 0.05 })).toThrow(RangeError);
-    expect(() => leapfrogStep({ uPrev: [0, 0, 0], uCurr: [0, 0], c: 1, dx: 0.1, dt: 0.05 })).toThrow(RangeError);
-    expect(() => leapfrogStep({ uPrev: [0, 0, 0], uCurr: [0, 0, 0], c: 0, dx: 0.1, dt: 0.05 })).toThrow(RangeError);
-    expect(() => leapfrogStep({ uPrev: [0, 0, 0], uCurr: [0, 0, 0], c: 1, dx: 0, dt: 0.05 })).toThrow(RangeError);
-    expect(() => leapfrogStep({ uPrev: [0, 0, 0], uCurr: [0, 0, 0], c: 1, dx: 0.1, dt: 0 })).toThrow(RangeError);
+    expect(() =>
+      leapfrogStep({ uPrev: [0, 0], uCurr: [0, 0], c: 1, dx: 0.1, dt: 0.05 }),
+    ).toThrow(RangeError);
+    expect(() =>
+      leapfrogStep({ uPrev: [0, 0, 0], uCurr: [0, 0], c: 1, dx: 0.1, dt: 0.05 }),
+    ).toThrow(RangeError);
+    expect(() =>
+      leapfrogStep({ uPrev: [0, 0, 0], uCurr: [0, 0, 0], c: 0, dx: 0.1, dt: 0.05 }),
+    ).toThrow(RangeError);
+    expect(() =>
+      leapfrogStep({ uPrev: [0, 0, 0], uCurr: [0, 0, 0], c: 1, dx: 0, dt: 0.05 }),
+    ).toThrow(RangeError);
+    expect(() =>
+      leapfrogStep({ uPrev: [0, 0, 0], uCurr: [0, 0, 0], c: 1, dx: 0.1, dt: 0 }),
+    ).toThrow(RangeError);
   });
 });
 
@@ -49,8 +59,12 @@ describe("firstStep", () => {
   });
 
   it("RangeError on bad inputs", () => {
-    expect(() => firstStep({ u0: [0, 0, 0], v0: [0, 0], c: 1, dx: 0.1, dt: 0.05 })).toThrow(RangeError);
-    expect(() => firstStep({ u0: [0, 0], v0: [0, 0], c: 1, dx: 0.1, dt: 0.05 })).toThrow(RangeError);
+    expect(() =>
+      firstStep({ u0: [0, 0, 0], v0: [0, 0], c: 1, dx: 0.1, dt: 0.05 }),
+    ).toThrow(RangeError);
+    expect(() => firstStep({ u0: [0, 0], v0: [0, 0], c: 1, dx: 0.1, dt: 0.05 })).toThrow(
+      RangeError,
+    );
   });
 });
 
@@ -68,7 +82,7 @@ describe("integrate — convergence to analytical standing wave", () => {
     const nGrid = 41;
     const dx = L / (nGrid - 1);
     // CFL = 0.9 (well within stability limit)
-    const dt = 0.9 * dx / c;
+    const dt = (0.9 * dx) / c;
     const nSteps = 50;
     const tEnd = nSteps * dt;
     const u0 = analyticalStanding({ L, c, t: 0, nGrid, mode: 1 });
@@ -110,10 +124,20 @@ describe("analyticalStanding", () => {
   });
 
   it("RangeError on bad inputs", () => {
-    expect(() => analyticalStanding({ L: 0, c: 1, t: 0, nGrid: 5, mode: 1 })).toThrow(RangeError);
-    expect(() => analyticalStanding({ L: 1, c: 0, t: 0, nGrid: 5, mode: 1 })).toThrow(RangeError);
-    expect(() => analyticalStanding({ L: 1, c: 1, t: 0, nGrid: 2, mode: 1 })).toThrow(RangeError);
-    expect(() => analyticalStanding({ L: 1, c: 1, t: 0, nGrid: 5, mode: 0 })).toThrow(RangeError);
-    expect(() => analyticalStanding({ L: 1, c: 1, t: -1, nGrid: 5, mode: 1 })).toThrow(RangeError);
+    expect(() => analyticalStanding({ L: 0, c: 1, t: 0, nGrid: 5, mode: 1 })).toThrow(
+      RangeError,
+    );
+    expect(() => analyticalStanding({ L: 1, c: 0, t: 0, nGrid: 5, mode: 1 })).toThrow(
+      RangeError,
+    );
+    expect(() => analyticalStanding({ L: 1, c: 1, t: 0, nGrid: 2, mode: 1 })).toThrow(
+      RangeError,
+    );
+    expect(() => analyticalStanding({ L: 1, c: 1, t: 0, nGrid: 5, mode: 0 })).toThrow(
+      RangeError,
+    );
+    expect(() => analyticalStanding({ L: 1, c: 1, t: -1, nGrid: 5, mode: 1 })).toThrow(
+      RangeError,
+    );
   });
 });

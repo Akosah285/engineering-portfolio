@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { sampleGrid, divergence, curlZ } from "../algorithm";
+import { describe, expect, it } from "vitest";
+import { curlZ, divergence, sampleGrid } from "../algorithm";
 
 describe("sampleGrid", () => {
   it("constant field: all magnitudes equal", () => {
@@ -66,7 +66,7 @@ describe("sampleGrid", () => {
   it("RangeError on non-finite field output", () => {
     expect(() =>
       sampleGrid({
-        f: () => ({ fx: NaN, fy: 0 }),
+        f: () => ({ fx: Number.NaN, fy: 0 }),
         xmin: 0,
         xmax: 1,
         ymin: 0,

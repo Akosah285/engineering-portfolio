@@ -76,11 +76,7 @@ export function thetaAt(input: DcMotorStepInput, t: number): number {
   const theta0 = input.theta0 ?? 0;
   const tau = input.motor.tauM;
   const omega_ss = steadyStateOmega(input.motor, input.voltage);
-  return (
-    theta0 +
-    omega_ss * t -
-    (omega_ss - omega0) * tau * (1 - Math.exp(-t / tau))
-  );
+  return theta0 + omega_ss * t - (omega_ss - omega0) * tau * (1 - Math.exp(-t / tau));
 }
 
 /**
@@ -98,7 +94,11 @@ export function settlingTime(motor: DcMotorParams, epsilon = 0.02): number {
   return -motor.tauM * Math.log(epsilon);
 }
 
-export function trajectory(input: DcMotorStepInput, tEnd: number, samples: number): DcMotorState[] {
+export function trajectory(
+  input: DcMotorStepInput,
+  tEnd: number,
+  samples: number,
+): DcMotorState[] {
   if (!Number.isFinite(tEnd) || tEnd < 0) {
     throw new RangeError("dcMotor: tEnd must be >= 0 and finite.");
   }

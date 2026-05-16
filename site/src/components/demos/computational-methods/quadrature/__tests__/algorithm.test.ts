@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
 import {
-  rectangleRule,
-  trapezoidRule,
-  simpsonRule,
-  midpointRule,
   type IntegrationInput,
+  midpointRule,
+  rectangleRule,
+  simpsonRule,
+  trapezoidRule,
 } from "../algorithm";
 
 /**
@@ -40,9 +40,7 @@ describe("rectangleRule (left-endpoint)", () => {
   });
 
   it("rejects n <= 0", () => {
-    expect(() =>
-      rectangleRule({ f: (x) => x, a: 0, b: 1, n: 0 }),
-    ).toThrow(RangeError);
+    expect(() => rectangleRule({ f: (x) => x, a: 0, b: 1, n: 0 })).toThrow(RangeError);
   });
 });
 
@@ -76,24 +74,18 @@ describe("trapezoidRule", () => {
   });
 
   it("rejects n <= 0", () => {
-    expect(() =>
-      trapezoidRule({ f: (x) => x, a: 0, b: 1, n: -1 }),
-    ).toThrow(RangeError);
+    expect(() => trapezoidRule({ f: (x) => x, a: 0, b: 1, n: -1 })).toThrow(RangeError);
   });
 });
 
 describe("simpsonRule", () => {
   it("integrates a quadratic exactly", () => {
     // Simpson's rule is exact for cubics (and below).
-    expect(
-      simpsonRule({ f: (x) => x * x, a: 0, b: 3, n: 4 }),
-    ).toBeCloseTo(9, 10);
+    expect(simpsonRule({ f: (x) => x * x, a: 0, b: 3, n: 4 })).toBeCloseTo(9, 10);
   });
 
   it("integrates a cubic exactly", () => {
-    expect(
-      simpsonRule({ f: (x) => x * x * x, a: 0, b: 2, n: 4 }),
-    ).toBeCloseTo(4, 10);
+    expect(simpsonRule({ f: (x) => x * x * x, a: 0, b: 2, n: 4 })).toBeCloseTo(4, 10);
   });
 
   it("approaches integral(0..pi) sin(x) dx = 2 to high precision", () => {
@@ -107,15 +99,11 @@ describe("simpsonRule", () => {
   });
 
   it("rejects odd n (Simpson's rule needs an even number of subintervals)", () => {
-    expect(() =>
-      simpsonRule({ f: (x) => x, a: 0, b: 1, n: 5 }),
-    ).toThrow(/even/i);
+    expect(() => simpsonRule({ f: (x) => x, a: 0, b: 1, n: 5 })).toThrow(/even/i);
   });
 
   it("rejects n <= 0", () => {
-    expect(() =>
-      simpsonRule({ f: (x) => x, a: 0, b: 1, n: 0 }),
-    ).toThrow(RangeError);
+    expect(() => simpsonRule({ f: (x) => x, a: 0, b: 1, n: 0 })).toThrow(RangeError);
   });
 });
 

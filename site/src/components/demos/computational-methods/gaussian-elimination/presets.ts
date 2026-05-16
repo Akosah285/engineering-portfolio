@@ -6,11 +6,7 @@
  * via <useDemoState>.
  */
 
-export type SystemSlug =
-  | "3x3-simple"
-  | "3x3-swap"
-  | "4x4-dense"
-  | "3x3-singular";
+export type SystemSlug = "3x3-simple" | "3x3-swap" | "4x4-dense" | "3x3-singular";
 
 export const SYSTEM_SLUGS: readonly SystemSlug[] = [
   "3x3-simple",

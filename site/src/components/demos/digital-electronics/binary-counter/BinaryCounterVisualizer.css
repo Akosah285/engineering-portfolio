@@ -54,9 +54,7 @@
 
 .bc-visualizer__led--on {
   background: radial-gradient(circle at 35% 30%, #ffd166 0%, #d97706 70%, #7a3d05 100%);
-  box-shadow:
-    0 0 6px rgba(255, 168, 38, 0.7),
-    inset 0 1px 2px rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 6px rgba(255, 168, 38, 0.7), inset 0 1px 2px rgba(255, 255, 255, 0.4);
   color: #fff;
 }
 
@@ -64,8 +62,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  font-family:
-    ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
   font-size: 0.95rem;
 }
 
@@ -111,8 +108,7 @@
 
 .bc-visualizer__counter {
   margin-left: auto;
-  font-family:
-    ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
   font-size: 0.85rem;
   color: #555;
 }

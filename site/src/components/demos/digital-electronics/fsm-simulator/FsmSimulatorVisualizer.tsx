@@ -9,13 +9,7 @@ import {
   run,
   stopwatchFSM,
 } from "./algorithm";
-import {
-  DEFAULT_STATE,
-  PRESETS,
-  SEQUENCES,
-  SLUGS,
-  type SequenceSlug,
-} from "./presets";
+import { DEFAULT_STATE, PRESETS, SEQUENCES, SLUGS, type SequenceSlug } from "./presets";
 import "./FsmSimulatorVisualizer.css";
 
 const STATE_SCHEMA = {
@@ -55,7 +49,10 @@ const EDGES: readonly EdgeSpec[] = [
   { from: "PAUSED", to: "IDLE", label: "reset", curved: true },
 ];
 
-function edgeEndpoints(from: NodePos, to: NodePos): {
+function edgeEndpoints(
+  from: NodePos,
+  to: NodePos,
+): {
   x1: number;
   y1: number;
   x2: number;
@@ -74,7 +71,10 @@ function edgeEndpoints(from: NodePos, to: NodePos): {
   };
 }
 
-function curvedPath(from: NodePos, to: NodePos): {
+function curvedPath(
+  from: NodePos,
+  to: NodePos,
+): {
   d: string;
   midX: number;
   midY: number;
@@ -114,9 +114,7 @@ export default function FsmSimulatorVisualizer() {
 
   // Current state at index `step`: step=0 → initial; step=k → trace[k-1].to
   const currentState: StopwatchState =
-    clampedStep === 0
-      ? stopwatchFSM.initial
-      : result.trace[clampedStep - 1]!.to;
+    clampedStep === 0 ? stopwatchFSM.initial : result.trace[clampedStep - 1]!.to;
 
   const currentOutput: StopwatchOutput =
     stopwatchFSM.outputs && stopwatchFSM.outputs.kind === "moore"
@@ -138,9 +136,7 @@ export default function FsmSimulatorVisualizer() {
   return (
     <div className="fsm-visualizer">
       <PresetCarousel
-        presets={
-          PRESETS as unknown as { name: string; state: typeof state }[]
-        }
+        presets={PRESETS as unknown as { name: string; state: typeof state }[]}
         onSelect={handlePresetSelect}
         ariaLabel="FSM simulator presets"
       />

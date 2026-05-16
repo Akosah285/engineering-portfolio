@@ -1,5 +1,5 @@
-import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, it, expect } from "vitest";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 import FsmSimulatorVisualizer from "../FsmSimulatorVisualizer";
 
 describe("FsmSimulatorVisualizer", () => {
@@ -25,7 +25,9 @@ describe("FsmSimulatorVisualizer", () => {
     const { container } = render(<FsmSimulatorVisualizer />);
     fireEvent.click(screen.getByRole("option", { name: /start.then.pause/i }));
 
-    const stepSlider = screen.getByRole("slider", { name: /step \(0\.\.n\)/i }) as HTMLInputElement;
+    const stepSlider = screen.getByRole("slider", {
+      name: /step \(0\.\.n\)/i,
+    }) as HTMLInputElement;
     fireEvent.change(stepSlider, { target: { value: "4" } });
 
     const counter = container.querySelector(".fsm-visualizer__counter");

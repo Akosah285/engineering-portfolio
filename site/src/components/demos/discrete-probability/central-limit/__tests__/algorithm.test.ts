@@ -28,11 +28,19 @@ describe("distributionMean / distributionVariance", () => {
 
   it("RangeError on invalid parameters", () => {
     expect(() => distributionMean({ kind: "uniform", a: 1, b: 0 })).toThrow(RangeError);
-    expect(() => distributionMean({ kind: "exponential", lambda: 0 })).toThrow(RangeError);
+    expect(() => distributionMean({ kind: "exponential", lambda: 0 })).toThrow(
+      RangeError,
+    );
     expect(() => distributionMean({ kind: "bernoulli", p: 1.5 })).toThrow(RangeError);
-    expect(() => distributionVariance({ kind: "uniform", a: 1, b: 0 })).toThrow(RangeError);
-    expect(() => distributionVariance({ kind: "exponential", lambda: 0 })).toThrow(RangeError);
-    expect(() => distributionVariance({ kind: "bernoulli", p: -0.1 })).toThrow(RangeError);
+    expect(() => distributionVariance({ kind: "uniform", a: 1, b: 0 })).toThrow(
+      RangeError,
+    );
+    expect(() => distributionVariance({ kind: "exponential", lambda: 0 })).toThrow(
+      RangeError,
+    );
+    expect(() => distributionVariance({ kind: "bernoulli", p: -0.1 })).toThrow(
+      RangeError,
+    );
   });
 });
 
@@ -85,9 +93,13 @@ describe("sampleMeans — CLT predictions", () => {
 
   it("RangeError on bad n / nSamples", () => {
     const d = { kind: "uniform", a: 0, b: 1 } as const;
-    expect(() => sampleMeans({ distribution: d, n: 0, nSamples: 10 })).toThrow(RangeError);
+    expect(() => sampleMeans({ distribution: d, n: 0, nSamples: 10 })).toThrow(
+      RangeError,
+    );
     expect(() => sampleMeans({ distribution: d, n: 1, nSamples: 0 })).toThrow(RangeError);
-    expect(() => sampleMeans({ distribution: d, n: 1.5, nSamples: 10 })).toThrow(RangeError);
+    expect(() => sampleMeans({ distribution: d, n: 1.5, nSamples: 10 })).toThrow(
+      RangeError,
+    );
   });
 });
 

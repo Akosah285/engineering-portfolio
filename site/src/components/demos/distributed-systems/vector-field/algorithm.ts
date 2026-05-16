@@ -73,7 +73,13 @@ export function sampleGrid(input: FieldGridInput): FieldGrid {
 }
 
 // Compute divergence at each grid point (central differences interior, forward/backward boundary).
-export function divergence(grid: FieldGrid, xmin: number, xmax: number, ymin: number, ymax: number): number[] {
+export function divergence(
+  grid: FieldGrid,
+  xmin: number,
+  xmax: number,
+  ymin: number,
+  ymax: number,
+): number[] {
   const { samples, nx, ny } = grid;
   const dx = (xmax - xmin) / (nx - 1);
   const dy = (ymax - ymin) / (ny - 1);
@@ -96,7 +102,13 @@ export function divergence(grid: FieldGrid, xmin: number, xmax: number, ymin: nu
 }
 
 // Curl-z = ∂Fy/∂x - ∂Fx/∂y
-export function curlZ(grid: FieldGrid, xmin: number, xmax: number, ymin: number, ymax: number): number[] {
+export function curlZ(
+  grid: FieldGrid,
+  xmin: number,
+  xmax: number,
+  ymin: number,
+  ymax: number,
+): number[] {
   const { samples, nx, ny } = grid;
   const dx = (xmax - xmin) / (nx - 1);
   const dy = (ymax - ymin) / (ny - 1);

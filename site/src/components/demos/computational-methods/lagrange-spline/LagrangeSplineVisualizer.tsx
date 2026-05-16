@@ -291,11 +291,11 @@ export function LagrangeSplineVisualizer() {
     setState(next);
   };
 
-  const toggle = (key: keyof LagrangeSplineDemoState) => (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ): void => {
-    setState({ ...state, [key]: e.target.checked ? "yes" : "no" });
-  };
+  const toggle =
+    (key: keyof LagrangeSplineDemoState) =>
+    (e: React.ChangeEvent<HTMLInputElement>): void => {
+      setState({ ...state, [key]: e.target.checked ? "yes" : "no" });
+    };
 
   return (
     <div className="ls-visualizer">

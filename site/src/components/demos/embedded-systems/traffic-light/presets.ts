@@ -51,18 +51,18 @@ export const PRESET_META = {
   },
 } as const;
 
-export const PRESETS: readonly TrafficLightPreset[] = (
-  MODE_SLUGS as readonly Mode[]
-).map((slug) => {
-  const meta = PRESET_META[slug];
-  return {
-    name: meta.label,
-    state: {
-      modeSlug: slug,
-      greenMs: meta.greenMs,
-      yellowMs: meta.yellowMs,
-      allRedMs: meta.allRedMs,
-      totalMs: meta.totalMs,
-    },
-  };
-});
+export const PRESETS: readonly TrafficLightPreset[] = (MODE_SLUGS as readonly Mode[]).map(
+  (slug) => {
+    const meta = PRESET_META[slug];
+    return {
+      name: meta.label,
+      state: {
+        modeSlug: slug,
+        greenMs: meta.greenMs,
+        yellowMs: meta.yellowMs,
+        allRedMs: meta.allRedMs,
+        totalMs: meta.totalMs,
+      },
+    };
+  },
+);

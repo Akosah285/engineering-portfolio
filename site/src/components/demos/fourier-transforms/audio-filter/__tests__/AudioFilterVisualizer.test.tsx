@@ -6,15 +6,9 @@ describe("AudioFilterVisualizer", () => {
   it("renders all sliders + preset chips + type buttons + canvas", () => {
     render(<AudioFilterVisualizer />);
     expect(screen.getByRole("slider", { name: /cutoff/i })).toBeTruthy();
-    expect(
-      screen.getByRole("slider", { name: /q\b|quality|resonance/i }),
-    ).toBeTruthy();
-    expect(
-      screen.getByRole("option", { name: /lowpass at 1 khz/i }),
-    ).toBeTruthy();
-    expect(
-      screen.getByRole("option", { name: /notch at 60 hz/i }),
-    ).toBeTruthy();
+    expect(screen.getByRole("slider", { name: /q\b|quality|resonance/i })).toBeTruthy();
+    expect(screen.getByRole("option", { name: /lowpass at 1 khz/i })).toBeTruthy();
+    expect(screen.getByRole("option", { name: /notch at 60 hz/i })).toBeTruthy();
     expect(screen.getByRole("option", { name: /^lowpass$/i })).toBeTruthy();
     expect(screen.getByRole("option", { name: /^highpass$/i })).toBeTruthy();
     expect(screen.getByRole("option", { name: /^bandpass$/i })).toBeTruthy();

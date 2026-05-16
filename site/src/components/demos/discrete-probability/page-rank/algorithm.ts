@@ -47,7 +47,14 @@ export function pageRank(input: PageRankInput): PageRankResult {
   const outDeg = new Array<number>(N).fill(0);
   const outNeighbors: number[][] = Array.from({ length: N }, () => [] as number[]);
   for (const [from, to] of input.edges) {
-    if (!Number.isInteger(from) || !Number.isInteger(to) || from < 0 || to < 0 || from >= N || to >= N) {
+    if (
+      !Number.isInteger(from) ||
+      !Number.isInteger(to) ||
+      from < 0 ||
+      to < 0 ||
+      from >= N ||
+      to >= N
+    ) {
       throw new RangeError("pageRank: edge endpoint out of range.");
     }
     outDeg[from] = outDeg[from]! + 1;
@@ -56,7 +63,8 @@ export function pageRank(input: PageRankInput): PageRankResult {
   // Initial r: uniform unless caller specified.
   let r: number[];
   if (input.initial !== undefined) {
-    if (input.initial.length !== N) throw new RangeError("pageRank: initial length mismatch.");
+    if (input.initial.length !== N)
+      throw new RangeError("pageRank: initial length mismatch.");
     const sum0 = input.initial.reduce((a, b) => a + b, 0);
     if (sum0 <= 0) throw new RangeError("pageRank: initial must have positive sum.");
     r = input.initial.map((v) => v / sum0);

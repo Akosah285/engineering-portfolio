@@ -1,15 +1,15 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
-  c,
-  add,
-  sub,
-  mul,
-  div,
   abs,
-  eq,
-  residueSimplePole,
-  residueRationalSimple,
+  add,
+  c,
   contourIntegral,
+  div,
+  eq,
+  mul,
+  residueRationalSimple,
+  residueSimplePole,
+  sub,
 } from "../algorithm";
 
 describe("complex arithmetic primitives", () => {
@@ -65,9 +65,7 @@ describe("residueSimplePole", () => {
   });
 
   it("RangeError on eps <= 0", () => {
-    expect(() =>
-      residueSimplePole(() => c(0, 0), c(0, 0), 0),
-    ).toThrow(RangeError);
+    expect(() => residueSimplePole(() => c(0, 0), c(0, 0), 0)).toThrow(RangeError);
   });
 });
 

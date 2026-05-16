@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { bisection, type BisectionResult } from "../algorithm";
+import { type BisectionResult, bisection } from "../algorithm";
 
 /**
  * Pure brain of v5 Bisection demo (#78).
@@ -34,9 +34,8 @@ describe("bisection", () => {
     expect(result.brackets[0]).toEqual([0, 4]);
     // Each bracket is half the previous width — except the very last one,
     // which we collapse to [mid, mid] when convergence is reached.
-    const upTo = result.status === "converged"
-      ? result.brackets.length - 1
-      : result.brackets.length;
+    const upTo =
+      result.status === "converged" ? result.brackets.length - 1 : result.brackets.length;
     for (let i = 1; i < upTo; i += 1) {
       const prev = result.brackets[i - 1]!;
       const curr = result.brackets[i]!;

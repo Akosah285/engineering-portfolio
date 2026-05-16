@@ -3,7 +3,10 @@
 // comparison against the theoretical sqrt(n)-scaled normal.  Pure module
 // used by the v4 Discrete & Probability CLT demo (#69).
 
-import { mulberry32, type Random } from "../../discrete-probability/erdos-renyi/algorithm";
+import {
+  type Random,
+  mulberry32,
+} from "../../discrete-probability/erdos-renyi/algorithm";
 
 export type Distribution =
   | { readonly kind: "uniform"; readonly a: number; readonly b: number }
@@ -29,10 +32,12 @@ export interface SampleMeanResult {
 export function distributionMean(dist: Distribution): number {
   switch (dist.kind) {
     case "uniform":
-      if (!(dist.b > dist.a)) throw new RangeError("distributionMean: uniform b > a required.");
+      if (!(dist.b > dist.a))
+        throw new RangeError("distributionMean: uniform b > a required.");
       return (dist.a + dist.b) / 2;
     case "exponential":
-      if (!(dist.lambda > 0)) throw new RangeError("distributionMean: exponential lambda > 0 required.");
+      if (!(dist.lambda > 0))
+        throw new RangeError("distributionMean: exponential lambda > 0 required.");
       return 1 / dist.lambda;
     case "bernoulli":
       if (!(dist.p >= 0 && dist.p <= 1)) {
@@ -46,11 +51,13 @@ export function distributionMean(dist: Distribution): number {
 export function distributionVariance(dist: Distribution): number {
   switch (dist.kind) {
     case "uniform":
-      if (!(dist.b > dist.a)) throw new RangeError("distributionVariance: uniform b > a required.");
-      return ((dist.b - dist.a) ** 2) / 12;
+      if (!(dist.b > dist.a))
+        throw new RangeError("distributionVariance: uniform b > a required.");
+      return (dist.b - dist.a) ** 2 / 12;
     case "exponential":
-      if (!(dist.lambda > 0)) throw new RangeError("distributionVariance: exponential lambda > 0 required.");
-      return 1 / (dist.lambda ** 2);
+      if (!(dist.lambda > 0))
+        throw new RangeError("distributionVariance: exponential lambda > 0 required.");
+      return 1 / dist.lambda ** 2;
     case "bernoulli":
       if (!(dist.p >= 0 && dist.p <= 1)) {
         throw new RangeError("distributionVariance: bernoulli p in [0,1] required.");

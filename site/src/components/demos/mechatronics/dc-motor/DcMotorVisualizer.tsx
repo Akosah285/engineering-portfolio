@@ -10,12 +10,7 @@ import {
   steadyStateOmega,
   trajectory,
 } from "./algorithm";
-import {
-  DEFAULT_STATE,
-  type DcMotorDemoState,
-  MOTOR_SLUGS,
-  PRESETS,
-} from "./presets";
+import { DEFAULT_STATE, type DcMotorDemoState, MOTOR_SLUGS, PRESETS } from "./presets";
 import "./DcMotorVisualizer.css";
 
 /**
@@ -44,8 +39,7 @@ const narrationTemplate = (state: DcMotorDemoState): string => {
   const omega_ss = steadyStateOmega(motor, state.voltage);
   const t_s = settlingTime(motor, 0.02);
   const label =
-    PRESETS.find((p) => p.state.motorSlug === state.motorSlug)?.name ??
-    state.motorSlug;
+    PRESETS.find((p) => p.state.motorSlug === state.motorSlug)?.name ?? state.motorSlug;
   return (
     `Step response of DC motor (preset "${label}") to ${state.voltage.toFixed(1)} V. ` +
     `Steady-state speed ω_ss = ${omega_ss.toFixed(2)} rad/s, ` +
@@ -119,8 +113,7 @@ function plotSeries(
     const t = ts[i]!;
     const v = values[i]!;
     const cx = panel.x0 + (t / tEnd) * panel.width;
-    const cy =
-      panel.y0 + panel.height - ((v - yMin) / (yMax - yMin)) * panel.height;
+    const cy = panel.y0 + panel.height - ((v - yMin) / (yMax - yMin)) * panel.height;
     if (i === 0) ctx.moveTo(cx, cy);
     else ctx.lineTo(cx, cy);
   }
@@ -134,7 +127,10 @@ export function DcMotorVisualizer() {
     DEFAULT_STATE,
   );
 
-  const motor = useMemo(() => ({ Km: state.Km, tauM: state.tauM }), [state.Km, state.tauM]);
+  const motor = useMemo(
+    () => ({ Km: state.Km, tauM: state.tauM }),
+    [state.Km, state.tauM],
+  );
   const omega_ss = useMemo(
     () => steadyStateOmega(motor, state.voltage),
     [motor, state.voltage],
@@ -235,7 +231,16 @@ export function DcMotorVisualizer() {
         ctx.fillText(`t_s=${t_s.toFixed(2)}s`, cx2 + 4, omegaPanel.y0 + 2);
       }
 
-      plotSeries(ctx, omegaPanel, omegas, ts, state.tEnd, omegaMin, omegaMax, "steelblue");
+      plotSeries(
+        ctx,
+        omegaPanel,
+        omegas,
+        ts,
+        state.tEnd,
+        omegaMin,
+        omegaMax,
+        "steelblue",
+      );
       plotSeries(ctx, thetaPanel, thetas, ts, state.tEnd, thetaMin, thetaMax, "crimson");
 
       // Shared x-axis labels
@@ -246,7 +251,11 @@ export function DcMotorVisualizer() {
       const baselineY = thetaPanel.y0 + thetaPanel.height + 4;
       ctx.fillText("0", thetaPanel.x0, baselineY);
       ctx.textAlign = "right";
-      ctx.fillText(`${state.tEnd.toFixed(1)} s`, thetaPanel.x0 + thetaPanel.width, baselineY);
+      ctx.fillText(
+        `${state.tEnd.toFixed(1)} s`,
+        thetaPanel.x0 + thetaPanel.width,
+        baselineY,
+      );
     },
     [omegas, thetas, ts, omega_ss, t_s, state.tEnd],
   );
@@ -266,16 +275,11 @@ export function DcMotorVisualizer() {
   };
 
   const activeLabel =
-    PRESETS.find((p) => p.state.motorSlug === state.motorSlug)?.name ??
-    state.motorSlug;
+    PRESETS.find((p) => p.state.motorSlug === state.motorSlug)?.name ?? state.motorSlug;
 
   return (
     <div className="dcm-visualizer">
-      <div
-        className="dcm-visualizer__presets"
-        role="group"
-        aria-label="DC motor presets"
-      >
+      <div className="dcm-visualizer__presets" role="group" aria-label="DC motor presets">
         {PRESETS.map((preset) => {
           const isActive = preset.state.motorSlug === state.motorSlug;
           return (

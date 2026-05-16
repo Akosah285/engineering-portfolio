@@ -6,15 +6,7 @@
  * sync via <useDemoState>.
  */
 
-export const FN_SLOTS = [
-  "z",
-  "z2",
-  "z3",
-  "1/z",
-  "z2-1",
-  "sin-z",
-  "exp-z",
-] as const;
+export const FN_SLOTS = ["z", "z2", "z3", "1/z", "z2-1", "sin-z", "exp-z"] as const;
 
 export type FnSlot = (typeof FN_SLOTS)[number];
 
@@ -71,9 +63,7 @@ export interface DomainColoringPreset {
   state: DomainColoringDemoState;
 }
 
-export const PRESETS: readonly DomainColoringPreset[] = PRESET_SLUGS.map(
-  (slug) => ({
-    name: PRESET_META[slug].name,
-    state: PRESET_META[slug].state,
-  }),
-);
+export const PRESETS: readonly DomainColoringPreset[] = PRESET_SLUGS.map((slug) => ({
+  name: PRESET_META[slug].name,
+  state: PRESET_META[slug].state,
+}));

@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { alu, toBinary4, fromSigned4 } from "../algorithm";
+import { describe, expect, it } from "vitest";
+import { alu, fromSigned4, toBinary4 } from "../algorithm";
 
 describe("alu — arithmetic ops", () => {
   it("ADD 3+5 = 8", () => {

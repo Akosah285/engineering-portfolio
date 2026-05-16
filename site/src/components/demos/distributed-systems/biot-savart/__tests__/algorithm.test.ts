@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { circularLoop, fieldAt, loopAxisField, MU0 } from "../algorithm";
+import { MU0, circularLoop, fieldAt, loopAxisField } from "../algorithm";
 
 describe("loopAxisField — closed-form sanity", () => {
   it("at the center of a loop (z=0) is μ0 I / (2R)", () => {
@@ -61,7 +61,9 @@ describe("fieldAt + circularLoop — numerical vs analytical", () => {
 
   it("RangeError on samples<2 or negative tol", () => {
     expect(() => fieldAt({ segments: [], x: 0, y: 0, samples: 1 })).toThrow(RangeError);
-    expect(() => fieldAt({ segments: [], x: 0, y: 0, singularityTol: -1 })).toThrow(RangeError);
+    expect(() => fieldAt({ segments: [], x: 0, y: 0, singularityTol: -1 })).toThrow(
+      RangeError,
+    );
   });
 });
 

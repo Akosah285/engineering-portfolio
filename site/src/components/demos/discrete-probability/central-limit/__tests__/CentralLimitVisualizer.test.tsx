@@ -6,7 +6,9 @@ describe("CentralLimitVisualizer", () => {
   it("renders sliders + preset chips + canvas", () => {
     render(<CentralLimitVisualizer />);
     expect(screen.getByRole("slider", { name: /^n\b|^sample size/i })).toBeTruthy();
-    expect(screen.getByRole("slider", { name: /^number of samples|^samples/i })).toBeTruthy();
+    expect(
+      screen.getByRole("slider", { name: /^number of samples|^samples/i }),
+    ).toBeTruthy();
     expect(screen.getByRole("slider", { name: /^seed/i })).toBeTruthy();
     expect(screen.getByRole("option", { name: /uniform.*n=1/i })).toBeTruthy();
     expect(screen.getByRole("option", { name: /uniform.*n=30/i })).toBeTruthy();
@@ -22,6 +24,6 @@ describe("CentralLimitVisualizer", () => {
     render(<CentralLimitVisualizer />);
     const counter = document.querySelector(".cl-visualizer__counter");
     expect(counter).toBeTruthy();
-    expect((counter?.textContent ?? "")).toMatch(/n\s*=\s*\d+/);
+    expect(counter?.textContent ?? "").toMatch(/n\s*=\s*\d+/);
   });
 });

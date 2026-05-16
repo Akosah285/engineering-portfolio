@@ -13,10 +13,10 @@ import {
   yMax,
 } from "./algorithm";
 import {
+  type BendingStressDemoState,
   DEFAULT_STATE,
   PRESETS,
   SECTION_KINDS,
-  type BendingStressDemoState,
   type SectionKind,
 } from "./presets";
 import "./BendingStressVisualizer.css";
@@ -101,10 +101,7 @@ function paintCrossSection(
   const yM = yMax(s);
   const outerW = sectionOuterWidth(s);
   // Fit-to-panel scale.
-  const scale = Math.min(
-    (panel.w - 2 * PAD) / outerW,
-    (panel.h - 2 * PAD) / (2 * yM),
-  );
+  const scale = Math.min((panel.w - 2 * PAD) / outerW, (panel.h - 2 * PAD) / (2 * yM));
   const cx = panel.x + panel.w / 2;
   const cy = panel.y + panel.h / 2;
 

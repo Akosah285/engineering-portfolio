@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { plan } from "../algorithm";
 
 describe("plan — step-position controller", () => {
@@ -57,9 +57,9 @@ describe("plan — step-position controller", () => {
   });
 
   it("RangeError on non-integer ticks", () => {
-    expect(() => plan({ currentTicks: 0.5, targetTicks: 10, maxStepsPerSec: 100 })).toThrow(
-      RangeError,
-    );
+    expect(() =>
+      plan({ currentTicks: 0.5, targetTicks: 10, maxStepsPerSec: 100 }),
+    ).toThrow(RangeError);
   });
 
   it("RangeError on maxStepsPerSec <= 0", () => {

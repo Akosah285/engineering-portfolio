@@ -42,7 +42,12 @@ export function plan(input: StepPlanInput): StepPlan {
   const direction: 1 | -1 | 0 = delta > 0 ? 1 : delta < 0 ? -1 : 0;
   const N = Math.abs(delta);
   if (N === 0) {
-    return { events: [{ t: 0, position: currentTicks }], direction, totalSteps: 0, elapsed: 0 };
+    return {
+      events: [{ t: 0, position: currentTicks }],
+      direction,
+      totalSteps: 0,
+      elapsed: 0,
+    };
   }
 
   const events: StepEvent[] = [{ t: 0, position: currentTicks }];
@@ -92,12 +97,15 @@ export function plan(input: StepPlanInput): StepPlan {
   //   - (nRamp - k)²/accel)) — simpler: mirror accel phase reversed.
   for (let k = 1; k <= nRamp; k += 1) {
     const remaining = nRamp - k + 1;
-    const dt = Math.sqrt((2 * (2 * remaining - 1)) / accel) - Math.sqrt((2 * (2 * remaining - 2)) / accel);
+    const dt =
+      Math.sqrt((2 * (2 * remaining - 1)) / accel) -
+      Math.sqrt((2 * (2 * remaining - 2)) / accel);
     // Approximation: average step length during decel mirrors accel.
     // Cleaner: just symmetric — kth decel = (nRamp - k + 1)th accel.
     void dt;
     const kFromTop = nRamp - k + 1;
-    const dtSym = Math.sqrt((2 * kFromTop) / accel) - Math.sqrt((2 * (kFromTop - 1)) / accel);
+    const dtSym =
+      Math.sqrt((2 * kFromTop) / accel) - Math.sqrt((2 * (kFromTop - 1)) / accel);
     t += dtSym;
     pos += direction;
     events.push({ t, position: pos });

@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { estimatePi, runningEstimate, mulberry32 } from "../algorithm";
+import { describe, expect, it } from "vitest";
+import { estimatePi, mulberry32, runningEstimate } from "../algorithm";
 
 describe("mulberry32", () => {
   it("is deterministic for a given seed", () => {

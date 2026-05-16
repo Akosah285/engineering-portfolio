@@ -9,18 +9,18 @@ import {
 
 describe("makeBiquad input validation", () => {
   it("rejects non-positive sample rate", () => {
-    expect(() => makeBiquad("lowpass", 100, 0, 0.707)).toThrow(RangeError);
-    expect(() => makeBiquad("lowpass", 100, -1, 0.707)).toThrow(RangeError);
+    expect(() => makeBiquad("lowpass", 100, 0, Math.SQRT1_2)).toThrow(RangeError);
+    expect(() => makeBiquad("lowpass", 100, -1, Math.SQRT1_2)).toThrow(RangeError);
   });
 
   it("rejects cutoff at or above Nyquist", () => {
-    expect(() => makeBiquad("lowpass", 24000, 48000, 0.707)).toThrow(RangeError);
-    expect(() => makeBiquad("lowpass", 30000, 48000, 0.707)).toThrow(RangeError);
+    expect(() => makeBiquad("lowpass", 24000, 48000, Math.SQRT1_2)).toThrow(RangeError);
+    expect(() => makeBiquad("lowpass", 30000, 48000, Math.SQRT1_2)).toThrow(RangeError);
   });
 
   it("rejects cutoff at or below 0", () => {
-    expect(() => makeBiquad("lowpass", 0, 48000, 0.707)).toThrow(RangeError);
-    expect(() => makeBiquad("lowpass", -100, 48000, 0.707)).toThrow(RangeError);
+    expect(() => makeBiquad("lowpass", 0, 48000, Math.SQRT1_2)).toThrow(RangeError);
+    expect(() => makeBiquad("lowpass", -100, 48000, Math.SQRT1_2)).toThrow(RangeError);
   });
 
   it("rejects non-positive Q", () => {
@@ -39,7 +39,7 @@ describe("lowpass magnitude response", () => {
     expect(magnitudeResponse(c, 0, sr)).toBeCloseTo(1, 3);
   });
 
-  it("is ≈0.707 (-3 dB) at cutoff for Butterworth Q", () => {
+  it("is ≈Math.SQRT1_2 (-3 dB) at cutoff for Butterworth Q", () => {
     expect(magnitudeResponse(c, fc, sr)).toBeCloseTo(1 / Math.sqrt(2), 2);
   });
 
@@ -93,13 +93,13 @@ describe("bandpass", () => {
 
 describe("processBuffer", () => {
   it("preserves length", () => {
-    const c = makeBiquad("lowpass", 1000, 48000, 0.707);
+    const c = makeBiquad("lowpass", 1000, 48000, Math.SQRT1_2);
     const out = processBuffer(c, [0, 1, 0, -1, 0, 1, 0, -1]);
     expect(out.length).toBe(8);
   });
 
   it("lowpasses an impulse to a bounded, eventually-decaying response", () => {
-    const c = makeBiquad("lowpass", 1000, 48000, 0.707);
+    const c = makeBiquad("lowpass", 1000, 48000, Math.SQRT1_2);
     const impulse = new Array<number>(2048).fill(0);
     impulse[0] = 1;
     const h = processBuffer(c, impulse);
@@ -113,7 +113,7 @@ describe("processBuffer", () => {
 
   it("lowpass attenuates a 10 kHz tone below DC", () => {
     const sr = 48000;
-    const c = makeBiquad("lowpass", 500, sr, 0.707);
+    const c = makeBiquad("lowpass", 500, sr, Math.SQRT1_2);
     const N = 2048;
     const f = 10000;
     const x = new Array<number>(N);
@@ -138,7 +138,7 @@ describe("processSample state update", () => {
   });
 
   it("processSample updates state slots", () => {
-    const c = makeBiquad("lowpass", 1000, 48000, 0.707);
+    const c = makeBiquad("lowpass", 1000, 48000, Math.SQRT1_2);
     const s = initState();
     processSample(c, s, 1);
     expect(s.x1).toBe(1);
@@ -151,12 +151,12 @@ describe("processSample state update", () => {
 
 describe("magnitudeResponse validation", () => {
   it("rejects negative freq", () => {
-    const c = makeBiquad("lowpass", 1000, 48000, 0.707);
+    const c = makeBiquad("lowpass", 1000, 48000, Math.SQRT1_2);
     expect(() => magnitudeResponse(c, -1, 48000)).toThrow(RangeError);
   });
 
   it("rejects freq above Nyquist", () => {
-    const c = makeBiquad("lowpass", 1000, 48000, 0.707);
+    const c = makeBiquad("lowpass", 1000, 48000, Math.SQRT1_2);
     expect(() => magnitudeResponse(c, 30000, 48000)).toThrow(RangeError);
   });
 });

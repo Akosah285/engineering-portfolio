@@ -21,6 +21,6 @@ describe("GaussianEliminationVisualizer", () => {
     render(<GaussianEliminationVisualizer />);
     const counter = document.querySelector(".ge-visualizer__counter");
     expect(counter).toBeTruthy();
-    expect((counter?.textContent ?? "")).toMatch(/step\s*1/);
+    expect(counter?.textContent ?? "").toMatch(/step\s*1/);
   });
 });

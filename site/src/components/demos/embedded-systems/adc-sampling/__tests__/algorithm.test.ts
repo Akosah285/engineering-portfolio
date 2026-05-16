@@ -16,15 +16,29 @@ describe("sampleSine", () => {
   });
 
   it("amplitude scales the signal", () => {
-    const s = sampleSine({ amplitude: 5, frequency: 1, phase: Math.PI / 2, sampleRate: 100, nSamples: 1 });
+    const s = sampleSine({
+      amplitude: 5,
+      frequency: 1,
+      phase: Math.PI / 2,
+      sampleRate: 100,
+      nSamples: 1,
+    });
     expect(s[0]!.value).toBeCloseTo(5, 12);
   });
 
   it("RangeError on bad sampleRate / nSamples / frequency / amplitude", () => {
-    expect(() => sampleSine({ amplitude: 1, frequency: 1, sampleRate: 0, nSamples: 10 })).toThrow(RangeError);
-    expect(() => sampleSine({ amplitude: 1, frequency: 1, sampleRate: 100, nSamples: 0 })).toThrow(RangeError);
-    expect(() => sampleSine({ amplitude: 1, frequency: Number.NaN, sampleRate: 100, nSamples: 10 })).toThrow(RangeError);
-    expect(() => sampleSine({ amplitude: -1, frequency: 1, sampleRate: 100, nSamples: 10 })).toThrow(RangeError);
+    expect(() =>
+      sampleSine({ amplitude: 1, frequency: 1, sampleRate: 0, nSamples: 10 }),
+    ).toThrow(RangeError);
+    expect(() =>
+      sampleSine({ amplitude: 1, frequency: 1, sampleRate: 100, nSamples: 0 }),
+    ).toThrow(RangeError);
+    expect(() =>
+      sampleSine({ amplitude: 1, frequency: Number.NaN, sampleRate: 100, nSamples: 10 }),
+    ).toThrow(RangeError);
+    expect(() =>
+      sampleSine({ amplitude: -1, frequency: 1, sampleRate: 100, nSamples: 10 }),
+    ).toThrow(RangeError);
   });
 });
 
@@ -82,7 +96,9 @@ describe("quantize", () => {
     expect(() => quantize({ bits: 0, vMin: 0, vMax: 1, value: 0 })).toThrow(RangeError);
     expect(() => quantize({ bits: 25, vMin: 0, vMax: 1, value: 0 })).toThrow(RangeError);
     expect(() => quantize({ bits: 8, vMin: 1, vMax: 1, value: 0 })).toThrow(RangeError);
-    expect(() => quantize({ bits: 8, vMin: 0, vMax: 1, value: Number.NaN })).toThrow(RangeError);
+    expect(() => quantize({ bits: 8, vMin: 0, vMax: 1, value: Number.NaN })).toThrow(
+      RangeError,
+    );
   });
 
   it("RangeError from lsb() on bad inputs", () => {

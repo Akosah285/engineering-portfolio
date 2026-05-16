@@ -5,12 +5,7 @@ import { MathHud } from "../../../demo-kit/MathHud";
 import { PresetCarousel } from "../../../demo-kit/PresetCarousel";
 import { SliderRow } from "../../../demo-kit/SliderRow";
 import { type Schema, useDemoState } from "../../../demo-kit/useDemoState";
-import {
-  type Complex,
-  type SignalKind,
-  magnitude,
-  sampleFT,
-} from "./algorithm";
+import { type Complex, type SignalKind, magnitude, sampleFT } from "./algorithm";
 import {
   DEFAULT_STATE,
   type FtSignalsDemoState,
@@ -71,11 +66,7 @@ interface PanelBox {
   readonly h: number;
 }
 
-function drawAxes(
-  ctx: CanvasRenderingContext2D,
-  box: PanelBox,
-  title: string,
-): void {
+function drawAxes(ctx: CanvasRenderingContext2D, box: PanelBox, title: string): void {
   ctx.strokeStyle = "#bbbbbb";
   ctx.lineWidth = 1;
   // Horizontal baseline (x-axis at vertical centre)
@@ -153,8 +144,7 @@ function drawFreqPanel(
 
   const midY = box.y + box.h / 2;
   const scaleY = (box.h / 2) * 0.85;
-  const xAt = (i: number): number =>
-    box.x + (i / (OMEGA_SAMPLES - 1)) * box.w;
+  const xAt = (i: number): number => box.x + (i / (OMEGA_SAMPLES - 1)) * box.w;
 
   // Magnitude — solid
   ctx.strokeStyle = "#00693e";
@@ -215,13 +205,7 @@ export function FtSignalsVisualizer() {
         h: CANVAS_H / 2,
       };
       drawTimePanel(ctx, timeBox, state.signalKind, state.param);
-      drawFreqPanel(
-        ctx,
-        freqBox,
-        state.signalKind,
-        state.param,
-        state.omegaMax,
-      );
+      drawFreqPanel(ctx, freqBox, state.signalKind, state.param, state.omegaMax);
       // Divider
       ctx.strokeStyle = "#dddddd";
       ctx.lineWidth = 1;
@@ -290,11 +274,7 @@ export function FtSignalsVisualizer() {
       </div>
 
       <div className="ft-visualizer__actions">
-        <button
-          type="button"
-          className="ft-visualizer__btn"
-          onClick={handleReset}
-        >
+        <button type="button" className="ft-visualizer__btn" onClick={handleReset}>
           ↺ Reset
         </button>
         <span className="ft-visualizer__counter" aria-live="off">

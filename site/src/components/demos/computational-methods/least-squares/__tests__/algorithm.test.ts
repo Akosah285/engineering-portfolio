@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { linearFit, predict } from "../algorithm";
 
 describe("linearFit", () => {
@@ -61,8 +61,12 @@ describe("linearFit", () => {
   });
 
   it("throws on non-finite values in xs or ys", () => {
-    expect(() => linearFit({ xs: [1, Number.NaN, 3], ys: [1, 2, 3] })).toThrow(RangeError);
-    expect(() => linearFit({ xs: [1, 2, 3], ys: [1, Infinity, 3] })).toThrow(RangeError);
+    expect(() => linearFit({ xs: [1, Number.NaN, 3], ys: [1, 2, 3] })).toThrow(
+      RangeError,
+    );
+    expect(() =>
+      linearFit({ xs: [1, 2, 3], ys: [1, Number.POSITIVE_INFINITY, 3] }),
+    ).toThrow(RangeError);
   });
 
   it("produces NaN R^2 when ys are perfectly constant (degenerate variance)", () => {

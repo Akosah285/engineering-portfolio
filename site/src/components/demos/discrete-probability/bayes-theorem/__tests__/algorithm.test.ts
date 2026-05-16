@@ -70,9 +70,9 @@ describe("bayesTheorem", () => {
   });
 
   it("rejects out-of-range sensitivity / specificity", () => {
-    expect(() =>
-      bayesTheorem({ prior: 0.5, sensitivity: 2, specificity: 0.5 }),
-    ).toThrow(RangeError);
+    expect(() => bayesTheorem({ prior: 0.5, sensitivity: 2, specificity: 0.5 })).toThrow(
+      RangeError,
+    );
     expect(() =>
       bayesTheorem({ prior: 0.5, sensitivity: 0.5, specificity: -0.5 }),
     ).toThrow(RangeError);
@@ -80,7 +80,7 @@ describe("bayesTheorem", () => {
 
   it("rejects NaN inputs", () => {
     expect(() =>
-      bayesTheorem({ prior: NaN, sensitivity: 0.5, specificity: 0.5 }),
+      bayesTheorem({ prior: Number.NaN, sensitivity: 0.5, specificity: 0.5 }),
     ).toThrow(RangeError);
   });
 });

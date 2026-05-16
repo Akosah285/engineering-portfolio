@@ -1,40 +1,35 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
-  momentOfInertia,
-  yMax,
+  type Section,
   bendingStress,
   maxBendingStress,
+  momentOfInertia,
   sectionModulus,
-  type Section,
+  yMax,
 } from "../algorithm";
 
 describe("momentOfInertia", () => {
   it("rectangle: bh³/12", () => {
     expect(momentOfInertia({ kind: "rect", b: 100, h: 200 })).toBeCloseTo(
-      (100 * Math.pow(200, 3)) / 12,
+      (100 * 200 ** 3) / 12,
       6,
     );
   });
 
   it("circle: πR⁴/4", () => {
     expect(momentOfInertia({ kind: "circle", R: 50 })).toBeCloseTo(
-      (Math.PI * Math.pow(50, 4)) / 4,
+      (Math.PI * 50 ** 4) / 4,
       6,
     );
   });
 
   it("ibeam: (BH³ - bh³)/12", () => {
     const I = momentOfInertia({ kind: "ibeam", B: 100, H: 200, b: 80, h: 180 });
-    expect(I).toBeCloseTo(
-      (100 * Math.pow(200, 3) - 80 * Math.pow(180, 3)) / 12,
-      6,
-    );
+    expect(I).toBeCloseTo((100 * 200 ** 3 - 80 * 180 ** 3) / 12, 6);
   });
 
   it("RangeError on non-positive dims", () => {
-    expect(() =>
-      momentOfInertia({ kind: "rect", b: 0, h: 10 }),
-    ).toThrow(RangeError);
+    expect(() => momentOfInertia({ kind: "rect", b: 0, h: 10 })).toThrow(RangeError);
     expect(() => momentOfInertia({ kind: "circle", R: -1 })).toThrow(RangeError);
     expect(() =>
       momentOfInertia({ kind: "ibeam", B: 100, H: 100, b: 100, h: 50 }),
@@ -75,14 +70,14 @@ describe("bendingStress (flexure formula)", () => {
   });
 
   it("RangeError on non-finite", () => {
-    expect(() => bendingStress(NaN, 5, 100)).toThrow(RangeError);
+    expect(() => bendingStress(Number.NaN, 5, 100)).toThrow(RangeError);
   });
 });
 
 describe("maxBendingStress", () => {
   it("rectangle 100×200 under M=1000: σ_max = M*c/I", () => {
     const s: Section = { kind: "rect", b: 100, h: 200 };
-    const I = (100 * Math.pow(200, 3)) / 12;
+    const I = (100 * 200 ** 3) / 12;
     const c = 100;
     expect(maxBendingStress(1000, s)).toBeCloseTo((1000 * c) / I, 10);
   });

@@ -136,11 +136,7 @@ function ConformalVisualizer() {
 
   const probe = useMemo<Complex[]>(
     () =>
-      sampleUnitCircle(
-        PROBE_N,
-        { re: state.centerRe, im: state.centerIm },
-        PROBE_RADIUS,
-      ),
+      sampleUnitCircle(PROBE_N, { re: state.centerRe, im: state.centerIm }, PROBE_RADIUS),
     [state.centerRe, state.centerIm],
   );
 
@@ -148,10 +144,7 @@ function ConformalVisualizer() {
 
   const f = useMemo<ComplexFn>(() => MAP_FNS[state.map], [state.map]);
 
-  const mappedProbe = useMemo<Complex[]>(
-    () => safeApply(probe, f),
-    [probe, f],
-  );
+  const mappedProbe = useMemo<Complex[]>(() => safeApply(probe, f), [probe, f]);
   const mappedGrid = useMemo<Complex[]>(() => safeApply(grid, f), [grid, f]);
 
   const sampled = mappedProbe.length;
@@ -289,10 +282,7 @@ function ConformalVisualizer() {
           step={1}
           value={mapIndex}
           onChange={(idx) => {
-            const i = Math.max(
-              0,
-              Math.min(MAP_SLUGS.length - 1, Math.round(idx)),
-            );
+            const i = Math.max(0, Math.min(MAP_SLUGS.length - 1, Math.round(idx)));
             const slug = MAP_SLUGS[i] ?? DEFAULT_MAP;
             setState({ ...state, map: slug } as unknown as typeof rawState);
           }}

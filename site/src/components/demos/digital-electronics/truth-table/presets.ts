@@ -6,15 +6,7 @@
  * sync via useDemoState.
  */
 
-export const GATE_TYPES = [
-  "AND",
-  "OR",
-  "NAND",
-  "NOR",
-  "XOR",
-  "XNOR",
-  "NOT",
-] as const;
+export const GATE_TYPES = ["AND", "OR", "NAND", "NOR", "XOR", "XNOR", "NOT"] as const;
 
 export type GateType = (typeof GATE_TYPES)[number];
 
@@ -42,7 +34,10 @@ export const DEFAULT_STATE: TruthTableDemoState = {
   nInputs: 2,
 };
 
-export const PRESET_META: Record<PresetSlug, { name: string; state: TruthTableDemoState }> = {
+export const PRESET_META: Record<
+  PresetSlug,
+  { name: string; state: TruthTableDemoState }
+> = {
   "and-2input": { name: "and-2input", state: { gate: "AND", nInputs: 2 } },
   "or-3input": { name: "or-3input", state: { gate: "OR", nInputs: 3 } },
   "xor-2input": { name: "xor-2input", state: { gate: "XOR", nInputs: 2 } },

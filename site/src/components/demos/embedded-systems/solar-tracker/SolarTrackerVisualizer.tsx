@@ -71,19 +71,14 @@ export default function SolarTrackerVisualizer() {
   );
 
   // History accumulates one entry per (currentAngle, sky, deadband) change.
-  const [history, setHistory] = useState<HistoryPoint[]>([
-    { angle: 0, clamped: false },
-  ]);
+  const [history, setHistory] = useState<HistoryPoint[]>([{ angle: 0, clamped: false }]);
   const lastKeyRef = useRef<string>("");
   useEffect(() => {
     const key = `${state.sky}|${state.deadband}|${state.currentAngle}`;
     if (lastKeyRef.current === key) return;
     lastKeyRef.current = key;
     setHistory((prev) => {
-      const next = [
-        ...prev,
-        { angle: result.nextAngle, clamped: result.clamped },
-      ];
+      const next = [...prev, { angle: result.nextAngle, clamped: result.clamped }];
       return next.length > HISTORY_MAX ? next.slice(-HISTORY_MAX) : next;
     });
   }, [state.sky, state.deadband, state.currentAngle, result.nextAngle, result.clamped]);
@@ -219,13 +214,7 @@ interface PanelDiagramProps {
   sunFraction: number;
 }
 
-function PanelDiagram({
-  angle,
-  direction,
-  east,
-  west,
-  sunFraction,
-}: PanelDiagramProps) {
+function PanelDiagram({ angle, direction, east, west, sunFraction }: PanelDiagramProps) {
   const w = 360;
   const h = 280;
   const cx = w / 2;
@@ -289,12 +278,24 @@ function PanelDiagram({
         />
         {/* East LDR pad (left end of panel in local frame) */}
         <circle cx={cx - panelW / 2 + 8} cy={cy} r={5} fill="#ffcb47" />
-        <text x={cx - panelW / 2 + 8} y={cy - 10} fontSize={10} textAnchor="middle" fill="#333">
+        <text
+          x={cx - panelW / 2 + 8}
+          y={cy - 10}
+          fontSize={10}
+          textAnchor="middle"
+          fill="#333"
+        >
           E:{east}
         </text>
         {/* West LDR pad */}
         <circle cx={cx + panelW / 2 - 8} cy={cy} r={5} fill="#ffcb47" />
-        <text x={cx + panelW / 2 - 8} y={cy - 10} fontSize={10} textAnchor="middle" fill="#333">
+        <text
+          x={cx + panelW / 2 - 8}
+          y={cy - 10}
+          fontSize={10}
+          textAnchor="middle"
+          fill="#333"
+        >
           W:{west}
         </text>
       </g>

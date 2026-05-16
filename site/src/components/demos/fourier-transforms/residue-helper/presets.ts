@@ -1,4 +1,4 @@
-import { type Complex, c, add, mul, div } from "./algorithm";
+import { type Complex, add, c, div, mul } from "./algorithm";
 
 export type FuncSlug =
   | "one-over-z"

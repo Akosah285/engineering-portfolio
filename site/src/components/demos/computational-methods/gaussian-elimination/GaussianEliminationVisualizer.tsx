@@ -135,10 +135,7 @@ export function GaussianEliminationVisualizer() {
   );
 
   const system = useMemo(() => getSystem(state.systemSlug), [state.systemSlug]);
-  const result: SolveResult = useMemo(
-    () => solve(system.A, system.b),
-    [system],
-  );
+  const result: SolveResult = useMemo(() => solve(system.A, system.b), [system]);
   const totalSteps = result.steps.length;
 
   const [paused, setPaused] = useState(false);

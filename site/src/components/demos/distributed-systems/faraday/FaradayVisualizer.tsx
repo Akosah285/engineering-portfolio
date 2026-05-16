@@ -26,10 +26,7 @@ const PLOT_W = 320;
 const PLOT_H = 260;
 const SAMPLES = 100;
 
-function paintCoil(
-  ctx: CanvasRenderingContext2D,
-  theta: number,
-): void {
+function paintCoil(ctx: CanvasRenderingContext2D, theta: number): void {
   const { width, height } = ctx.canvas;
   ctx.clearRect(0, 0, width, height);
   ctx.fillStyle = "#fafafa";
@@ -224,12 +221,7 @@ export default function FaradayVisualizer() {
   const [, forceTick] = useState(0);
 
   const period = (2 * Math.PI) / Math.max(1e-6, state.omega);
-  const peak = peakEmf(
-    Math.max(1, Math.round(state.N)),
-    state.B,
-    state.A,
-    state.omega,
-  );
+  const peak = peakEmf(Math.max(1, Math.round(state.N)), state.B, state.A, state.omega);
 
   const draw = useCallback(() => {
     const coil = coilRef.current;

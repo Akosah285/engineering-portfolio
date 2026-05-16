@@ -31,7 +31,9 @@ describe("rcChargingVoltage", () => {
 
   it("RangeError on bad tau or non-finite t", () => {
     expect(() => rcChargingVoltage({ Vstep: 5, tau: 0, t: 1 })).toThrow(RangeError);
-    expect(() => rcChargingVoltage({ Vstep: 5, tau: 1, t: Number.NaN })).toThrow(RangeError);
+    expect(() => rcChargingVoltage({ Vstep: 5, tau: 1, t: Number.NaN })).toThrow(
+      RangeError,
+    );
   });
 });
 

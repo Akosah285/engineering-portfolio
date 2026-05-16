@@ -5,9 +5,9 @@ import { type Schema, useDemoState } from "../../../demo-kit/useDemoState";
 import { type Cube, cubeToTerm, minimize } from "./algorithm";
 import {
   DEFAULT_STATE,
+  PRESETS,
   PRESET_META,
   PRESET_SLUGS,
-  PRESETS,
   type PresetSlug,
 } from "./presets";
 import "./KarnaughMinimizerVisualizer.css";
@@ -22,7 +22,14 @@ import "./KarnaughMinimizerVisualizer.css";
  */
 
 const VAR_NAMES = ["A", "B", "C", "D"] as const;
-const CUBE_COLORS = ["#d04a55", "#3a7bd5", "#e08b1a", "#7a3fbf", "#1aa28a", "#c43c8b"] as const;
+const CUBE_COLORS = [
+  "#d04a55",
+  "#3a7bd5",
+  "#e08b1a",
+  "#7a3fbf",
+  "#1aa28a",
+  "#c43c8b",
+] as const;
 const CELL_SIZE = 56;
 const CELL_GAP = 6;
 const PAD = 38;
@@ -210,10 +217,8 @@ export default function KarnaughMinimizerVisualizer() {
     const inset = 3 + idx * 1.5;
     const x = cellX(minC) - inset;
     const y = cellY(minR) - inset;
-    const w =
-      (maxC - minC + 1) * CELL_SIZE + (maxC - minC) * CELL_GAP + inset * 2;
-    const h =
-      (maxR - minR + 1) * CELL_SIZE + (maxR - minR) * CELL_GAP + inset * 2;
+    const w = (maxC - minC + 1) * CELL_SIZE + (maxC - minC) * CELL_GAP + inset * 2;
+    const h = (maxR - minR + 1) * CELL_SIZE + (maxR - minR) * CELL_GAP + inset * 2;
     const color = CUBE_COLORS[idx % CUBE_COLORS.length];
     return { key: idx, x, y, w, h, color, term: cubeToTerm(cube, varNames) };
   });
@@ -345,10 +350,7 @@ export default function KarnaughMinimizerVisualizer() {
                   key={`leg-${rect.key}`}
                   style={{ color: rect.color }}
                 >
-                  <span
-                    className="km-visualizer__cube-swatch"
-                    aria-hidden="true"
-                  />
+                  <span className="km-visualizer__cube-swatch" aria-hidden="true" />
                   <span style={{ color: "#333" }}>{rect.term}</span>
                 </span>
               ),
@@ -369,25 +371,16 @@ export default function KarnaughMinimizerVisualizer() {
           </div>
           <div className="km-visualizer__hud">
             <span className="km-visualizer__hud-item">nVars: {typed.nVars}</span>
-            <span className="km-visualizer__hud-item">
-              minterms: {minterms.length}
-            </span>
-            <span className="km-visualizer__hud-item">
-              cubes: {result.cubes.length}
-            </span>
+            <span className="km-visualizer__hud-item">minterms: {minterms.length}</span>
+            <span className="km-visualizer__hud-item">cubes: {result.cubes.length}</span>
             <span className="km-visualizer__hud-item">
               literals: {result.literalCount}
             </span>
           </div>
-          <p
-            className="km-visualizer__panel-title"
-            style={{ marginTop: "1rem" }}
-          >
+          <p className="km-visualizer__panel-title" style={{ marginTop: "1rem" }}>
             Preset
           </p>
-          <p style={{ margin: 0, fontSize: "0.9rem", color: "#444" }}>
-            {meta.narration}
-          </p>
+          <p style={{ margin: 0, fontSize: "0.9rem", color: "#444" }}>{meta.narration}</p>
         </div>
       </div>
 
@@ -405,11 +398,7 @@ export default function KarnaughMinimizerVisualizer() {
       </div>
 
       <div className="km-visualizer__actions">
-        <button
-          type="button"
-          className="km-visualizer__btn"
-          onClick={handleReset}
-        >
+        <button type="button" className="km-visualizer__btn" onClick={handleReset}>
           ↺ Reset
         </button>
         <span className="km-visualizer__counter" aria-live="off">

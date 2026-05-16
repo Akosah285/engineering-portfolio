@@ -54,7 +54,13 @@ export const PRESETS: readonly BeamPreset[] = [
   },
   {
     name: CASE_LABELS["simply-supported-point"],
-    state: { caseSlug: "simply-supported-point", L: 4, E_GPa: 200, I_cm4: 500, P_or_w: 10 },
+    state: {
+      caseSlug: "simply-supported-point",
+      L: 4,
+      E_GPa: 200,
+      I_cm4: 500,
+      P_or_w: 10,
+    },
   },
   {
     name: CASE_LABELS["simply-supported-udl"],

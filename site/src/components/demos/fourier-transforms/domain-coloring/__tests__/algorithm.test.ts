@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 import {
+  type ComplexF,
   colorAt,
   colorGrid,
   hsvToRgb,
   hueFromArg,
   valueFromMagnitude,
-  type ComplexF,
 } from "../algorithm";
 
 describe("hueFromArg", () => {

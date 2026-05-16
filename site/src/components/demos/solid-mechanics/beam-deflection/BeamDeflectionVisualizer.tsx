@@ -98,10 +98,7 @@ export function BeamDeflectionVisualizer() {
       const L = input.L;
 
       // Amplification: scale so v_max occupies ~25% of half-height.
-      const maxAbs = Math.max(
-        ...curve.map((p) => Math.abs(p.v)),
-        Number.EPSILON,
-      );
+      const maxAbs = Math.max(...curve.map((p) => Math.abs(p.v)), Number.EPSILON);
       const maxPx = (height / 2 - padY) * 0.6;
       const amp = maxPx / maxAbs;
 

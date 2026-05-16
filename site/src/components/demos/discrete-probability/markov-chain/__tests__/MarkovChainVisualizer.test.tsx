@@ -7,9 +7,7 @@ describe("MarkovChainVisualizer", () => {
     render(<MarkovChainVisualizer />);
     expect(screen.getByRole("slider", { name: /^step delay/i })).toBeTruthy();
     expect(screen.getByRole("option", { name: /weather/i })).toBeTruthy();
-    expect(
-      screen.getByRole("option", { name: /rock.paper.scissors/i }),
-    ).toBeTruthy();
+    expect(screen.getByRole("option", { name: /rock.paper.scissors/i })).toBeTruthy();
     expect(screen.getByRole("option", { name: /random walk/i })).toBeTruthy();
     expect(screen.getByRole("option", { name: /absorbing/i })).toBeTruthy();
     expect(screen.getByRole("button", { name: /⏸ pause/i })).toBeTruthy();

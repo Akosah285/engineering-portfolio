@@ -38,12 +38,12 @@ describe("tiltFromAccel", () => {
 describe("complementaryFilter", () => {
   it("rejects alpha out of [0,1]", () => {
     const sample = { ax: 0, ay: 0, az: G, gx: 0, gy: 0, dt: 0.01 };
-    expect(() =>
-      complementaryFilter({ roll: 0, pitch: 0 }, sample, -0.1),
-    ).toThrow(RangeError);
-    expect(() =>
-      complementaryFilter({ roll: 0, pitch: 0 }, sample, 1.1),
-    ).toThrow(RangeError);
+    expect(() => complementaryFilter({ roll: 0, pitch: 0 }, sample, -0.1)).toThrow(
+      RangeError,
+    );
+    expect(() => complementaryFilter({ roll: 0, pitch: 0 }, sample, 1.1)).toThrow(
+      RangeError,
+    );
   });
 
   it("rejects negative dt", () => {

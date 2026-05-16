@@ -27,7 +27,11 @@ export interface IKResult {
 }
 
 /** Forward kinematics: end-effector (x, y) for given joint angles and link lengths. */
-export function forwardKinematics(input: ArmInput): { x: number; y: number; elbow: { x: number; y: number } } {
+export function forwardKinematics(input: ArmInput): {
+  x: number;
+  y: number;
+  elbow: { x: number; y: number };
+} {
   if (!(input.l1 > 0) || !(input.l2 > 0)) {
     throw new RangeError("forwardKinematics: l1 and l2 must be > 0.");
   }
@@ -58,7 +62,8 @@ export function inverseKinematics(input: IKInput): IKResult {
   if (r > outer + TOL || r < inner - TOL) {
     return { poses: [], reachable: false, singular: false };
   }
-  const cos2 = (r2 - input.l1 * input.l1 - input.l2 * input.l2) / (2 * input.l1 * input.l2);
+  const cos2 =
+    (r2 - input.l1 * input.l1 - input.l2 * input.l2) / (2 * input.l1 * input.l2);
   // Clamp to [-1, 1] to absorb floating-point overshoot at the boundary.
   const cosClamped = Math.min(1, Math.max(-1, cos2));
   const singular = Math.abs(Math.abs(cosClamped) - 1) < 1e-9;
@@ -66,8 +71,14 @@ export function inverseKinematics(input: IKInput): IKResult {
   const t2up = Math.atan2(sinPos, cosClamped); // elbow up
   const t2dn = Math.atan2(-sinPos, cosClamped); // elbow down
   const phi = Math.atan2(input.y, input.x);
-  const psiUp = Math.atan2(input.l2 * Math.sin(t2up), input.l1 + input.l2 * Math.cos(t2up));
-  const psiDn = Math.atan2(input.l2 * Math.sin(t2dn), input.l1 + input.l2 * Math.cos(t2dn));
+  const psiUp = Math.atan2(
+    input.l2 * Math.sin(t2up),
+    input.l1 + input.l2 * Math.cos(t2up),
+  );
+  const psiDn = Math.atan2(
+    input.l2 * Math.sin(t2dn),
+    input.l1 + input.l2 * Math.cos(t2dn),
+  );
   const t1up = phi - psiUp;
   const t1dn = phi - psiDn;
   const elbowUp: Pose = { theta1: t1up, theta2: t2up };
@@ -76,7 +87,8 @@ export function inverseKinematics(input: IKInput): IKResult {
     return { poses: [elbowUp], reachable: true, singular: true };
   }
   if (input.elbow === "up") return { poses: [elbowUp], reachable: true, singular: false };
-  if (input.elbow === "down") return { poses: [elbowDown], reachable: true, singular: false };
+  if (input.elbow === "down")
+    return { poses: [elbowDown], reachable: true, singular: false };
   return { poses: [elbowUp, elbowDown], reachable: true, singular: false };
 }
 

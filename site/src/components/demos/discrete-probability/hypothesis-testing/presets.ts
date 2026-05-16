@@ -27,7 +27,11 @@ export const ALTERNATIVE_SLUGS = [
   "less",
 ] as const satisfies readonly Alternative[];
 
-export const ALPHA_SLUGS = ["0.01", "0.05", "0.10"] as const satisfies readonly AlphaSlug[];
+export const ALPHA_SLUGS = [
+  "0.01",
+  "0.05",
+  "0.10",
+] as const satisfies readonly AlphaSlug[];
 
 export interface HypothesisDemoState {
   scenarioSlug: ScenarioSlug;

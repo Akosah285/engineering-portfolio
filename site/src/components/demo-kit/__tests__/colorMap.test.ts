@@ -1,10 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  computeColorBarTicks,
-  viridis,
-  rdbu,
-  type ColorBarTick,
-} from "../colorMap";
+import { type ColorBarTick, computeColorBarTicks, rdbu, viridis } from "../colorMap";
 
 /**
  * computeColorBarTicks + built-in colour maps — pure brain of <ColorBar> (#55).

@@ -19,7 +19,9 @@ export function exactCollisionProbability(input: BirthdayInput): number {
     throw new RangeError("exactCollisionProbability: n must be a non-negative integer.");
   }
   if (!Number.isInteger(D) || D < 1) {
-    throw new RangeError("exactCollisionProbability: daysInYear must be a positive integer.");
+    throw new RangeError(
+      "exactCollisionProbability: daysInYear must be a positive integer.",
+    );
   }
   if (input.n <= 1) return 0;
   if (input.n > D) return 1;
@@ -38,10 +40,14 @@ export function exactCollisionProbability(input: BirthdayInput): number {
 export function approximateCollisionProbability(input: BirthdayInput): number {
   const D = input.daysInYear ?? 365;
   if (!Number.isInteger(input.n) || input.n < 0) {
-    throw new RangeError("approximateCollisionProbability: n must be a non-negative integer.");
+    throw new RangeError(
+      "approximateCollisionProbability: n must be a non-negative integer.",
+    );
   }
   if (!Number.isInteger(D) || D < 1) {
-    throw new RangeError("approximateCollisionProbability: daysInYear must be a positive integer.");
+    throw new RangeError(
+      "approximateCollisionProbability: daysInYear must be a positive integer.",
+    );
   }
   if (input.n <= 1) return 0;
   return 1 - Math.exp((-input.n * (input.n - 1)) / (2 * D));
@@ -65,7 +71,9 @@ export function smallestNForProbability(input: SmallestNInput): number {
   const D = input.daysInYear ?? 365;
   const cap = input.nMax ?? D + 1;
   if (!Number.isInteger(D) || D < 1) {
-    throw new RangeError("smallestNForProbability: daysInYear must be a positive integer.");
+    throw new RangeError(
+      "smallestNForProbability: daysInYear must be a positive integer.",
+    );
   }
   if (!Number.isInteger(cap) || cap < 1) {
     throw new RangeError("smallestNForProbability: nMax must be a positive integer.");

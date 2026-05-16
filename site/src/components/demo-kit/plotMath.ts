@@ -52,9 +52,7 @@ export function computeAxisLayout(opts: AxisLayoutOptions): AxisLayout {
 
   if (logScale) {
     if (opts.min <= 0 || opts.max <= 0) {
-      throw new RangeError(
-        "computeAxisLayout: log scale requires positive min and max.",
-      );
+      throw new RangeError("computeAxisLayout: log scale requires positive min and max.");
     }
     return buildLogAxis(opts);
   }
@@ -82,9 +80,7 @@ function buildLinearAxis(opts: AxisLayoutOptions): AxisLayout {
   }
 
   const values =
-    niceTicks.length === 0
-      ? [min, max]
-      : pinEndpoints(niceTicks, min, max, niceStep);
+    niceTicks.length === 0 ? [min, max] : pinEndpoints(niceTicks, min, max, niceStep);
 
   return {
     min,
@@ -118,21 +114,13 @@ function buildLogAxis(opts: AxisLayoutOptions): AxisLayout {
     logScale: true,
     ticks: values.map((value) => ({
       value,
-      normalized:
-        logSpan === 0
-          ? 0.5
-          : (Math.log10(value) - Math.log10(min)) / logSpan,
+      normalized: logSpan === 0 ? 0.5 : (Math.log10(value) - Math.log10(min)) / logSpan,
       label: formatTickValue(value),
     })),
   };
 }
 
-function pinEndpoints(
-  ticks: number[],
-  min: number,
-  max: number,
-  step: number,
-): number[] {
+function pinEndpoints(ticks: number[], min: number, max: number, step: number): number[] {
   const out = [...ticks];
   const first = out[0];
   if (first !== undefined && Math.abs(first - min) > step * 1e-9) {

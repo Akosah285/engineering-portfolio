@@ -180,8 +180,7 @@ function paintResponse(
   const tMax = 5 * tau;
   const yMax = Math.max(Math.abs(asymptote(state)), 1e-12);
   const tToX = (t: number): number => PLOT_X0 + (t / tMax) * PLOT_W;
-  const yToY = (y: number): number =>
-    PLOT_Y0 + PLOT_H - (Math.abs(y) / yMax) * PLOT_H;
+  const yToY = (y: number): number => PLOT_Y0 + PLOT_H - (Math.abs(y) / yMax) * PLOT_H;
 
   // τ, 2τ, 3τ vertical guides + labels
   const fractions = [
@@ -246,11 +245,7 @@ function paintResponse(
 }
 
 export default function RcRlVisualizer() {
-  const [state, setState, { reset }] = useDemoState(
-    "rc-rl",
-    STATE_SCHEMA,
-    DEFAULT_STATE,
-  );
+  const [state, setState, { reset }] = useDemoState("rc-rl", STATE_SCHEMA, DEFAULT_STATE);
 
   const tau = useMemo(() => computeTau(state), [state]);
   const t90 = useMemo(() => timeToFraction(tau, 0.9), [tau]);
@@ -378,11 +373,7 @@ export default function RcRlVisualizer() {
       </div>
 
       <div className="rcrl-visualizer__actions">
-        <button
-          type="button"
-          className="rcrl-visualizer__btn"
-          onClick={handleReset}
-        >
+        <button type="button" className="rcrl-visualizer__btn" onClick={handleReset}>
           ↺ Reset
         </button>
         <span className="rcrl-visualizer__counter" aria-live="off">

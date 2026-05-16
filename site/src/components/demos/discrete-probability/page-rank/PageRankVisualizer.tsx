@@ -10,8 +10,8 @@ import { pageRank } from "./algorithm";
 import {
   DEFAULT_STATE,
   GRAPH_SLUGS,
-  type PageRankDemoState,
   PRESETS,
+  type PageRankDemoState,
   TOLERANCE_KEYS,
   TOLERANCE_VALUES,
   getGraph,
@@ -146,15 +146,12 @@ export function PageRankVisualizer() {
   const { ranks, iterations, converged } = result;
   const maxRank = ranks.reduce((m, v) => (v > m ? v : m), 0) || 1;
   const topIdx = ranks.reduce(
-    (best, v, i) => (v > (ranks[best] ?? -Infinity) ? i : best),
+    (best, v, i) => (v > (ranks[best] ?? Number.NEGATIVE_INFINITY) ? i : best),
     0,
   );
   const topRank = ranks[topIdx] ?? 0;
 
-  const radii = useMemo(
-    () => ranks.map((r) => 8 + r * 80),
-    [ranks],
-  );
+  const radii = useMemo(() => ranks.map((r) => 8 + r * 80), [ranks]);
 
   const draw: DrawFn = useCallback(
     (ctx) => {
@@ -171,8 +168,7 @@ export function PageRankVisualizer() {
       }
 
       // Nodes
-      ctx.font =
-        "11px 'JetBrains Mono Variable', 'JetBrains Mono', monospace";
+      ctx.font = "11px 'JetBrains Mono Variable', 'JetBrains Mono', monospace";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       for (let i = 0; i < graph.nNodes; i += 1) {
@@ -305,8 +301,7 @@ export function PageRankVisualizer() {
             onChange={(event) =>
               setState({
                 ...state,
-                toleranceKey: event.target
-                  .value as PageRankDemoState["toleranceKey"],
+                toleranceKey: event.target.value as PageRankDemoState["toleranceKey"],
               })
             }
           >
@@ -320,11 +315,7 @@ export function PageRankVisualizer() {
       </div>
 
       <div className="pr-visualizer__actions">
-        <button
-          type="button"
-          className="pr-visualizer__btn"
-          onClick={handleReset}
-        >
+        <button type="button" className="pr-visualizer__btn" onClick={handleReset}>
           ↺ Reset
         </button>
         <span className="pr-visualizer__counter" aria-live="off">

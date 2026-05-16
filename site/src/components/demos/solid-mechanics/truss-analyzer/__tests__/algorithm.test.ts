@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { analyze, type Joint, type Member } from "../algorithm";
+import { type Joint, type Member, analyze } from "../algorithm";
 
 describe("analyze — statically determinate trusses", () => {
   it("simple 3-bar triangle with vertical load at apex", () => {
@@ -27,12 +27,18 @@ describe("analyze — statically determinate trusses", () => {
     });
     expect(r.solvable).toBe(true);
     // By symmetry: AC and BC carry equal compression of 1000 / (2*sin60) = 577 each
-    const FAC = r.memberForces.find((m) => m.member.i === "A" && m.member.j === "C")!.force;
-    const FBC = r.memberForces.find((m) => m.member.i === "B" && m.member.j === "C")!.force;
+    const FAC = r.memberForces.find(
+      (m) => m.member.i === "A" && m.member.j === "C",
+    )!.force;
+    const FBC = r.memberForces.find(
+      (m) => m.member.i === "B" && m.member.j === "C",
+    )!.force;
     expect(Math.abs(FAC + 577.35)).toBeLessThan(0.5); // negative ⇒ compression
     expect(Math.abs(FBC + 577.35)).toBeLessThan(0.5);
     // Bottom chord AB carries equal tension by horizontal equilibrium at A: 577 cos60 = 288.7
-    const FAB = r.memberForces.find((m) => m.member.i === "A" && m.member.j === "B")!.force;
+    const FAB = r.memberForces.find(
+      (m) => m.member.i === "A" && m.member.j === "B",
+    )!.force;
     expect(Math.abs(FAB - 288.68)).toBeLessThan(0.5);
   });
 
@@ -90,13 +96,21 @@ describe("analyze — determinacy + error handling", () => {
   });
 
   it("RangeError on missing joints/members or unknown member endpoint", () => {
-    expect(() => analyze({ joints: [], members: [], loads: [], supports: [] })).toThrow(RangeError);
+    expect(() => analyze({ joints: [], members: [], loads: [], supports: [] })).toThrow(
+      RangeError,
+    );
     expect(() =>
       analyze({
-        joints: [{ id: "A", x: 0, y: 0 }, { id: "B", x: 1, y: 0 }],
+        joints: [
+          { id: "A", x: 0, y: 0 },
+          { id: "B", x: 1, y: 0 },
+        ],
         members: [{ i: "A", j: "X" }],
         loads: [],
-        supports: [{ joint: "A", kind: "pin" }, { joint: "B", kind: "roller-y" }],
+        supports: [
+          { joint: "A", kind: "pin" },
+          { joint: "B", kind: "roller-y" },
+        ],
       }),
     ).toThrow(RangeError);
   });

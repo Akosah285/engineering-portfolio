@@ -76,11 +76,7 @@ export const GRAPHS: Readonly<Record<GraphSlug, GraphDef>> = {
     slug: "two-cluster",
     name: "Two-cluster bridge",
     nNodes: 8,
-    edges: [
-      ...cliqueEdges(0, 4),
-      ...cliqueEdges(4, 4),
-      [3, 4] as const,
-    ],
+    edges: [...cliqueEdges(0, 4), ...cliqueEdges(4, 4), [3, 4] as const],
   },
   "cycle-6": {
     slug: "cycle-6",

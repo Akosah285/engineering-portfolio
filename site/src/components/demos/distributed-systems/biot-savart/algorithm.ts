@@ -98,7 +98,13 @@ export function loopAxisField(R: number, I: number, z: number): number {
 }
 
 /** Build N straight segments approximating a circular loop in the xy plane. */
-export function circularLoop(R: number, I: number, nSegments: number, cx = 0, cy = 0): Segment[] {
+export function circularLoop(
+  R: number,
+  I: number,
+  nSegments: number,
+  cx = 0,
+  cy = 0,
+): Segment[] {
   if (!(R > 0)) throw new RangeError("circularLoop: R must be > 0.");
   if (!Number.isInteger(nSegments) || nSegments < 3) {
     throw new RangeError("circularLoop: nSegments must be an integer >= 3.");

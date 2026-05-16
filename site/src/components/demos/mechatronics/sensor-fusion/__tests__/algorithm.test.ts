@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { complementaryFilter, fuseHeading } from "../algorithm";
 
 describe("complementaryFilter", () => {
@@ -138,8 +138,8 @@ describe("fuseHeading", () => {
   });
 
   it("RangeError on mismatched lengths", () => {
-    expect(() =>
-      fuseHeading({ alpha: 0.5, dyawImu: [0], headingEnc: [0, 0] }),
-    ).toThrow(RangeError);
+    expect(() => fuseHeading({ alpha: 0.5, dyawImu: [0], headingEnc: [0, 0] })).toThrow(
+      RangeError,
+    );
   });
 });

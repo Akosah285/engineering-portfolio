@@ -10,8 +10,8 @@ import {
   type BayesDemoState,
   DEFAULT_STATE,
   POPULATION_SIZES,
-  type PopulationSize,
   PRESETS,
+  type PopulationSize,
 } from "./presets";
 import "./BayesTheoremVisualizer.css";
 
@@ -47,7 +47,7 @@ const STATE_SCHEMA = {
 } as const satisfies Schema;
 
 function parsePopulationSize(s: PopulationSize): number {
-  const n = parseInt(s, 10);
+  const n = Number.parseInt(s, 10);
   // POPULATION_SIZES is a closed set of valid integer strings — guard for paranoia.
   if (!Number.isFinite(n) || n <= 0) return 10000;
   return n;
@@ -93,11 +93,7 @@ function computeCounts(
   return { truePositive, falseNegative, falsePositive, trueNegative };
 }
 
-function paintDotGrid(
-  ctx: CanvasRenderingContext2D,
-  counts: Counts,
-  pop: number,
-): void {
+function paintDotGrid(ctx: CanvasRenderingContext2D, counts: Counts, pop: number): void {
   const cols = Math.max(1, Math.ceil(Math.sqrt((pop * CANVAS_WIDTH) / GRID_HEIGHT)));
   const rows = Math.max(1, Math.ceil(pop / cols));
   const cellW = CANVAS_WIDTH / cols;
@@ -180,9 +176,10 @@ export function BayesTheoremVisualizer() {
     DEFAULT_STATE,
   );
 
-  const pop = useMemo(() => parsePopulationSize(state.populationSize), [
-    state.populationSize,
-  ]);
+  const pop = useMemo(
+    () => parsePopulationSize(state.populationSize),
+    [state.populationSize],
+  );
 
   const result = useMemo(
     () =>

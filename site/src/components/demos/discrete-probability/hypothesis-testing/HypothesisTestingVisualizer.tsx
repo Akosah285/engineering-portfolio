@@ -80,7 +80,7 @@ const narrationTemplate = (state: HypothesisDemoState): string => {
     n: Math.max(1, Math.round(state.n)),
     alternative: state.alternative,
   });
-  const alphaNum = parseFloat(state.alpha);
+  const alphaNum = Number.parseFloat(state.alpha);
   const decision = decide(result.pValue, alphaNum);
   return (
     `Testing H₀: μ = ${state.mu0.toFixed(2)} vs ${state.alternative} alternative ` +
@@ -259,7 +259,7 @@ export function HypothesisTestingVisualizer() {
       }),
     [state.xbar, state.mu0, state.sigma, nInt, state.alternative],
   );
-  const alphaNum = parseFloat(state.alpha);
+  const alphaNum = Number.parseFloat(state.alpha);
   const decision = decide(result.pValue, alphaNum);
 
   const draw: DrawFn = useCallback(
@@ -312,7 +312,11 @@ export function HypothesisTestingVisualizer() {
 
       <DemoNarration state={state} template={narrationTemplate} />
 
-      <div className="ht-visualizer__group" role="radiogroup" aria-label="Alternative hypothesis">
+      <div
+        className="ht-visualizer__group"
+        role="radiogroup"
+        aria-label="Alternative hypothesis"
+      >
         <span className="ht-visualizer__group-label">Alternative</span>
         {ALTERNATIVE_SLUGS.map((alt) => (
           <button
@@ -332,7 +336,11 @@ export function HypothesisTestingVisualizer() {
         ))}
       </div>
 
-      <div className="ht-visualizer__group" role="radiogroup" aria-label="Significance level α">
+      <div
+        className="ht-visualizer__group"
+        role="radiogroup"
+        aria-label="Significance level α"
+      >
         <span className="ht-visualizer__group-label">α</span>
         {ALPHA_SLUGS.map((a) => (
           <button
@@ -396,11 +404,7 @@ export function HypothesisTestingVisualizer() {
       </div>
 
       <div className="ht-visualizer__actions">
-        <button
-          type="button"
-          className="ht-visualizer__btn"
-          onClick={() => reset()}
-        >
+        <button type="button" className="ht-visualizer__btn" onClick={() => reset()}>
           ↺ Reset
         </button>
         <span className="ht-visualizer__counter" aria-live="off">

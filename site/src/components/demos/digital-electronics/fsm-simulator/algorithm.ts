@@ -43,7 +43,8 @@ function validateSpec<S extends string, I extends string, O>(
   if (!spec.states.includes(spec.initial)) {
     throw new RangeError(`initial state ${spec.initial} not in states`);
   }
-  if (spec.inputs.length === 0) throw new RangeError("FSM must define at least one input");
+  if (spec.inputs.length === 0)
+    throw new RangeError("FSM must define at least one input");
 }
 
 export function run<S extends string, I extends string, O>(

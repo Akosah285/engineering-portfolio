@@ -19,20 +19,25 @@ export interface Sample {
  * sequence of (t, value) pairs starting at t=0 and stepping by 1/fs.
  */
 export function sampleSine(input: SignalInput): Sample[] {
-  if (!(input.sampleRate > 0)) throw new RangeError("sampleSine: sampleRate must be > 0.");
+  if (!(input.sampleRate > 0))
+    throw new RangeError("sampleSine: sampleRate must be > 0.");
   if (!Number.isInteger(input.nSamples) || input.nSamples < 1) {
     throw new RangeError("sampleSine: nSamples must be a positive integer.");
   }
   if (!Number.isFinite(input.frequency)) {
     throw new RangeError("sampleSine: frequency must be finite.");
   }
-  if (!(input.amplitude >= 0)) throw new RangeError("sampleSine: amplitude must be >= 0.");
+  if (!(input.amplitude >= 0))
+    throw new RangeError("sampleSine: amplitude must be >= 0.");
   const phase = input.phase ?? 0;
   const dt = 1 / input.sampleRate;
   const out = new Array<Sample>(input.nSamples);
   for (let i = 0; i < input.nSamples; i += 1) {
     const t = i * dt;
-    out[i] = { t, value: input.amplitude * Math.sin(2 * Math.PI * input.frequency * t + phase) };
+    out[i] = {
+      t,
+      value: input.amplitude * Math.sin(2 * Math.PI * input.frequency * t + phase),
+    };
   }
   return out;
 }
@@ -76,7 +81,8 @@ export function quantize(input: QuantizeInput): number {
   if (!(input.vMax > input.vMin)) {
     throw new RangeError("quantize: vMax must be > vMin.");
   }
-  if (!Number.isFinite(input.value)) throw new RangeError("quantize: value must be finite.");
+  if (!Number.isFinite(input.value))
+    throw new RangeError("quantize: value must be finite.");
   const levels = 2 ** input.bits;
   const span = input.vMax - input.vMin;
   const lsb = span / levels;
@@ -91,7 +97,8 @@ export function quantize(input: QuantizeInput): number {
 
 /** Quantization step size in volts for a given config. */
 export function lsb(bits: number, vRange: number): number {
-  if (!Number.isInteger(bits) || bits < 1) throw new RangeError("lsb: bits must be >= 1.");
+  if (!Number.isInteger(bits) || bits < 1)
+    throw new RangeError("lsb: bits must be >= 1.");
   if (!(vRange > 0)) throw new RangeError("lsb: vRange must be > 0.");
   return vRange / 2 ** bits;
 }

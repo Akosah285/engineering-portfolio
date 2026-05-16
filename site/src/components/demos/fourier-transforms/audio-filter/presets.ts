@@ -22,7 +22,7 @@ export const FILTER_TYPES = [
 export const DEFAULT_STATE: AudioFilterDemoState = {
   filterType: "lowpass",
   cutoffHz: 1000,
-  Q: 0.707,
+  Q: Math.SQRT1_2,
 };
 
 export interface AudioFilterPreset {
@@ -33,11 +33,11 @@ export interface AudioFilterPreset {
 export const PRESETS: readonly AudioFilterPreset[] = [
   {
     name: "Lowpass at 1 kHz",
-    state: { filterType: "lowpass", cutoffHz: 1000, Q: 0.707 },
+    state: { filterType: "lowpass", cutoffHz: 1000, Q: Math.SQRT1_2 },
   },
   {
     name: "Highpass at 200 Hz",
-    state: { filterType: "highpass", cutoffHz: 200, Q: 0.707 },
+    state: { filterType: "highpass", cutoffHz: 200, Q: Math.SQRT1_2 },
   },
   {
     name: "Bandpass at 2 kHz",

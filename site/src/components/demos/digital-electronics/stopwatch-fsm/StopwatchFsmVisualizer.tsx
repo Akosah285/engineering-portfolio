@@ -5,8 +5,8 @@ import { type Schema, useDemoState } from "../../../demo-kit/useDemoState";
 import { type Event, replay } from "./algorithm";
 import {
   DEFAULT_STATE,
-  EVENT_LOGS,
   EVENTS_SLUGS,
+  EVENT_LOGS,
   type EventsSlug,
   PRESETS,
   type StopwatchDemoState,
@@ -117,14 +117,7 @@ export function StopwatchFsmVisualizer() {
             role="img"
             aria-label={`Stopwatch face showing ${formatTime(snap.elapsed)} in ${snap.state} state`}
           >
-            <circle
-              cx={cx}
-              cy={cy}
-              r={r}
-              fill="#fdfdf6"
-              stroke="#333"
-              strokeWidth={3}
-            />
+            <circle cx={cx} cy={cy} r={r} fill="#fdfdf6" stroke="#333" strokeWidth={3} />
             {ticks.map((i) => {
               const a = ((i * 6 - 90) * Math.PI) / 180;
               const inner = r - (i % 5 === 0 ? 12 : 6);

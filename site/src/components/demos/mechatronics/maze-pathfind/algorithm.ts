@@ -33,12 +33,14 @@ function passable(maze: Maze, r: number, c: number): boolean {
 }
 
 function validate(maze: Maze, start: Cell, goal: Cell): void {
-  if (maze.rows < 1 || maze.cols < 1) throw new RangeError("maze must have rows>=1, cols>=1.");
+  if (maze.rows < 1 || maze.cols < 1)
+    throw new RangeError("maze must have rows>=1, cols>=1.");
   if (maze.passable.length !== maze.rows) {
     throw new RangeError("maze.passable length mismatch with rows.");
   }
   for (const row of maze.passable) {
-    if (row.length !== maze.cols) throw new RangeError("maze.passable column count mismatch.");
+    if (row.length !== maze.cols)
+      throw new RangeError("maze.passable column count mismatch.");
   }
   if (!inBounds(maze, start.row, start.col)) {
     throw new RangeError("start cell out of bounds.");
@@ -133,7 +135,11 @@ export function astar(maze: Maze, start: Cell, goal: Cell): PathResult {
       if (knownG === undefined || tentativeG < knownG) {
         gScore.set(nk, tentativeG);
         parent.set(nk, current.cell);
-        open.push({ cell: { row: nr, col: nc }, g: tentativeG, f: tentativeG + manhattan({ row: nr, col: nc }, goal) });
+        open.push({
+          cell: { row: nr, col: nc },
+          g: tentativeG,
+          f: tentativeG + manhattan({ row: nr, col: nc }, goal),
+        });
       }
     }
   }

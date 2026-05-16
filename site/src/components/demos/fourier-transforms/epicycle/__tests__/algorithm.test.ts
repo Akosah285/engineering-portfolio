@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  type Complex,
   buildEpicycles,
   cAbs,
   cAdd,
@@ -8,7 +9,6 @@ import {
   dft,
   epicycleChain,
   samplePath,
-  type Complex,
 } from "../algorithm";
 
 describe("complex primitives", () => {

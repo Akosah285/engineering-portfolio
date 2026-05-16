@@ -40,10 +40,12 @@ export function linearFit(input: LinearFitInput): LinearFitResult {
     throw new RangeError("linearFit: need at least 2 points.");
   }
   for (const v of xs) {
-    if (!Number.isFinite(v)) throw new RangeError("linearFit: xs contain non-finite values.");
+    if (!Number.isFinite(v))
+      throw new RangeError("linearFit: xs contain non-finite values.");
   }
   for (const v of ys) {
-    if (!Number.isFinite(v)) throw new RangeError("linearFit: ys contain non-finite values.");
+    if (!Number.isFinite(v))
+      throw new RangeError("linearFit: ys contain non-finite values.");
   }
 
   const xMean = meanOf(xs);

@@ -45,11 +45,11 @@ describe("mohrCircle", () => {
   });
 
   it("rejects NaN / Infinity inputs", () => {
+    expect(() => mohrCircle({ sigmaX: Number.NaN, sigmaY: 0, tauXY: 0 })).toThrow(
+      RangeError,
+    );
     expect(() =>
-      mohrCircle({ sigmaX: NaN, sigmaY: 0, tauXY: 0 }),
-    ).toThrow(RangeError);
-    expect(() =>
-      mohrCircle({ sigmaX: Infinity, sigmaY: 0, tauXY: 0 }),
+      mohrCircle({ sigmaX: Number.POSITIVE_INFINITY, sigmaY: 0, tauXY: 0 }),
     ).toThrow(RangeError);
   });
 

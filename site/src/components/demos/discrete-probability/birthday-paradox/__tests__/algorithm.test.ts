@@ -40,7 +40,9 @@ describe("exactCollisionProbability", () => {
   it("RangeError on non-positive or non-integer daysInYear", () => {
     expect(() => exactCollisionProbability({ n: 5, daysInYear: 0 })).toThrow(RangeError);
     expect(() => exactCollisionProbability({ n: 5, daysInYear: -7 })).toThrow(RangeError);
-    expect(() => exactCollisionProbability({ n: 5, daysInYear: 365.25 })).toThrow(RangeError);
+    expect(() => exactCollisionProbability({ n: 5, daysInYear: 365.25 })).toThrow(
+      RangeError,
+    );
   });
 });
 
@@ -60,7 +62,9 @@ describe("approximateCollisionProbability", () => {
 
   it("RangeError on bad input", () => {
     expect(() => approximateCollisionProbability({ n: -2 })).toThrow(RangeError);
-    expect(() => approximateCollisionProbability({ n: 5, daysInYear: 0 })).toThrow(RangeError);
+    expect(() => approximateCollisionProbability({ n: 5, daysInYear: 0 })).toThrow(
+      RangeError,
+    );
   });
 });
 

@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 import {
+  type RGB,
   assignToClusters,
   euclideanDistanceSq,
   initCentroidsKPP,
   kMeans,
   recomputeCentroids,
-  type RGB,
 } from "../algorithm";
 
 const r = (red: number, g: number, b: number): RGB => [red, g, b];
@@ -41,12 +41,7 @@ describe("assignToClusters", () => {
   });
 
   it("returns assignments matching input length", () => {
-    const pixels: RGB[] = [
-      r(1, 2, 3),
-      r(4, 5, 6),
-      r(7, 8, 9),
-      r(10, 11, 12),
-    ];
+    const pixels: RGB[] = [r(1, 2, 3), r(4, 5, 6), r(7, 8, 9), r(10, 11, 12)];
     const centroids: RGB[] = [r(0, 0, 0), r(255, 255, 255)];
     const assignments = assignToClusters(pixels, centroids);
     expect(assignments).toHaveLength(4);
@@ -79,9 +74,7 @@ describe("recomputeCentroids", () => {
 
 describe("initCentroidsKPP", () => {
   it("returns k distinct centroids drawn from the pixel set", () => {
-    const pixels: RGB[] = Array.from({ length: 30 }, (_, i) =>
-      r(i * 8, 0, 0),
-    );
+    const pixels: RGB[] = Array.from({ length: 30 }, (_, i) => r(i * 8, 0, 0));
     const centroids = initCentroidsKPP(pixels, 4, 42);
     expect(centroids).toHaveLength(4);
     for (const c of centroids) {
@@ -126,9 +119,7 @@ describe("kMeans", () => {
     const result = kMeans(pixels, { k: 2, seed: 42, maxIter: 50 });
     expect(result.centroids).toHaveLength(2);
     // Centroids should be near (10,10,10) and (240,240,240) in some order
-    const sortedR = result.centroids
-      .map((c) => c[0])
-      .sort((a, b) => a - b);
+    const sortedR = result.centroids.map((c) => c[0]).sort((a, b) => a - b);
     expect(sortedR[0]!).toBeLessThan(50);
     expect(sortedR[1]!).toBeGreaterThan(200);
   });
@@ -152,9 +143,7 @@ describe("kMeans", () => {
   });
 
   it("returns an assignment for every pixel", () => {
-    const pixels: RGB[] = Array.from({ length: 23 }, (_, i) =>
-      r(i * 10, i * 5, i * 11),
-    );
+    const pixels: RGB[] = Array.from({ length: 23 }, (_, i) => r(i * 10, i * 5, i * 11));
     const result = kMeans(pixels, { k: 3, seed: 1, maxIter: 20 });
     expect(result.assignments).toHaveLength(23);
     for (const a of result.assignments) {

@@ -30,9 +30,7 @@ function validate(s: StressTensor): void {
   }
 }
 
-export function invariants(
-  s: StressTensor,
-): { I1: number; I2: number; I3: number } {
+export function invariants(s: StressTensor): { I1: number; I2: number; I3: number } {
   validate(s);
   const I1 = s.sx + s.sy + s.sz;
   const I2 =
@@ -53,7 +51,7 @@ export function principalStresses(s: StressTensor): [number, number, number] {
   // Depressed cubic: substitute λ = y + I1/3 ⇒  y³ + p y + q = 0.
   const a = I1 / 3;
   const p = I2 - (I1 * I1) / 3;
-  const q = -((2 * Math.pow(I1, 3)) / 27) + (I1 * I2) / 3 - I3;
+  const q = -((2 * I1 ** 3) / 27) + (I1 * I2) / 3 - I3;
   // The cubic always has three real roots for a symmetric tensor (real symm matrix).
   // Use trigonometric solution: y_k = 2 √(-p/3) cos((1/3) acos(3q/(2p) √(-3/p)) - 2πk/3).
   let r1: number;
@@ -96,9 +94,6 @@ export function hydrostatic(s: StressTensor): number {
 export function vonMises(s: StressTensor): number {
   const [s1, s2, s3] = principalStresses(s);
   return Math.sqrt(
-    0.5 *
-      ((s1 - s2) * (s1 - s2) +
-        (s2 - s3) * (s2 - s3) +
-        (s3 - s1) * (s3 - s1)),
+    0.5 * ((s1 - s2) * (s1 - s2) + (s2 - s3) * (s2 - s3) + (s3 - s1) * (s3 - s1)),
   );
 }

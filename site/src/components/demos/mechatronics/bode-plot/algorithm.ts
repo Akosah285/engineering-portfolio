@@ -72,7 +72,9 @@ function evaluate(tf: TransferFunction, s: Complex): Complex {
     denom = cMul(denom, cSub(s, p));
   }
   if (cAbs(denom) === 0) {
-    throw new RangeError("bode: denominator is zero — pole on jω axis at this frequency.");
+    throw new RangeError(
+      "bode: denominator is zero — pole on jω axis at this frequency.",
+    );
   }
   return cDiv(numer, denom);
 }
@@ -134,6 +136,9 @@ export function logspace(
   return out;
 }
 
-export function bodePlot(tf: TransferFunction, omegas: ReadonlyArray<number>): BodePoint[] {
+export function bodePlot(
+  tf: TransferFunction,
+  omegas: ReadonlyArray<number>,
+): BodePoint[] {
   return omegas.map((w) => bodePoint(tf, w));
 }

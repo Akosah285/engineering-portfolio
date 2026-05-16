@@ -1,10 +1,12 @@
-import { describe, it, expect } from "vitest";
-import { partialSum, partialSumTrace, exactValue } from "../algorithm";
+import { describe, expect, it } from "vitest";
+import { exactValue, partialSum, partialSumTrace } from "../algorithm";
 
 describe("partialSum — square wave", () => {
   it("first harmonic at x=π/2 is exactly 4/π (only n=1 term contributes)", () => {
-    expect(partialSum({ kind: "square", x: Math.PI / 2, nHarmonics: 1 }))
-      .toBeCloseTo(4 / Math.PI, 12);
+    expect(partialSum({ kind: "square", x: Math.PI / 2, nHarmonics: 1 })).toBeCloseTo(
+      4 / Math.PI,
+      12,
+    );
   });
 
   it("converges to +1 at x=π/2 as more harmonics are added", () => {
@@ -35,8 +37,10 @@ describe("partialSum — square wave", () => {
 
 describe("partialSum — sawtooth", () => {
   it("first harmonic at x=π/2 is exactly 2/π (only n=1 term contributes)", () => {
-    expect(partialSum({ kind: "sawtooth", x: Math.PI / 2, nHarmonics: 1 }))
-      .toBeCloseTo(2 / Math.PI, 12);
+    expect(partialSum({ kind: "sawtooth", x: Math.PI / 2, nHarmonics: 1 })).toBeCloseTo(
+      2 / Math.PI,
+      12,
+    );
   });
 
   it("approaches 0.5 at x=π/2 with many harmonics", () => {
@@ -85,11 +89,15 @@ describe("partialSumTrace", () => {
 describe("validation", () => {
   it("throws on non-positive or non-integer nHarmonics", () => {
     expect(() => partialSum({ kind: "square", x: 0, nHarmonics: 0 })).toThrow(RangeError);
-    expect(() => partialSum({ kind: "square", x: 0, nHarmonics: 1.5 })).toThrow(RangeError);
+    expect(() => partialSum({ kind: "square", x: 0, nHarmonics: 1.5 })).toThrow(
+      RangeError,
+    );
   });
 
   it("throws on non-finite x", () => {
-    expect(() => partialSum({ kind: "square", x: Number.NaN, nHarmonics: 1 })).toThrow(RangeError);
+    expect(() => partialSum({ kind: "square", x: Number.NaN, nHarmonics: 1 })).toThrow(
+      RangeError,
+    );
   });
 });
 
@@ -116,6 +124,9 @@ describe("exactValue", () => {
 
   it("is periodic with period 2π", () => {
     expect(exactValue("square", 0.5 + 2 * Math.PI)).toBe(exactValue("square", 0.5));
-    expect(exactValue("triangle", 1 + 4 * Math.PI)).toBeCloseTo(exactValue("triangle", 1), 12);
+    expect(exactValue("triangle", 1 + 4 * Math.PI)).toBeCloseTo(
+      exactValue("triangle", 1),
+      12,
+    );
   });
 });

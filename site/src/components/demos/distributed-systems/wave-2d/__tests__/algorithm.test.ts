@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { step, gaussianPulse } from "../algorithm";
+import { describe, expect, it } from "vitest";
+import { gaussianPulse, step } from "../algorithm";
 
 describe("step — 2D wave equation", () => {
   it("zero source + zero IC → field stays zero", () => {

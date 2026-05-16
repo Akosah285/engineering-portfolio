@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { decide, isNight } from "../algorithm";
 
 describe("decide — solar tracker", () => {
@@ -63,7 +63,7 @@ describe("decide — solar tracker", () => {
   });
 
   it("RangeError on non-finite", () => {
-    expect(() => decide({ east: NaN, west: 0 })).toThrow(RangeError);
+    expect(() => decide({ east: Number.NaN, west: 0 })).toThrow(RangeError);
   });
 
   it("RangeError on currentAngle outside bounds", () => {
@@ -97,7 +97,7 @@ describe("isNight", () => {
     expect(isNight(200, 100)).toBe(false);
   });
   it("RangeError on non-finite", () => {
-    expect(() => isNight(NaN, 100)).toThrow(RangeError);
-    expect(() => isNight(50, Infinity)).toThrow(RangeError);
+    expect(() => isNight(Number.NaN, 100)).toThrow(RangeError);
+    expect(() => isNight(50, Number.POSITIVE_INFINITY)).toThrow(RangeError);
   });
 });

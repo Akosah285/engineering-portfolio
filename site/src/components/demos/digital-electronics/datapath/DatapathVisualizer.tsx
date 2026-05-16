@@ -76,9 +76,7 @@ export default function DatapathVisualizer() {
   return (
     <div className="dp-visualizer">
       <PresetCarousel
-        presets={
-          PRESETS as unknown as { name: string; state: typeof state }[]
-        }
+        presets={PRESETS as unknown as { name: string; state: typeof state }[]}
         onSelect={handlePresetSelect as (next: typeof state) => void}
         ariaLabel="Datapath programs"
       />
@@ -186,7 +184,8 @@ export default function DatapathVisualizer() {
           step={1}
           value={programIndex}
           onChange={(idx) => {
-            const slug = PROGRAM_SLUGS[Math.max(0, Math.min(PROGRAM_SLUGS.length - 1, idx))]!;
+            const slug =
+              PROGRAM_SLUGS[Math.max(0, Math.min(PROGRAM_SLUGS.length - 1, idx))]!;
             setState({ pc: 0, program: slug });
           }}
           format={{ precision: 0 }}

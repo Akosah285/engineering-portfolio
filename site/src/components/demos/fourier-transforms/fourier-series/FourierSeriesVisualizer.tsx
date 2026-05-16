@@ -5,7 +5,7 @@ import { MathHud } from "../../../demo-kit/MathHud";
 import { PresetCarousel } from "../../../demo-kit/PresetCarousel";
 import { SliderRow } from "../../../demo-kit/SliderRow";
 import { type Schema, useDemoState } from "../../../demo-kit/useDemoState";
-import { exactValue, partialSum, partialSumTrace, type WaveformKind } from "./algorithm";
+import { type WaveformKind, exactValue, partialSum, partialSumTrace } from "./algorithm";
 import {
   DEFAULT_STATE,
   type FourierSeriesDemoState,
@@ -39,7 +39,9 @@ const STATE_SCHEMA = {
   stepDelay: { type: "number", default: DEFAULT_STATE.stepDelay },
 } as const satisfies Schema;
 
-const narrationTemplate = (state: FourierSeriesDemoState & { currentN: number }): string => {
+const narrationTemplate = (
+  state: FourierSeriesDemoState & { currentN: number },
+): string => {
   const gibbs =
     state.waveformKind === "square" || state.waveformKind === "sawtooth"
       ? " Gibbs phenomenon: overshoot near the jump never vanishes as N grows."
@@ -228,10 +230,7 @@ export function FourierSeriesVisualizer() {
         />
       </div>
 
-      <DemoNarration
-        state={{ ...state, currentN }}
-        template={narrationTemplate}
-      />
+      <DemoNarration state={{ ...state, currentN }} template={narrationTemplate} />
 
       <div className="fs-visualizer__kind" role="group" aria-label="Waveform kind">
         <span className="fs-visualizer__kind-label">Waveform:</span>

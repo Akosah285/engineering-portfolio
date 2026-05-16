@@ -4,13 +4,7 @@ import { MathHud } from "../../../demo-kit/MathHud";
 import { PresetCarousel } from "../../../demo-kit/PresetCarousel";
 import { SliderRow } from "../../../demo-kit/SliderRow";
 import { type Schema, useDemoState } from "../../../demo-kit/useDemoState";
-import {
-  aliasedFrequency,
-  lsb,
-  quantize,
-  sampleSine,
-  willAlias,
-} from "./algorithm";
+import { aliasedFrequency, lsb, quantize, sampleSine, willAlias } from "./algorithm";
 import { type AdcSamplingDemoState, DEFAULT_STATE, PRESETS } from "./presets";
 import "./AdcSamplingVisualizer.css";
 
@@ -51,7 +45,7 @@ function paintTimeDomain(
 ): void {
   const { width, height } = ctx.canvas;
   paintAxes(ctx, state.amp);
-  const yScale = (height / 2) / state.amp;
+  const yScale = height / 2 / state.amp;
   const toX = (t: number) => (t / tMax) * width;
   const toY = (v: number) => height / 2 - v * yScale;
 
@@ -115,7 +109,7 @@ function paintQuantization(
 ): void {
   const { width, height } = ctx.canvas;
   paintAxes(ctx, state.amp);
-  const yScale = (height / 2) / state.amp;
+  const yScale = height / 2 / state.amp;
   const toX = (t: number) => (t / tMax) * width;
   const toY = (v: number) => height / 2 - v * yScale;
 

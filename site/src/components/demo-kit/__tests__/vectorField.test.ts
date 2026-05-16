@@ -1,9 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  computeArrows,
-  type Arrow,
-  type FieldFn,
-} from "../vectorField";
+import { type Arrow, type FieldFn, computeArrows } from "../vectorField";
 
 /**
  * computeArrows — pure brain of <VectorFieldPlot> (#54).
@@ -141,7 +137,7 @@ describe("computeArrows — clipping + singularities", () => {
       xDomain: [-1, 1],
       yDomain: [-1, 1],
       gridSize: 4,
-      fieldFn: () => [NaN, NaN],
+      fieldFn: () => [Number.NaN, Number.NaN],
     });
     for (const a of arrows) {
       expect(Number.isFinite(a.dx)).toBe(true);

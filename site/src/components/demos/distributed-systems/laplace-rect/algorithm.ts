@@ -58,13 +58,12 @@ export function solve(input: LaplaceInput): LaplaceResult {
   }
 
   let iter = 0;
-  let residual = Infinity;
+  let residual = Number.POSITIVE_INFINITY;
   for (iter = 0; iter < maxIter; iter += 1) {
     let maxDelta = 0;
     for (let i = 1; i < ny - 1; i += 1) {
       for (let j = 1; j < nx - 1; j += 1) {
-        const gs =
-          (u[i - 1]![j]! + u[i + 1]![j]! + u[i]![j - 1]! + u[i]![j + 1]!) / 4;
+        const gs = (u[i - 1]![j]! + u[i + 1]![j]! + u[i]![j - 1]! + u[i]![j + 1]!) / 4;
         const old = u[i]![j]!;
         const next = old + omega * (gs - old);
         u[i]![j] = next;

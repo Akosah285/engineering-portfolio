@@ -7,7 +7,7 @@
  * row-stochastic matrices are reachable from URL state.
  */
 
-import { isStochastic, type Matrix } from "./algorithm";
+import { type Matrix, isStochastic } from "./algorithm";
 
 export const CHAIN_SLUGS = [
   "weather",

@@ -49,10 +49,7 @@ function axisScale(maxAbs: number, halfPx: number): number {
   return (halfPx - 24) / safe;
 }
 
-function drawMohrPanel(
-  ctx: CanvasRenderingContext2D,
-  state: MohrDemoState,
-): void {
+function drawMohrPanel(ctx: CanvasRenderingContext2D, state: MohrDemoState): void {
   const x0 = 0;
   const cx = x0 + PANEL_W / 2;
   const cy = PANEL_H / 2;
@@ -165,10 +162,7 @@ function drawMohrPanel(
   ctx.fillText(`τ_max = ${r.tauMax.toFixed(0)}`, cx + r.centre * s + 6, topY - 4);
 }
 
-function drawElementPanel(
-  ctx: CanvasRenderingContext2D,
-  state: MohrDemoState,
-): void {
+function drawElementPanel(ctx: CanvasRenderingContext2D, state: MohrDemoState): void {
   const x0 = PANEL_W;
   const cx = x0 + PANEL_W / 2;
   const cy = PANEL_H / 2;
@@ -224,11 +218,7 @@ function drawElementPanel(
   // Caption
   ctx.fillStyle = "#555";
   ctx.font = "11px 'Inter Variable', sans-serif";
-  ctx.fillText(
-    `θp = ${((r.thetaP * 180) / Math.PI).toFixed(1)}°`,
-    x0 + 12,
-    PANEL_H - 12,
-  );
+  ctx.fillText(`θp = ${((r.thetaP * 180) / Math.PI).toFixed(1)}°`, x0 + 12, PANEL_H - 12);
 }
 
 export function MohrCircleVisualizer() {

@@ -6,7 +6,7 @@ import { PresetCarousel } from "../../../demo-kit/PresetCarousel";
 import { SliderRow } from "../../../demo-kit/SliderRow";
 import { type Schema, useDemoState } from "../../../demo-kit/useDemoState";
 import { type PidState, createPidState, pidStep } from "./algorithm";
-import { DEFAULT_STATE, type PidDemoState, PRESETS } from "./presets";
+import { DEFAULT_STATE, PRESETS, type PidDemoState } from "./presets";
 import "./PidControllerVisualizer.css";
 
 /**
@@ -215,7 +215,7 @@ export function PidControllerVisualizer() {
 
         // First-order plant: y_new = y + dt * (u - y) / tau
         const tau = Math.max(state.tau, 1e-6);
-        const yNext = y + DT * (u - y) / tau;
+        const yNext = y + (DT * (u - y)) / tau;
         measurementRef.current = yNext;
         timeRef.current += DT;
 
@@ -269,10 +269,7 @@ export function PidControllerVisualizer() {
         />
         <MathHud
           corner="top-right"
-          lines={[
-            `\\text{error} = ${error.toFixed(3)}`,
-            `u = ${u.toFixed(2)}`,
-          ]}
+          lines={[`\\text{error} = ${error.toFixed(3)}`, `u = ${u.toFixed(2)}`]}
         />
       </div>
 

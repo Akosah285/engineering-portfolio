@@ -63,11 +63,7 @@ function makeProjector(
   };
 }
 
-function paintAxes(
-  ctx: CanvasRenderingContext2D,
-  proj: Projector,
-  width: number,
-): void {
+function paintAxes(ctx: CanvasRenderingContext2D, proj: Projector, width: number): void {
   const y0 = proj.toY(0);
   ctx.strokeStyle = "rgba(60, 60, 60, 0.5)";
   ctx.lineWidth = 1;

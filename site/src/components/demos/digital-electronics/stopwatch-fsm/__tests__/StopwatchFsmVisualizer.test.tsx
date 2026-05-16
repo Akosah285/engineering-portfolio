@@ -1,5 +1,5 @@
-import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, it, expect } from "vitest";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 import StopwatchFsmVisualizer from "../StopwatchFsmVisualizer";
 
 describe("StopwatchFsmVisualizer", () => {
@@ -25,7 +25,9 @@ describe("StopwatchFsmVisualizer", () => {
     const { container } = render(<StopwatchFsmVisualizer />);
     fireEvent.click(screen.getByRole("option", { name: /with.laps/i }));
 
-    const t = screen.getByRole("slider", { name: /current time \(ms\)/i }) as HTMLInputElement;
+    const t = screen.getByRole("slider", {
+      name: /current time \(ms\)/i,
+    }) as HTMLInputElement;
     fireEvent.change(t, { target: { value: "1500" } });
 
     const counter = container.querySelector(".sw-visualizer__counter");

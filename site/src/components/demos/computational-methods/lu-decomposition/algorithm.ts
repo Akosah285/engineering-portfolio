@@ -101,7 +101,8 @@ export interface SolveLUInput {
 /** Solve PAx = Pb given a precomputed LU factorization. */
 export function solveWithLU(input: SolveLUInput): number[] {
   const n = input.lu.L.length;
-  if (input.b.length !== n) throw new RangeError("solveWithLU: b length must match L size.");
+  if (input.b.length !== n)
+    throw new RangeError("solveWithLU: b length must match L size.");
   if (input.lu.singular) {
     const out = new Array<number>(n).fill(Number.NaN);
     return out;

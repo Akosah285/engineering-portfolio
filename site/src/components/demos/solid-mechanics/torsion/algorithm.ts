@@ -85,9 +85,7 @@ export function polarMomentOfArea(geometry: ShaftGeometry): number {
   if (geometry.innerRadius >= geometry.outerRadius) {
     throw new RangeError("torsion: innerRadius must be < outerRadius.");
   }
-  return (
-    (Math.PI * (geometry.outerRadius ** 4 - geometry.innerRadius ** 4)) / 2
-  );
+  return (Math.PI * (geometry.outerRadius ** 4 - geometry.innerRadius ** 4)) / 2;
 }
 
 function outerRadiusOf(geometry: ShaftGeometry): number {
@@ -101,7 +99,7 @@ export function torsionAnalysis(input: TorsionInput): TorsionResult {
 
   const J = polarMomentOfArea(input.geometry);
   const c = outerRadiusOf(input.geometry);
-  const maxShearStress = Math.abs(input.torque) * c / J;
+  const maxShearStress = (Math.abs(input.torque) * c) / J;
   const twistAngle = (input.torque * input.length) / (input.shearModulus * J);
   const twistRate = twistAngle / input.length;
   return { J, outerRadius: c, maxShearStress, twistAngle, twistRate };

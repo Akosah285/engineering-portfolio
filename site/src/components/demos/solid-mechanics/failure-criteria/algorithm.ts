@@ -30,7 +30,7 @@ export function trescaStress(p: PrincipalStress): number {
 export function trescaSafetyFactor(p: PrincipalStress, sy: number): number {
   validate(p, sy);
   const eq = trescaStress(p);
-  return eq === 0 ? Infinity : sy / eq;
+  return eq === 0 ? Number.POSITIVE_INFINITY : sy / eq;
 }
 
 export function tresca(p: PrincipalStress, sy: number): boolean {
@@ -45,7 +45,7 @@ export function vonMisesStress(p: PrincipalStress): number {
 export function vonMisesSafetyFactor(p: PrincipalStress, sy: number): number {
   validate(p, sy);
   const eq = vonMisesStress(p);
-  return eq === 0 ? Infinity : sy / eq;
+  return eq === 0 ? Number.POSITIVE_INFINITY : sy / eq;
 }
 
 export function vonMises(p: PrincipalStress, sy: number): boolean {
@@ -60,7 +60,7 @@ export function rankineStress(p: PrincipalStress): number {
 export function rankineSafetyFactor(p: PrincipalStress, sy: number): number {
   validate(p, sy);
   const eq = rankineStress(p);
-  return eq === 0 ? Infinity : sy / eq;
+  return eq === 0 ? Number.POSITIVE_INFINITY : sy / eq;
 }
 
 export function rankine(p: PrincipalStress, sy: number): boolean {

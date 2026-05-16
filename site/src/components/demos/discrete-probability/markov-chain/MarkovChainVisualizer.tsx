@@ -145,10 +145,7 @@ export function MarkovChainVisualizer() {
 
   const chain = useMemo(() => getChain(state.chainSlug), [state.chainSlug]);
 
-  const stationaryDist = useMemo(
-    () => stationary({ P: chain.P }).distribution,
-    [chain],
-  );
+  const stationaryDist = useMemo(() => stationary({ P: chain.P }).distribution, [chain]);
 
   const initialDist = useMemo(
     () => resolveInitialDistribution(chain, state.initialStateSlug),
@@ -213,10 +210,13 @@ export function MarkovChainVisualizer() {
 
   const n = chain.P.length;
   // Only expose initial-state options that index into the current chain.
-  const initialStateOptions: { slug: typeof INITIAL_STATE_SLUGS[number]; label: string }[] = [
+  const initialStateOptions: {
+    slug: (typeof INITIAL_STATE_SLUGS)[number];
+    label: string;
+  }[] = [
     { slug: "uniform", label: "Uniform" },
     ...Array.from({ length: n }, (_, i) => ({
-      slug: `state-${i}` as typeof INITIAL_STATE_SLUGS[number],
+      slug: `state-${i}` as (typeof INITIAL_STATE_SLUGS)[number],
       label: `Start in ${chain.stateLabels[i] ?? `S${i}`}`,
     })),
   ];
@@ -274,8 +274,7 @@ export function MarkovChainVisualizer() {
             onChange={(e) =>
               setState({
                 ...state,
-                initialStateSlug: e.target
-                  .value as typeof INITIAL_STATE_SLUGS[number],
+                initialStateSlug: e.target.value as (typeof INITIAL_STATE_SLUGS)[number],
               })
             }
           >
@@ -296,11 +295,7 @@ export function MarkovChainVisualizer() {
         >
           {paused ? "▶ Resume" : "⏸ Pause"}
         </button>
-        <button
-          type="button"
-          className="mk-visualizer__btn"
-          onClick={handleReset}
-        >
+        <button type="button" className="mk-visualizer__btn" onClick={handleReset}>
           ↺ Reset
         </button>
         <span className="mk-visualizer__counter" aria-live="off">

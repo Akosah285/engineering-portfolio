@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { valueAt, aggregates, trace } from "../algorithm";
+import { describe, expect, it } from "vitest";
+import { aggregates, trace, valueAt } from "../algorithm";
 
 const DEFAULT = { frequency: 1000, duty: 0.5, vHigh: 5, vLow: 0 } as const; // 1 kHz, 50%
 

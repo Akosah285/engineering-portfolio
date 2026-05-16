@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import InterruptPollingVisualizer from "../InterruptPollingVisualizer";
 
 describe("InterruptPollingVisualizer", () => {
@@ -12,10 +12,14 @@ describe("InterruptPollingVisualizer", () => {
     expect(screen.getByRole("option", { name: /high.rate/i })).toBeTruthy();
 
     expect(screen.getByRole("slider", { name: /poll period \(ms\)/i })).toBeTruthy();
-    expect(screen.getByRole("slider", { name: /interrupt latency \(ms\)/i })).toBeTruthy();
+    expect(
+      screen.getByRole("slider", { name: /interrupt latency \(ms\)/i }),
+    ).toBeTruthy();
     expect(screen.getByRole("slider", { name: /workload/i })).toBeTruthy();
 
-    expect(screen.getByRole("button", { name: /reset interrupt vs polling/i })).toBeTruthy();
+    expect(
+      screen.getByRole("button", { name: /reset interrupt vs polling/i }),
+    ).toBeTruthy();
 
     const counter = container.querySelector(".ip-visualizer__counter");
     expect(counter).not.toBeNull();

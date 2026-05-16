@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { isSafe, planSequence, stateAt, type Plan } from "../algorithm";
+import { type Plan, isSafe, planSequence, stateAt } from "../algorithm";
 
 const normalPlan: Plan = {
   mode: "normal",

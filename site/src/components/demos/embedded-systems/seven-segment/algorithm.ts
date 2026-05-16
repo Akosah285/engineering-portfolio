@@ -16,7 +16,15 @@
 // [a, b, c, d, e, f, g].
 
 export type Segment = "a" | "b" | "c" | "d" | "e" | "f" | "g";
-export type SevenSegmentPattern = readonly [number, number, number, number, number, number, number];
+export type SevenSegmentPattern = readonly [
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+];
 
 const HEX_DIGITS: Record<string, SevenSegmentPattern> = {
   "0": [1, 1, 1, 1, 1, 1, 0],
@@ -48,7 +56,8 @@ export function decodeHex(ch: string): SevenSegmentPattern {
   const upper = ch.toUpperCase();
   // Allow A..F upper, b/d lowercase as standard in datasheets.
   const key = HEX_DIGITS[upper] ? upper : HEX_DIGITS[ch] ? ch : null;
-  if (key === null) throw new RangeError(`decodeHex: '${ch}' is not a representable hex digit.`);
+  if (key === null)
+    throw new RangeError(`decodeHex: '${ch}' is not a representable hex digit.`);
   return HEX_DIGITS[key]!;
 }
 

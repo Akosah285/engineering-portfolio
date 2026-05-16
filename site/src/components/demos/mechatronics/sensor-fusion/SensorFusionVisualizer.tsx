@@ -3,12 +3,7 @@ import { PresetCarousel } from "../../../demo-kit/PresetCarousel";
 import { SliderRow } from "../../../demo-kit/SliderRow";
 import { type Schema, useDemoState } from "../../../demo-kit/useDemoState";
 import { complementaryFilter } from "./algorithm";
-import {
-  SCENARIOS,
-  SCENARIO_SLUGS,
-  type ScenarioSlug,
-  getScenario,
-} from "./presets";
+import { SCENARIOS, SCENARIO_SLUGS, type ScenarioSlug, getScenario } from "./presets";
 import "./SensorFusionVisualizer.css";
 
 const DEFAULT_SCENARIO: ScenarioSlug = "clean-tilt-ramp";
@@ -43,11 +38,7 @@ const COLORS = {
 
 const RAD_TO_DEG = 180 / Math.PI;
 
-function integrateGyro(
-  omega: readonly number[],
-  dt: number,
-  theta0: number,
-): number[] {
+function integrateGyro(omega: readonly number[], dt: number, theta0: number): number[] {
   const out = new Array<number>(omega.length);
   out[0] = theta0;
   for (let k = 1; k < omega.length; k += 1) {
@@ -79,7 +70,9 @@ interface SeriesPathProps {
 function SeriesPath({ values, xScale, yScale, color, width, dashed }: SeriesPathProps) {
   if (values.length === 0) return null;
   const d = values
-    .map((v, i) => `${i === 0 ? "M" : "L"}${xScale(i).toFixed(1)},${yScale(v).toFixed(1)}`)
+    .map(
+      (v, i) => `${i === 0 ? "M" : "L"}${xScale(i).toFixed(1)},${yScale(v).toFixed(1)}`,
+    )
     .join(" ");
   return (
     <path
@@ -151,8 +144,7 @@ export default function SensorFusionVisualizer() {
 
   const plotW = SVG_WIDTH - PAD_L - PAD_R;
   const plotH = SVG_HEIGHT - PAD_T - PAD_B;
-  const xScale = (i: number): number =>
-    PAD_L + (N <= 1 ? 0 : (i / (N - 1)) * plotW);
+  const xScale = (i: number): number => PAD_L + (N <= 1 ? 0 : (i / (N - 1)) * plotW);
   const yScale = (v: number): number =>
     PAD_T + (1 - (v - yMin) / (yMax - yMin || 1)) * plotH;
 
@@ -179,10 +171,7 @@ export default function SensorFusionVisualizer() {
   };
 
   const handleScenarioChange = (nextIdx: number): void => {
-    const idx = Math.min(
-      SCENARIOS.length - 1,
-      Math.max(0, Math.round(nextIdx)),
-    );
+    const idx = Math.min(SCENARIOS.length - 1, Math.max(0, Math.round(nextIdx)));
     const picked = SCENARIOS[idx];
     if (!picked) return;
     setState({ scenario: picked.slug, alpha, sample: 0 } as unknown as DemoState);
@@ -229,13 +218,7 @@ export default function SensorFusionVisualizer() {
             y2={SVG_HEIGHT - PAD_B}
             stroke="#bbb"
           />
-          <line
-            x1={PAD_L}
-            y1={PAD_T}
-            x2={PAD_L}
-            y2={SVG_HEIGHT - PAD_B}
-            stroke="#bbb"
-          />
+          <line x1={PAD_L} y1={PAD_T} x2={PAD_L} y2={SVG_HEIGHT - PAD_B} stroke="#bbb" />
           {/* y-axis labels: min, mid, max in degrees */}
           {[yMin, (yMin + yMax) / 2, yMax].map((yv, i) => (
             <g key={`y-${i}`}>

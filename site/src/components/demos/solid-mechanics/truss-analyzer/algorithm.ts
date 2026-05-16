@@ -9,7 +9,10 @@
 //
 // Pulled tightly from Hibbeler Statics chapters 6.
 
-import { decompose, solveWithLU } from "../../../demos/computational-methods/lu-decomposition/algorithm";
+import {
+  decompose,
+  solveWithLU,
+} from "../../../demos/computational-methods/lu-decomposition/algorithm";
 
 export interface Joint {
   readonly id: string;
@@ -30,7 +33,7 @@ export interface Load {
 
 export type Support =
   | { readonly joint: string; readonly kind: "pin" }
-  | { readonly joint: string; readonly kind: "roller-x"; }
+  | { readonly joint: string; readonly kind: "roller-x" }
   | { readonly joint: string; readonly kind: "roller-y" };
 
 export interface TrussInput {
@@ -42,7 +45,11 @@ export interface TrussInput {
 
 export interface TrussResult {
   readonly memberForces: { readonly member: Member; readonly force: number }[];
-  readonly reactions: { readonly joint: string; readonly Rx: number; readonly Ry: number }[];
+  readonly reactions: {
+    readonly joint: string;
+    readonly Rx: number;
+    readonly Ry: number;
+  }[];
   readonly solvable: boolean;
 }
 
@@ -65,7 +72,9 @@ export function analyze(input: TrussInput): TrussResult {
   // Validate members and supports refer to existing joints.
   for (const m of input.members) {
     if (!jointIndex.has(m.i) || !jointIndex.has(m.j)) {
-      throw new RangeError(`analyze: member references unknown joint (${m.i} or ${m.j}).`);
+      throw new RangeError(
+        `analyze: member references unknown joint (${m.i} or ${m.j}).`,
+      );
     }
   }
   for (const s of input.supports) {
@@ -102,7 +111,8 @@ export function analyze(input: TrussInput): TrussResult {
     const dx = input.joints[j]!.x - input.joints[i]!.x;
     const dy = input.joints[j]!.y - input.joints[i]!.y;
     const L = Math.hypot(dx, dy);
-    if (L === 0) throw new RangeError(`analyze: member ${mem.i}-${mem.j} has zero length.`);
+    if (L === 0)
+      throw new RangeError(`analyze: member ${mem.i}-${mem.j} has zero length.`);
     const cx = dx / L;
     const cy = dy / L;
     // Joint i: +cx, +cy
@@ -137,7 +147,8 @@ export function analyze(input: TrussInput): TrussResult {
   const lu = decompose(A);
   if (lu.singular) return { memberForces: [], reactions: [], solvable: false };
   const x = solveWithLU({ lu, b });
-  if (x.some((v) => Number.isNaN(v))) return { memberForces: [], reactions: [], solvable: false };
+  if (x.some((v) => Number.isNaN(v)))
+    return { memberForces: [], reactions: [], solvable: false };
   // Pack member forces.
   const memberForces = input.members.map((mem, m) => ({ member: mem, force: x[m]! }));
   // Pack reactions: aggregate Rx/Ry per supported joint.

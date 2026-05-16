@@ -12,8 +12,8 @@ import {
 import {
   DEFAULT_STATE,
   LOADING_SLUGS,
-  PRESETS,
   type LoadingSlug,
+  PRESETS,
   type Stress3dDemoState,
   getPreset,
 } from "./presets";
@@ -224,10 +224,7 @@ export default function Stress3dVisualizer() {
   const sigmaMean = inv.I1 / 3;
   const sigmaVm = useMemo(() => vonMises(tensor), [tensor]);
 
-  const loadingIndex = Math.max(
-    0,
-    LOADING_SLUGS.indexOf(state.loading),
-  );
+  const loadingIndex = Math.max(0, LOADING_SLUGS.indexOf(state.loading));
 
   const presets = useMemo(
     () =>
@@ -268,15 +265,12 @@ export default function Stress3dVisualizer() {
       />
 
       <div className="s3d-visualizer__stage">
-        <MohrSvg
-          s1={s1}
-          s2={s2}
-          s3={s3}
-          tauMax={tauMax}
-          sigmaMean={sigmaMean}
-        />
+        <MohrSvg s1={s1} s2={s2} s3={s3} tauMax={tauMax} sigmaMean={sigmaMean} />
 
-        <div className="s3d-visualizer__panel" aria-label="Invariants and equivalent stress">
+        <div
+          className="s3d-visualizer__panel"
+          aria-label="Invariants and equivalent stress"
+        >
           <div className="s3d-visualizer__panel-row">
             <span className="s3d-visualizer__panel-label">I₁</span>
             <span className="s3d-visualizer__panel-value">{fmt(inv.I1)}</span>

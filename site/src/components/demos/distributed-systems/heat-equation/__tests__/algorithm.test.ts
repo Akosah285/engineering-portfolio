@@ -23,13 +23,21 @@ describe("ftcsStep", () => {
   });
 
   it("RangeError on grids smaller than 3 points", () => {
-    expect(() => ftcsStep({ u: [0, 0], alpha: 1, dx: 0.1, dt: 0.01 })).toThrow(RangeError);
+    expect(() => ftcsStep({ u: [0, 0], alpha: 1, dx: 0.1, dt: 0.01 })).toThrow(
+      RangeError,
+    );
   });
 
   it("RangeError on non-positive alpha/dx/dt", () => {
-    expect(() => ftcsStep({ u: [0, 1, 0], alpha: 0, dx: 0.1, dt: 0.01 })).toThrow(RangeError);
-    expect(() => ftcsStep({ u: [0, 1, 0], alpha: 1, dx: 0, dt: 0.01 })).toThrow(RangeError);
-    expect(() => ftcsStep({ u: [0, 1, 0], alpha: 1, dx: 0.1, dt: 0 })).toThrow(RangeError);
+    expect(() => ftcsStep({ u: [0, 1, 0], alpha: 0, dx: 0.1, dt: 0.01 })).toThrow(
+      RangeError,
+    );
+    expect(() => ftcsStep({ u: [0, 1, 0], alpha: 1, dx: 0, dt: 0.01 })).toThrow(
+      RangeError,
+    );
+    expect(() => ftcsStep({ u: [0, 1, 0], alpha: 1, dx: 0.1, dt: 0 })).toThrow(
+      RangeError,
+    );
   });
 });
 
@@ -66,10 +74,18 @@ describe("analyticalMode", () => {
   });
 
   it("RangeError on bad inputs", () => {
-    expect(() => analyticalMode({ L: 0, alpha: 1, t: 0, nGrid: 5, mode: 1 })).toThrow(RangeError);
-    expect(() => analyticalMode({ L: 1, alpha: 1, t: 0, nGrid: 2, mode: 1 })).toThrow(RangeError);
-    expect(() => analyticalMode({ L: 1, alpha: 1, t: 0, nGrid: 5, mode: 0 })).toThrow(RangeError);
-    expect(() => analyticalMode({ L: 1, alpha: 1, t: -1, nGrid: 5, mode: 1 })).toThrow(RangeError);
+    expect(() => analyticalMode({ L: 0, alpha: 1, t: 0, nGrid: 5, mode: 1 })).toThrow(
+      RangeError,
+    );
+    expect(() => analyticalMode({ L: 1, alpha: 1, t: 0, nGrid: 2, mode: 1 })).toThrow(
+      RangeError,
+    );
+    expect(() => analyticalMode({ L: 1, alpha: 1, t: 0, nGrid: 5, mode: 0 })).toThrow(
+      RangeError,
+    );
+    expect(() => analyticalMode({ L: 1, alpha: 1, t: -1, nGrid: 5, mode: 1 })).toThrow(
+      RangeError,
+    );
   });
 });
 

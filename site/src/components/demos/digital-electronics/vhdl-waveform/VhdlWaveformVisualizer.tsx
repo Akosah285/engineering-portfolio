@@ -2,14 +2,14 @@ import { useEffect, useMemo } from "react";
 import { PresetCarousel } from "../../../demo-kit/PresetCarousel";
 import { SliderRow } from "../../../demo-kit/SliderRow";
 import { type Schema, useDemoState } from "../../../demo-kit/useDemoState";
-import { projectSignal, risingEdges, simulate, type TraceFrame } from "./algorithm";
+import { type TraceFrame, projectSignal, risingEdges, simulate } from "./algorithm";
 import {
   DEFAULT_STATE,
-  getPattern,
   PATTERNS,
   PATTERN_SLUGS,
   PRESETS,
   type PatternSlug,
+  getPattern,
 } from "./presets";
 import "./VhdlWaveformVisualizer.css";
 

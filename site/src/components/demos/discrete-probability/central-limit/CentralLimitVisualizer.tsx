@@ -9,9 +9,9 @@ import { mulberry32, sampleMeans } from "./algorithm";
 import {
   type CltDemoState,
   DEFAULT_STATE,
+  DISTRIBUTIONS,
   DIST_LABELS,
   DIST_SLUGS,
-  DISTRIBUTIONS,
   PRESETS,
 } from "./presets";
 import "./CentralLimitVisualizer.css";

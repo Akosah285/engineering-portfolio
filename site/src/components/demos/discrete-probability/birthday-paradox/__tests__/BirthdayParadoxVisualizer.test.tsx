@@ -22,6 +22,6 @@ describe("BirthdayParadoxVisualizer", () => {
     render(<BirthdayParadoxVisualizer />);
     const counter = document.querySelector(".bp-visualizer__counter");
     expect(counter).toBeTruthy();
-    expect((counter?.textContent ?? "")).toMatch(/n\s*=\s*1/);
+    expect(counter?.textContent ?? "").toMatch(/n\s*=\s*1/);
   });
 });

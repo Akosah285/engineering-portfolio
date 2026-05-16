@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { yieldStrain, stressAt, curve, type StressStrainParams } from "../algorithm";
+import { describe, expect, it } from "vitest";
+import { type StressStrainParams, curve, stressAt, yieldStrain } from "../algorithm";
 
 // Mild steel / A36-style synthetic curve
 const STEEL: StressStrainParams = {
@@ -105,7 +105,9 @@ describe("curve", () => {
 
 describe("validation", () => {
   it("throws if ultimateStress <= yieldStress", () => {
-    expect(() => stressAt({ ...STEEL, ultimateStress: STEEL.yieldStress }, 0)).toThrow(RangeError);
+    expect(() => stressAt({ ...STEEL, ultimateStress: STEEL.yieldStress }, 0)).toThrow(
+      RangeError,
+    );
   });
 
   it("throws if ultimateStrain <= plateauEndStrain", () => {
@@ -115,7 +117,9 @@ describe("validation", () => {
   });
 
   it("throws if failureStrain <= ultimateStrain", () => {
-    expect(() => stressAt({ ...STEEL, failureStrain: STEEL.ultimateStrain }, 0)).toThrow(RangeError);
+    expect(() => stressAt({ ...STEEL, failureStrain: STEEL.ultimateStrain }, 0)).toThrow(
+      RangeError,
+    );
   });
 
   it("throws if plateauEndStrain < yield strain", () => {

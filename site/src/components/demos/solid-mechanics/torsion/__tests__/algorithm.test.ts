@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { polarMomentOfArea, torsionAnalysis } from "../algorithm";
 
 describe("polarMomentOfArea", () => {
@@ -102,7 +102,10 @@ describe("torsionAnalysis", () => {
 
   it("hollow shaft with inner=0 matches the solid case for τ_max and φ", () => {
     const params = { torque: 200, length: 1.2, shearModulus: 80e9 };
-    const solid = torsionAnalysis({ ...params, geometry: { kind: "solid", radius: 0.03 } });
+    const solid = torsionAnalysis({
+      ...params,
+      geometry: { kind: "solid", radius: 0.03 },
+    });
     const hollow = torsionAnalysis({
       ...params,
       geometry: { kind: "hollow", outerRadius: 0.03, innerRadius: 0 },
@@ -116,8 +119,12 @@ describe("torsionAnalysis", () => {
       torque: 10,
       geometry: { kind: "solid", radius: 0.01 } as const,
     };
-    expect(() => torsionAnalysis({ ...base, length: 0, shearModulus: 80e9 })).toThrow(RangeError);
-    expect(() => torsionAnalysis({ ...base, length: 1, shearModulus: 0 })).toThrow(RangeError);
+    expect(() => torsionAnalysis({ ...base, length: 0, shearModulus: 80e9 })).toThrow(
+      RangeError,
+    );
+    expect(() => torsionAnalysis({ ...base, length: 1, shearModulus: 0 })).toThrow(
+      RangeError,
+    );
   });
 
   it("throws on non-finite torque", () => {

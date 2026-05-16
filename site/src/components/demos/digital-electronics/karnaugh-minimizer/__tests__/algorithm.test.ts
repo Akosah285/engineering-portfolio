@@ -85,7 +85,9 @@ describe("minimize — error gates", () => {
   it("RangeError on out-of-range minterms or don't-cares", () => {
     expect(() => minimize({ nVars: 2, minterms: [4] })).toThrow(RangeError);
     expect(() => minimize({ nVars: 2, minterms: [-1] })).toThrow(RangeError);
-    expect(() => minimize({ nVars: 2, minterms: [0], dontCares: [10] })).toThrow(RangeError);
+    expect(() => minimize({ nVars: 2, minterms: [0], dontCares: [10] })).toThrow(
+      RangeError,
+    );
   });
 });
 

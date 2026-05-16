@@ -52,10 +52,7 @@ export interface RunResult {
   readonly finalState: DMState;
 }
 
-export function run(
-  initial: DMState,
-  inputs: readonly DMInput[],
-): RunResult {
+export function run(initial: DMState, inputs: readonly DMInput[]): RunResult {
   const valid: readonly DMState[] = ["SEARCHING", "WALL_FOLLOWING", "TURNING", "DONE"];
   if (!valid.includes(initial)) {
     throw new RangeError(`invalid initial state: ${initial}`);

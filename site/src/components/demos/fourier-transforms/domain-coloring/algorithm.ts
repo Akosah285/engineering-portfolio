@@ -96,10 +96,7 @@ export interface GridSpec {
 
 // Sample f over a rectangular grid and return per-pixel HSV.
 // Pixel order: row-major, y descending (image-space y).
-export function colorGrid(
-  f: (z: ComplexF) => ComplexF,
-  g: GridSpec,
-): HSV[] {
+export function colorGrid(f: (z: ComplexF) => ComplexF, g: GridSpec): HSV[] {
   if (!Number.isInteger(g.width) || !Number.isInteger(g.height)) {
     throw new RangeError("colorGrid: width and height must be integers");
   }

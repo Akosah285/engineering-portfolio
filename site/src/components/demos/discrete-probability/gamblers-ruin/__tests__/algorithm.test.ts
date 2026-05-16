@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { ruinProb, expectedDuration, simulate } from "../algorithm";
+import { describe, expect, it } from "vitest";
+import { expectedDuration, ruinProb, simulate } from "../algorithm";
 
 describe("ruinProb — analytical", () => {
   it("k=0 → ruined", () => {
@@ -29,8 +29,7 @@ describe("ruinProb — analytical", () => {
   it("symmetric (Ross §4.5 example): N=10, k=5, p=0.6", () => {
     // r = 0.4/0.6 = 2/3; expected P_ruin ≈ (2/3)^5 - (2/3)^10) / (1 - (2/3)^10)
     const r = 2 / 3;
-    const expected =
-      (Math.pow(r, 5) - Math.pow(r, 10)) / (1 - Math.pow(r, 10));
+    const expected = (r ** 5 - r ** 10) / (1 - r ** 10);
     expect(ruinProb({ N: 10, k: 5, p: 0.6 })).toBeCloseTo(expected, 10);
   });
 

@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { PlotPanel, type PlotSeries } from "./PlotPanel";
-import { windowSlice, type RingBuffer } from "./timeSeries";
+import { type RingBuffer, windowSlice } from "./timeSeries";
 
 /**
  * <TimeSeriesPlot> — sliding-window specialization of <PlotPanel> (#53).

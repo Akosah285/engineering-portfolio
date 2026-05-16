@@ -91,8 +91,8 @@ function drawAxes(ctx: CanvasRenderingContext2D, proj: Projector, sy: number): v
   ctx.font = "12px 'JetBrains Mono Variable', monospace";
   ctx.fillText("σ1", CANVAS_W - PAD + 4, y0 + 4);
   ctx.fillText("σ2", x0 + 6, PAD - 6);
-  ctx.fillText(`+σy`, ...labelOffset(proj.toCanvas(sy, 0), 2, -4));
-  ctx.fillText(`-σy`, ...labelOffset(proj.toCanvas(-sy, 0), 2, -4));
+  ctx.fillText("+σy", ...labelOffset(proj.toCanvas(sy, 0), 2, -4));
+  ctx.fillText("-σy", ...labelOffset(proj.toCanvas(-sy, 0), 2, -4));
   ctx.restore();
 }
 
@@ -158,13 +158,13 @@ function vonMisesCurve(sy: number): ReadonlyArray<readonly [number, number]> {
   const limit = (2 * sy) / Math.sqrt(3);
   const pts: [number, number][] = [];
   for (let i = 0; i <= SAMPLES; i += 1) {
-    const s1 = -limit + ((2 * limit) * i) / SAMPLES;
+    const s1 = -limit + (2 * limit * i) / SAMPLES;
     const disc = Math.max(0, 4 * sy * sy - 3 * s1 * s1);
     const s2 = (s1 + Math.sqrt(disc)) / 2;
     pts.push([s1, s2]);
   }
   for (let i = SAMPLES; i >= 0; i -= 1) {
-    const s1 = -limit + ((2 * limit) * i) / SAMPLES;
+    const s1 = -limit + (2 * limit * i) / SAMPLES;
     const disc = Math.max(0, 4 * sy * sy - 3 * s1 * s1);
     const s2 = (s1 - Math.sqrt(disc)) / 2;
     pts.push([s1, s2]);
@@ -179,11 +179,7 @@ function projectAll(
   return pts.map(([a, b]) => proj.toCanvas(a, b));
 }
 
-function safeOverallColor(
-  trescaOk: boolean,
-  vmOk: boolean,
-  rankineOk: boolean,
-): string {
+function safeOverallColor(trescaOk: boolean, vmOk: boolean, rankineOk: boolean): string {
   const passes = (trescaOk ? 1 : 0) + (vmOk ? 1 : 0) + (rankineOk ? 1 : 0);
   if (passes === 3) return "#2e7d32"; // green: safe under all
   if (passes === 0) return "#c62828"; // red: failed under all
@@ -203,7 +199,10 @@ export function FailureCriteriaVisualizer() {
     DEFAULT_STATE,
   );
 
-  const p: PrincipalStress = useMemo(() => ({ s1: state.s1, s2: state.s2 }), [state.s1, state.s2]);
+  const p: PrincipalStress = useMemo(
+    () => ({ s1: state.s1, s2: state.s2 }),
+    [state.s1, state.s2],
+  );
 
   const trescaEq = trescaStress(p);
   const vmEq = vonMisesStress(p);
@@ -286,20 +285,28 @@ export function FailureCriteriaVisualizer() {
 
       <div className="fc-visualizer__legend" aria-hidden="true">
         <span>
-          <span className="fc-visualizer__legend-swatch" style={{ background: TRESCA_COLOR }} />
+          <span
+            className="fc-visualizer__legend-swatch"
+            style={{ background: TRESCA_COLOR }}
+          />
           Tresca
         </span>
         <span>
-          <span className="fc-visualizer__legend-swatch" style={{ background: VM_COLOR }} />
+          <span
+            className="fc-visualizer__legend-swatch"
+            style={{ background: VM_COLOR }}
+          />
           von Mises
         </span>
         <span>
-          <span className="fc-visualizer__legend-swatch" style={{ background: RANKINE_COLOR }} />
+          <span
+            className="fc-visualizer__legend-swatch"
+            style={{ background: RANKINE_COLOR }}
+          />
           Rankine
         </span>
         <span>
-          Failing:{" "}
-          {failingCriteria.length === 0 ? "none" : failingCriteria.join(", ")}
+          Failing: {failingCriteria.length === 0 ? "none" : failingCriteria.join(", ")}
         </span>
       </div>
 

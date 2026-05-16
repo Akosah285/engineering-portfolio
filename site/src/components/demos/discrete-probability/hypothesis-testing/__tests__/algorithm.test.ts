@@ -1,11 +1,5 @@
-import { describe, it, expect } from "vitest";
-import {
-  erf,
-  normalCdf,
-  oneSampleZ,
-  twoSampleZ,
-  decide,
-} from "../algorithm";
+import { describe, expect, it } from "vitest";
+import { decide, erf, normalCdf, oneSampleZ, twoSampleZ } from "../algorithm";
 
 describe("erf + normalCdf primitives", () => {
   it("erf(0) = 0", () => {

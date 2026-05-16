@@ -23,6 +23,6 @@ describe("EpicycleVisualizer", () => {
     render(<EpicycleVisualizer />);
     const counter = document.querySelector(".ep-visualizer__counter");
     expect(counter).toBeTruthy();
-    expect((counter?.textContent ?? "")).toMatch(/terms\s*\d+\s*\/\s*\d+/);
+    expect(counter?.textContent ?? "").toMatch(/terms\s*\d+\s*\/\s*\d+/);
   });
 });

@@ -9,8 +9,8 @@ import { type ShaftGeometry, torsionAnalysis } from "./algorithm";
 import {
   DEFAULT_STATE,
   GEOMETRY_SLUGS,
-  PRESET_META,
   PRESETS,
+  PRESET_META,
   type TorsionDemoState,
 } from "./presets";
 import "./TorsionVisualizer.css";
@@ -50,8 +50,7 @@ const SHAFT_LEN_PX = 200;
 
 /** Linear pixel-radius for a given outer radius in mm. */
 function outerRadiusPx(outerRadius_mm: number): number {
-  const t =
-    (outerRadius_mm - MIN_OUTER_MM) / (MAX_OUTER_MM - MIN_OUTER_MM);
+  const t = (outerRadius_mm - MIN_OUTER_MM) / (MAX_OUTER_MM - MIN_OUTER_MM);
   const clamped = Math.max(0, Math.min(1, t));
   return MIN_OUTER_PX + clamped * (MAX_OUTER_PX - MIN_OUTER_PX);
 }
@@ -231,10 +230,7 @@ export function TorsionVisualizer() {
 
   const { result, tauMax_MPa, phi_deg, J_cm4, outerPx, innerPx } = useMemo(() => {
     const outerMm = state.outerRadius_mm;
-    const innerMm = Math.max(
-      0,
-      Math.min(state.innerRadius_mm, outerMm - 1),
-    );
+    const innerMm = Math.max(0, Math.min(state.innerRadius_mm, outerMm - 1));
     const geometry: ShaftGeometry =
       innerMm > 0
         ? {

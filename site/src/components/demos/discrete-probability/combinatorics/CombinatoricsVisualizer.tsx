@@ -116,12 +116,7 @@ export function CombinatoricsVisualizer() {
           if (isSelected) {
             ctx.strokeStyle = "crimson";
             ctx.lineWidth = 3;
-            ctx.strokeRect(
-              cx - cellW / 2 + 1,
-              y - cellH / 2 + 1,
-              cellW - 2,
-              cellH - 2,
-            );
+            ctx.strokeRect(cx - cellW / 2 + 1, y - cellH / 2 + 1, cellW - 2, cellH - 2);
           }
 
           // Draw value text if it fits.
@@ -130,11 +125,7 @@ export function CombinatoricsVisualizer() {
           ctx.font = `${fontSize}px sans-serif`;
           const textWidth = ctx.measureText(text).width;
           if (textWidth <= cellW - 4 && fontSize >= 7) {
-            ctx.fillStyle = isSelected
-              ? "#ffffff"
-              : t > 0.6
-                ? "#ffffff"
-                : "#222222";
+            ctx.fillStyle = isSelected ? "#ffffff" : t > 0.6 ? "#ffffff" : "#222222";
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
             ctx.fillText(text, cx, y);
@@ -171,7 +162,11 @@ export function CombinatoricsVisualizer() {
         ariaLabel="Combinatorics presets"
       />
 
-      <div className="cb-visualizer__presets" role="group" aria-label="Scenario quick select">
+      <div
+        className="cb-visualizer__presets"
+        role="group"
+        aria-label="Scenario quick select"
+      >
         {PRESETS.map((preset) => (
           <button
             key={preset.state.scenarioSlug}
@@ -228,11 +223,7 @@ export function CombinatoricsVisualizer() {
       </div>
 
       <div className="cb-visualizer__actions">
-        <button
-          type="button"
-          className="cb-visualizer__btn"
-          onClick={handleReset}
-        >
+        <button type="button" className="cb-visualizer__btn" onClick={handleReset}>
           ↺ Reset
         </button>
         <span className="cb-visualizer__counter" aria-live="off">

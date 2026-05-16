@@ -54,10 +54,7 @@ function chebyshev(a: number, b: number, count: number): number[] {
 const runge = (x: number): number => 1 / (1 + 25 * x * x);
 const sineWave = (x: number): number => Math.sin(Math.PI * x);
 
-function samplePoints(
-  xs: readonly number[],
-  f: (x: number) => number,
-): readonly Point[] {
+function samplePoints(xs: readonly number[], f: (x: number) => number): readonly Point[] {
   return xs.map((x) => ({ x, y: f(x) }));
 }
 

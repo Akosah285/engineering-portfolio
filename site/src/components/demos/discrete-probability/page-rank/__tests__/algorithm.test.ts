@@ -48,7 +48,13 @@ describe("pageRank — basic invariants", () => {
 describe("pageRank — dangling nodes", () => {
   it("a graph with a dangling node still conserves mass", () => {
     // 0 -> 1, 1 -> 2; node 2 dangles.
-    const r = pageRank({ nNodes: 3, edges: [[0, 1], [1, 2]] });
+    const r = pageRank({
+      nNodes: 3,
+      edges: [
+        [0, 1],
+        [1, 2],
+      ],
+    });
     const total = r.ranks.reduce((a, b) => a + b, 0);
     expect(total).toBeCloseTo(1, 10);
   });
@@ -78,7 +84,11 @@ describe("pageRank — convergence", () => {
   it("respects a custom initial distribution (still sums to 1 after first normalize)", () => {
     const r = pageRank({
       nNodes: 3,
-      edges: [[0, 1], [1, 2], [2, 0]],
+      edges: [
+        [0, 1],
+        [1, 2],
+        [2, 0],
+      ],
       initial: [10, 1, 1],
     });
     const total = r.ranks.reduce((a, b) => a + b, 0);
@@ -86,8 +96,24 @@ describe("pageRank — convergence", () => {
   });
 
   it("respects a custom damping factor", () => {
-    const lo = pageRank({ nNodes: 3, edges: [[0, 1], [1, 2], [2, 0]], damping: 0.1 });
-    const hi = pageRank({ nNodes: 3, edges: [[0, 1], [1, 2], [2, 0]], damping: 0.99 });
+    const lo = pageRank({
+      nNodes: 3,
+      edges: [
+        [0, 1],
+        [1, 2],
+        [2, 0],
+      ],
+      damping: 0.1,
+    });
+    const hi = pageRank({
+      nNodes: 3,
+      edges: [
+        [0, 1],
+        [1, 2],
+        [2, 0],
+      ],
+      damping: 0.99,
+    });
     // Both still converge for a strongly connected cycle.
     expect(lo.converged).toBe(true);
     expect(hi.converged).toBe(true);
@@ -103,7 +129,9 @@ describe("pageRank — error handling", () => {
     expect(() => pageRank({ nNodes: 1, edges: [], damping: 0 })).toThrow(RangeError);
     expect(() => pageRank({ nNodes: 1, edges: [], damping: 1 })).toThrow(RangeError);
     expect(() => pageRank({ nNodes: 1, edges: [], tolerance: 0 })).toThrow(RangeError);
-    expect(() => pageRank({ nNodes: 1, edges: [], maxIterations: 0 })).toThrow(RangeError);
+    expect(() => pageRank({ nNodes: 1, edges: [], maxIterations: 0 })).toThrow(
+      RangeError,
+    );
   });
 
   it("RangeError on out-of-range edge endpoints", () => {
@@ -113,6 +141,8 @@ describe("pageRank — error handling", () => {
 
   it("RangeError on initial of wrong length or non-positive sum", () => {
     expect(() => pageRank({ nNodes: 3, edges: [], initial: [1, 1] })).toThrow(RangeError);
-    expect(() => pageRank({ nNodes: 3, edges: [], initial: [0, 0, 0] })).toThrow(RangeError);
+    expect(() => pageRank({ nNodes: 3, edges: [], initial: [0, 0, 0] })).toThrow(
+      RangeError,
+    );
   });
 });

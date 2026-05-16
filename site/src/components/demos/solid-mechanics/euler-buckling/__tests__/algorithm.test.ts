@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { eulerCriticalLoad } from "../algorithm";
 
 describe("eulerCriticalLoad", () => {
@@ -34,14 +34,34 @@ describe("eulerCriticalLoad", () => {
   });
 
   it("doubling the length quarters the critical load", () => {
-    const a = eulerCriticalLoad({ E: 200e9, I: 1e-6, L: 1, endCondition: "pinned-pinned" });
-    const b = eulerCriticalLoad({ E: 200e9, I: 1e-6, L: 2, endCondition: "pinned-pinned" });
+    const a = eulerCriticalLoad({
+      E: 200e9,
+      I: 1e-6,
+      L: 1,
+      endCondition: "pinned-pinned",
+    });
+    const b = eulerCriticalLoad({
+      E: 200e9,
+      I: 1e-6,
+      L: 2,
+      endCondition: "pinned-pinned",
+    });
     expect(b.criticalLoad / a.criticalLoad).toBeCloseTo(0.25, 10);
   });
 
   it("doubling I doubles the critical load", () => {
-    const a = eulerCriticalLoad({ E: 200e9, I: 1e-6, L: 2, endCondition: "pinned-pinned" });
-    const b = eulerCriticalLoad({ E: 200e9, I: 2e-6, L: 2, endCondition: "pinned-pinned" });
+    const a = eulerCriticalLoad({
+      E: 200e9,
+      I: 1e-6,
+      L: 2,
+      endCondition: "pinned-pinned",
+    });
+    const b = eulerCriticalLoad({
+      E: 200e9,
+      I: 2e-6,
+      L: 2,
+      endCondition: "pinned-pinned",
+    });
     expect(b.criticalLoad / a.criticalLoad).toBeCloseTo(2, 12);
   });
 

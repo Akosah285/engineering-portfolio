@@ -7,8 +7,8 @@ import { type StepPlanInput, plan } from "./algorithm";
 import {
   DEFAULT_STATE,
   PRESETS,
-  USE_TRAPEZOIDAL_VALUES,
   type StepPositionDemoState,
+  USE_TRAPEZOIDAL_VALUES,
   type UseTrapezoidal,
 } from "./presets";
 import "./StepPositionVisualizer.css";
@@ -308,9 +308,7 @@ export default function StepPositionVisualizer() {
         </div>
         <div className="sp-visualizer__hud-item">
           <span className="sp-visualizer__hud-label">vMax actual</span>
-          <span className="sp-visualizer__hud-value">
-            {vMaxActual.toFixed(1)} st/s
-          </span>
+          <span className="sp-visualizer__hud-value">{vMaxActual.toFixed(1)} st/s</span>
         </div>
       </div>
 

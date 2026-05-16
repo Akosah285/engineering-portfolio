@@ -14,8 +14,8 @@ import {
   HANDLER_COST_MS,
   POLL_COST_MS,
   SIMULATION_DURATION_MS,
-  WORKLOAD_SLUGS,
   WORKLOADS,
+  WORKLOAD_SLUGS,
   type Workload,
   type WorkloadSlug,
   getWorkload,
@@ -71,10 +71,7 @@ interface PollingTrace {
   handlerBars: readonly { x: number; w: number }[];
 }
 
-function buildPollingTrace(
-  events: readonly number[],
-  cfg: PollingConfig,
-): PollingTrace {
+function buildPollingTrace(events: readonly number[], cfg: PollingConfig): PollingTrace {
   const boundaries: number[] = [];
   const pollCostBars: { x: number; w: number }[] = [];
   const handlerBars: { x: number; w: number }[] = [];
@@ -83,7 +80,7 @@ function buildPollingTrace(
   while (t <= cfg.simulationDurationMs) {
     boundaries.push(t);
     if (cfg.pollCostMs > 0) pollCostBars.push({ x: t, w: cfg.pollCostMs });
-    while (evIdx < events.length && (events[evIdx] ?? Infinity) <= t) {
+    while (evIdx < events.length && (events[evIdx] ?? Number.POSITIVE_INFINITY) <= t) {
       if (t + cfg.handlerCostMs <= cfg.simulationDurationMs) {
         handlerBars.push({ x: t, w: cfg.handlerCostMs });
       }
@@ -108,7 +105,11 @@ function buildInterruptTrace(
     const dispatch = Math.max(ev, nextFreeAt) + cfg.interruptLatencyMs;
     const finish = dispatch + cfg.handlerCostMs;
     if (finish <= cfg.simulationDurationMs) {
-      out.push({ x: Math.max(ev, nextFreeAt), w: cfg.interruptLatencyMs, handler: cfg.handlerCostMs });
+      out.push({
+        x: Math.max(ev, nextFreeAt),
+        w: cfg.interruptLatencyMs,
+        handler: cfg.handlerCostMs,
+      });
       nextFreeAt = finish;
     }
   }
@@ -159,10 +160,7 @@ export default function InterruptPollingVisualizer() {
     DEFAULT_STATE,
   );
 
-  const workload: Workload = useMemo(
-    () => getWorkload(state.workload),
-    [state.workload],
-  );
+  const workload: Workload = useMemo(() => getWorkload(state.workload), [state.workload]);
 
   const pollingCfg: PollingConfig = {
     pollPeriodMs: state.pollPeriodMs,
@@ -195,7 +193,8 @@ export default function InterruptPollingVisualizer() {
   );
 
   const pollingBetterLatency = pollingMetrics.meanLatency <= interruptMetrics.meanLatency;
-  const pollingBetterUtil = pollingMetrics.cpuUtilization <= interruptMetrics.cpuUtilization;
+  const pollingBetterUtil =
+    pollingMetrics.cpuUtilization <= interruptMetrics.cpuUtilization;
   // Highlight column that wins on the headline (latency) metric.
   const pollingIsBetter = pollingBetterLatency && pollingBetterUtil;
   const interruptIsBetter = !pollingBetterLatency && !pollingBetterUtil;
@@ -225,7 +224,10 @@ export default function InterruptPollingVisualizer() {
     <div className="ip-visualizer">
       <PresetCarousel
         presets={
-          presetChips as readonly { name: string; state: { slug: WorkloadSlug } }[] as unknown as {
+          presetChips as readonly {
+            name: string;
+            state: { slug: WorkloadSlug };
+          }[] as unknown as {
             name: string;
             state: { slug: WorkloadSlug };
           }[]
@@ -396,7 +398,11 @@ export default function InterruptPollingVisualizer() {
       </div>
 
       <div className="ip-visualizer__stats">
-        <StatsColumn title="Polling" metrics={pollingMetrics} isBetter={pollingIsBetter} />
+        <StatsColumn
+          title="Polling"
+          metrics={pollingMetrics}
+          isBetter={pollingIsBetter}
+        />
         <StatsColumn
           title="Interrupts"
           metrics={interruptMetrics}
@@ -420,9 +426,7 @@ export default function InterruptPollingVisualizer() {
           max={20}
           step={0.5}
           value={state.interruptLatencyMs}
-          onChange={(interruptLatencyMs) =>
-            setState({ ...state, interruptLatencyMs })
-          }
+          onChange={(interruptLatencyMs) => setState({ ...state, interruptLatencyMs })}
           format={{ precision: 1, unit: "ms" }}
         />
         <SliderRow

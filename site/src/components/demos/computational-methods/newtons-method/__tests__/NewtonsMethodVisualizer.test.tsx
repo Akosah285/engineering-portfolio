@@ -6,17 +6,11 @@ describe("NewtonsMethodVisualizer", () => {
   it("renders all sliders + preset chips + canvas", () => {
     render(<NewtonsMethodVisualizer />);
 
-    expect(
-      screen.getByRole("slider", { name: /initial guess|x₀|x0/i }),
-    ).toBeTruthy();
+    expect(screen.getByRole("slider", { name: /initial guess|x₀|x0/i })).toBeTruthy();
     expect(screen.getByRole("slider", { name: /tolerance/i })).toBeTruthy();
-    expect(
-      screen.getByRole("slider", { name: /max iterations/i }),
-    ).toBeTruthy();
+    expect(screen.getByRole("slider", { name: /max iterations/i })).toBeTruthy();
 
-    expect(
-      screen.getByRole("option", { name: /square root of 2/i }),
-    ).toBeTruthy();
+    expect(screen.getByRole("option", { name: /square root of 2/i })).toBeTruthy();
     expect(screen.getByRole("option", { name: /bad seed/i })).toBeTruthy();
 
     expect(screen.getByRole("button", { name: /⏸ pause/i })).toBeTruthy();

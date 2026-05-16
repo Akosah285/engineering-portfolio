@@ -3,9 +3,9 @@ import { DemoNarration } from "../../../demo-kit/DemoNarration";
 import { MathHud } from "../../../demo-kit/MathHud";
 import { SliderRow } from "../../../demo-kit/SliderRow";
 import { type Schema, useDemoState } from "../../../demo-kit/useDemoState";
-import { kMeans, type RGB } from "./algorithm";
+import { type RGB, kMeans } from "./algorithm";
 import "./KMeansImageCompression.css";
-import { type SampleImage, SAMPLE_IMAGES, getSampleImage } from "./sampleImages";
+import { SAMPLE_IMAGES, type SampleImage, getSampleImage } from "./sampleImages";
 
 /**
  * <KMeansImageCompression> — v1 ML demo #3 (plan §4.1, #26).
@@ -130,12 +130,7 @@ export function KMeansImageCompression() {
     const out: RGB[] = result.assignments.map(
       (a) => result.centroids[a] ?? ([0, 0, 0] as RGB),
     );
-    paintPixels(
-      compressedCanvasRef.current,
-      out,
-      sourceImage.width,
-      sourceImage.height,
-    );
+    paintPixels(compressedCanvasRef.current, out, sourceImage.width, sourceImage.height);
   }, [sourceImage, result]);
 
   const handleFile = async (file: File): Promise<void> => {
@@ -171,9 +166,7 @@ export function KMeansImageCompression() {
     }
   };
 
-  const stats = sourceImage
-    ? compressionStats(sourceImage.pixels.length, k)
-    : null;
+  const stats = sourceImage ? compressionStats(sourceImage.pixels.length, k) : null;
 
   return (
     <div className="kmeans-demo">
@@ -270,14 +263,11 @@ export function KMeansImageCompression() {
 
       {stats && (
         <div className="kmeans-demo__readout" aria-live="polite">
-          <span>
-            Pixels: {sourceImage?.pixels.length.toLocaleString() ?? 0}
-          </span>
+          <span>Pixels: {sourceImage?.pixels.length.toLocaleString() ?? 0}</span>
           <span>Iterations: {result?.iterations ?? 0}</span>
           <span>
             Compression: {stats.compressed.toLocaleString()} B vs.{" "}
-            {stats.uncompressed.toLocaleString()} B (
-            {stats.ratio.toFixed(1)}× smaller)
+            {stats.uncompressed.toLocaleString()} B ({stats.ratio.toFixed(1)}× smaller)
           </span>
           <button
             type="button"

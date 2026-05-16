@@ -5,18 +5,10 @@ import { DftVisualizer } from "../DftVisualizer";
 describe("DftVisualizer", () => {
   it("renders sliders + preset chips + canvas", () => {
     render(<DftVisualizer />);
-    expect(
-      screen.getByRole("slider", { name: /^n\b|^sample count/i }),
-    ).toBeTruthy();
-    expect(
-      screen.getByRole("slider", { name: /^sample rate|^rate/i }),
-    ).toBeTruthy();
-    expect(
-      screen.getByRole("option", { name: /single sinusoid/i }),
-    ).toBeTruthy();
-    expect(
-      screen.getByRole("option", { name: /sum of sinusoids/i }),
-    ).toBeTruthy();
+    expect(screen.getByRole("slider", { name: /^n\b|^sample count/i })).toBeTruthy();
+    expect(screen.getByRole("slider", { name: /^sample rate|^rate/i })).toBeTruthy();
+    expect(screen.getByRole("option", { name: /single sinusoid/i })).toBeTruthy();
+    expect(screen.getByRole("option", { name: /sum of sinusoids/i })).toBeTruthy();
     expect(screen.getByRole("option", { name: /square wave/i })).toBeTruthy();
     expect(screen.getByRole("option", { name: /noisy/i })).toBeTruthy();
     expect(screen.getByRole("button", { name: /↺ reset/i })).toBeTruthy();

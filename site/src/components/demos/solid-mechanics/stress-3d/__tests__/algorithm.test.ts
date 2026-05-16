@@ -1,9 +1,9 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
-  invariants,
-  principalStresses,
-  maxShear,
   hydrostatic,
+  invariants,
+  maxShear,
+  principalStresses,
   vonMises,
 } from "../algorithm";
 
@@ -57,7 +57,7 @@ describe("invariants", () => {
 
   it("RangeError on non-finite component", () => {
     expect(() =>
-      invariants({ sx: NaN, sy: 0, sz: 0, txy: 0, txz: 0, tyz: 0 }),
+      invariants({ sx: Number.NaN, sy: 0, sz: 0, txy: 0, txz: 0, tyz: 0 }),
     ).toThrow(RangeError);
   });
 });

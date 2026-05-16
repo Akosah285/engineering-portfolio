@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
+  type Complex,
+  type MobiusCoeffs,
   applyMap,
   cAdd,
   cDiv,
@@ -11,8 +13,6 @@ import {
   joukowski,
   mobius,
   sampleUnitCircle,
-  type Complex,
-  type MobiusCoeffs,
 } from "../algorithm";
 
 describe("complex arithmetic", () => {

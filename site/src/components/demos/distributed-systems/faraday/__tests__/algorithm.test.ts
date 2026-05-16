@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { flux, peakEmf, emfRotating, emfFromBSeries } from "../algorithm";
+import { describe, expect, it } from "vitest";
+import { emfFromBSeries, emfRotating, flux, peakEmf } from "../algorithm";
 
 describe("flux", () => {
   it("Φ = N·B·A·cos(θ); θ=0 → full alignment", () => {
@@ -88,6 +88,8 @@ describe("emfFromBSeries", () => {
   });
 
   it("RangeError on dt <= 0", () => {
-    expect(() => emfFromBSeries({ A: 1, dt: 0, Bsamples: [1, 2, 3] })).toThrow(RangeError);
+    expect(() => emfFromBSeries({ A: 1, dt: 0, Bsamples: [1, 2, 3] })).toThrow(
+      RangeError,
+    );
   });
 });

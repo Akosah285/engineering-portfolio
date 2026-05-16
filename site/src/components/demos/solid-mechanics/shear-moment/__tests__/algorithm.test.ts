@@ -105,8 +105,12 @@ describe("analyze — error handling", () => {
   it("RangeError on out-of-range loads / moments / UDLs", () => {
     expect(() => analyze({ L: 5, pointLoads: [{ x: 6, P: 1 }] })).toThrow(RangeError);
     expect(() => analyze({ L: 5, pointMoments: [{ x: -1, M: 1 }] })).toThrow(RangeError);
-    expect(() => analyze({ L: 5, udls: [{ xStart: 1, xEnd: 6, w: 1 }] })).toThrow(RangeError);
-    expect(() => analyze({ L: 5, udls: [{ xStart: 1, xEnd: 1, w: 1 }] })).toThrow(RangeError);
+    expect(() => analyze({ L: 5, udls: [{ xStart: 1, xEnd: 6, w: 1 }] })).toThrow(
+      RangeError,
+    );
+    expect(() => analyze({ L: 5, udls: [{ xStart: 1, xEnd: 1, w: 1 }] })).toThrow(
+      RangeError,
+    );
   });
 
   it("RangeError on too-coarse nSamples", () => {

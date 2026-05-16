@@ -1,21 +1,16 @@
 import { useMemo } from "react";
-import { PresetCarousel, type Preset } from "../../../demo-kit/PresetCarousel";
+import { type Preset, PresetCarousel } from "../../../demo-kit/PresetCarousel";
 import { SliderRow } from "../../../demo-kit/SliderRow";
 import { type Schema, useDemoState } from "../../../demo-kit/useDemoState";
-import {
-  type AccelSample,
-  detectShakes,
-  tiltFromAccel,
-  toDegrees,
-} from "./algorithm";
+import { type AccelSample, detectShakes, tiltFromAccel, toDegrees } from "./algorithm";
 import {
   type AccelDemoState,
   DEFAULT_STATE,
   PATTERNS,
   PATTERN_NAMES,
   PATTERN_SLUGS,
-  type PatternSlug,
   PRESETS,
+  type PatternSlug,
 } from "./presets";
 import "./AccelerometerVisualizer.css";
 
@@ -146,8 +141,7 @@ function MagnitudePlot({
   const innerW = PLOT_W - PLOT_PAD * 2;
   const innerH = PLOT_H - PLOT_PAD * 2;
 
-  const xAt = (i: number): number =>
-    PLOT_PAD + (n <= 1 ? 0 : (i / (n - 1)) * innerW);
+  const xAt = (i: number): number => PLOT_PAD + (n <= 1 ? 0 : (i / (n - 1)) * innerW);
   const yAt = (v: number): number =>
     PLOT_PAD + innerH - ((v - minY) / (maxY - minY)) * innerH;
 
@@ -272,10 +266,7 @@ function AccelerometerVisualizer() {
   };
 
   const handlePatternSliderChange = (idx: number): void => {
-    const clamped = Math.min(
-      Math.max(0, Math.round(idx)),
-      PATTERN_SLUGS.length - 1,
-    );
+    const clamped = Math.min(Math.max(0, Math.round(idx)), PATTERN_SLUGS.length - 1);
     const slug: PatternSlug = PATTERN_SLUGS[clamped] ?? DEFAULT_STATE.pattern;
     setState((prev) => ({ ...prev, pattern: slug, cursor: 0 }));
   };
@@ -329,9 +320,7 @@ function AccelerometerVisualizer() {
           max={3.0}
           step={0.1}
           value={state.thresholdG}
-          onChange={(next) =>
-            setState((prev) => ({ ...prev, thresholdG: next }))
-          }
+          onChange={(next) => setState((prev) => ({ ...prev, thresholdG: next }))}
           format={{ precision: 1, unit: "g" }}
         />
         <SliderRow

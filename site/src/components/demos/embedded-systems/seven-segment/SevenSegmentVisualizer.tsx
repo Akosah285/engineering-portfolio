@@ -20,13 +20,7 @@ import "./SevenSegmentVisualizer.css";
  * a user-supplied string and a brightness slider.
  */
 
-const PRESET_SLUGS = [
-  "hello",
-  "count-0-7",
-  "hex-AbCdEF",
-  "year",
-  "blank",
-] as const;
+const PRESET_SLUGS = ["hello", "count-0-7", "hex-AbCdEF", "year", "blank"] as const;
 
 const STATE_SCHEMA = {
   presetSlug: {
@@ -54,13 +48,13 @@ interface SegmentRect {
 }
 
 const SEGMENT_RECTS: readonly SegmentRect[] = [
-  { x: 10, y: 5, w: 40, h: 8 },   // a
-  { x: 50, y: 13, w: 8, h: 35 },  // b
-  { x: 50, y: 50, w: 8, h: 35 },  // c
-  { x: 10, y: 85, w: 40, h: 8 },  // d
-  { x: 2, y: 50, w: 8, h: 35 },   // e
-  { x: 2, y: 13, w: 8, h: 35 },   // f
-  { x: 10, y: 43, w: 40, h: 6 },  // g
+  { x: 10, y: 5, w: 40, h: 8 }, // a
+  { x: 50, y: 13, w: 8, h: 35 }, // b
+  { x: 50, y: 50, w: 8, h: 35 }, // c
+  { x: 10, y: 85, w: 40, h: 8 }, // d
+  { x: 2, y: 50, w: 8, h: 35 }, // e
+  { x: 2, y: 13, w: 8, h: 35 }, // f
+  { x: 10, y: 43, w: 40, h: 6 }, // g
 ];
 
 function patternsFor(text: string): {
@@ -107,10 +101,7 @@ export function SevenSegmentVisualizer() {
   );
 
   const trimmed = state.text.slice(0, MAX_SLOTS);
-  const { patterns, hasUnrepresentable } = useMemo(
-    () => patternsFor(trimmed),
-    [trimmed],
-  );
+  const { patterns, hasUnrepresentable } = useMemo(() => patternsFor(trimmed), [trimmed]);
   const totalLit = useMemo(
     () => patterns.reduce((sum, p) => sum + segmentCount(p), 0),
     [patterns],

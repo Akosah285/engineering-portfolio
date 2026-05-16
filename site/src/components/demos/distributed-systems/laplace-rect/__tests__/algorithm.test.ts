@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { solve } from "../algorithm";
 
 describe("solve — Laplace on a rectangle, Dirichlet BCs", () => {
@@ -109,7 +109,14 @@ describe("solve — Laplace on a rectangle, Dirichlet BCs", () => {
 
   it("RangeError on non-finite BC", () => {
     expect(() =>
-      solve({ nx: 5, ny: 5, top: Infinity, bottom: 0, left: 0, right: 0 }),
+      solve({
+        nx: 5,
+        ny: 5,
+        top: Number.POSITIVE_INFINITY,
+        bottom: 0,
+        left: 0,
+        right: 0,
+      }),
     ).toThrow(RangeError);
   });
 });

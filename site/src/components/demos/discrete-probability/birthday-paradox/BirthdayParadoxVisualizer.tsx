@@ -271,10 +271,7 @@ export function BirthdayParadoxVisualizer() {
         />
         <MathHud
           corner="top-right"
-          lines={[
-            `n = ${currentN}`,
-            `P(\\text{collision}) = ${exactProb.toFixed(3)}`,
-          ]}
+          lines={[`n = ${currentN}`, `P(\\text{collision}) = ${exactProb.toFixed(3)}`]}
         />
       </div>
 

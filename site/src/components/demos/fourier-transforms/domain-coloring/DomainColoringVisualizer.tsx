@@ -2,18 +2,8 @@ import { useCallback, useEffect, useMemo, useRef } from "react";
 import { PresetCarousel } from "../../../demo-kit/PresetCarousel";
 import { SliderRow } from "../../../demo-kit/SliderRow";
 import { type Schema, useDemoState } from "../../../demo-kit/useDemoState";
-import {
-  type ComplexF,
-  type HSV,
-  colorGrid,
-  hsvToRgb,
-} from "./algorithm";
-import {
-  DEFAULT_STATE,
-  FN_SLOTS,
-  type FnSlot,
-  PRESETS,
-} from "./presets";
+import { type ComplexF, type HSV, colorGrid, hsvToRgb } from "./algorithm";
+import { DEFAULT_STATE, FN_SLOTS, type FnSlot, PRESETS } from "./presets";
 import "./DomainColoringVisualizer.css";
 
 /**

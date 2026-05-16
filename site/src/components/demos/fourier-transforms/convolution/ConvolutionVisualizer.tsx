@@ -5,13 +5,13 @@ import { MathHud } from "../../../demo-kit/MathHud";
 import { PresetCarousel } from "../../../demo-kit/PresetCarousel";
 import { SliderRow } from "../../../demo-kit/SliderRow";
 import { type Schema, useDemoState } from "../../../demo-kit/useDemoState";
-import { convolve, type Sample } from "./algorithm";
+import { type Sample, convolve } from "./algorithm";
 import {
   type ConvolutionDemoState,
   DEFAULT_STATE,
-  getPair,
   PAIR_SLUGS,
   PRESETS,
+  getPair,
 } from "./presets";
 import "./ConvolutionVisualizer.css";
 
@@ -174,10 +174,7 @@ export function ConvolutionVisualizer() {
   );
 
   const pair = useMemo(() => getPair(state.pairSlug), [state.pairSlug]);
-  const signals = useMemo(
-    () => pair.build(state.nSamples),
-    [pair, state.nSamples],
-  );
+  const signals = useMemo(() => pair.build(state.nSamples), [pair, state.nSamples]);
 
   const conv = useMemo(
     () =>
@@ -240,10 +237,7 @@ export function ConvolutionVisualizer() {
       const stepInterval = 1000 / Math.max(1, state.slideSpeed);
       accumulatorRef.current += deltaMs;
       let advanced = false;
-      while (
-        accumulatorRef.current >= stepInterval &&
-        idxRef.current < totalShifts - 1
-      ) {
+      while (accumulatorRef.current >= stepInterval && idxRef.current < totalShifts - 1) {
         accumulatorRef.current -= stepInterval;
         idxRef.current += 1;
         advanced = true;
@@ -275,8 +269,7 @@ export function ConvolutionVisualizer() {
       const product: Sample[] = [];
       for (let i = 0; i < signals.f.length; i += 1) {
         const j = n - i;
-        const gVal =
-          j >= 0 && j < signals.g.length ? signals.g[j]!.value : 0;
+        const gVal = j >= 0 && j < signals.g.length ? signals.g[j]!.value : 0;
         const t = signals.f[i]!.t;
         shifted.push({ t, value: gVal });
         product.push({ t, value: gVal * signals.f[i]!.value });
@@ -299,23 +292,14 @@ export function ConvolutionVisualizer() {
         const xSpan = xRange.max - xRange.min || 1;
         const ySpan = outExtent.max - outExtent.min || 1;
         const cx = innerX + ((last.t - xRange.min) / xSpan) * innerW;
-        const cy =
-          innerY + innerH - ((last.value - outExtent.min) / ySpan) * innerH;
+        const cy = innerY + innerH - ((last.value - outExtent.min) / ySpan) * innerH;
         ctx.fillStyle = "#00693e";
         ctx.beginPath();
         ctx.arc(cx, cy, 4, 0, Math.PI * 2);
         ctx.fill();
       }
     },
-    [
-      outExtent,
-      outSamples,
-      signals,
-      sigYExtent,
-      state.slideSpeed,
-      totalShifts,
-      xRange,
-    ],
+    [outExtent, outSamples, signals, sigYExtent, state.slideSpeed, totalShifts, xRange],
   );
 
   const currentT = outTMin + currentIdx * signals.dt;

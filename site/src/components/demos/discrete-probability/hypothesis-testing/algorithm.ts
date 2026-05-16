@@ -63,8 +63,10 @@ export function twoSampleZ(input: TwoSampleZInput): ZResult {
   const alt = input.alternative ?? "two-sided";
   const { xbar1, xbar2, sigma1, sigma2, n1, n2 } = input;
   if (sigma1 <= 0 || sigma2 <= 0) throw new RangeError("sigmas must be > 0");
-  if (!Number.isInteger(n1) || n1 < 1) throw new RangeError("n1 must be positive integer");
-  if (!Number.isInteger(n2) || n2 < 1) throw new RangeError("n2 must be positive integer");
+  if (!Number.isInteger(n1) || n1 < 1)
+    throw new RangeError("n1 must be positive integer");
+  if (!Number.isInteger(n2) || n2 < 1)
+    throw new RangeError("n2 must be positive integer");
   const mu0 = input.mu0Diff ?? 0;
   const se = Math.sqrt((sigma1 * sigma1) / n1 + (sigma2 * sigma2) / n2);
   const z = (xbar1 - xbar2 - mu0) / se;

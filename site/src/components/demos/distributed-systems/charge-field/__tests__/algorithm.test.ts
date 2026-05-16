@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { fieldAt, fieldGrid, type PointCharge } from "../algorithm";
+import { describe, expect, it } from "vitest";
+import { type PointCharge, fieldAt, fieldGrid } from "../algorithm";
 
 describe("fieldAt — single positive charge at origin", () => {
   const Q: PointCharge[] = [{ x: 0, y: 0, q: 1 }];
@@ -123,17 +123,27 @@ describe("fieldGrid", () => {
   });
 
   it("throws on degenerate grid bounds or sample counts", () => {
-    const base = { charges: [{ x: 0, y: 0, q: 1 }], xMin: 0, xMax: 1, yMin: 0, yMax: 1 } as const;
+    const base = {
+      charges: [{ x: 0, y: 0, q: 1 }],
+      xMin: 0,
+      xMax: 1,
+      yMin: 0,
+      yMax: 1,
+    } as const;
     expect(() => fieldGrid({ ...base, nx: 1, ny: 5 })).toThrow(RangeError);
-    expect(() => fieldGrid({ ...base, nx: 5, ny: 5, xMin: 1, xMax: 0 })).toThrow(RangeError);
+    expect(() => fieldGrid({ ...base, nx: 5, ny: 5, xMin: 1, xMax: 0 })).toThrow(
+      RangeError,
+    );
   });
 });
 
 describe("validation", () => {
   it("throws on non-finite charge or query coordinates", () => {
-    expect(() => fieldAt({ charges: [{ x: 0, y: 0, q: Number.NaN }], x: 1, y: 0 }))
-      .toThrow(RangeError);
-    expect(() => fieldAt({ charges: [{ x: 0, y: 0, q: 1 }], x: Number.NaN, y: 0 }))
-      .toThrow(RangeError);
+    expect(() =>
+      fieldAt({ charges: [{ x: 0, y: 0, q: Number.NaN }], x: 1, y: 0 }),
+    ).toThrow(RangeError);
+    expect(() =>
+      fieldAt({ charges: [{ x: 0, y: 0, q: 1 }], x: Number.NaN, y: 0 }),
+    ).toThrow(RangeError);
   });
 });

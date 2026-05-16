@@ -66,10 +66,7 @@ function paintBackdrop(ctx: CanvasRenderingContext2D): void {
 }
 
 /** Plot the accumulated samples as 1-pixel-ish dots. */
-function paintSamples(
-  ctx: CanvasRenderingContext2D,
-  samples: readonly Sample[],
-): void {
+function paintSamples(ctx: CanvasRenderingContext2D, samples: readonly Sample[]): void {
   const { width, height } = ctx.canvas;
   for (let i = 0; i < samples.length; i += 1) {
     const s = samples[i]!;

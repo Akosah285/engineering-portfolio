@@ -5,13 +5,13 @@ import { MathHud } from "../../../demo-kit/MathHud";
 import { PresetCarousel } from "../../../demo-kit/PresetCarousel";
 import { SliderRow } from "../../../demo-kit/SliderRow";
 import { type Schema, useDemoState } from "../../../demo-kit/useDemoState";
-import { fieldGrid, type GridSamplePoint, type PointCharge } from "./algorithm";
+import { type GridSamplePoint, type PointCharge, fieldGrid } from "./algorithm";
 import {
   type ChargeFieldDemoState,
   DEFAULT_STATE,
+  PRESETS,
   PRESET_META,
   PRESET_SLUGS,
-  PRESETS,
 } from "./presets";
 import "./ChargeFieldVisualizer.css";
 
@@ -125,8 +125,14 @@ function paintArrows(
     const ang = Math.atan2(dy, dx);
     ctx.beginPath();
     ctx.moveTo(ex, ey);
-    ctx.lineTo(ex - ah * Math.cos(ang - Math.PI / 6), ey - ah * Math.sin(ang - Math.PI / 6));
-    ctx.lineTo(ex - ah * Math.cos(ang + Math.PI / 6), ey - ah * Math.sin(ang + Math.PI / 6));
+    ctx.lineTo(
+      ex - ah * Math.cos(ang - Math.PI / 6),
+      ey - ah * Math.sin(ang - Math.PI / 6),
+    );
+    ctx.lineTo(
+      ex - ah * Math.cos(ang + Math.PI / 6),
+      ey - ah * Math.sin(ang + Math.PI / 6),
+    );
     ctx.closePath();
     ctx.fill();
   }
@@ -214,10 +220,12 @@ export default function ChargeFieldVisualizer() {
   return (
     <div className="cf-visualizer">
       <PresetCarousel
-        presets={PRESETS as readonly { name: string; state: ChargeFieldDemoState }[] as {
-          name: string;
-          state: ChargeFieldDemoState;
-        }[]}
+        presets={
+          PRESETS as readonly { name: string; state: ChargeFieldDemoState }[] as {
+            name: string;
+            state: ChargeFieldDemoState;
+          }[]
+        }
         onSelect={handlePresetSelect}
         ariaLabel="Charge field presets"
       />

@@ -76,10 +76,12 @@ export function analyze(input: BeamInput): BeamResult {
   }
   // Validate all positions are within [0, L].
   for (const p of input.pointLoads ?? []) {
-    if (!(p.x >= 0 && p.x <= input.L)) throw new RangeError("analyze: point load outside [0, L].");
+    if (!(p.x >= 0 && p.x <= input.L))
+      throw new RangeError("analyze: point load outside [0, L].");
   }
   for (const m of input.pointMoments ?? []) {
-    if (!(m.x >= 0 && m.x <= input.L)) throw new RangeError("analyze: moment outside [0, L].");
+    if (!(m.x >= 0 && m.x <= input.L))
+      throw new RangeError("analyze: moment outside [0, L].");
   }
   for (const u of input.udls ?? []) {
     if (!(u.xStart >= 0 && u.xEnd <= input.L && u.xEnd > u.xStart)) {

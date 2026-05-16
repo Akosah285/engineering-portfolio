@@ -6,9 +6,7 @@ describe("StateMachineVisualizer", () => {
   it("renders sliders + preset chips + canvas controls", () => {
     render(<StateMachineVisualizer />);
     expect(screen.getByRole("slider", { name: /step delay/i })).toBeTruthy();
-    expect(
-      screen.getByRole("option", { name: /find.wall|find wall/i }),
-    ).toBeTruthy();
+    expect(screen.getByRole("option", { name: /find.wall|find wall/i })).toBeTruthy();
     expect(
       screen.getByRole("option", { name: /goal.from.start|goal from start/i }),
     ).toBeTruthy();

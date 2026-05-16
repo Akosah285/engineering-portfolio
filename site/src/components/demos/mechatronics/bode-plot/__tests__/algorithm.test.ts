@@ -1,10 +1,10 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
-  bodePoint,
+  type TransferFunction,
   bodePlot,
+  bodePoint,
   frequencyResponse,
   logspace,
-  type TransferFunction,
 } from "../algorithm";
 
 // First-order low-pass: H(s) = 1 / (s + 1), pole at -1.

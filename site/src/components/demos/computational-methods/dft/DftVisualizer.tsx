@@ -187,11 +187,7 @@ function paintSpectrumPanel(
     y + h + 6,
   );
   ctx.textAlign = "right";
-  ctx.fillText(
-    `${binFrequency(half, N, sampleRate).toFixed(1)}`,
-    x + w,
-    y + h + 6,
-  );
+  ctx.fillText(`${binFrequency(half, N, sampleRate).toFixed(1)}`, x + w, y + h + 6);
   ctx.textAlign = "center";
   ctx.fillText("frequency (Hz)", x + w / 2, y + h + 18);
 
@@ -203,11 +199,7 @@ function paintSpectrumPanel(
 }
 
 export function DftVisualizer() {
-  const [state, setState, { reset }] = useDemoState(
-    "dft",
-    STATE_SCHEMA,
-    DEFAULT_STATE,
-  );
+  const [state, setState, { reset }] = useDemoState("dft", STATE_SCHEMA, DEFAULT_STATE);
 
   // Snap N to a multiple of 8 within bounds.
   const N = Math.max(8, Math.min(256, Math.round(state.N / 8) * 8));
@@ -221,7 +213,7 @@ export function DftVisualizer() {
     // Peak over one-sided bins, skipping DC.
     const half = Math.floor(N / 2);
     let kp = 0;
-    let best = -Infinity;
+    let best = Number.NEGATIVE_INFINITY;
     for (let k = 1; k <= half; k += 1) {
       const m = mag[k] ?? 0;
       if (m > best) {

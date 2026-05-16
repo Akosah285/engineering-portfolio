@@ -232,7 +232,10 @@ export function VectorFieldVisualizer() {
           step={1}
           value={coloringIdx >= 0 ? coloringIdx : 0}
           onChange={(i) =>
-            setState({ ...state, coloring: COLORING_MODES[i] ?? "magnitude" as ColoringMode })
+            setState({
+              ...state,
+              coloring: COLORING_MODES[i] ?? ("magnitude" as ColoringMode),
+            })
           }
           format={{ precision: 0 }}
           hideTicks
@@ -245,7 +248,7 @@ export function VectorFieldVisualizer() {
           step={1}
           value={fieldIdx >= 0 ? fieldIdx : 0}
           onChange={(i) =>
-            setState({ ...state, field: FIELD_KINDS[i] ?? "uniform" as FieldKind })
+            setState({ ...state, field: FIELD_KINDS[i] ?? ("uniform" as FieldKind) })
           }
           format={{ precision: 0 }}
           hideTicks
@@ -277,8 +280,8 @@ export function VectorFieldVisualizer() {
           ↺ Reset
         </button>
         <span className="vf-visualizer__counter" aria-live="off">
-          max |F| {grid.maxMagnitude.toFixed(2)} · max |div| {maxAbsDiv.toFixed(2)} · max |curl|{" "}
-          {maxAbsCurl.toFixed(2)}
+          max |F| {grid.maxMagnitude.toFixed(2)} · max |div| {maxAbsDiv.toFixed(2)} · max
+          |curl| {maxAbsCurl.toFixed(2)}
         </span>
       </div>
     </div>

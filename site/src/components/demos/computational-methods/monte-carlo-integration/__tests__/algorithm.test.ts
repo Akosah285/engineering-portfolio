@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { integrate1D, integrate2D } from "../algorithm";
 
 function seededRng(seed: number): () => number {
@@ -77,7 +77,7 @@ describe("integrate1D", () => {
 
   it("RangeError on non-finite integrand value", () => {
     expect(() =>
-      integrate1D({ f: () => NaN, a: 0, b: 1, n: 10, rng: seededRng(1) }),
+      integrate1D({ f: () => Number.NaN, a: 0, b: 1, n: 10, rng: seededRng(1) }),
     ).toThrow(RangeError);
   });
 });

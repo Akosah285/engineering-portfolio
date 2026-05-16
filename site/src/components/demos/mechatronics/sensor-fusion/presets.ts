@@ -92,7 +92,10 @@ function buildNoisyAccel(): Scenario {
   // Exact derivative of 0.4 sin(0.1k) wrt continuous time t = k·dt is
   // 0.4 · (0.1/dt) · cos(0.1k); we treat k as the integer sample index so
   // that integrating ω·dt over samples reproduces the truth series.
-  const omegaGyro = Array.from({ length: N }, (_, k) => (0.4 * 0.1 * Math.cos(0.1 * k)) / DT);
+  const omegaGyro = Array.from(
+    { length: N },
+    (_, k) => (0.4 * 0.1 * Math.cos(0.1 * k)) / DT,
+  );
   const thetaAcc = noisy(truth, 0.2, 3);
   return {
     slug: "noisy-accel",

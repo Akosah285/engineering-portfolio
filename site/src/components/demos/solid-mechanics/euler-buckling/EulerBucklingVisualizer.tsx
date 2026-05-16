@@ -133,11 +133,7 @@ function drawEnd(
   }
 }
 
-function drawLoadArrow(
-  ctx: CanvasRenderingContext2D,
-  cx: number,
-  topY: number,
-): void {
+function drawLoadArrow(ctx: CanvasRenderingContext2D, cx: number, topY: number): void {
   ctx.save();
   ctx.strokeStyle = "#cf4f4f";
   ctx.fillStyle = "#cf4f4f";
@@ -226,22 +222,13 @@ function drawColumnPanel(
   ctx.stroke();
   ctx.fillStyle = "#222";
   ctx.font = "12px 'Inter Variable', sans-serif";
-  ctx.fillText(
-    `L = ${L.toFixed(1)} m`,
-    dimX - 36,
-    (COL_TOP_Y + COL_BOTTOM_Y) / 2,
-  );
+  ctx.fillText(`L = ${L.toFixed(1)} m`, dimX - 36, (COL_TOP_Y + COL_BOTTOM_Y) / 2);
   ctx.restore();
 
   // Column width hint (faint rectangle behind centerline at top end)
   ctx.save();
   ctx.fillStyle = "rgba(0, 105, 62, 0.08)";
-  ctx.fillRect(
-    PANEL_LEFT_X - COL_WIDTH_PX / 2,
-    COL_TOP_Y,
-    COL_WIDTH_PX,
-    COL_HEIGHT_PX,
-  );
+  ctx.fillRect(PANEL_LEFT_X - COL_WIDTH_PX / 2, COL_TOP_Y, COL_WIDTH_PX, COL_HEIGHT_PX);
   ctx.restore();
 }
 
@@ -312,17 +299,9 @@ function drawCapacityPanel(
   const ok = validIfSlenderEnough === true;
   ctx.fillStyle = ok ? "#00693e" : "#cf4f4f";
   ctx.font = "bold 13px 'JetBrains Mono Variable', monospace";
-  ctx.fillText(
-    `λ = ${lambda.toFixed(1)}    λ_c = ${lambdaC.toFixed(1)}`,
-    panelX,
-    215,
-  );
+  ctx.fillText(`λ = ${lambda.toFixed(1)}    λ_c = ${lambdaC.toFixed(1)}`, panelX, 215);
   ctx.font = "11px 'Inter Variable', sans-serif";
-  ctx.fillText(
-    ok ? "slender — Euler valid" : "stocky — yield may govern",
-    panelX,
-    232,
-  );
+  ctx.fillText(ok ? "slender — Euler valid" : "stocky — yield may govern", panelX, 232);
 
   ctx.restore();
 }
@@ -468,11 +447,7 @@ export function EulerBucklingVisualizer() {
       </div>
 
       <div className="eb-visualizer__actions">
-        <button
-          type="button"
-          className="eb-visualizer__btn"
-          onClick={handleReset}
-        >
+        <button type="button" className="eb-visualizer__btn" onClick={handleReset}>
           ↺ Reset
         </button>
         <span className="eb-visualizer__counter" aria-live="off">

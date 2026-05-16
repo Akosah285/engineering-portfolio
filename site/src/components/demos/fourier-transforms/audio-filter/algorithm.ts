@@ -34,9 +34,7 @@ export function makeBiquad(
     throw new RangeError("makeBiquad: sampleRate must be > 0");
   }
   if (cutoffHz <= 0 || cutoffHz >= sampleRate / 2) {
-    throw new RangeError(
-      "makeBiquad: cutoffHz must be in (0, sampleRate/2) (Nyquist)",
-    );
+    throw new RangeError("makeBiquad: cutoffHz must be in (0, sampleRate/2) (Nyquist)");
   }
   if (Q <= 0) {
     throw new RangeError("makeBiquad: Q must be > 0");
@@ -103,11 +101,7 @@ export function initState(): BiquadState {
 }
 
 // Process a single sample, mutating state in-place.
-export function processSample(
-  c: BiquadCoeffs,
-  s: BiquadState,
-  x: number,
-): number {
+export function processSample(c: BiquadCoeffs, s: BiquadState, x: number): number {
   const y =
     (c.b0 / c.a0) * x +
     (c.b1 / c.a0) * s.x1 +

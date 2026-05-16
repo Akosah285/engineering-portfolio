@@ -9,9 +9,9 @@ import { linearFit, predict } from "./algorithm";
 import {
   DEFAULT_STATE,
   type LeastSquaresDemoState,
+  PRESETS,
   PRESET_META,
   PRESET_SLUGS,
-  PRESETS,
   generateDataset,
 } from "./presets";
 import "./LeastSquaresVisualizer.css";
@@ -264,11 +264,7 @@ export function LeastSquaresVisualizer() {
       </div>
 
       <div className="ls-visualizer__actions">
-        <button
-          type="button"
-          className="ls-visualizer__btn"
-          onClick={handleApplyPreset}
-        >
+        <button type="button" className="ls-visualizer__btn" onClick={handleApplyPreset}>
           Apply {meta.label} preset defaults
         </button>
         <button type="button" className="ls-visualizer__btn" onClick={handleReset}>

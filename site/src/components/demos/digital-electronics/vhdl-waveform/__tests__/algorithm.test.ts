@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
 import {
+  type Signals,
   counterTransition,
   projectSignal,
   risingEdges,
   simulate,
-  type Signals,
 } from "../algorithm";
 
 describe("simulate input validation", () => {
@@ -111,9 +111,7 @@ describe("counterTransition", () => {
       transition: t,
     });
     const post = frames.filter((_, i) => i % 2 === 1);
-    const values = post.map(
-      (f) => ((f.signals.q1 ?? 0) << 1) | (f.signals.q0 ?? 0),
-    );
+    const values = post.map((f) => ((f.signals.q1 ?? 0) << 1) | (f.signals.q0 ?? 0));
     expect(values).toEqual([1, 2, 3, 0, 1]);
   });
 

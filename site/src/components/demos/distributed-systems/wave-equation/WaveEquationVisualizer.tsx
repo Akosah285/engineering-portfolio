@@ -5,12 +5,7 @@ import { MathHud } from "../../../demo-kit/MathHud";
 import { PresetCarousel } from "../../../demo-kit/PresetCarousel";
 import { SliderRow } from "../../../demo-kit/SliderRow";
 import { type Schema, useDemoState } from "../../../demo-kit/useDemoState";
-import {
-  analyticalStanding,
-  cflRatio,
-  firstStep,
-  leapfrogStep,
-} from "./algorithm";
+import { analyticalStanding, cflRatio, firstStep, leapfrogStep } from "./algorithm";
 import {
   DEFAULT_STATE,
   PRESETS,
@@ -41,10 +36,7 @@ const narrationTemplate = (state: WaveEquationDemoState): string => {
   return `Standing wave mode ${state.mode} on a 1 m string with wave speed c = ${state.c.toFixed(2)} m/s, ${state.nGrid} grid points, timestep ${state.dt.toFixed(3)} s, CFL ratio r = ${r.toFixed(3)} (stable when r ≤ 1).`;
 };
 
-function paintFrame(
-  ctx: CanvasRenderingContext2D,
-  u: readonly number[],
-): void {
+function paintFrame(ctx: CanvasRenderingContext2D, u: readonly number[]): void {
   const { width, height } = ctx.canvas;
   ctx.clearRect(0, 0, width, height);
 
@@ -92,10 +84,7 @@ export function WaveEquationVisualizer() {
   );
 
   const dx = useMemo(() => L / (state.nGrid - 1), [state.nGrid]);
-  const r = useMemo(
-    () => cflRatio(state.c, dx, state.dt),
-    [state.c, dx, state.dt],
-  );
+  const r = useMemo(() => cflRatio(state.c, dx, state.dt), [state.c, dx, state.dt]);
   const violated = r > 1;
 
   const uPrevRef = useRef<number[]>([]);

@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
 import {
-  computeAxisLayout,
-  formatTickValue,
   type AxisLayout,
   type AxisTick,
+  computeAxisLayout,
+  formatTickValue,
 } from "../plotMath";
 
 /**
@@ -113,12 +113,12 @@ describe("computeAxisLayout (log)", () => {
   });
 
   it("throws when min ≤ 0 in log mode", () => {
-    expect(() =>
-      computeAxisLayout({ min: 0, max: 100, logScale: true }),
-    ).toThrow(/positive/i);
-    expect(() =>
-      computeAxisLayout({ min: -1, max: 100, logScale: true }),
-    ).toThrow(/positive/i);
+    expect(() => computeAxisLayout({ min: 0, max: 100, logScale: true })).toThrow(
+      /positive/i,
+    );
+    expect(() => computeAxisLayout({ min: -1, max: 100, logScale: true })).toThrow(
+      /positive/i,
+    );
   });
 
   it("handles fractional log domains (min < 1)", () => {
@@ -182,7 +182,7 @@ describe("AxisTick contract", () => {
       max: 100,
       logScale: false,
     });
-    let prev = -Infinity;
+    let prev = Number.NEGATIVE_INFINITY;
     for (const tick of layout.ticks) {
       expect(tick.normalized).toBeGreaterThan(prev);
       prev = tick.normalized;

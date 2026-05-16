@@ -18,10 +18,10 @@ export type Section =
 
 export function momentOfInertia(s: Section): number {
   validateSection(s);
-  if (s.kind === "rect") return (s.b * Math.pow(s.h, 3)) / 12;
-  if (s.kind === "circle") return (Math.PI * Math.pow(s.R, 4)) / 4;
+  if (s.kind === "rect") return (s.b * s.h ** 3) / 12;
+  if (s.kind === "circle") return (Math.PI * s.R ** 4) / 4;
   // ibeam: outer minus inner (centered hole).
-  return (s.B * Math.pow(s.H, 3) - s.b * Math.pow(s.h, 3)) / 12;
+  return (s.B * s.H ** 3 - s.b * s.h ** 3) / 12;
 }
 
 export function yMax(s: Section): number {

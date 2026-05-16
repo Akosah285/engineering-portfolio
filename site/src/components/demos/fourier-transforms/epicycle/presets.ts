@@ -46,10 +46,7 @@ const heart: PathDefinition = {
     const sinA = Math.sin(a);
     const re = 16 * sinA * sinA * sinA;
     const im =
-      13 * Math.cos(a) -
-      5 * Math.cos(2 * a) -
-      2 * Math.cos(3 * a) -
-      Math.cos(4 * a);
+      13 * Math.cos(a) - 5 * Math.cos(2 * a) - 2 * Math.cos(3 * a) - Math.cos(4 * a);
     // Heart is parametrised in y-up; flip y so it points up on canvas
     // (where +im draws upward in our projection).
     return { re: re / 16, im: im / 16 };

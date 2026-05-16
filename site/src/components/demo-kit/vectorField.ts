@@ -108,8 +108,6 @@ function buildArrow(
   };
 }
 
-function normalizeDomain(
-  domain: readonly [number, number],
-): readonly [number, number] {
+function normalizeDomain(domain: readonly [number, number]): readonly [number, number] {
   return domain[0] <= domain[1] ? domain : [domain[1], domain[0]];
 }

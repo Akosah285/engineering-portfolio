@@ -20,11 +20,11 @@
  */
 import { existsSync, mkdirSync } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
-import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
-import sharp from "sharp";
+import { fileURLToPath } from "node:url";
+import { type CollectionEntry, getCollection } from "astro:content";
 import { OGImageRoute } from "astro-og-canvas";
-import { getCollection, type CollectionEntry } from "astro:content";
+import sharp from "sharp";
 import coursesData from "../../../content/_courses.json";
 import type { Course } from "../../../content/resolver";
 

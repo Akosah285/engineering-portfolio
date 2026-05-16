@@ -28,7 +28,7 @@ export function leapfrogStep(input: WaveStepInput): number[] {
   if (!(input.dt > 0 && Number.isFinite(input.dt))) {
     throw new RangeError("leapfrogStep: dt must be > 0.");
   }
-  const r2 = (input.c * input.dt / input.dx) ** 2;
+  const r2 = ((input.c * input.dt) / input.dx) ** 2;
   const out = new Array<number>(n);
   out[0] = 0;
   out[n - 1] = 0;
@@ -64,7 +64,7 @@ export function firstStep(input: FirstStepInput): number[] {
   if (!(input.c > 0)) throw new RangeError("firstStep: c must be > 0.");
   if (!(input.dx > 0)) throw new RangeError("firstStep: dx must be > 0.");
   if (!(input.dt > 0)) throw new RangeError("firstStep: dt must be > 0.");
-  const r2 = (input.c * input.dt / input.dx) ** 2;
+  const r2 = ((input.c * input.dt) / input.dx) ** 2;
   const out = new Array<number>(n);
   out[0] = 0;
   out[n - 1] = 0;
@@ -106,7 +106,13 @@ export function integrate(input: IntegrateWaveInput): number[] {
     dt: input.dt,
   });
   for (let s = 1; s < input.nSteps; s += 1) {
-    const next = leapfrogStep({ uPrev: prev, uCurr: curr, c: input.c, dx: input.dx, dt: input.dt });
+    const next = leapfrogStep({
+      uPrev: prev,
+      uCurr: curr,
+      c: input.c,
+      dx: input.dx,
+      dt: input.dt,
+    });
     prev = curr;
     curr = next;
   }

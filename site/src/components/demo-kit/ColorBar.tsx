@@ -1,8 +1,5 @@
 import { useEffect, useRef } from "react";
-import {
-  computeColorBarTicks,
-  type ColorMap,
-} from "./colorMap";
+import { type ColorMap, computeColorBarTicks } from "./colorMap";
 import "./ColorBar.css";
 
 /**
@@ -66,10 +63,7 @@ export function ColorBar({
       role="img"
       aria-label={ariaLabel}
     >
-      <div
-        className="color-bar__canvas-wrap"
-        style={{ width, height }}
-      >
+      <div className="color-bar__canvas-wrap" style={{ width, height }}>
         <canvas ref={canvasRef} width={width} height={height} />
       </div>
       <div
@@ -91,9 +85,7 @@ export function ColorBar({
           </span>
         ))}
       </div>
-      {label ? (
-        <div className="color-bar__label">{label}</div>
-      ) : null}
+      {label ? <div className="color-bar__label">{label}</div> : null}
     </div>
   );
 }

@@ -44,8 +44,6 @@ function validate(n: number, k: number): void {
     !Number.isFinite(n) ||
     !Number.isFinite(k)
   ) {
-    throw new RangeError(
-      "combinatorics: n and k must be non-negative integers.",
-    );
+    throw new RangeError("combinatorics: n and k must be non-negative integers.");
   }
 }

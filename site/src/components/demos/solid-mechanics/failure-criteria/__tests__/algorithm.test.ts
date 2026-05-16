@@ -1,14 +1,14 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
-  trescaStress,
-  trescaSafetyFactor,
-  tresca,
-  vonMisesStress,
-  vonMisesSafetyFactor,
-  vonMises,
-  rankineStress,
-  rankineSafetyFactor,
   rankine,
+  rankineSafetyFactor,
+  rankineStress,
+  tresca,
+  trescaSafetyFactor,
+  trescaStress,
+  vonMises,
+  vonMisesSafetyFactor,
+  vonMisesStress,
 } from "../algorithm";
 
 describe("Tresca (max shear)", () => {
@@ -28,7 +28,7 @@ describe("Tresca (max shear)", () => {
   });
 
   it("zero-stress safety factor is Infinity", () => {
-    expect(trescaSafetyFactor({ s1: 0, s2: 0 }, 100)).toBe(Infinity);
+    expect(trescaSafetyFactor({ s1: 0, s2: 0 }, 100)).toBe(Number.POSITIVE_INFINITY);
   });
 });
 
@@ -57,8 +57,10 @@ describe("von Mises (distortion energy)", () => {
   });
 
   it("RangeError on non-finite", () => {
-    expect(() => vonMises({ s1: NaN, s2: 0 }, 100)).toThrow(RangeError);
-    expect(() => vonMises({ s1: 1, s2: Infinity }, 100)).toThrow(RangeError);
+    expect(() => vonMises({ s1: Number.NaN, s2: 0 }, 100)).toThrow(RangeError);
+    expect(() => vonMises({ s1: 1, s2: Number.POSITIVE_INFINITY }, 100)).toThrow(
+      RangeError,
+    );
   });
 });
 

@@ -67,9 +67,7 @@ export function buildNaturalSpline(nodes: readonly Point[]): SplineCoeffs {
   const a = nodes.map((p) => p.y);
   const alpha = new Array<number>(n).fill(0);
   for (let i = 1; i < n; i += 1) {
-    alpha[i] =
-      (3 / h[i]!) * (a[i + 1]! - a[i]!) -
-      (3 / h[i - 1]!) * (a[i]! - a[i - 1]!);
+    alpha[i] = (3 / h[i]!) * (a[i + 1]! - a[i]!) - (3 / h[i - 1]!) * (a[i]! - a[i - 1]!);
   }
   const l = new Array<number>(n + 1).fill(0);
   const mu = new Array<number>(n + 1).fill(0);

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { astar, bfs, manhattan, type Maze } from "../algorithm";
+import { type Maze, astar, bfs, manhattan } from "../algorithm";
 
 function open(rows: number, cols: number): Maze {
   const passable: boolean[][] = Array.from({ length: rows }, () =>

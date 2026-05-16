@@ -128,16 +128,7 @@ export const TRUSS_GEOMETRIES: Record<PresetSlug, TrussGeometry> = {
 };
 
 /** Union of every joint id used across all presets — needed for the enum schema. */
-export const ALL_JOINT_IDS = [
-  "A",
-  "B",
-  "C",
-  "J1",
-  "J2",
-  "J3",
-  "J4",
-  "J5",
-] as const;
+export const ALL_JOINT_IDS = ["A", "B", "C", "J1", "J2", "J3", "J4", "J5"] as const;
 
 const DEFAULT_LOAD_MAG = 4;
 
@@ -157,8 +148,7 @@ export const PRESET_META: Record<PresetSlug, PresetMeta> = {
   "simple-triangle": {
     slug: "simple-triangle",
     label: "Simple Triangle",
-    narration:
-      "Three-joint pin-roller triangle — the canonical determinate truss.",
+    narration: "Three-joint pin-roller triangle — the canonical determinate truss.",
     geometry: TRUSS_GEOMETRIES["simple-triangle"],
     state: makePresetState("simple-triangle", TRUSS_GEOMETRIES["simple-triangle"]),
   },
@@ -173,23 +163,20 @@ export const PRESET_META: Record<PresetSlug, PresetMeta> = {
   "howe-truss": {
     slug: "howe-truss",
     label: "Howe Truss",
-    narration:
-      "Four-joint Howe-style truss with a central vertical member.",
+    narration: "Four-joint Howe-style truss with a central vertical member.",
     geometry: TRUSS_GEOMETRIES["howe-truss"],
     state: makePresetState("howe-truss", TRUSS_GEOMETRIES["howe-truss"]),
   },
   cantilever: {
     slug: "cantilever",
     label: "Cantilever",
-    narration:
-      "Two pins on the wall and a free end carrying the load.",
-    geometry: TRUSS_GEOMETRIES["cantilever"],
+    narration: "Two pins on the wall and a free end carrying the load.",
+    geometry: TRUSS_GEOMETRIES.cantilever,
     state: makePresetState("cantilever", TRUSS_GEOMETRIES.cantilever),
   },
 };
 
-export const DEFAULT_STATE: TrussAnalyzerDemoState =
-  PRESET_META["simple-triangle"].state;
+export const DEFAULT_STATE: TrussAnalyzerDemoState = PRESET_META["simple-triangle"].state;
 
 export const PRESETS: readonly { name: string; state: TrussAnalyzerDemoState }[] =
   PRESET_SLUGS.map((slug) => ({

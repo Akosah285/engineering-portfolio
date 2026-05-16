@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { PresetCarousel, type Preset } from "../../../demo-kit/PresetCarousel";
+import { type Preset, PresetCarousel } from "../../../demo-kit/PresetCarousel";
 import { SliderRow } from "../../../demo-kit/SliderRow";
 import { type Schema, useDemoState } from "../../../demo-kit/useDemoState";
 import { type Bit, type Sample, compare } from "./algorithm";
@@ -105,10 +105,7 @@ export default function LatchVsFfVisualizer() {
   };
 
   const handlePatternSlider = (raw: number): void => {
-    const idx = Math.min(
-      PATTERN_SLUGS.length - 1,
-      Math.max(0, Math.round(raw)),
-    );
+    const idx = Math.min(PATTERN_SLUGS.length - 1, Math.max(0, Math.round(raw)));
     const slug: PatternSlug = PATTERN_SLUGS[idx] ?? "slow-clock";
     setState({ ...state, pattern: slug, cursor: 0 });
   };
@@ -122,9 +119,10 @@ export default function LatchVsFfVisualizer() {
     <div className="lvf-visualizer">
       <PresetCarousel
         presets={
-          PRESETS as readonly { name: string; state: LatchVsFfState }[] as unknown as Preset<
-            typeof state
-          >[]
+          PRESETS as readonly {
+            name: string;
+            state: LatchVsFfState;
+          }[] as unknown as Preset<typeof state>[]
         }
         onSelect={(next) => handlePreset(next as LatchVsFfState)}
         ariaLabel="Latch vs flip-flop presets"

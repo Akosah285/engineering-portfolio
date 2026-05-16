@@ -112,10 +112,7 @@ function paintChain(
   ctx.stroke();
 }
 
-function paintTrace(
-  ctx: CanvasRenderingContext2D,
-  trace: readonly Complex[],
-): void {
+function paintTrace(ctx: CanvasRenderingContext2D, trace: readonly Complex[]): void {
   if (trace.length < 2) return;
   ctx.strokeStyle = "#00693e";
   ctx.lineWidth = 2;

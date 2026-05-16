@@ -1,8 +1,5 @@
 import { useEffect, useRef } from "react";
-import {
-  computeAxisLayout,
-  type AxisLayout,
-} from "./plotMath";
+import { type AxisLayout, computeAxisLayout } from "./plotMath";
 import "./PlotPanel.css";
 
 /**
@@ -130,9 +127,7 @@ export function PlotPanel({
           </span>
         ))}
       </div>
-      {xLabel ? (
-        <div className="plot-panel__x-label">{xLabel}</div>
-      ) : null}
+      {xLabel ? <div className="plot-panel__x-label">{xLabel}</div> : null}
     </div>
   );
 }

@@ -20,6 +20,6 @@ describe("BayesTheoremVisualizer", () => {
     render(<BayesTheoremVisualizer />);
     const counter = document.querySelector(".bt-visualizer__counter");
     expect(counter).toBeTruthy();
-    expect((counter?.textContent ?? "")).toMatch(/pop\s*=\s*\d+/);
+    expect(counter?.textContent ?? "").toMatch(/pop\s*=\s*\d+/);
   });
 });

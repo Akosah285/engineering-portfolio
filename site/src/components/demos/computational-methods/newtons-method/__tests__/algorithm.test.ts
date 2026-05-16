@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { newtonsMethod, type NewtonResult } from "../algorithm";
+import { type NewtonResult, newtonsMethod } from "../algorithm";
 
 /**
  * Pure brain of v5 Newton's Method demo (#77).

@@ -1,9 +1,9 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
-  steadyStateOmega,
   omegaAt,
-  thetaAt,
   settlingTime,
+  steadyStateOmega,
+  thetaAt,
   trajectory,
 } from "../algorithm";
 

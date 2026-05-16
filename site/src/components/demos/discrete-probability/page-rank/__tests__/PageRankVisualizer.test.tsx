@@ -11,9 +11,7 @@ describe("PageRankVisualizer", () => {
     ).toBeTruthy();
     expect(screen.getByRole("option", { name: /linear chain/i })).toBeTruthy();
     expect(screen.getByRole("option", { name: /star/i })).toBeTruthy();
-    expect(
-      screen.getByRole("option", { name: /two.cluster|bridge/i }),
-    ).toBeTruthy();
+    expect(screen.getByRole("option", { name: /two.cluster|bridge/i })).toBeTruthy();
     expect(screen.getByRole("option", { name: /cycle/i })).toBeTruthy();
     expect(screen.getByRole("button", { name: /↺ reset/i })).toBeTruthy();
     const narrations = screen.getAllByRole("status");

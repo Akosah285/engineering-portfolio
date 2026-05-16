@@ -1,13 +1,6 @@
 import { useEffect, useRef } from "react";
-import {
-  computeArrows,
-  type Arrow,
-  type FieldFn,
-} from "./vectorField";
-import {
-  viridis,
-  type ColorMap,
-} from "./colorMap";
+import { type ColorMap, viridis } from "./colorMap";
+import { type Arrow, type FieldFn, computeArrows } from "./vectorField";
 import "./VectorFieldPlot.css";
 
 /**

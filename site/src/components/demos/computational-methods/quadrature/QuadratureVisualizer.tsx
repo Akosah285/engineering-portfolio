@@ -5,16 +5,11 @@ import { MathHud } from "../../../demo-kit/MathHud";
 import { PresetCarousel } from "../../../demo-kit/PresetCarousel";
 import { SliderRow } from "../../../demo-kit/SliderRow";
 import { type Schema, useDemoState } from "../../../demo-kit/useDemoState";
-import {
-  midpointRule,
-  rectangleRule,
-  simpsonRule,
-  trapezoidRule,
-} from "./algorithm";
+import { midpointRule, rectangleRule, simpsonRule, trapezoidRule } from "./algorithm";
 import {
   DEFAULT_STATE,
-  FUNC_SLUGS,
   FUNCTIONS,
+  FUNC_SLUGS,
   PRESETS,
   type QuadFunction,
   type QuadratureDemoState,
@@ -62,7 +57,8 @@ function computeIntegral(
   state: QuadratureDemoState,
   fn: QuadFunction,
 ): { approx: number; safeN: number } {
-  const safeN = state.rule === "simpson" ? evenN(state.n) : Math.max(1, Math.floor(state.n));
+  const safeN =
+    state.rule === "simpson" ? evenN(state.n) : Math.max(1, Math.floor(state.n));
   const input = { f: fn.f, a: state.a, b: state.b, n: safeN };
   let approx = 0;
   try {
@@ -289,10 +285,7 @@ export function QuadratureVisualizer() {
 
   const fn = useMemo(() => FUNCTIONS[state.funcSlug], [state.funcSlug]);
 
-  const { approx, safeN } = useMemo(
-    () => computeIntegral(state, fn),
-    [state, fn],
-  );
+  const { approx, safeN } = useMemo(() => computeIntegral(state, fn), [state, fn]);
 
   const draw: DrawFn = useCallback(
     (ctx) => {
@@ -376,6 +369,7 @@ export function QuadratureVisualizer() {
         className="qd-visualizer__rules"
         role="listbox"
         aria-label="Quadrature rule"
+        tabIndex={0}
       >
         <span className="qd-visualizer__rules-label">Rule:</span>
         {RULE_SLUGS.map((slug) => {

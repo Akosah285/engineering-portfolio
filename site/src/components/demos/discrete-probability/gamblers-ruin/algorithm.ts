@@ -34,8 +34,8 @@ export function ruinProb({ N, k, p }: RuinInput): number {
   }
   const r = (1 - p) / p;
   // (r^k - r^N) / (1 - r^N)
-  const numerator = Math.pow(r, k) - Math.pow(r, N);
-  const denominator = 1 - Math.pow(r, N);
+  const numerator = r ** k - r ** N;
+  const denominator = 1 - r ** N;
   return numerator / denominator;
 }
 
@@ -48,7 +48,7 @@ export function expectedDuration({ N, k, p }: RuinInput): number {
   if (Math.abs(p - 0.5) < 1e-12) return k * (N - k);
   const q = 1 - p;
   const r = q / p;
-  return (1 / (q - p)) * (k - (N * (1 - Math.pow(r, k))) / (1 - Math.pow(r, N)));
+  return (1 / (q - p)) * (k - (N * (1 - r ** k)) / (1 - r ** N));
 }
 
 // Simulate a single trajectory: returns terminal state (0 or N) + step count.

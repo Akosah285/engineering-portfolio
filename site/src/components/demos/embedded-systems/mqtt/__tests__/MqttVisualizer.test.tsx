@@ -1,5 +1,5 @@
-import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, it, expect } from "vitest";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 import MqttVisualizer from "../MqttVisualizer";
 
 describe("MqttVisualizer", () => {
@@ -25,11 +25,13 @@ describe("MqttVisualizer", () => {
     const { container } = render(<MqttVisualizer />);
 
     fireEvent.click(screen.getByRole("option", { name: /qos.2/i }));
-    expect(container.querySelector(".mqtt-visualizer__counter")?.textContent ?? "")
-      .toMatch(/events:\s*8/i);
+    expect(
+      container.querySelector(".mqtt-visualizer__counter")?.textContent ?? "",
+    ).toMatch(/events:\s*8/i);
 
     fireEvent.click(screen.getByRole("option", { name: /no.match/i }));
-    expect(container.querySelector(".mqtt-visualizer__counter")?.textContent ?? "")
-      .toMatch(/events:\s*0/i);
+    expect(
+      container.querySelector(".mqtt-visualizer__counter")?.textContent ?? "",
+    ).toMatch(/events:\s*0/i);
   });
 });

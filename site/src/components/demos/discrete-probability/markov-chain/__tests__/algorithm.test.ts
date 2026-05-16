@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { isStochastic, step, nStep, stationary, type Matrix } from "../algorithm";
+import { describe, expect, it } from "vitest";
+import { type Matrix, isStochastic, nStep, stationary, step } from "../algorithm";
 
 const TWO_STATE: Matrix = [
   [0.7, 0.3],
@@ -20,15 +20,30 @@ describe("isStochastic", () => {
   });
 
   it("rejects a non-square matrix", () => {
-    expect(isStochastic([[1, 0], [0.5, 0.3, 0.2]])).toBe(false);
+    expect(
+      isStochastic([
+        [1, 0],
+        [0.5, 0.3, 0.2],
+      ]),
+    ).toBe(false);
   });
 
   it("rejects negative probabilities", () => {
-    expect(isStochastic([[1.2, -0.2], [0.5, 0.5]])).toBe(false);
+    expect(
+      isStochastic([
+        [1.2, -0.2],
+        [0.5, 0.5],
+      ]),
+    ).toBe(false);
   });
 
   it("rejects rows that don't sum to 1", () => {
-    expect(isStochastic([[0.5, 0.4], [0.5, 0.5]])).toBe(false);
+    expect(
+      isStochastic([
+        [0.5, 0.4],
+        [0.5, 0.5],
+      ]),
+    ).toBe(false);
   });
 
   it("rejects an empty matrix", () => {
@@ -55,7 +70,15 @@ describe("step", () => {
   });
 
   it("throws RangeError on non-stochastic P", () => {
-    expect(() => step([1, 0], [[0.5, 0.4], [0.5, 0.5]])).toThrow(RangeError);
+    expect(() =>
+      step(
+        [1, 0],
+        [
+          [0.5, 0.4],
+          [0.5, 0.5],
+        ],
+      ),
+    ).toThrow(RangeError);
   });
 
   it("throws RangeError on a distribution that doesn't sum to 1", () => {
@@ -129,7 +152,14 @@ describe("stationary", () => {
   });
 
   it("throws RangeError on non-stochastic P", () => {
-    expect(() => stationary({ P: [[0.5, 0.4], [0.5, 0.5]] })).toThrow(RangeError);
+    expect(() =>
+      stationary({
+        P: [
+          [0.5, 0.4],
+          [0.5, 0.5],
+        ],
+      }),
+    ).toThrow(RangeError);
   });
 
   it("throws RangeError on non-positive tol or maxIterations", () => {

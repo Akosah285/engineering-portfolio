@@ -16,7 +16,8 @@ export function rcChargingVoltage(input: FirstOrderInput): number {
   if (!(input.tau > 0 && Number.isFinite(input.tau))) {
     throw new RangeError("rcChargingVoltage: tau must be > 0.");
   }
-  if (!Number.isFinite(input.t)) throw new RangeError("rcChargingVoltage: t must be finite.");
+  if (!Number.isFinite(input.t))
+    throw new RangeError("rcChargingVoltage: t must be finite.");
   if (input.t < 0) return 0;
   return input.Vstep * (1 - Math.exp(-input.t / input.tau));
 }
@@ -29,7 +30,8 @@ export function rcDischargingVoltage(V0: number, tau: number, t: number): number
   if (!(tau > 0 && Number.isFinite(tau))) {
     throw new RangeError("rcDischargingVoltage: tau must be > 0.");
   }
-  if (!Number.isFinite(t)) throw new RangeError("rcDischargingVoltage: t must be finite.");
+  if (!Number.isFinite(t))
+    throw new RangeError("rcDischargingVoltage: t must be finite.");
   if (t < 0) return V0;
   return V0 * Math.exp(-t / tau);
 }

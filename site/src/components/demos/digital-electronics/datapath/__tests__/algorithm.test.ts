@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { initState, run, step, type Op } from "../algorithm";
+import { type Op, initState, run, step } from "../algorithm";
 
 describe("initial state", () => {
   it("all registers zero, zero flag set", () => {
@@ -28,15 +28,15 @@ describe("LOAD", () => {
   });
 
   it("rejects imm out of range", () => {
-    expect(() =>
-      step(initState(), { kind: "LOAD", rd: "R0", imm: 256 }),
-    ).toThrow(RangeError);
-    expect(() =>
-      step(initState(), { kind: "LOAD", rd: "R0", imm: -1 }),
-    ).toThrow(RangeError);
-    expect(() =>
-      step(initState(), { kind: "LOAD", rd: "R0", imm: 1.5 }),
-    ).toThrow(RangeError);
+    expect(() => step(initState(), { kind: "LOAD", rd: "R0", imm: 256 })).toThrow(
+      RangeError,
+    );
+    expect(() => step(initState(), { kind: "LOAD", rd: "R0", imm: -1 })).toThrow(
+      RangeError,
+    );
+    expect(() => step(initState(), { kind: "LOAD", rd: "R0", imm: 1.5 })).toThrow(
+      RangeError,
+    );
   });
 });
 

@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { run, stopwatchFSM, type FSMSpec } from "../algorithm";
+import { describe, expect, it } from "vitest";
+import { type FSMSpec, run, stopwatchFSM } from "../algorithm";
 
 describe("run — generic FSM stepping", () => {
   it("empty input → finalState = initial, empty trace", () => {

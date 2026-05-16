@@ -230,8 +230,7 @@ export function BodePlotVisualizer() {
     setState(next);
   };
 
-  const bwLabel =
-    bw === null ? "n/a" : `${bw.toExponential(2).replace("e+", "e")} rad/s`;
+  const bwLabel = bw === null ? "n/a" : `${bw.toExponential(2).replace("e+", "e")} rad/s`;
 
   return (
     <div className="bo-visualizer">

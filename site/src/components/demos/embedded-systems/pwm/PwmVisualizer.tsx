@@ -70,11 +70,7 @@ function toCanvas(
 }
 
 export function PwmVisualizer() {
-  const [state, setState, { reset }] = useDemoState(
-    "pwm",
-    STATE_SCHEMA,
-    DEFAULT_STATE,
-  );
+  const [state, setState, { reset }] = useDemoState("pwm", STATE_SCHEMA, DEFAULT_STATE);
 
   const params = useMemo(
     () => ({
@@ -89,10 +85,7 @@ export function PwmVisualizer() {
   const agg = useMemo(() => aggregates(params), [params]);
 
   const tEnd = state.nPeriods / state.frequency;
-  const samples = useMemo(
-    () => trace(params, tEnd, SAMPLES),
-    [params, tEnd],
-  );
+  const samples = useMemo(() => trace(params, tEnd, SAMPLES), [params, tEnd]);
 
   const axes: Axes = useMemo(
     () => ({
@@ -140,11 +133,7 @@ export function PwmVisualizer() {
       ctx.stroke();
 
       // Helper to paint a dashed horizontal line + label
-      const paintLevel = (
-        y: number,
-        color: string,
-        label: string,
-      ): void => {
+      const paintLevel = (y: number, color: string, label: string): void => {
         const [, cy] = toCanvas(axes, width, height, 0, y);
         ctx.save();
         ctx.strokeStyle = color;
@@ -157,8 +146,7 @@ export function PwmVisualizer() {
         ctx.restore();
 
         ctx.fillStyle = color;
-        ctx.font =
-          "12px 'JetBrains Mono Variable', ui-monospace, monospace";
+        ctx.font = "12px 'JetBrains Mono Variable', ui-monospace, monospace";
         ctx.textBaseline = "bottom";
         ctx.fillText(label, 8, cy - 2);
       };
@@ -273,11 +261,7 @@ export function PwmVisualizer() {
       </div>
 
       <div className="pw-visualizer__actions">
-        <button
-          type="button"
-          className="pw-visualizer__btn"
-          onClick={handleReset}
-        >
+        <button type="button" className="pw-visualizer__btn" onClick={handleReset}>
           ↺ Reset
         </button>
         <span className="pw-visualizer__counter" aria-live="off">

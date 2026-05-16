@@ -1,43 +1,25 @@
-import { describe, expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 import { ColorBar } from "../ColorBar";
-import { viridis, rdbu } from "../colorMap";
+import { rdbu, viridis } from "../colorMap";
 
 describe("<ColorBar>", () => {
   it("renders tick labels at the requested min/max", () => {
-    render(
-      <ColorBar
-        min={0}
-        max={100}
-        colorMap={viridis}
-        ariaLabel="temperature"
-      />,
-    );
+    render(<ColorBar min={0} max={100} colorMap={viridis} ariaLabel="temperature" />);
     expect(screen.getByText("0")).toBeTruthy();
     expect(screen.getByText("100")).toBeTruthy();
   });
 
   it("uses the ariaLabel for the colour bar container", () => {
     render(
-      <ColorBar
-        min={0}
-        max={1}
-        colorMap={viridis}
-        ariaLabel="velocity magnitude"
-      />,
+      <ColorBar min={0} max={1} colorMap={viridis} ariaLabel="velocity magnitude" />,
     );
     expect(screen.getByLabelText("velocity magnitude")).toBeTruthy();
   });
 
   it("renders the optional label text when provided", () => {
     render(
-      <ColorBar
-        min={0}
-        max={1}
-        colorMap={rdbu}
-        label="charge density"
-        ariaLabel="x"
-      />,
+      <ColorBar min={0} max={1} colorMap={rdbu} label="charge density" ariaLabel="x" />,
     );
     expect(screen.getByText("charge density")).toBeTruthy();
   });

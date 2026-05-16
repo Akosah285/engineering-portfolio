@@ -31,7 +31,7 @@
 }
 
 .lvf-visualizer__lane-label {
-  font: 12px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+  font: 12px / 1 ui-monospace, SFMono-Regular, Menlo, monospace;
   fill: #333;
 }
 
@@ -48,7 +48,7 @@
 }
 
 .lvf-visualizer__hud {
-  font: 13px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+  font: 13px / 1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
   color: #444;
 }
 
@@ -78,6 +78,6 @@
 }
 
 .lvf-visualizer__counter {
-  font: 13px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+  font: 13px / 1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
   color: #444;
 }

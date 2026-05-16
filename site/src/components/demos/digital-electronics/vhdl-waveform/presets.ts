@@ -1,4 +1,4 @@
-import { counterTransition, type Signals } from "./algorithm";
+import { type Signals, counterTransition } from "./algorithm";
 
 export type PatternSlug =
   | "counter-3bit"

@@ -135,11 +135,7 @@ const FIXED_SEED = 42;
  * identical output, which is the property the visualiser depends on for
  * reproducible R² values.
  */
-export function generateDataset(
-  slug: PresetSlug,
-  noise: number,
-  n: number,
-): Dataset {
+export function generateDataset(slug: PresetSlug, noise: number, n: number): Dataset {
   const meta = PRESET_META[slug];
   const rng = mulberry32(FIXED_SEED);
   const span = meta.xMax - meta.xMin;

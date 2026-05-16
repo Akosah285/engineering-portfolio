@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
 import {
+  type RingBuffer,
+  type Sample,
   createRingBuffer,
   pushSample,
   windowSlice,
-  type Sample,
-  type RingBuffer,
 } from "../timeSeries";
 
 /**

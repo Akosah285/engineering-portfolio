@@ -6,7 +6,12 @@ import { PresetCarousel } from "../../../demo-kit/PresetCarousel";
 import { SliderRow } from "../../../demo-kit/SliderRow";
 import { type Schema, useDemoState } from "../../../demo-kit/useDemoState";
 import { type Light, type Phase, type Plan, planSequence, stateAt } from "./algorithm";
-import { DEFAULT_STATE, MODE_SLUGS, PRESETS, type TrafficLightDemoState } from "./presets";
+import {
+  DEFAULT_STATE,
+  MODE_SLUGS,
+  PRESETS,
+  type TrafficLightDemoState,
+} from "./presets";
 import "./TrafficLightVisualizer.css";
 
 /**
@@ -186,10 +191,7 @@ export function TrafficLightVisualizer() {
     return () => cancelAnimationFrame(raf);
   }, [paused, state.totalMs]);
 
-  const safeT = Math.min(
-    Math.max(0, displayTime % state.totalMs),
-    state.totalMs - 1,
-  );
+  const safeT = Math.min(Math.max(0, displayTime % state.totalMs), state.totalMs - 1);
 
   const currentPhase: Phase = useMemo(() => {
     try {
@@ -230,7 +232,12 @@ export function TrafficLightVisualizer() {
   return (
     <div className="tl-visualizer">
       <PresetCarousel
-        presets={PRESETS as readonly { name: string; state: TrafficLightDemoState }[] as { name: string; state: TrafficLightDemoState }[]}
+        presets={
+          PRESETS as readonly { name: string; state: TrafficLightDemoState }[] as {
+            name: string;
+            state: TrafficLightDemoState;
+          }[]
+        }
         onSelect={handlePresetSelect}
         ariaLabel="Traffic light presets"
       />

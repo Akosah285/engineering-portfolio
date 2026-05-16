@@ -1,14 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import {
-  bit,
-  load,
-  makeCounter,
-  reset,
-  tick,
-  tickDown,
-  trace,
-} from "../algorithm";
+import { bit, load, makeCounter, reset, tick, tickDown, trace } from "../algorithm";
 
 describe("makeCounter / load / reset", () => {
   it("makes a counter with the given width and initial 0", () => {

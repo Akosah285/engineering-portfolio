@@ -28,7 +28,10 @@ export function generate(input: ERInput): ERGraph {
     throw new RangeError("generate: p must be in [0, 1].");
   }
   const rand: Random = input.random ?? Math.random;
-  const adjacency: number[][] = Array.from({ length: input.nNodes }, () => [] as number[]);
+  const adjacency: number[][] = Array.from(
+    { length: input.nNodes },
+    () => [] as number[],
+  );
   const edges: [number, number][] = [];
   for (let i = 0; i < input.nNodes; i += 1) {
     for (let j = i + 1; j < input.nNodes; j += 1) {

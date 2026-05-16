@@ -99,7 +99,8 @@ export function minimize(input: MinimizeInput): MinimizeResult {
   const allTerms = [...new Set([...sortedMinterms, ...(input.dontCares ?? [])])];
   // Generate prime implicants.
   let groups: Map<string, Cube> = new Map();
-  for (const m of allTerms) groups.set(cubeKey(toBits(m, input.nVars)), toBits(m, input.nVars));
+  for (const m of allTerms)
+    groups.set(cubeKey(toBits(m, input.nVars)), toBits(m, input.nVars));
   const primes: Cube[] = [];
   while (groups.size > 0) {
     const cubes = Array.from(groups.values());

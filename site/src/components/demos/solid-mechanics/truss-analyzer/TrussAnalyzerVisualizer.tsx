@@ -5,13 +5,13 @@ import { MathHud } from "../../../demo-kit/MathHud";
 import { PresetCarousel } from "../../../demo-kit/PresetCarousel";
 import { SliderRow } from "../../../demo-kit/SliderRow";
 import { type Schema, useDemoState } from "../../../demo-kit/useDemoState";
-import { analyze, type Load, type TrussInput, type TrussResult } from "./algorithm";
+import { type Load, type TrussInput, type TrussResult, analyze } from "./algorithm";
 import {
   ALL_JOINT_IDS,
   DEFAULT_STATE,
+  PRESETS,
   PRESET_META,
   PRESET_SLUGS,
-  PRESETS,
   type PresetSlug,
   type ShowZero,
   type TrussAnalyzerDemoState,
@@ -157,9 +157,7 @@ export default function TrussAnalyzerVisualizer() {
   }, [geometry, state.loadJoint]);
 
   const trussInput: TrussInput = useMemo(() => {
-    const loads: Load[] = [
-      { joint: validLoadJoint, Fx: 0, Fy: -state.loadMag },
-    ];
+    const loads: Load[] = [{ joint: validLoadJoint, Fx: 0, Fy: -state.loadMag }];
     return {
       joints: geometry.joints,
       members: geometry.members,
@@ -350,8 +348,7 @@ export default function TrussAnalyzerVisualizer() {
         </button>
         <span className="tr-visualizer__counter" aria-live="off">
           max tension {maxTension.toFixed(2)} kN · max compression{" "}
-          {Math.abs(maxCompression).toFixed(2)} kN ·{" "}
-          {geometry.members.length} members
+          {Math.abs(maxCompression).toFixed(2)} kN · {geometry.members.length} members
         </span>
       </div>
     </div>

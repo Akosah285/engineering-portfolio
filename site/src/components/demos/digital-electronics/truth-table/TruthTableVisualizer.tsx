@@ -160,8 +160,7 @@ function drawGateSymbol(
   // Input lines + labels
   const names = inputNames(nInputs);
   const inputLineX = left - 60;
-  const inputEntryX =
-    baseGate === "OR" || baseGate === "XOR" ? left + 14 : left;
+  const inputEntryX = baseGate === "OR" || baseGate === "XOR" ? left + 14 : left;
   const spacing = bodyH / (names.length + 1);
   names.forEach((name, i) => {
     const y = top + spacing * (i + 1);
@@ -249,7 +248,7 @@ export function TruthTableVisualizer() {
 
         <div className="tt-visualizer__panel">
           <p className="tt-visualizer__panel-title">Truth table</p>
-          <table className="tt-visualizer__table" role="table">
+          <table className="tt-visualizer__table">
             <thead>
               <tr>
                 {inputs.map((name) => (

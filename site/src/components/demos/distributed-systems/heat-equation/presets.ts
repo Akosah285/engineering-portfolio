@@ -79,7 +79,11 @@ export const PRESET_META: Record<HeatPresetSlug, HeatPresetMeta> = {
     name: "Two peaks",
     analyticalMode: null,
     initialFn: (L, n) =>
-      sampleX(L, n, (x) => Math.sin((Math.PI * x) / L) + 0.5 * Math.sin((2 * Math.PI * x) / L)),
+      sampleX(
+        L,
+        n,
+        (x) => Math.sin((Math.PI * x) / L) + 0.5 * Math.sin((2 * Math.PI * x) / L),
+      ),
   },
   step: {
     slug: "step",

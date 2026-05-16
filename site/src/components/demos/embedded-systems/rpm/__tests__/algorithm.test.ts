@@ -1,9 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  instantRpmFromPulses,
-  movingAverageRpm,
-  windowedRpm,
-} from "../algorithm";
+import { instantRpmFromPulses, movingAverageRpm, windowedRpm } from "../algorithm";
 
 describe("instantRpmFromPulses", () => {
   it("rejects non-positive pulsesPerRev", () => {

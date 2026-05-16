@@ -41,22 +41,12 @@ const narrationTemplate = (state: NewtonDemoState): string => {
 };
 
 /** Project x in function coordinates → cx in canvas pixels. */
-function projectX(
-  x: number,
-  xMin: number,
-  xMax: number,
-  width: number,
-): number {
+function projectX(x: number, xMin: number, xMax: number, width: number): number {
   return ((x - xMin) / (xMax - xMin)) * width;
 }
 
 /** Project y in function coordinates → cy in canvas pixels (y-flipped). */
-function projectY(
-  y: number,
-  yMin: number,
-  yMax: number,
-  height: number,
-): number {
+function projectY(y: number, yMin: number, yMax: number, height: number): number {
   return height - ((y - yMin) / (yMax - yMin)) * height;
 }
 
@@ -168,12 +158,7 @@ export function NewtonsMethodVisualizer() {
         const xn = result.iterates[upTo]!;
         const xNext = result.iterates[upTo + 1]!;
         const fxn = fn.f(xn);
-        if (
-          Number.isFinite(fxn) &&
-          Number.isFinite(xNext) &&
-          xn >= xMin &&
-          xn <= xMax
-        ) {
+        if (Number.isFinite(fxn) && Number.isFinite(xNext) && xn >= xMin && xn <= xMax) {
           const cx1 = projectX(xn, xMin, xMax, width);
           const cy1 = projectY(fxn, yMin, yMax, height);
           const cx2 = projectX(xNext, xMin, xMax, width);
@@ -211,7 +196,8 @@ export function NewtonsMethodVisualizer() {
     [fn, result, stepIndex],
   );
 
-  const currentX = result.iterates[Math.min(stepIndex, result.iterates.length - 1)] ?? state.x0;
+  const currentX =
+    result.iterates[Math.min(stepIndex, result.iterates.length - 1)] ?? state.x0;
   const currentFx = fn.f(currentX);
 
   const handleReset = (): void => {

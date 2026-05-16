@@ -62,7 +62,12 @@ export function magnitude(c: Complex): number {
   return Math.hypot(c.re, c.im);
 }
 
-export type SignalKind = "rect" | "triangle" | "exp-two-sided" | "exp-causal" | "gaussian";
+export type SignalKind =
+  | "rect"
+  | "triangle"
+  | "exp-two-sided"
+  | "exp-causal"
+  | "gaussian";
 
 // Sample a signal's FT over an array of ω values.
 export function sampleFT(

@@ -5,7 +5,7 @@ import { MathHud } from "../../../demo-kit/MathHud";
 import { PresetCarousel } from "../../../demo-kit/PresetCarousel";
 import { SliderRow } from "../../../demo-kit/SliderRow";
 import { type Schema, useDemoState } from "../../../demo-kit/useDemoState";
-import { type BiquadType, makeBiquad, magnitudeResponse } from "./algorithm";
+import { type BiquadType, magnitudeResponse, makeBiquad } from "./algorithm";
 import {
   type AudioFilterDemoState,
   DEFAULT_STATE,
@@ -216,6 +216,7 @@ export function AudioFilterVisualizer() {
         className="af-visualizer__type-row"
         role="listbox"
         aria-label="Filter type"
+        tabIndex={0}
       >
         {FILTER_TYPES.map((t) => (
           <button

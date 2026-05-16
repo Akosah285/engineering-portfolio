@@ -81,7 +81,12 @@ export function fieldAt(input: FieldInput): FieldVector {
   }
 
   if (onCharge) {
-    return { Ex: Number.NaN, Ey: Number.NaN, magnitude: Number.NaN, potential: Number.POSITIVE_INFINITY };
+    return {
+      Ex: Number.NaN,
+      Ey: Number.NaN,
+      magnitude: Number.NaN,
+      potential: Number.POSITIVE_INFINITY,
+    };
   }
   return { Ex, Ey, magnitude: Math.hypot(Ex, Ey), potential: V };
 }
@@ -107,7 +112,12 @@ export interface GridSamplePoint extends FieldVector {
  * Returns a flat row-major array of length nx*ny.
  */
 export function fieldGrid(input: GridFieldInput): GridSamplePoint[] {
-  if (!Number.isInteger(input.nx) || input.nx < 2 || !Number.isInteger(input.ny) || input.ny < 2) {
+  if (
+    !Number.isInteger(input.nx) ||
+    input.nx < 2 ||
+    !Number.isInteger(input.ny) ||
+    input.ny < 2
+  ) {
     throw new RangeError("chargeField: nx and ny must be integers >= 2.");
   }
   if (input.xMax <= input.xMin || input.yMax <= input.yMin) {

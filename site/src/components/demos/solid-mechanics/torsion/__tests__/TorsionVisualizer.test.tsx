@@ -8,12 +8,8 @@ describe("TorsionVisualizer", () => {
     expect(screen.getByRole("slider", { name: /torque/i })).toBeTruthy();
     expect(screen.getByRole("slider", { name: /length/i })).toBeTruthy();
     expect(screen.getByRole("slider", { name: /outer.*radius/i })).toBeTruthy();
-    expect(
-      screen.getByRole("option", { name: /solid.*thin|solid thin/i }),
-    ).toBeTruthy();
-    expect(
-      screen.getByRole("option", { name: /hollow.*thin wall/i }),
-    ).toBeTruthy();
+    expect(screen.getByRole("option", { name: /solid.*thin|solid thin/i })).toBeTruthy();
+    expect(screen.getByRole("option", { name: /hollow.*thin wall/i })).toBeTruthy();
     expect(screen.getByRole("button", { name: /↺ reset/i })).toBeTruthy();
   });
 

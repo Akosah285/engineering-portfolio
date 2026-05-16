@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom/vitest";
-import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 import { HypothesisTestingVisualizer } from "../HypothesisTestingVisualizer";
 
 describe("HypothesisTestingVisualizer", () => {
@@ -8,7 +8,9 @@ describe("HypothesisTestingVisualizer", () => {
     render(<HypothesisTestingVisualizer />);
     expect(screen.getByRole("slider", { name: /x̄|xbar/i })).toBeInTheDocument();
     expect(screen.getByRole("slider", { name: /n/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /weak effect|weak-effect/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /weak effect|weak-effect/i }),
+    ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /↺ reset/i })).toBeInTheDocument();
   });
 

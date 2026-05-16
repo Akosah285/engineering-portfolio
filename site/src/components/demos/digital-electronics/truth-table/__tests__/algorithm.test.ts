@@ -1,15 +1,15 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
-  truthTable,
   AND,
-  OR,
-  NOT,
   NAND,
   NOR,
-  XOR,
+  NOT,
+  OR,
   XNOR,
-  rowKey,
+  XOR,
   minterms,
+  rowKey,
+  truthTable,
 } from "../algorithm";
 
 describe("gate primitives", () => {
@@ -88,8 +88,7 @@ describe("truthTable", () => {
   it("3-input full adder carry bit (AB OR ACin OR BCin) gives the expected table", () => {
     const t = truthTable({
       inputs: ["A", "B", "Cin"],
-      evaluate: (a) =>
-        OR(OR(AND(a.A!, a.B!), AND(a.A!, a.Cin!)), AND(a.B!, a.Cin!)),
+      evaluate: (a) => OR(OR(AND(a.A!, a.B!), AND(a.A!, a.Cin!)), AND(a.B!, a.Cin!)),
     });
     expect(t.map((r) => r.output)).toEqual([
       false,
@@ -108,7 +107,9 @@ describe("truthTable", () => {
   });
 
   it("throws on duplicate input names", () => {
-    expect(() => truthTable({ inputs: ["A", "A"], evaluate: () => true })).toThrow(RangeError);
+    expect(() => truthTable({ inputs: ["A", "A"], evaluate: () => true })).toThrow(
+      RangeError,
+    );
   });
 
   it("throws when input count exceeds the cap", () => {

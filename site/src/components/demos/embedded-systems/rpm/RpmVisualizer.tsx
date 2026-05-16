@@ -90,7 +90,7 @@ function simulatePulseTimes(
     const t = raw[i]!;
     if (t < 0) continue;
     if (t > DURATION_SEC) break;
-    const prev = out.length > 0 ? out[out.length - 1]! : -Infinity;
+    const prev = out.length > 0 ? out[out.length - 1]! : Number.NEGATIVE_INFINITY;
     out.push(t <= prev ? prev + eps : t);
   }
   return out;
@@ -265,11 +265,7 @@ function paintPlot(
 }
 
 export default function RpmVisualizer() {
-  const [state, setState, { reset }] = useDemoState(
-    "rpm",
-    STATE_SCHEMA,
-    DEFAULT_STATE,
-  );
+  const [state, setState, { reset }] = useDemoState("rpm", STATE_SCHEMA, DEFAULT_STATE);
 
   // Derived series — recomputed only when controls change.
   const { instant, windowed, movingAvg, pulseTimes } = useMemo(() => {
@@ -278,12 +274,7 @@ export default function RpmVisualizer() {
       Math.round(state.trueRpm) * 1009 +
       Math.round(state.ppr) * 31 +
       Math.round(state.noisePct);
-    const pulses = simulatePulseTimes(
-      state.trueRpm,
-      state.ppr,
-      state.noisePct,
-      seed,
-    );
+    const pulses = simulatePulseTimes(state.trueRpm, state.ppr, state.noisePct, seed);
 
     let inst: InstantRpm[] = [];
     try {
@@ -334,9 +325,7 @@ export default function RpmVisualizer() {
       const dialCy = height * 0.55;
       const dialR = Math.min(width * 0.2, height * 0.4);
       const needleRpm =
-        findRpmAt(windowed, cursorRef.t) ??
-        findRpmAt(movingAvg, cursorRef.t) ??
-        0;
+        findRpmAt(windowed, cursorRef.t) ?? findRpmAt(movingAvg, cursorRef.t) ?? 0;
       paintDial(ctx, dialCx, dialCy, dialR, needleRpm);
 
       // Plot panel — right half
@@ -376,16 +365,13 @@ export default function RpmVisualizer() {
     };
   }, [instant, windowed, movingAvg, pulseTimes]);
 
-  const fmt = (v: number | null): string =>
-    v === null ? "—" : `${v.toFixed(0)}`;
+  const fmt = (v: number | null): string => (v === null ? "—" : `${v.toFixed(0)}`);
 
   const handlePresetSelect = (next: typeof state): void => {
     setState(next);
   };
 
-  const presetsForCarousel = useMemo<
-    { name: string; state: RpmDemoState }[]
-  >(
+  const presetsForCarousel = useMemo<{ name: string; state: RpmDemoState }[]>(
     () => PRESETS.map((p) => ({ name: p.name, state: p.state })),
     [],
   );
@@ -470,16 +456,12 @@ export default function RpmVisualizer() {
       </div>
 
       <div className="rpm-visualizer__actions">
-        <button
-          type="button"
-          className="rpm-visualizer__btn"
-          onClick={() => reset()}
-        >
+        <button type="button" className="rpm-visualizer__btn" onClick={() => reset()}>
           ↺ Reset
         </button>
         <span className="rpm-visualizer__counter" aria-live="off">
-          instant {fmt(summary.instantRpm)} RPM · windowed{" "}
-          {fmt(summary.windowedRpm)} RPM · avg {fmt(summary.movingAvgRpm)} RPM
+          instant {fmt(summary.instantRpm)} RPM · windowed {fmt(summary.windowedRpm)} RPM
+          · avg {fmt(summary.movingAvgRpm)} RPM
         </span>
       </div>
     </div>

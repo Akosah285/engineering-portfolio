@@ -5,7 +5,9 @@ import { FourierSeriesVisualizer } from "../FourierSeriesVisualizer";
 describe("FourierSeriesVisualizer", () => {
   it("renders sliders + preset chips + canvas", () => {
     render(<FourierSeriesVisualizer />);
-    expect(screen.getByRole("slider", { name: /^max harmonics|^harmonics/i })).toBeTruthy();
+    expect(
+      screen.getByRole("slider", { name: /^max harmonics|^harmonics/i }),
+    ).toBeTruthy();
     expect(screen.getByRole("slider", { name: /^step delay|^delay/i })).toBeTruthy();
     expect(screen.getByRole("option", { name: /square wave \(gibbs\)/i })).toBeTruthy();
     expect(screen.getByRole("option", { name: /sawtooth/i })).toBeTruthy();

@@ -121,11 +121,7 @@ function mulberry32(seed: number): () => number {
  * centroid. Better starting points → faster convergence and lower final
  * inertia than random init.
  */
-export function initCentroidsKPP(
-  pixels: readonly RGB[],
-  k: number,
-  seed: number,
-): RGB[] {
+export function initCentroidsKPP(pixels: readonly RGB[], k: number, seed: number): RGB[] {
   const rand = mulberry32(seed);
   const n = pixels.length;
   if (n === 0) return [];
@@ -179,10 +175,7 @@ export function initCentroidsKPP(
  * - iterations: how many iterations actually ran (≤ maxIter)
  * - inertia: final Σ ||x_i - μ_{c(i)}||²
  */
-export function kMeans(
-  pixels: readonly RGB[],
-  options: KMeansOptions,
-): KMeansResult {
+export function kMeans(pixels: readonly RGB[], options: KMeansOptions): KMeansResult {
   const { k, seed, maxIter } = options;
   if (k < 1) throw new Error("k must be >= 1");
   if (pixels.length === 0) {

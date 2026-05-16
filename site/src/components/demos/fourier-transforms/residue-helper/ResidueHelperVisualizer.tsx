@@ -2,13 +2,7 @@ import { useMemo } from "react";
 import { PresetCarousel } from "../../../demo-kit/PresetCarousel";
 import { SliderRow } from "../../../demo-kit/SliderRow";
 import { type Schema, useDemoState } from "../../../demo-kit/useDemoState";
-import {
-  type Complex,
-  abs,
-  contourIntegral,
-  residueSimplePole,
-  sub,
-} from "./algorithm";
+import { type Complex, abs, contourIntegral, residueSimplePole, sub } from "./algorithm";
 import {
   DEFAULT_FUNC,
   DEFAULT_RADIUS,
@@ -199,14 +193,7 @@ export default function ResidueHelperVisualizer() {
             strokeWidth={1}
           />
           {/* contour */}
-          <circle
-            cx={cx}
-            cy={cy}
-            r={rPx}
-            fill="none"
-            stroke="#1f77b4"
-            strokeWidth={2}
-          />
+          <circle cx={cx} cy={cy} r={rPx} fill="none" stroke="#1f77b4" strokeWidth={2} />
           {/* poles */}
           {spec.poles.map((p, i) => {
             const isEnclosed = abs(p) < state.radius;
@@ -237,9 +224,7 @@ export default function ResidueHelperVisualizer() {
         <div className="rh-visualizer__readout">
           {enclosed.length === 0 ? (
             <div className="rh-visualizer__readout-row">
-              <span className="rh-visualizer__readout-label">
-                No poles enclosed
-              </span>
+              <span className="rh-visualizer__readout-label">No poles enclosed</span>
             </div>
           ) : (
             enclosed.map((p, i) => {

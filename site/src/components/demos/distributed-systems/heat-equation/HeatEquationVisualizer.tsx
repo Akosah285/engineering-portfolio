@@ -249,7 +249,10 @@ export function HeatEquationVisualizer() {
 
   const handleReset = (): void => {
     reset();
-    uRef.current = PRESET_META[DEFAULT_STATE.presetSlug].initialFn(L, DEFAULT_STATE.nGrid);
+    uRef.current = PRESET_META[DEFAULT_STATE.presetSlug].initialFn(
+      L,
+      DEFAULT_STATE.nGrid,
+    );
     tRef.current = 0;
     accumulatorRef.current = 0;
     setDisplayTick((x) => x + 1);

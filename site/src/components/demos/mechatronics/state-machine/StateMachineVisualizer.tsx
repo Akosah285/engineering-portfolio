@@ -95,10 +95,7 @@ function drawArrowhead(
   ctx.restore();
 }
 
-function drawEdge(
-  ctx: CanvasRenderingContext2D,
-  edge: EdgeSpec,
-): void {
+function drawEdge(ctx: CanvasRenderingContext2D, edge: EdgeSpec): void {
   const a = NODE_POS[edge.from];
   const b = NODE_POS[edge.to];
   const dx = b.x - a.x;
@@ -141,12 +138,7 @@ function drawEdge(
   const metrics = ctx.measureText(edge.label);
   const pad = 3;
   ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
-  ctx.fillRect(
-    lx - metrics.width / 2 - pad,
-    ly - 7,
-    metrics.width + pad * 2,
-    14,
-  );
+  ctx.fillRect(lx - metrics.width / 2 - pad, ly - 7, metrics.width + pad * 2, 14);
   ctx.fillStyle = "#1f2328";
   ctx.fillText(edge.label, lx, ly);
 }
@@ -165,11 +157,7 @@ function drawSelfLoop(ctx: CanvasRenderingContext2D, s: DMState): void {
   drawArrowhead(ctx, cx + 12, cy, Math.PI / 2);
 }
 
-function drawNode(
-  ctx: CanvasRenderingContext2D,
-  s: DMState,
-  active: boolean,
-): void {
+function drawNode(ctx: CanvasRenderingContext2D, s: DMState, active: boolean): void {
   const p = NODE_POS[s];
   ctx.beginPath();
   ctx.arc(p.x, p.y, NODE_RADIUS, 0, Math.PI * 2);
@@ -203,10 +191,7 @@ function drawGoalEdge(ctx: CanvasRenderingContext2D): void {
     ctx,
     target.x + NODE_RADIUS * 0.7,
     target.y - NODE_RADIUS * 0.7,
-    Math.atan2(
-      target.y - NODE_RADIUS * 0.7 - sy,
-      target.x + NODE_RADIUS * 0.7 - sx,
-    ),
+    Math.atan2(target.y - NODE_RADIUS * 0.7 - sy, target.x + NODE_RADIUS * 0.7 - sx),
   );
   ctx.fillStyle = "#c25d00";
   ctx.font = "11px system-ui, sans-serif";
@@ -242,11 +227,7 @@ function drawTrace(
       ctx.lineWidth = 1;
       ctx.strokeRect(x - 4, y - 9, 220, 18);
     }
-    ctx.fillStyle = isProcessed
-      ? "#9aa1a8"
-      : isCurrent
-        ? "#1f2328"
-        : "#57606a";
+    ctx.fillStyle = isProcessed ? "#9aa1a8" : isCurrent ? "#1f2328" : "#57606a";
     ctx.fillText(`${i + 1}. ${input}`, x, y);
     y += 18;
   }
@@ -264,10 +245,7 @@ export function StateMachineVisualizer() {
     DEFAULT_STATE,
   );
 
-  const inputs = useMemo(
-    () => PRESET_META[state.presetSlug].inputs,
-    [state.presetSlug],
-  );
+  const inputs = useMemo(() => PRESET_META[state.presetSlug].inputs, [state.presetSlug]);
   const presetLabel = PRESET_META[state.presetSlug].label;
 
   const stepRef = useRef(0);
@@ -330,9 +308,9 @@ export function StateMachineVisualizer() {
       drawGoalEdge(ctx);
 
       // nodes
-      (Object.keys(NODE_POS) as DMState[]).forEach((s) => {
+      for (const s of Object.keys(NODE_POS) as DMState[]) {
         drawNode(ctx, s, s === stateRef.current);
-      });
+      }
 
       // trace
       drawTrace(ctx, inputs, stepRef.current, stateRef.current);
@@ -353,8 +331,7 @@ export function StateMachineVisualizer() {
     setState({ ...state, ...next });
   };
 
-  const currentInput =
-    stepCount < inputs.length ? inputs[stepCount]! : "—";
+  const currentInput = stepCount < inputs.length ? inputs[stepCount]! : "—";
 
   return (
     <div className="sm-visualizer">
@@ -413,11 +390,7 @@ export function StateMachineVisualizer() {
         >
           {paused ? "▶ Resume" : "⏸ Pause"}
         </button>
-        <button
-          type="button"
-          className="sm-visualizer__btn"
-          onClick={handleReset}
-        >
+        <button type="button" className="sm-visualizer__btn" onClick={handleReset}>
           ↺ Reset
         </button>
         <span className="sm-visualizer__counter" aria-live="off">
