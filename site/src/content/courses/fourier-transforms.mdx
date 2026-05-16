@@ -14,10 +14,81 @@ techTags:
   - Matplotlib
   - Web Audio API
 heroDemoLabel: "Epicycle Drawing Animation"
-publishedAt: null
-draft: true
+publishedAt: "2026-05-16"
+draft: false
+interviewPending: true
 ---
+
+import { EpicycleVisualizer } from "../../components/demos/fourier-transforms/epicycle/EpicycleVisualizer";
+import { AudioFilterVisualizer } from "../../components/demos/fourier-transforms/audio-filter/AudioFilterVisualizer";
+import ConformalVisualizer from "../../components/demos/fourier-transforms/conformal/ConformalVisualizer";
+import { ConvolutionVisualizer } from "../../components/demos/fourier-transforms/convolution/ConvolutionVisualizer";
+import DomainColoringVisualizer from "../../components/demos/fourier-transforms/domain-coloring/DomainColoringVisualizer";
+import { FourierSeriesVisualizer } from "../../components/demos/fourier-transforms/fourier-series/FourierSeriesVisualizer";
+import { FtSignalsVisualizer } from "../../components/demos/fourier-transforms/ft-signals/FtSignalsVisualizer";
+import ResidueHelperVisualizer from "../../components/demos/fourier-transforms/residue-helper/ResidueHelperVisualizer";
+
+<EpicycleVisualizer client:idle />
 
 ## Reflection
 
-_Author reflection pending._
+_Pre-interview preview. Akwasi's first-person reflection on this course is pending —
+track at [issue #45](https://github.com/Akosah285/engineering-portfolio/issues/45)._
+
+## Fourier series builder
+
+Stack sine and cosine harmonics and watch the partial sums converge to square,
+sawtooth, or triangle waves.
+
+<FourierSeriesVisualizer client:visible />
+
+## Fourier transform of common signals
+
+Side-by-side time-domain and frequency-domain plots for canonical signals.
+
+<FtSignalsVisualizer client:visible />
+
+## Convolution animation
+
+Slide one signal past another and trace the running integral of their product.
+
+<ConvolutionVisualizer client:visible />
+
+## Audio filter — Web Audio biquad
+
+Drag the cutoff and Q to hear how a biquad filter sculpts a synth or microphone
+signal.
+
+<AudioFilterVisualizer client:visible />
+
+## Complex domain coloring
+
+Phase-as-hue and magnitude-as-brightness visualisation of analytic functions
+across the complex plane.
+
+<DomainColoringVisualizer client:visible />
+
+## Conformal mapping
+
+Watch how an analytic map deforms a grid while preserving angles between curves
+at every point.
+
+<ConformalVisualizer client:visible />
+
+## Residue theorem helper
+
+Compute residues at poles inside a contour and verify them against the contour
+integral.
+
+<ResidueHelperVisualizer client:visible />
+
+## Featured problems
+
+_Featured-problem writeups for this course are pending the v3 author interview
+— tracked at [issue #45](https://github.com/Akosah285/engineering-portfolio/issues/45).
+Demos above stand on their own in the meantime._
+
+## What's coming
+
+The author's written reflection and 2–4 featured problems land alongside the v3
+interview. The demos above are wired and playable today.
