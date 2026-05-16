@@ -1,0 +1,65 @@
+name: Lighthouse CI
+
+# Plan §2.13: warn from v3, fail from v6. We're at v3 — every assertion in
+# site/lighthouserc.json uses severity "warn", so this workflow does NOT
+# block PRs or deploys. The vitest test
+# site/src/lib/__tests__/lighthouseConfig.test.ts locks the budgets to the
+# numbers in plan §7.5; the v3→v6 flip requires changing those assertions
+# from "warn" to "error" + updating the test, by design.
+#
+# Matrix: mobile + desktop. Per rubber-duck critique, desktop-only would
+# miss the hardest budget (mobile LCP <1500ms, score ≥95).
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lhci:
+    name: Lighthouse CI (warn-only, ${{ matrix.preset }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        preset: [mobile, desktop]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Enable Corepack and activate pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.15.0 --activate
+          pnpm --version
+
+      - name: Install site deps
+        working-directory: site
+        run: pnpm install --frozen-lockfile
+
+      - name: Approve build scripts
+        working-directory: site
+        run: pnpm rebuild
+
+      - name: Build site
+        working-directory: site
+        env:
+          ASTRO_TELEMETRY_DISABLED: "1"
+        run: pnpm run build
+
+      - name: Install Lighthouse CI
+        run: npm install -g @lhci/cli@0.14.x
+
+      - name: Run Lighthouse CI (${{ matrix.preset }})
+        working-directory: site
+        run: lhci autorun --config=./lighthouserc.json --collect.settings.preset=${{ matrix.preset }}

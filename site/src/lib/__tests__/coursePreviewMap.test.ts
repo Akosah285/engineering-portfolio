@@ -61,9 +61,7 @@ describe("COURSE_PREVIEW_SLUGS invariants", () => {
   });
 
   it("does NOT contain any slug that is already published", () => {
-    const published = courses
-      .filter((c) => c.publishedAt !== null)
-      .map((c) => c.slug);
+    const published = courses.filter((c) => c.publishedAt !== null).map((c) => c.slug);
     for (const slug of published) {
       expect(COURSE_PREVIEW_SLUGS as readonly string[]).not.toContain(slug);
     }
