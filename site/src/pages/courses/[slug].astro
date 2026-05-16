@@ -17,8 +17,28 @@ import Layout from "../../layouts/Layout.astro";
 import CoursePage from "../../layouts/CoursePage.astro";
 import { buildCourseResolver, type Course } from "../../content/resolver";
 import coursesData from "../../content/_courses.json";
+import ComputationalMethodsPreview from "../../components/CoursePreview/computational-methods.astro";
+import DigitalElectronicsPreview from "../../components/CoursePreview/digital-electronics.astro";
+import DiscreteProbabilityPreview from "../../components/CoursePreview/discrete-probability.astro";
+import DistributedSystemsPreview from "../../components/CoursePreview/distributed-systems.astro";
+import EmbeddedSystemsPreview from "../../components/CoursePreview/embedded-systems.astro";
+import FourierTransformsPreview from "../../components/CoursePreview/fourier-transforms.astro";
+import MechatronicsPreview from "../../components/CoursePreview/mechatronics.astro";
+import SolidMechanicsPreview from "../../components/CoursePreview/solid-mechanics.astro";
 
 type CourseEntry = CollectionEntry<"courses">;
+
+const previewComponents = {
+  "computational-methods": ComputationalMethodsPreview,
+  "digital-electronics": DigitalElectronicsPreview,
+  "discrete-probability": DiscreteProbabilityPreview,
+  "distributed-systems": DistributedSystemsPreview,
+  "embedded-systems": EmbeddedSystemsPreview,
+  "fourier-transforms": FourierTransformsPreview,
+  mechatronics: MechatronicsPreview,
+  "solid-mechanics": SolidMechanicsPreview,
+} as const;
+type PreviewSlug = keyof typeof previewComponents;
 
 export async function getStaticPaths() {
   const courses = coursesData as Course[];
@@ -48,6 +68,11 @@ const isDraft = entry?.data.draft ?? false;
 const showCourse = entry !== null && isPublishedInJson && !isDraft;
 
 const Content = showCourse && entry ? (await entry.render()).Content : null;
+
+const PreviewComponent =
+  !showCourse && course.slug in previewComponents
+    ? previewComponents[course.slug as PreviewSlug]
+    : null;
 ---
 
 {
@@ -74,7 +99,7 @@ const Content = showCourse && entry ? (await entry.render()).Content : null;
       <section class="coming-soon">
         <p class="coming-soon__term">{course.term}</p>
         <h1 class="coming-soon__title">{course.displayName}</h1>
-        <p class="coming-soon__label">Coming soon</p>
+        <p class="coming-soon__label">Reflection coming soon</p>
         <p class="coming-soon__preview">
           {course.comingSoonPreview ??
             `Interactive demos and featured problems for ${course.displayName}, in progress.`}
@@ -86,10 +111,13 @@ const Content = showCourse && entry ? (await entry.render()).Content : null;
           </a>
           .
         </p>
-        <p class="coming-soon__back">
-          <a href={base}>← Back to all courses</a>
-        </p>
       </section>
+
+      {PreviewComponent && <PreviewComponent />}
+
+      <p class="coming-soon__back">
+        <a href={base}>← Back to all courses</a>
+      </p>
     </Layout>
   )
 }
@@ -166,5 +194,9 @@ const Content = showCourse && entry ? (await entry.render()).Content : null;
   .coming-soon__back a:hover,
   .coming-soon__back a:focus {
     text-decoration: underline;
+  }
+  .coming-soon__back {
+    text-align: center;
+    margin: 3rem auto 4rem;
   }
 </style>
