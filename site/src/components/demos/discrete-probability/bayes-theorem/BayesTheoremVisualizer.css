@@ -1,0 +1,120 @@
+/** Layout styles for the Bayes Theorem Visualizer (#68). */
+
+.bt-visualizer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.bt-visualizer__stage {
+  position: relative;
+  width: 100%;
+  background: var(--color-bg);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.bt-visualizer__controls {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+@media (min-width: 720px) {
+  .bt-visualizer__controls {
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 1.5rem;
+  }
+}
+
+.bt-visualizer__popsize {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.bt-visualizer__popsize-label {
+  font-family: "Inter Variable", sans-serif;
+  font-size: 0.875rem;
+  color: var(--color-text);
+}
+
+.bt-visualizer__popsize-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 0 0.75rem;
+  border: 1px solid var(--color-text-muted);
+  border-radius: 6px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-family: "JetBrains Mono Variable", monospace;
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
+.bt-visualizer__popsize-btn--active {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+.bt-visualizer__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.bt-visualizer__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 1rem;
+  border: 1px solid var(--color-text-muted);
+  border-radius: 8px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-family: "Inter Variable", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.bt-visualizer__btn:hover,
+.bt-visualizer__btn:focus-visible {
+  background: color-mix(in srgb, var(--color-accent) 8%, var(--color-surface));
+  border-color: var(--color-accent);
+}
+
+.bt-visualizer__counter {
+  font-family: "JetBrains Mono Variable", monospace;
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  margin-left: auto;
+}
+
+.bt-visualizer__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  font-family: "Inter Variable", sans-serif;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.bt-visualizer__legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.bt-visualizer__legend-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
