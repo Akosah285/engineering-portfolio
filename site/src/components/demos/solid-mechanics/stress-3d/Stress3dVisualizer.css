@@ -1,0 +1,101 @@
+/** Layout styles for the 3-D Stress Visualizer. */
+
+.s3d-visualizer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.s3d-visualizer__stage {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  background: var(--color-bg, #fcfbf8);
+  border-radius: 6px;
+  padding: 0.75rem;
+}
+
+@media (min-width: 720px) {
+  .s3d-visualizer__stage {
+    grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.s3d-visualizer__svg {
+  width: 100%;
+  height: auto;
+  max-width: 360px;
+  display: block;
+}
+
+.s3d-visualizer__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-family: "JetBrains Mono Variable", ui-monospace, monospace;
+  font-size: 0.85rem;
+  color: #222;
+}
+
+.s3d-visualizer__panel-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.15rem 0.25rem;
+  border-bottom: 1px dashed rgba(40, 40, 40, 0.15);
+}
+
+.s3d-visualizer__panel-label {
+  color: rgba(40, 40, 40, 0.7);
+}
+
+.s3d-visualizer__panel-value {
+  font-variant-numeric: tabular-nums;
+}
+
+.s3d-visualizer__hud {
+  font-family: "JetBrains Mono Variable", ui-monospace, monospace;
+  font-size: 0.85rem;
+  color: rgba(40, 40, 40, 0.85);
+  padding: 0.25rem 0.5rem;
+}
+
+.s3d-visualizer__controls {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+@media (min-width: 720px) {
+  .s3d-visualizer__controls {
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 1.5rem;
+  }
+}
+
+.s3d-visualizer__actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.s3d-visualizer__btn {
+  font: inherit;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid rgba(40, 40, 40, 0.4);
+  background: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.s3d-visualizer__btn:hover {
+  background: #f4f3ef;
+}
+
+.s3d-visualizer__counter {
+  font-family: "JetBrains Mono Variable", ui-monospace, monospace;
+  font-size: 0.8rem;
+  color: rgba(40, 40, 40, 0.75);
+}
