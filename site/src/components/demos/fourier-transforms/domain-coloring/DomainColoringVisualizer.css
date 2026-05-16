@@ -1,0 +1,91 @@
+/** Layout styles for the Domain Coloring Visualizer. */
+
+.dc-visualizer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.dc-visualizer__stage {
+  position: relative;
+  width: 100%;
+  background: var(--color-bg, #000);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.dc-visualizer__canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  image-rendering: pixelated;
+}
+
+.dc-visualizer__hud {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-family: "JetBrains Mono Variable", monospace;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  pointer-events: none;
+}
+
+.dc-visualizer__hud-line {
+  display: block;
+}
+
+.dc-visualizer__controls {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+@media (min-width: 720px) {
+  .dc-visualizer__controls {
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 1.5rem;
+  }
+}
+
+.dc-visualizer__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.dc-visualizer__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 1rem;
+  border: 1px solid var(--color-text-muted, #888);
+  border-radius: 8px;
+  background: var(--color-surface, #fff);
+  color: var(--color-text, #111);
+  font-family: "Inter Variable", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 120ms ease, border-color 120ms ease;
+}
+
+.dc-visualizer__btn:hover,
+.dc-visualizer__btn:focus-visible {
+  background: color-mix(in srgb, var(--color-accent, #06f) 8%, var(--color-surface, #fff));
+  border-color: var(--color-accent, #06f);
+}
+
+.dc-visualizer__counter {
+  font-family: "JetBrains Mono Variable", monospace;
+  font-size: 0.8125rem;
+  color: var(--color-text-muted, #666);
+  margin-left: auto;
+}

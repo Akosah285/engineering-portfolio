@@ -1,0 +1,175 @@
+/** Layout styles for the Karnaugh-map minimizer visualiser. */
+
+.km-visualizer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.km-visualizer__stage {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+@media (min-width: 720px) {
+  .km-visualizer__stage {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  }
+}
+
+.km-visualizer__panel {
+  background: var(--color-bg, #fafafa);
+  border-radius: 6px;
+  padding: 0.75rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.km-visualizer__panel-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-muted, #555);
+}
+
+.km-visualizer__svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.km-visualizer__cell-zero {
+  fill: #ffffff;
+  stroke: #cccccc;
+  stroke-width: 1;
+}
+
+.km-visualizer__cell-one {
+  fill: #b6e2c1;
+  stroke: #2f8a4e;
+  stroke-width: 1;
+}
+
+.km-visualizer__cell-dc {
+  fill: #e0e0e0;
+  stroke: #aaaaaa;
+  stroke-width: 1;
+}
+
+.km-visualizer__cell-label {
+  font-size: 11px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  fill: #333;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+}
+
+.km-visualizer__axis-label {
+  font-size: 11px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  fill: #555;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.km-visualizer__cube-overlay {
+  fill: none;
+  stroke-width: 2.5;
+  pointer-events: none;
+}
+
+.km-visualizer__expression {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 1rem;
+  line-height: 1.6;
+  padding: 0.5rem 0.75rem;
+  background: #ffffff;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  word-break: break-word;
+}
+
+.km-visualizer__expression-empty {
+  color: #888;
+  font-style: italic;
+}
+
+.km-visualizer__hud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+  color: #444;
+  margin-top: 0.5rem;
+}
+
+.km-visualizer__hud-item {
+  background: #f0f0f0;
+  border-radius: 999px;
+  padding: 0.15rem 0.6rem;
+}
+
+.km-visualizer__cube-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.85rem;
+}
+
+.km-visualizer__cube-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.km-visualizer__cube-swatch {
+  display: inline-block;
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 3px;
+  border: 2px solid currentColor;
+  background: transparent;
+}
+
+.km-visualizer__controls {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+.km-visualizer__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.km-visualizer__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 0.85rem;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.km-visualizer__btn:hover {
+  background: #f5f5f5;
+}
+
+.km-visualizer__counter {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.85rem;
+  color: #555;
+  margin-left: auto;
+}
