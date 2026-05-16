@@ -1,0 +1,56 @@
+.sv-visualizer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sv-visualizer__stage {
+  position: relative;
+}
+
+.sv-visualizer__controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sv-visualizer__text-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.sv-visualizer__text-input {
+  font-family: ui-monospace, monospace;
+  font-size: 1rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  max-width: 18rem;
+}
+
+.sv-visualizer__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.sv-visualizer__btn {
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #888;
+  background: #f7f7f7;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.sv-visualizer__btn:hover {
+  background: #ececec;
+}
+
+.sv-visualizer__counter {
+  font-family: ui-monospace, monospace;
+  font-size: 0.9rem;
+  color: #444;
+}

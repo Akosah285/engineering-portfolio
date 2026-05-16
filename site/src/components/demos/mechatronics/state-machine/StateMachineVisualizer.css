@@ -1,0 +1,52 @@
+.sm-visualizer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sm-visualizer__stage {
+  position: relative;
+}
+
+.sm-visualizer__controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sm-visualizer__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.sm-visualizer__btn {
+  appearance: none;
+  border: 1px solid #d0d7de;
+  background: #ffffff;
+  color: #1f2328;
+  padding: 0.5rem 0.9rem;
+  border-radius: 6px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.sm-visualizer__btn:hover {
+  background: #f6f8fa;
+}
+
+.sm-visualizer__btn--primary {
+  background: #00693e;
+  border-color: #00693e;
+  color: #ffffff;
+}
+
+.sm-visualizer__btn--primary:hover {
+  background: #005530;
+}
+
+.sm-visualizer__counter {
+  font-variant-numeric: tabular-nums;
+  color: #57606a;
+}
