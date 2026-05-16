@@ -15,6 +15,8 @@ Public surface:
 - Sidecar (frozen dataclass)
 """
 
+from typing import Any
+
 import pytest
 
 from ocr_vault.sidecar_schema import (
@@ -24,7 +26,7 @@ from ocr_vault.sidecar_schema import (
 )
 
 
-def _good_sidecar() -> dict:
+def _good_sidecar() -> dict[str, Any]:
     return {
         "source": {
             "pdf": "archive/originals/lab1.pdf",
@@ -114,11 +116,11 @@ def test_missing_top_level_key_raises(key: str) -> None:
 
 def test_non_dict_input_raises() -> None:
     with pytest.raises(SidecarValidationError):
-        validate_sidecar("not a dict")  # type: ignore[arg-type]
+        validate_sidecar("not a dict")
     with pytest.raises(SidecarValidationError):
-        validate_sidecar([1, 2, 3])  # type: ignore[arg-type]
+        validate_sidecar([1, 2, 3])
     with pytest.raises(SidecarValidationError):
-        validate_sidecar(None)  # type: ignore[arg-type]
+        validate_sidecar(None)
 
 
 # ----- source -----
@@ -140,7 +142,7 @@ def test_source_page_must_be_positive_int() -> None:
     data["source"]["page"] = -3
     with pytest.raises(SidecarValidationError):
         validate_sidecar(data)
-    data["source"]["page"] = "3"  # type: ignore[assignment]
+    data["source"]["page"] = "3"
     with pytest.raises(SidecarValidationError):
         validate_sidecar(data)
 
@@ -209,7 +211,7 @@ def test_pii_block_required_fields() -> None:
 
 def test_pii_names_must_be_list_of_strings() -> None:
     data = _good_sidecar()
-    data["pii"]["names_detected"] = [1, 2, 3]  # type: ignore[list-item]
+    data["pii"]["names_detected"] = [1, 2, 3]
     with pytest.raises(SidecarValidationError):
         validate_sidecar(data)
 

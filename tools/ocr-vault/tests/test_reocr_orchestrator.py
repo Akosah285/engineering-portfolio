@@ -9,7 +9,7 @@ sidecar (overwrite or versioned) and tagging the call as is_re_ocr=True.
 from __future__ import annotations
 
 import json
-from collections.abc import Sequence
+from collections.abc import Iterator, Sequence
 from decimal import Decimal
 from pathlib import Path
 
@@ -109,7 +109,7 @@ def data_dir(tmp_path: Path) -> Path:
 
 
 @pytest.fixture
-def index(data_dir: Path) -> SqliteIndex:
+def index(data_dir: Path) -> Iterator[SqliteIndex]:
     idx = SqliteIndex.open(data_dir / "index.sqlite")
     yield idx
     idx.close()

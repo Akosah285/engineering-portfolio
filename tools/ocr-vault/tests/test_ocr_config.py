@@ -71,7 +71,7 @@ def test_cli_override_wins_over_config() -> None:
 # ----- file loading -----
 
 
-def test_loads_from_valid_json_file(workdir) -> None:
+def test_loads_from_valid_json_file(workdir: Path) -> None:
     config_data = {
         "global": {"low_confidence_threshold": 0.7},
         "per_course": {
@@ -88,13 +88,13 @@ def test_loads_from_valid_json_file(workdir) -> None:
     assert cfg.threshold_for("ml") == 0.7
 
 
-def test_missing_file_yields_empty_config(workdir) -> None:
+def test_missing_file_yields_empty_config(workdir: Path) -> None:
     """A missing config file is a soft failure — fall back to defaults."""
     cfg = load_ocr_config(workdir / "does-not-exist.json")
     assert cfg.threshold_for("any-course") == DEFAULT_CONFIDENCE_THRESHOLD
 
 
-def test_invalid_json_raises_with_path(workdir) -> None:
+def test_invalid_json_raises_with_path(workdir: Path) -> None:
     path = workdir / "bad.json"
     path.write_text("{not valid json")
     with pytest.raises(OcrConfigError) as exc:
@@ -102,7 +102,7 @@ def test_invalid_json_raises_with_path(workdir) -> None:
     assert str(path) in str(exc.value)
 
 
-def test_missing_global_section_uses_default(workdir) -> None:
+def test_missing_global_section_uses_default(workdir: Path) -> None:
     config_data = {"per_course": {"ml": {"low_confidence_threshold": 0.6}}}
     path = workdir / "ocr-config.json"
     path.write_text(json.dumps(config_data))
@@ -114,7 +114,7 @@ def test_missing_global_section_uses_default(workdir) -> None:
 # ----- validation -----
 
 
-def test_threshold_must_be_in_zero_one(workdir) -> None:
+def test_threshold_must_be_in_zero_one(workdir: Path) -> None:
     config_data = {"global": {"low_confidence_threshold": 1.5}}
     path = workdir / "ocr-config.json"
     path.write_text(json.dumps(config_data))
@@ -123,7 +123,7 @@ def test_threshold_must_be_in_zero_one(workdir) -> None:
     assert "0" in str(exc.value) and "1" in str(exc.value)
 
 
-def test_per_course_threshold_must_be_in_zero_one(workdir) -> None:
+def test_per_course_threshold_must_be_in_zero_one(workdir: Path) -> None:
     config_data = {
         "per_course": {"ml": {"low_confidence_threshold": -0.1}}
     }

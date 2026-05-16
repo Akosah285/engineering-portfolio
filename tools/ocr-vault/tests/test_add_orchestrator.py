@@ -13,6 +13,7 @@ from __future__ import annotations
 import json
 from decimal import Decimal
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -131,7 +132,7 @@ class TestIdempotency:
         """Re-running with same PDF -> zero new API calls (acceptance criterion)."""
         index = SqliteIndex.open(":memory:")
         provider = MockProvider()
-        orch_kwargs = {
+        orch_kwargs: dict[str, Any] = {
             "pdf_loader": MockPdfLoader(page_count=2),
             "provider": provider,
             "index": index,
@@ -153,7 +154,7 @@ class TestIdempotency:
     def test_index_unchanged_after_cached_run(self, tmp_path: Path) -> None:
         index = SqliteIndex.open(":memory:")
         provider = MockProvider()
-        orch_kwargs = {
+        orch_kwargs: dict[str, Any] = {
             "pdf_loader": MockPdfLoader(page_count=2),
             "provider": provider,
             "index": index,
