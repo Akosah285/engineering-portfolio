@@ -42,11 +42,20 @@ const courses = coursesData as Course[];
 const resolver = buildCourseResolver(courses);
 const entries = (await getCollection("courses")) as CourseEntry[];
 
+// Pre-sort by displayOrder so downstream consumers (tagIndex, the rendered
+// list) inherit curated ordering instead of MDX-load (alphabetical) order.
+// buildTagIndex preserves insertion order of `courseLikes`.
+const orderedEntries = [...entries].sort((a, b) => {
+  const aOrder = courses.find((c) => c.slug === a.slug)?.displayOrder ?? 999;
+  const bOrder = courses.find((c) => c.slug === b.slug)?.displayOrder ?? 999;
+  return aOrder - bOrder;
+});
+
 // Include courses that are EITHER consistently published (catalog +
 // non-draft MDX) OR consistently staged Coming-Soon (catalog publishedAt is
 // null AND MDX is draft: true). The catalog ↔ MDX invariant test guarantees
 // every catalog entry is in exactly one of these two states.
-const courseLikes: Array<CourseLike & { comingSoon: boolean }> = entries
+const courseLikes: Array<CourseLike & { comingSoon: boolean }> = orderedEntries
   .map((entry) => {
     const slug = entry.slug;
     const course = courses.find((c) => c.slug === slug);
