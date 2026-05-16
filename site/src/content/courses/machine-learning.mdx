@@ -124,6 +124,41 @@ import MathExpression from "../../components/demo-kit/MathExpression.astro";
   </p>
 </FeaturedProblem>
 
+<FeaturedProblem
+  kind="Featured Solution"
+  title="Gradient descent convergence for an L²-regularised quadratic"
+  attribution="Adapted from Dartmouth ENGS 89, SP20 — placeholder restatement pending author interview."
+  placeholder={true}
+>
+  <p>
+    *Paraphrased problem statement, in author's voice, will replace this
+    paragraph after the v1 ML interview (see issue #27).* The setup: a
+    convex quadratic loss with an L² penalty term, fit by batch gradient
+    descent. Show that for a sufficiently small fixed learning rate
+    <MathExpression latex="\eta" /> the iterates converge to the unique
+    minimiser, and derive the largest <MathExpression latex="\eta" /> that
+    still guarantees monotone descent in terms of the Hessian's spectrum.
+  </p>
+  <p>
+    With objective
+    <MathExpression latex="J(\theta) = \tfrac{1}{2} \theta^\top H \theta + b^\top \theta + \tfrac{\lambda}{2} \|\theta\|^2" />
+    the gradient step is:
+  </p>
+  <MathExpression
+    latex="\theta_{t+1} = \theta_t - \eta \bigl( (H + \lambda I)\theta_t + b \bigr)"
+    display={true}
+  />
+  <p>
+    The iterates contract toward the optimum as long as every eigenvalue of
+    <MathExpression latex="I - \eta(H + \lambda I)" /> sits inside the unit
+    circle — which gives the upper bound
+    <MathExpression latex="\eta < 2 / \lambda_{\max}(H + \lambda I)" />.
+    *Numerical illustration tied to the Gradient Descent Visualizer above
+    will be added once the author records their own reasoning in the v1
+    interview.*
+  </p>
+</FeaturedProblem>
+
 ## What's coming
 
 A written reflection from the author's interview is in development.
