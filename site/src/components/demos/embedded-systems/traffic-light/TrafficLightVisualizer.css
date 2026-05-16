@@ -1,0 +1,59 @@
+/** Layout styles for the Traffic Light Visualizer. */
+
+.tl-visualizer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.tl-visualizer__stage {
+  position: relative;
+  width: 100%;
+  background: var(--color-bg, #f4f4f0);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.tl-visualizer__controls {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+@media (min-width: 720px) {
+  .tl-visualizer__controls {
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 1.5rem;
+  }
+}
+
+.tl-visualizer__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.tl-visualizer__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid currentColor;
+  background: transparent;
+  border-radius: 4px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.tl-visualizer__btn--primary {
+  background: var(--color-accent, #00693e);
+  color: #fff;
+  border-color: transparent;
+}
+
+.tl-visualizer__counter {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
