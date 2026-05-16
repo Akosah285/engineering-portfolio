@@ -123,7 +123,7 @@ const PreviewComponent = shouldShowPreview(course.slug, showCourse)
             <div class="coming-soon__concepts" aria-label="Concepts learned">
               <p class="coming-soon__chip-label">Concepts</p>
               <ul class="coming-soon__chips" role="list">
-                {entry.data.concepts.map((tag) => (
+                {entry.data.concepts.map((tag: string) => (
                   <li>
                     <a class="coming-soon__chip" href={`${base}concepts/${tag}/`}>
                       {tag}
@@ -139,7 +139,7 @@ const PreviewComponent = shouldShowPreview(course.slug, showCourse)
             <div class="coming-soon__techtags" aria-label="Tech and tools">
               <p class="coming-soon__chip-label">Tech</p>
               <ul class="coming-soon__chips" role="list">
-                {entry.data.techTags.map((tag) => (
+                {entry.data.techTags.map((tag: string) => (
                   <li>
                     <span class="coming-soon__chip coming-soon__chip--inert">
                       {tag}

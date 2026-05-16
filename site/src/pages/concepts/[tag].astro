@@ -14,8 +14,11 @@ import Layout from "../../layouts/Layout.astro";
 import {
   buildTagIndex,
   lookupTag,
-  type CourseLike,
 } from "../../content/concepts/tagIndex";
+import {
+  selectIndexableCourses,
+  type CatalogEntry,
+} from "../../content/concepts/courseSelector";
 import tagsData from "../../content/concepts/_tags.json";
 import coursesData from "../../content/_courses.json";
 import {
@@ -42,41 +45,18 @@ const courses = coursesData as Course[];
 const resolver = buildCourseResolver(courses);
 const entries = (await getCollection("courses")) as CourseEntry[];
 
-// Pre-sort by displayOrder so downstream consumers (tagIndex, the rendered
-// list) inherit curated ordering instead of MDX-load (alphabetical) order.
-// buildTagIndex preserves insertion order of `courseLikes`.
-const orderedEntries = [...entries].sort((a, b) => {
-  const aOrder = courses.find((c) => c.slug === a.slug)?.displayOrder ?? 999;
-  const bOrder = courses.find((c) => c.slug === b.slug)?.displayOrder ?? 999;
-  return aOrder - bOrder;
-});
+// Pure pipeline: catalog + MDX -> sorted, classified, deduplicated list.
+// See src/content/concepts/courseSelector.ts for the contract + tests.
+const indexable = selectIndexableCourses(
+  courses as readonly CatalogEntry[],
+  entries.map((e) => ({ slug: e.slug, data: e.data })),
+);
 
-// Include courses that are EITHER consistently published (catalog +
-// non-draft MDX) OR consistently staged Coming-Soon (catalog publishedAt is
-// null AND MDX is draft: true). The catalog ↔ MDX invariant test guarantees
-// every catalog entry is in exactly one of these two states.
-const courseLikes: Array<CourseLike & { comingSoon: boolean }> = orderedEntries
-  .map((entry) => {
-    const slug = entry.slug;
-    const course = courses.find((c) => c.slug === slug);
-    if (!course) return null;
-    const isPublished = course.publishedAt !== null && entry.data.draft !== true;
-    const isComingSoon =
-      course.publishedAt === null && entry.data.draft === true;
-    if (!isPublished && !isComingSoon) return null;
-    return {
-      slug,
-      concepts: entry.data.concepts,
-      comingSoon: isComingSoon,
-    };
-  })
-  .filter((c): c is CourseLike & { comingSoon: boolean } => c !== null);
-
-const index = buildTagIndex(courseLikes, vocabulary);
+const index = buildTagIndex(indexable, vocabulary);
 const entry = lookupTag(index, tag);
 
 const comingSoonBySlug = new Map(
-  courseLikes.map((c) => [c.slug, c.comingSoon]),
+  indexable.map((c) => [c.slug, c.comingSoon]),
 );
 
 const courseDetails =
