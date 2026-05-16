@@ -42,6 +42,7 @@ export interface MdxEntryLike {
   data: {
     draft: boolean;
     concepts: readonly string[];
+    interviewPending: boolean;
   };
 }
 
@@ -49,6 +50,15 @@ export interface IndexableCourse {
   slug: string;
   concepts: readonly string[];
   comingSoon: boolean;
+  /**
+   * True when the course MDX is non-draft but the author interview is
+   * still pending (the body is shipped as a "published preview" with a
+   * visible banner instead of a finalized authorial reflection).
+   *
+   * Orthogonal to `comingSoon`: a course is `comingSoon: true` OR
+   * `interviewPending: true` OR neither, never both.
+   */
+  interviewPending: boolean;
 }
 
 export type PairState = "published" | "coming-soon" | "inconsistent";
@@ -90,10 +100,16 @@ export function selectIndexableCourses(
     const catalogEntry = catalogBySlug.get(mdx.slug);
     const state = classifyCatalogMdxPair(catalogEntry, mdx);
     if (state === "inconsistent") continue;
+    const comingSoon = state === "coming-soon";
+    // interviewPending only makes sense on the published branch; for
+    // Coming-Soon courses the flag is forced to false to keep the
+    // (comingSoon, interviewPending) state space disjoint.
+    const interviewPending = !comingSoon && mdx.data.interviewPending === true;
     out.push({
       slug: mdx.slug,
       concepts: mdx.data.concepts,
-      comingSoon: state === "coming-soon",
+      comingSoon,
+      interviewPending,
     });
   }
   return out;

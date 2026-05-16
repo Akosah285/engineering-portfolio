@@ -43,6 +43,7 @@ interface MdxFrontmatter {
   techTags?: string[];
   oneLineTakeaway?: string;
   heroDemoLabel?: string;
+  interviewPending?: boolean;
 }
 
 const ROOT = resolve(process.cwd());
@@ -174,6 +175,22 @@ describe("catalog ↔ MDX consistency", () => {
         it("title matches catalog.displayName", () => {
           const front = loadMdxFrontmatter(`${course.slug}.mdx`);
           expect(front.title).toBe(course.displayName);
+        });
+
+        it("interviewPending invariants hold", () => {
+          const front = loadMdxFrontmatter(`${course.slug}.mdx`);
+          if (front.interviewPending === true) {
+            // A preview course MUST be published (catalog has publishedAt
+            // non-null AND MDX is non-draft). Without these, the visible
+            // "Pre-interview preview" banner would appear on a Coming-Soon
+            // page — which would be incoherent UX.
+            expect(course.publishedAt).not.toBeNull();
+            expect(front.draft).toBe(false);
+          } else {
+            // interviewPending absent or explicitly false — either is fine.
+            // (Validator defaults to false.)
+            expect(front.interviewPending ?? false).toBe(false);
+          }
         });
       });
     }

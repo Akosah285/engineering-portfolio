@@ -35,6 +35,15 @@ export interface CourseFrontmatter {
   heroDemoLabel?: string;
   publishedAt: string | null;
   draft: boolean;
+  /**
+   * When true, the course page renders the published structure (demos
+   * woven into MDX, layout chrome, search facets) but with a visible
+   * "Pre-interview preview" banner and no fabricated authorial prose.
+   *
+   * Used for the 8 v3–v10 courses while their author interviews are
+   * pending. Defaults to false (= interview-reviewed content).
+   */
+  interviewPending: boolean;
 }
 
 export class CourseFrontmatterError extends Error {
@@ -190,6 +199,16 @@ export function buildFrontmatterValidator(
         draft = input.draft;
       }
 
+      let interviewPending = false;
+      if (input.interviewPending !== undefined) {
+        if (typeof input.interviewPending !== "boolean") {
+          throw new CourseFrontmatterError(
+            `interviewPending: expected boolean, got ${typeof input.interviewPending}`,
+          );
+        }
+        interviewPending = input.interviewPending;
+      }
+
       return {
         title,
         term: termRaw,
@@ -199,6 +218,7 @@ export function buildFrontmatterValidator(
         ...(heroDemoLabel !== undefined ? { heroDemoLabel } : {}),
         publishedAt,
         draft,
+        interviewPending,
       };
     },
   };

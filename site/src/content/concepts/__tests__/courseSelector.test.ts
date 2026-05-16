@@ -34,14 +34,28 @@ const EMB_CATALOG: CatalogEntry = {
   displayOrder: 2,
   publishedAt: null,
 };
+// New: catalog entry for a course that has been promoted to the
+// "published preview" state (publishedAt non-null + draft false +
+// interviewPending true).
+const PREV_CATALOG: CatalogEntry = {
+  slug: "fourier-pub",
+  displayName: "Fourier Transforms (preview)",
+  term: "FA20",
+  displayOrder: 5,
+  publishedAt: "2026-05-16",
+};
 
-const pubMdx = (slug: string, concepts: readonly string[] = []): MdxEntryLike => ({
+const pubMdx = (
+  slug: string,
+  concepts: readonly string[] = [],
+  interviewPending = false,
+): MdxEntryLike => ({
   slug,
-  data: { draft: false, concepts },
+  data: { draft: false, concepts, interviewPending },
 });
 const draftMdx = (slug: string, concepts: readonly string[] = []): MdxEntryLike => ({
   slug,
-  data: { draft: true, concepts },
+  data: { draft: true, concepts, interviewPending: false },
 });
 
 describe("classifyCatalogMdxPair", () => {
@@ -74,7 +88,9 @@ describe("selectIndexableCourses", () => {
 
     it("includes a consistently-published course", () => {
       const result = selectIndexableCourses([PUB_CATALOG], [pubMdx("ml", ["x"])]);
-      expect(result).toEqual([{ slug: "ml", concepts: ["x"], comingSoon: false }]);
+      expect(result).toEqual([
+        { slug: "ml", concepts: ["x"], comingSoon: false, interviewPending: false },
+      ]);
     });
 
     it("includes a consistently-Coming-Soon course with comingSoon: true", () => {
@@ -83,7 +99,27 @@ describe("selectIndexableCourses", () => {
         [draftMdx("fourier", ["fourier-series"])],
       );
       expect(result).toEqual([
-        { slug: "fourier", concepts: ["fourier-series"], comingSoon: true },
+        {
+          slug: "fourier",
+          concepts: ["fourier-series"],
+          comingSoon: true,
+          interviewPending: false,
+        },
+      ]);
+    });
+
+    it("includes a published-preview course with interviewPending: true (NOT comingSoon)", () => {
+      const result = selectIndexableCourses(
+        [PREV_CATALOG],
+        [pubMdx("fourier-pub", ["fourier-series"], true)],
+      );
+      expect(result).toEqual([
+        {
+          slug: "fourier-pub",
+          concepts: ["fourier-series"],
+          comingSoon: false,
+          interviewPending: true,
+        },
       ]);
     });
 

@@ -58,6 +58,9 @@ const entry = lookupTag(index, tag);
 const comingSoonBySlug = new Map(
   indexable.map((c) => [c.slug, c.comingSoon]),
 );
+const interviewPendingBySlug = new Map(
+  indexable.map((c) => [c.slug, c.interviewPending]),
+);
 
 const courseDetails =
   entry?.courses.map((slug) => ({
@@ -65,6 +68,7 @@ const courseDetails =
     displayName: resolver.toCourse(slug).displayName,
     term: resolver.toCourse(slug).term,
     comingSoon: comingSoonBySlug.get(slug) ?? false,
+    interviewPending: interviewPendingBySlug.get(slug) ?? false,
   })) ?? [];
 
 const titleCase = tag
@@ -111,6 +115,10 @@ const titleCase = tag
                     {c.displayName}
                     {c.comingSoon ? (
                       <span class="concept-courses__badge">Coming soon</span>
+                    ) : c.interviewPending ? (
+                      <span class="concept-courses__badge concept-courses__badge--preview">
+                        Preview
+                      </span>
                     ) : null}
                   </span>
                   <span class="concept-courses__term">{c.term}</span>

@@ -89,6 +89,25 @@ const heading = displayName ?? frontmatter.title;
       )
     }
 
+    {
+      frontmatter.interviewPending && (
+        <aside
+          class="course-preview-banner"
+          role="note"
+          aria-labelledby="preview-banner-heading"
+        >
+          <p id="preview-banner-heading" class="course-preview-banner__title">
+            Pre-interview preview
+          </p>
+          <p class="course-preview-banner__body">
+            This page ships the demos and structure for a course whose
+            author reflection and featured-problem writeups are still
+            pending. Demos work; the personal narrative will follow.
+          </p>
+        </aside>
+      )
+    }
+
     <section class="course-body">
       <slot />
     </section>
@@ -228,6 +247,28 @@ const heading = displayName ?? frontmatter.title;
     color: var(--color-accent);
     font-weight: 600;
     margin-right: 0.5rem;
+  }
+
+  .course-preview-banner {
+    margin: 2rem 0;
+    padding: 1rem 1.25rem;
+    border-left: 4px solid var(--color-accent);
+    background: var(--color-math-bg);
+    border-radius: 4px;
+  }
+  .course-preview-banner__title {
+    margin: 0 0 0.25rem;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+  .course-preview-banner__body {
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: var(--color-text);
   }
 
   .course-body :global(h2) {

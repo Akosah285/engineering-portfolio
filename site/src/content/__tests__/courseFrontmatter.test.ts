@@ -77,6 +77,31 @@ describe("buildFrontmatterValidator — happy path", () => {
     expect(out.draft).toBe(true);
   });
 
+  it("defaults interviewPending to false when missing", () => {
+    const v = mkValidator();
+    const out = v.validate(valid());
+    expect(out.interviewPending).toBe(false);
+  });
+
+  it("preserves interviewPending=true", () => {
+    const v = mkValidator();
+    const out = v.validate(valid({ interviewPending: true }));
+    expect(out.interviewPending).toBe(true);
+  });
+
+  it("preserves interviewPending=false when explicitly set", () => {
+    const v = mkValidator();
+    const out = v.validate(valid({ interviewPending: false }));
+    expect(out.interviewPending).toBe(false);
+  });
+
+  it("rejects interviewPending of non-boolean type", () => {
+    const v = mkValidator();
+    expect(() => v.validate(valid({ interviewPending: "yes" }))).toThrow(
+      CourseFrontmatterError,
+    );
+  });
+
   it("accepts an empty concepts list", () => {
     const v = mkValidator();
     const out = v.validate(valid({ concepts: [] }));
