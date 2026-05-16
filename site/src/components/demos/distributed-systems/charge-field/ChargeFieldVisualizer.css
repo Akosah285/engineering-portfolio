@@ -1,0 +1,43 @@
+.cf-visualizer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cf-visualizer__stage {
+  position: relative;
+}
+
+.cf-visualizer__controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cf-visualizer__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.cf-visualizer__btn {
+  min-height: 44px;
+  padding: 0 1rem;
+  border: 1px solid #2a2a2a;
+  background: #fff;
+  cursor: pointer;
+  font: inherit;
+}
+
+.cf-visualizer__btn--primary {
+  background: #00693e;
+  color: #fff;
+  border-color: #00693e;
+}
+
+.cf-visualizer__counter {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.9rem;
+  color: #444;
+}

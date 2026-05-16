@@ -1,0 +1,48 @@
+.tr-visualizer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.tr-visualizer__stage {
+  position: relative;
+  background: #f7f8f6;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.tr-visualizer__controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem 1.25rem;
+}
+
+.tr-visualizer__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.tr-visualizer__btn {
+  appearance: none;
+  border: 1px solid #00693e;
+  background: #ffffff;
+  color: #00693e;
+  font: inherit;
+  padding: 0.4rem 0.9rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.tr-visualizer__btn--primary {
+  background: #00693e;
+  color: #ffffff;
+}
+
+.tr-visualizer__counter {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.9rem;
+  color: #333;
+  margin-left: auto;
+}
