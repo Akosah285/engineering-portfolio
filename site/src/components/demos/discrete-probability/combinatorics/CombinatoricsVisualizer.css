@@ -1,0 +1,47 @@
+.cb-visualizer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cb-visualizer__stage {
+  position: relative;
+}
+
+.cb-visualizer__presets {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.cb-visualizer__controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cb-visualizer__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.cb-visualizer__btn {
+  min-height: 2.5rem;
+  padding: 0 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+  font: inherit;
+}
+
+.cb-visualizer__btn:hover {
+  background: #f5f5f5;
+}
+
+.cb-visualizer__counter {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
