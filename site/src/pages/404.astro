@@ -1,0 +1,114 @@
+---
+/**
+ * /404.astro — branded 404 page.
+ *
+ * Astro builds this to `dist/404.html` (per `build.format: "directory"`).
+ * GitHub Pages auto-serves `/404.html` for any unknown path, so this gives
+ * us a branded fallback instead of the generic GH Pages 404. The same
+ * file also serves as the SPA-style fallback if we ever route client-side.
+ *
+ * Intentionally simple: no demos, no JS beyond theme bootstrap inherited
+ * from `<Layout>`. Wordmark + heading + "browse courses" CTA + back-home
+ * link. Pagefind excluded — there's nothing to index here, and listing
+ * "Page not found" in search results would be confusing.
+ */
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  title="Page not found"
+  description="The page you're looking for doesn't exist. Browse the engineering portfolio courses or head back home."
+  pagefindType="404"
+>
+  <main class="not-found" data-pagefind-ignore>
+    <p class="not-found__eyebrow">404</p>
+    <h1 class="not-found__heading">Page not found</h1>
+    <p class="not-found__lead">
+      The page you're looking for doesn't exist on this engineering portfolio.
+      It may have moved, been removed, or never existed.
+    </p>
+    <p class="not-found__actions">
+      <a class="not-found__cta" href={import.meta.env.BASE_URL}>Back to home</a>
+      <a class="not-found__link" href={`${import.meta.env.BASE_URL}#courses`}>
+        Browse courses
+      </a>
+    </p>
+  </main>
+</Layout>
+
+<style>
+  .not-found {
+    max-width: 640px;
+    margin: 6rem auto;
+    padding: 0 1.5rem;
+    text-align: center;
+  }
+
+  .not-found__eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    letter-spacing: 0.15em;
+    color: var(--color-text-muted);
+    margin: 0 0 0.5rem;
+    text-transform: uppercase;
+  }
+
+  .not-found__heading {
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 600;
+    margin: 0 0 1.25rem;
+    color: var(--color-text);
+    line-height: 1.1;
+  }
+
+  .not-found__lead {
+    font-family: var(--font-serif);
+    font-size: 1.125rem;
+    line-height: 1.55;
+    color: var(--color-text-secondary);
+    margin: 0 0 2.5rem;
+  }
+
+  .not-found__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin: 0;
+  }
+
+  .not-found__cta {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: var(--color-accent);
+    color: var(--color-bg);
+    text-decoration: none;
+    border-radius: 6px;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    transition: opacity 150ms ease;
+  }
+
+  .not-found__cta:hover,
+  .not-found__cta:focus-visible {
+    opacity: 0.85;
+  }
+
+  .not-found__link {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    color: var(--color-accent);
+    text-decoration: none;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    border: 1px solid var(--color-accent);
+    border-radius: 6px;
+    transition: background 150ms ease;
+  }
+
+  .not-found__link:hover,
+  .not-found__link:focus-visible {
+    background: var(--color-surface);
+  }
+</style>
