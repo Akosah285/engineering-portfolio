@@ -1,0 +1,16 @@
+{
+  "global": {
+    "low_confidence_threshold": 0.7
+  },
+  "per_course": {
+    "computational-methods": {"low_confidence_threshold": 0.7},
+    "digital-electronics": {"low_confidence_threshold": 0.7},
+    "discrete-probability": {"low_confidence_threshold": 0.7},
+    "distributed-systems": {"low_confidence_threshold": 0.7},
+    "embedded-systems": {"low_confidence_threshold": 0.7},
+    "fourier-transforms": {"low_confidence_threshold": 0.7},
+    "machine-learning": {"low_confidence_threshold": 0.7},
+    "mechatronics": {"low_confidence_threshold": 0.7},
+    "solid-mechanics": {"low_confidence_threshold": 0.7}
+  }
+}

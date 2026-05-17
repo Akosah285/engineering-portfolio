@@ -1,0 +1,14 @@
+{
+  "_comment": "Placeholder manifest for `ocr-vault plan` (#43 prep). Replace pdf_count and total_pages with the actual numbers for each course after `pdftk source.pdf dump_data` or `qpdf --show-npages`. Then run `ocr-vault plan --data-dir data` to project total spend before placing PDFs in archive/originals/ and running `ocr-vault add`.",
+  "courses": [
+    {"slug": "computational-methods", "pdf_count": 0, "total_pages": 0},
+    {"slug": "digital-electronics",   "pdf_count": 0, "total_pages": 0},
+    {"slug": "discrete-probability",  "pdf_count": 0, "total_pages": 0},
+    {"slug": "distributed-systems",   "pdf_count": 0, "total_pages": 0},
+    {"slug": "embedded-systems",      "pdf_count": 0, "total_pages": 0},
+    {"slug": "fourier-transforms",    "pdf_count": 0, "total_pages": 0},
+    {"slug": "machine-learning",      "pdf_count": 0, "total_pages": 0},
+    {"slug": "mechatronics",          "pdf_count": 0, "total_pages": 0},
+    {"slug": "solid-mechanics",       "pdf_count": 0, "total_pages": 0}
+  ]
+}

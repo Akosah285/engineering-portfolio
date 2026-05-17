@@ -283,6 +283,7 @@ normalisation
 normalise
 normalised
 normalises
+npages
 nullable
 nullables
 numeric
@@ -334,6 +335,7 @@ prefetch
 prefetched
 prefetching
 preorder
+prereqs
 prettifies
 prettify
 prng
@@ -344,10 +346,12 @@ pubcomp
 pubrec
 pubrel
 pwm
+pypdfium
 pyproject
 pyright
 pytest
 pytorch
+qpdf
 quantisation
 quantise
 quantised
@@ -570,6 +574,7 @@ vecs
 vectorize
 vectorized
 vendored
+venv
 verilog
 vesa
 vhdl

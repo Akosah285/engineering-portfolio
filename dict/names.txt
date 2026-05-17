@@ -1,5 +1,6 @@
 akosah
 akwasi
+akwasiakosah
 anthropic
 astro
 biome
