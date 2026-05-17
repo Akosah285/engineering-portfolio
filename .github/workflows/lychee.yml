@@ -1,0 +1,92 @@
+name: Link check (lychee)
+
+# Plan §2.13: v0 CI pipeline includes lychee link checking.
+#
+# Currently warn-only via `fail: false` + `continue-on-error: true`, mirroring
+# the Lighthouse CI v3 stage. Broken links surface as a failed step inside an
+# otherwise-green workflow run — never block deploys.
+#
+# Flipping to fail-severity later: remove `continue-on-error` + set
+# `fail: true` on the lychee-action step, and update
+# site/src/lib/__tests__/lycheeConfig.test.ts to assert the new severity.
+#
+# The vitest test (lycheeConfig.test.ts) locks the accept codes, exclude
+# patterns, max_concurrency, and timeout from site/lychee.toml so silent
+# drift fails CI.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    # Weekly drift check (Monday 07:00 UTC) — catches external links going
+    # stale even when no source changes land.
+    - cron: "0 7 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  lychee:
+    name: Link check (warn-only)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Enable Corepack and activate pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.15.0 --activate
+          pnpm --version
+
+      - name: Install site deps
+        working-directory: site
+        run: pnpm install --frozen-lockfile
+
+      - name: Approve build scripts
+        working-directory: site
+        run: pnpm rebuild
+
+      - name: Build site
+        working-directory: site
+        env:
+          ASTRO_TELEMETRY_DISABLED: "1"
+        run: pnpm run build
+
+      - name: Restore lychee cache
+        uses: actions/cache@v4
+        with:
+          path: .lycheecache
+          key: cache-lychee-${{ github.sha }}
+          restore-keys: cache-lychee-
+
+      - name: Run lychee link check
+        id: lychee
+        continue-on-error: true
+        uses: lycheeverse/lychee-action@v2
+        with:
+          # `fail: false` keeps the action's own exit code 0 even with broken
+          # links; `continue-on-error: true` is belt-and-braces. The v6
+          # flip removes both.
+          fail: false
+          args: >-
+            --config ./site/lychee.toml
+            --cache
+            ./site/dist/**/*.html
+
+      - name: Upload lychee report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lychee-report
+          path: lychee/out.md
+          if-no-files-found: ignore
+          retention-days: 14

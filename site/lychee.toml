@@ -1,0 +1,58 @@
+# Lychee link checker config — plan §2.13 ("v0 pipeline: ... + lychee + cspell")
+#
+# Currently warn-only: the .github/workflows/lychee.yml step sets `fail: false`
+# + `continue-on-error: true`, so this gate surfaces broken links without
+# blocking deploys (mirrors the Lighthouse CI v3 stage). The vitest test
+# site/src/lib/__tests__/lycheeConfig.test.ts locks the accept codes +
+# exclude patterns + concurrency knobs declared here.
+#
+# Flipping to fail-severity later requires removing `continue-on-error` from
+# the workflow + updating the test, by design.
+
+# HTTP status codes that count as "alive" beyond the default 2xx range.
+# 206 = partial content (some hosts return for HEAD probes).
+# 429 = rate-limited (treat as healthy; the link itself is fine — the
+#       server is just throttling us).
+# 403 = some hosts (LinkedIn, X/Twitter, Cloudflare-fronted sites) block
+#       link-checker user agents; their links are not actually broken.
+accept = ["200", "206", "403", "429"]
+
+# Don't traverse mailto: / tel: schemes.
+exclude_mail = true
+
+# Skip known-noisy or non-applicable hosts.
+exclude = [
+  # localhost / loopback (the built site contains absolute prod URLs only,
+  # but defensive in case a dev preview slips through)
+  "^https?://(localhost|127\\.0\\.0\\.1|0\\.0\\.0\\.0)",
+  # example.com / example.org per RFC 2606
+  "^https?://(www\\.)?example\\.(com|org|net)",
+  # GitHub's rate limiter is aggressive against unauthenticated CI runners;
+  # most github.com links are stable repos we control anyway.
+  "^https?://github\\.com",
+  # LinkedIn aggressively blocks bots; About-page socials use them.
+  "^https?://(www\\.)?linkedin\\.com",
+]
+
+# Performance + reliability knobs.
+max_concurrency = 8
+max_retries = 2
+timeout = 20
+retry_wait_time = 2
+no_progress = true
+
+# Cache successful results so repeat CI runs don't re-probe stable links.
+cache = true
+max_cache_age = "1d"
+
+# We're checking the built static site, which contains relative + absolute
+# URLs. Set the base so relative URLs resolve correctly when scanning
+# site/dist/**/*.html.
+base = "https://akosah285.github.io/engineering-portfolio/"
+
+# Use GET (not HEAD) — some hosts (Cloudflare, Substack, etc.) return 405
+# on HEAD probes for URLs that are perfectly valid via GET.
+method = "get"
+
+# Bail out fast on truly unreachable hosts so the workflow doesn't drag.
+include_verbatim = false
