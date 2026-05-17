@@ -20,8 +20,17 @@ import sys
 from collections.abc import Callable, Iterable
 from decimal import Decimal
 from pathlib import Path
+from typing import Final
 
 from ocr_vault.add_orchestrator import AddOrchestrator, OrchestratorError
+from ocr_vault.batch_estimator import (
+    BatchManifestError,
+    default_avg_input_tokens_per_page,
+    default_avg_output_tokens_per_page,
+    estimate_batch_cost,
+    format_estimate_report,
+    load_batch_manifest,
+)
 from ocr_vault.cost_ledger import CostLedger
 from ocr_vault.cropper import (
     BBox,
@@ -521,6 +530,43 @@ def _cmd_crop(args: argparse.Namespace) -> int:
     return 0
 
 
+# ────────────────── command: plan (#43 prep) ──────────────────────────────
+
+
+_DEFAULT_BATCH_MANIFEST_NAME: Final[str] = "batch-manifest.json"
+
+
+def _cmd_plan(args: argparse.Namespace) -> int:
+    data_dir = Path(args.data_dir)
+    manifest_path = (
+        Path(args.manifest)
+        if args.manifest
+        else data_dir / _DEFAULT_BATCH_MANIFEST_NAME
+    )
+
+    try:
+        manifest = load_batch_manifest(manifest_path)
+    except BatchManifestError as e:
+        sys.stderr.write(f"[error] manifest: {e}\n")
+        return 1
+
+    try:
+        estimate = estimate_batch_cost(
+            manifest,
+            model=args.model,
+            avg_input_tokens_per_page=args.avg_input_tokens,
+            avg_output_tokens_per_page=args.avg_output_tokens,
+            hard_cap_usd=Decimal(str(args.max_cost)),
+            soft_warn_usd=Decimal(str(args.warn_cost)),
+        )
+    except ValueError as e:
+        sys.stderr.write(f"[error] {e}\n")
+        return 1
+
+    sys.stdout.write(format_estimate_report(estimate))
+    return 0
+
+
 # ────────────────── command: re-ocr (#40) ─────────────────────────────────
 
 
@@ -914,6 +960,64 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Path to the data/ root (default: ./data).",
     )
     p_reocr.set_defaults(func=_cmd_reocr)
+
+    # ─── plan (#43 prep — cost projection, no API calls) ──────────────
+    p_plan = sub.add_parser(
+        "plan",
+        help=(
+            "Project total OCR spend across the courses in a batch manifest. "
+            "Pre-flight estimator — no provider calls."
+        ),
+    )
+    p_plan.add_argument(
+        "--manifest",
+        default=None,
+        help=(
+            "Path to a batch manifest JSON file "
+            "(default: <data-dir>/batch-manifest.json)."
+        ),
+    )
+    p_plan.add_argument(
+        "--data-dir",
+        default="data",
+        help="Path to the data/ root (default: ./data).",
+    )
+    p_plan.add_argument(
+        "--model",
+        default="claude-sonnet-4.5",
+        help="Model id to price against (default: claude-sonnet-4.5).",
+    )
+    p_plan.add_argument(
+        "--avg-input-tokens",
+        type=int,
+        default=default_avg_input_tokens_per_page(),
+        help=(
+            "Expected average input tokens per page "
+            f"(default: {default_avg_input_tokens_per_page()})."
+        ),
+    )
+    p_plan.add_argument(
+        "--avg-output-tokens",
+        type=int,
+        default=default_avg_output_tokens_per_page(),
+        help=(
+            "Expected average output tokens per page "
+            f"(default: {default_avg_output_tokens_per_page()})."
+        ),
+    )
+    p_plan.add_argument(
+        "--max-cost",
+        type=float,
+        default=50.0,
+        help="Hard cost cap in USD for cap-status flag (default: 50).",
+    )
+    p_plan.add_argument(
+        "--warn-cost",
+        type=float,
+        default=10.0,
+        help="Soft warning threshold in USD (default: 10).",
+    )
+    p_plan.set_defaults(func=_cmd_plan)
 
     return parser
 

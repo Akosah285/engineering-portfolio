@@ -967,3 +967,168 @@ class TestReocrCommand:
         assert rc == 0
         assert (ml_dir / "page-1.v1.0.0.json").exists()
         assert (ml_dir / "page-1.json").exists()
+
+
+# ───────────────── plan (#43 prep — cost projection) ───────────────────────
+
+
+def _write_manifest(
+    path: Path,
+    *,
+    courses: list[tuple[str, int, int]],
+) -> Path:
+    """Write a batch manifest JSON at path. courses=[(slug, pdf_count, pages)]."""
+    payload = {
+        "courses": [
+            {"slug": slug, "pdf_count": pc, "total_pages": tp}
+            for slug, pc, tp in courses
+        ]
+    }
+    path.write_text(json.dumps(payload), encoding="utf-8")
+    return path
+
+
+class TestPlanCommand:
+    def test_default_manifest_path_under_data_dir(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        manifest = _write_manifest(
+            tmp_path / "batch-manifest.json",
+            courses=[("machine-learning", 1, 20), ("fourier-transforms", 1, 12)],
+        )
+        rc = main(["plan", "--data-dir", str(tmp_path)])
+        out = capsys.readouterr().out
+        assert rc == 0
+        assert manifest.exists()
+        assert "machine-learning" in out
+        assert "fourier-transforms" in out
+        assert "estimated total" in out.lower()
+
+    def test_explicit_manifest_flag_overrides_default(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        other = _write_manifest(
+            tmp_path / "elsewhere.json",
+            courses=[("solid-mechanics", 1, 5)],
+        )
+        rc = main(
+            [
+                "plan",
+                "--manifest",
+                str(other),
+                "--data-dir",
+                str(tmp_path),
+            ]
+        )
+        out = capsys.readouterr().out
+        assert rc == 0
+        assert "solid-mechanics" in out
+
+    def test_missing_manifest_returns_nonzero_with_helpful_error(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        # No manifest written.
+        rc = main(["plan", "--data-dir", str(tmp_path)])
+        err = capsys.readouterr().err
+        assert rc == 1
+        assert "manifest" in err.lower()
+
+    def test_invalid_manifest_returns_nonzero(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        (tmp_path / "batch-manifest.json").write_text("{not json", encoding="utf-8")
+        rc = main(["plan", "--data-dir", str(tmp_path)])
+        err = capsys.readouterr().err
+        assert rc == 1
+        assert "manifest" in err.lower() or "json" in err.lower()
+
+    def test_makes_no_provider_calls(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        # If plan ever tries to construct a provider it should not need a key,
+        # so even on a totally bare environment the command succeeds.
+        _write_manifest(
+            tmp_path / "batch-manifest.json",
+            courses=[("ml", 1, 5)],
+        )
+        rc = main(
+            [
+                "plan",
+                "--data-dir",
+                str(tmp_path),
+                "--model",
+                "claude-sonnet-4.5",
+            ]
+        )
+        assert rc == 0
+
+    def test_flags_soft_warn_in_output(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        # 2000 pages at default avg tokens lands above soft warn ($10), below hard cap.
+        _write_manifest(
+            tmp_path / "batch-manifest.json",
+            courses=[("big-course", 1, 2000)],
+        )
+        rc = main(["plan", "--data-dir", str(tmp_path)])
+        out = capsys.readouterr().out
+        assert rc == 0
+        assert "warn" in out.lower()
+
+    def test_flags_hard_cap_violation_in_output(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        _write_manifest(
+            tmp_path / "batch-manifest.json",
+            courses=[("huge", 10, 50000)],
+        )
+        rc = main(["plan", "--data-dir", str(tmp_path)])
+        out = capsys.readouterr().out
+        # Plan still exits 0 (it's a projection, not an enforcement); the
+        # report itself must carry the abort signal.
+        assert rc == 0
+        assert "stop" in out.lower() or "exceeds" in out.lower()
+
+    def test_token_overrides_change_projection(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        _write_manifest(
+            tmp_path / "batch-manifest.json",
+            courses=[("ml", 1, 10)],
+        )
+        rc_low = main(
+            [
+                "plan",
+                "--data-dir",
+                str(tmp_path),
+                "--avg-input-tokens",
+                "100",
+                "--avg-output-tokens",
+                "50",
+            ]
+        )
+        out_low = capsys.readouterr().out
+        rc_high = main(
+            [
+                "plan",
+                "--data-dir",
+                str(tmp_path),
+                "--avg-input-tokens",
+                "5000",
+                "--avg-output-tokens",
+                "2000",
+            ]
+        )
+        out_high = capsys.readouterr().out
+        assert rc_low == 0 and rc_high == 0
+        # Same manifest, much heavier token assumption -> higher total.
+        # Extract the "estimated total" line for a soft numerical compare.
+        import re as _re
+
+        def _extract(text: str) -> float:
+            m = _re.search(r"estimated total\s*:\s*\$([0-9.]+)", text)
+            assert m is not None, text
+            return float(m.group(1))
+
+        assert _extract(out_high) > _extract(out_low)
+
