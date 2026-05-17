@@ -1,0 +1,46 @@
+{
+  "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
+  "version": "0.2",
+  "language": "en-US",
+  "//": "Spell checker for engineering-portfolio. Plan §2.13: v0 pipeline includes cspell. Currently warn-only via continue-on-error in .github/workflows/cspell.yml (mirrors lychee + Lighthouse CI v3 stage). Flipping to fail-severity requires removing continue-on-error + updating site/src/lib/__tests__/cspellConfig.test.ts.",
+  "files": [
+    "site/src/**/*.{ts,tsx,astro,mdx,md}",
+    "tools/ocr-vault/src/**/*.py",
+    "README.md",
+    "CONTENT-LICENSE.md"
+  ],
+  "ignorePaths": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/.astro/**",
+    "**/__tests__/**",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/algorithm.ts",
+    "site/pnpm-lock.yaml",
+    "site/src/content/concepts/_tags.json",
+    "site/src/content/_courses.json",
+    "tools/ocr-vault/.venv/**",
+    "tools/ocr-vault/dist/**",
+    "data/**",
+    "archive/**"
+  ],
+  "dictionaries": ["dartmouth", "technical", "names"],
+  "dictionaryDefinitions": [
+    {
+      "name": "dartmouth",
+      "path": "./dict/dartmouth.txt",
+      "addWords": true
+    },
+    {
+      "name": "technical",
+      "path": "./dict/technical.txt",
+      "addWords": true
+    },
+    {
+      "name": "names",
+      "path": "./dict/names.txt",
+      "addWords": true
+    }
+  ]
+}

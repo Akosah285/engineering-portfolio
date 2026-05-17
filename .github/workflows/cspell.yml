@@ -1,0 +1,68 @@
+name: Spell check (cspell)
+
+# Plan §2.13: v0 CI pipeline includes cspell.
+#
+# Currently warn-only via `continue-on-error: true`, mirroring the lychee
+# (6ba355f) and Lighthouse CI (989b9b4) v3 stages. Misspellings surface as
+# a failed step inside an otherwise-green workflow run — never block deploys.
+#
+# Flipping to fail severity later: remove `continue-on-error` on the cspell
+# step, and update site/src/lib/__tests__/cspellConfig.test.ts to assert
+# the new severity.
+#
+# The vitest test (cspellConfig.test.ts) locks the file globs, ignore paths,
+# dictionary registrations, and workflow shape so silent drift fails CI.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  cspell:
+    name: Spell check (warn-only)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run cspell
+        id: cspell
+        continue-on-error: true
+        # Pinned major to keep behaviour stable; bump via PR with a
+        # dictionary review.
+        run: |
+          npx --yes cspell@8 lint \
+            --config ./cspell.json \
+            --no-progress \
+            --show-suggestions \
+            --no-must-find-files \
+            --reporter @cspell/cspell-json-reporter \
+            --output ./cspell-report.json || true
+          # Always produce a human-readable copy too for the artifact.
+          npx --yes cspell@8 lint \
+            --config ./cspell.json \
+            --no-progress \
+            --no-must-find-files \
+            > ./cspell-report.txt 2>&1 || true
+
+      - name: Upload cspell report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cspell-report
+          path: |
+            cspell-report.json
+            cspell-report.txt
+          if-no-files-found: ignore
+          retention-days: 14
