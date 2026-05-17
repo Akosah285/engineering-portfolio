@@ -85,10 +85,9 @@ export function MazePathfindVisualizer() {
     [size, state.wallDensity, state.seed],
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: start/goal derive from size which is captured via maze; explicit-trigger dep set is intentional
   const result = useMemo(
     () => runAlgorithm(state.algorithm, maze, start, goal),
-    // start/goal are derived from `size`, which is in the dep list via `maze`.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [state.algorithm, maze],
   );
 

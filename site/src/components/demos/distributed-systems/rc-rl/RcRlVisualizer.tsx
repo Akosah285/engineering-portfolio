@@ -254,6 +254,7 @@ export default function RcRlVisualizer() {
   const totalRef = useRef(0);
 
   // Reset cursor whenever inputs change so the sweep restarts at t=0.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: trigger-only deps; body resets refs and never reads the listed state.* values
   useEffect(() => {
     cursorRef.current = 0;
     totalRef.current = 0;

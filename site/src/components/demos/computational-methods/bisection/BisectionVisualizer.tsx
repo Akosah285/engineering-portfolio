@@ -220,6 +220,7 @@ export function BisectionVisualizer() {
   const [stepCount, setStepCount] = useState(0);
 
   // Reset animation whenever inputs change.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: trigger-only deps; body resets refs/state and never reads the listed state.* values, so there's no stale-closure risk
   useEffect(() => {
     accumulatorRef.current = 0;
     setStepCount(0);

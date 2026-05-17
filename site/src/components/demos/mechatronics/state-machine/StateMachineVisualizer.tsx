@@ -257,6 +257,7 @@ export function StateMachineVisualizer() {
   const [currentState, setCurrentState] = useState<DMState>(INITIAL_STATE);
 
   // Reset whenever the preset changes (or after explicit reset).
+  // biome-ignore lint/correctness/useExhaustiveDependencies: trigger-only dep; body resets refs/state and doesn't read presetSlug
   useEffect(() => {
     stepRef.current = 0;
     stateRef.current = INITIAL_STATE;

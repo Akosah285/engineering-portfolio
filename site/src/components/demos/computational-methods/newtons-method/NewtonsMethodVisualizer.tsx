@@ -75,6 +75,7 @@ export function NewtonsMethodVisualizer() {
   const [paused, setPaused] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: trigger-only deps; body resets refs/state and never reads the listed state.* values
   useEffect(() => {
     accumulatorRef.current = 0;
     setStepIndex(0);

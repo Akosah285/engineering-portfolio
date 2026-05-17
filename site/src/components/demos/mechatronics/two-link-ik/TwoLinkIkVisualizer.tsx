@@ -90,12 +90,14 @@ export function TwoLinkIkVisualizer() {
   const [tDisplay, setTDisplay] = useState(0);
 
   // Reset clock + trail whenever any control changes.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: trigger-only deps; body resets refs/state and doesn't read the listed state.* values
   useEffect(() => {
     tRef.current = 0;
     trailRef.current = [];
     setTDisplay(0);
   }, [state.pathSlug, state.l1, state.l2, state.elbow, state.cycleSpeed]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: state.pathSlug feeds into pathFn (already a dep); keeping it explicit in the dep array documents the cause-effect chain and matches the reset-effect deps above
   const draw: DrawFn = useCallback(
     (ctx, deltaMs) => {
       const { width, height } = ctx.canvas;

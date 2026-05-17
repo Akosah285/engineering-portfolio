@@ -190,6 +190,7 @@ export function PolynomialRegression() {
         ? { type: "ridge", lambda: state.lambda }
         : { type: "lasso", lambda: state.lambda };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: state.regularization and state.lambda are captured indirectly through the local `reg` object built above; listing both keeps the memo invalidation explicit and surfaces a stable contract
   const coeffs = useMemo(
     () => fitPolynomial(data.xs, data.ys, Math.round(state.degree), reg),
     [data, state.degree, state.regularization, state.lambda],

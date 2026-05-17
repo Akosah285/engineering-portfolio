@@ -204,6 +204,7 @@ export function ConvolutionVisualizer() {
   const [currentIdx, setCurrentIdx] = useState(0);
 
   // Reset slide whenever inputs change.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: trigger-only deps; body resets refs/state and doesn't read pairSlug/nSamples
   useEffect(() => {
     accumulatorRef.current = 0;
     idxRef.current = 0;

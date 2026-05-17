@@ -181,6 +181,7 @@ export function BirthdayParadoxVisualizer() {
   const accumulatorRef = useRef(0);
   const currentNRef = useRef(1);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: trigger-only deps; body resets refs/state and never reads the listed state.* values
   useEffect(() => {
     currentNRef.current = 1;
     accumulatorRef.current = 0;

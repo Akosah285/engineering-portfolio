@@ -143,6 +143,7 @@ export function GaussianEliminationVisualizer() {
   const accumulatorRef = useRef(0);
 
   // Reset step counter when system or delay changes.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: trigger-only dep; body resets refs/state and never reads systemSlug
   useEffect(() => {
     accumulatorRef.current = 0;
     setCurrentStep(0);

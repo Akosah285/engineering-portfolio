@@ -168,6 +168,7 @@ export function GamblersRuinVisualizer() {
   const [paused, setPaused] = useState(false);
   const [completedCount, setCompletedCount] = useState(0);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: trigger-only dep; body resets refs/state, doesn't read allWalks
   useEffect(() => {
     revealRef.current = 0;
     accumulatorRef.current = 0;

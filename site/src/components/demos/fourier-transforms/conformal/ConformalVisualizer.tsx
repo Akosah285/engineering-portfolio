@@ -164,6 +164,7 @@ function ConformalVisualizer() {
     .map((z) => `${toSvgX(z.re).toFixed(2)},${toSvgY(z.im).toFixed(2)}`)
     .join(" ");
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: rawState is the source-of-truth shape that setState requires; state is the deserialized projection used in the spread; keeping both in deps documents the dual identity
   const handlePreset = useCallback(
     (next: { map: MapSlug }) => {
       setState({ ...state, map: next.map } as unknown as typeof rawState);

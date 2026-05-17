@@ -262,6 +262,7 @@ export function DcMotorVisualizer() {
 
   // Trigger a one-shot repaint after each state change; useDrawLoop runs every
   // frame anyway, but the deps array on the callback ensures it picks up changes.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: intentional no-op effect that exists only so React sees a fresh dep-change to draw and re-evaluates downstream memo chains
   useEffect(() => {
     // no-op — re-renders the draw callback through useCallback deps
   }, [draw]);

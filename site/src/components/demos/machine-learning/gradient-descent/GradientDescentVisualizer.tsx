@@ -152,6 +152,7 @@ export function GradientDescentVisualizer() {
   const [stepCount, setStepCount] = useState(0);
 
   // Reset trajectory whenever any control or surface changes.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: trigger deps; body resets refs/state and only reads state.startX/startY (both listed)
   useEffect(() => {
     trajRef.current = [{ x: state.startX, y: state.startY, vx: 0, vy: 0 }];
     accumulatorRef.current = 0;

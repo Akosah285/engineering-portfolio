@@ -159,6 +159,7 @@ export function BinaryCounterVisualizer() {
   const [cursorTick, setCursorTick] = useState(0);
 
   // Reset cursor when frames change.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: trigger-only dep; body resets refs/state, doesn't read frames here
   useEffect(() => {
     cursorRef.current = 0;
     accRef.current = 0;

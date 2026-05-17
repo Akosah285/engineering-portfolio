@@ -93,6 +93,7 @@ export function MonteCarloPiVisualizer() {
   const [inside, setInside] = useState(0);
 
   // Re-seed and clear samples whenever any control changes.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: trigger deps; body resets refs/state and only reads state.seed (which is one of the listed trigger keys)
   useEffect(() => {
     samplesRef.current = [];
     insideRef.current = 0;

@@ -88,6 +88,7 @@ export default function Wave2DVisualizer() {
   const [tick, setTick] = useState(0);
 
   // Reset integration state whenever sliders change.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: trigger deps; body resets refs and only reads nx/ny (both listed) and allocates fresh grids
   useEffect(() => {
     uPrevRef.current = allocGrid(ny, nx);
     uCurRef.current = allocGrid(ny, nx);

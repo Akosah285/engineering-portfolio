@@ -190,6 +190,7 @@ export function PidControllerVisualizer() {
   }, []);
 
   // Reset whenever any control changes (gains, setpoint, or plant tau).
+  // biome-ignore lint/correctness/useExhaustiveDependencies: trigger deps; body only reads state.setpoint and resetSim (both listed); other state.* are trigger-only
   useEffect(() => {
     resetSim(state.setpoint);
   }, [state.kp, state.ki, state.kd, state.setpoint, state.tau, resetSim]);

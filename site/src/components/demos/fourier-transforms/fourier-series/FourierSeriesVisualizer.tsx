@@ -159,6 +159,7 @@ export function FourierSeriesVisualizer() {
   const currentNRef = useRef(1);
 
   // Reset N whenever waveform or maxHarmonics changes.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: trigger-only deps; body resets refs/state and doesn't read waveformKind/maxHarmonics
   useEffect(() => {
     currentNRef.current = 1;
     accumulatorRef.current = 0;

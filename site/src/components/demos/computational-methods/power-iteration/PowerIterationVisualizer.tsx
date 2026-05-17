@@ -185,6 +185,7 @@ export function PowerIterationVisualizer() {
   const [converged, setConverged] = useState(false);
 
   // Reset the live iterate whenever the matrix preset or maxIterations change.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: trigger-only deps; body resets refs/state without reading the listed state values, and meta.A is sampled fresh on next render
   useEffect(() => {
     vRef.current = INITIAL_V;
     trailRef.current = [];

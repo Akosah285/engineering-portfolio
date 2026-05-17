@@ -154,6 +154,7 @@ export function LorenzVisualizer() {
   const [paused, setPaused] = useState(false);
 
   // Reset the animation whenever the trajectory changes.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: trigger-only dep; body resets refs/state, doesn't read trajectory
   useEffect(() => {
     idxRef.current = 0;
     setCurrentIdx(0);

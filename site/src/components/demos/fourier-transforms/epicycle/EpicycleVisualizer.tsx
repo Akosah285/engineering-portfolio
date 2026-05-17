@@ -152,6 +152,7 @@ export function EpicycleVisualizer() {
   const effectiveTerms = Math.max(1, Math.min(state.numTerms, termCap));
 
   // Clear the trace whenever the path, sample count, or term count changes.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: trigger-only deps; body resets refs and doesn't read the listed state.* values
   useEffect(() => {
     tRef.current = 0;
     traceRef.current = [];
