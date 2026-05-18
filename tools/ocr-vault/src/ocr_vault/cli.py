@@ -49,7 +49,12 @@ from ocr_vault.listings import (
     rank_candidates,
 )
 from ocr_vault.ocr_config import OcrConfig, OcrConfigError, load_ocr_config
-from ocr_vault.pdf_loader import MockPdfLoader, PdfLoader
+from ocr_vault.pdf_loader import (
+    MockPdfLoader,
+    PdfLoader,
+    PdfLoaderError,
+    Pypdfium2PdfLoader,
+)
 from ocr_vault.provider import ProviderError, get_provider
 from ocr_vault.reocr_orchestrator import (
     ReocrOrchestrator,
@@ -134,19 +139,17 @@ def _cmd_status(args: argparse.Namespace) -> int:
 # ────────────────── command: add ───────────────────────────────────────────
 
 
-def _build_pdf_loader(mock_pages: int | None) -> PdfLoader:
-    """Construct a PDF loader. Today only MockPdfLoader exists.
+def _build_pdf_loader(mock_pages: int | None, dpi: int) -> PdfLoader:
+    """Construct a PDF loader.
 
-    Real pypdfium2 wiring is deferred to a follow-up (see #36 / plan §2.3).
-    For now, ``--mock-pages N`` lets the user exercise the full pipeline end
-    to end without binary PDF dependencies.
+    ``--mock-pages N`` selects the deterministic ``MockPdfLoader`` (useful
+    for synthetic dry-runs that exercise the full pipeline without a real
+    PDF). Otherwise the real ``Pypdfium2PdfLoader`` is used at the requested
+    DPI.
     """
-    if mock_pages is None:
-        raise OrchestratorError(
-            "Real PDF rendering is not yet implemented. "
-            "Pass --mock-pages N for a deterministic synthetic loader."
-        )
-    return MockPdfLoader(page_count=mock_pages)
+    if mock_pages is not None:
+        return MockPdfLoader(page_count=mock_pages)
+    return Pypdfium2PdfLoader(dpi=dpi)
 
 
 def _cmd_add(args: argparse.Namespace) -> int:
@@ -155,8 +158,8 @@ def _cmd_add(args: argparse.Namespace) -> int:
     course_slug: str = args.course
 
     try:
-        pdf_loader = _build_pdf_loader(args.mock_pages)
-    except OrchestratorError as e:
+        pdf_loader = _build_pdf_loader(args.mock_pages, args.dpi)
+    except (OrchestratorError, ValueError) as e:
         sys.stderr.write(f"[error] {e}\n")
         return 1
 
@@ -185,7 +188,7 @@ def _cmd_add(args: argparse.Namespace) -> int:
 
     try:
         result = orch.run(pdf_path=pdf_path, course_slug=course_slug)
-    except OrchestratorError as e:
+    except (OrchestratorError, PdfLoaderError) as e:
         sys.stderr.write(f"[error] {e}\n")
         index.close()
         return 1
@@ -741,8 +744,20 @@ def _build_parser() -> argparse.ArgumentParser:
         type=int,
         default=None,
         help=(
-            "When set, use a deterministic MockPdfLoader with N pages. "
-            "Required until real PDF rendering lands."
+            "When set, use a deterministic MockPdfLoader with N pages "
+            "(synthetic dry-run; no PDF needed). Omit for the real "
+            "pypdfium2-backed loader."
+        ),
+    )
+    p_add.add_argument(
+        "--dpi",
+        type=int,
+        default=200,
+        help=(
+            "Render DPI for the real pypdfium2 loader. Default 200 "
+            "(legible for handwritten math without ballooning PNG size). "
+            "Ignored when --mock-pages is set. Must be > 0; "
+            "recommended band 150-400."
         ),
     )
     p_add.set_defaults(func=_cmd_add)

@@ -171,24 +171,68 @@ class TestStatusCommand:
 
 
 class TestAddCommand:
-    def test_add_requires_mock_pages_until_real_loader_lands(
+    def test_add_without_mock_pages_uses_real_loader_and_errors_on_missing_pdf(
         self,
         tmp_path: Path,
         capsys: pytest.CaptureFixture[str],
     ) -> None:
+        """Real pypdfium2 loader is the default; missing PDF surfaces a clear error."""
         rc = main(
             [
                 "add",
-                str(tmp_path / "hw1.pdf"),
+                str(tmp_path / "does-not-exist.pdf"),
                 "--course",
                 "machine-learning",
+                "--provider",
+                "mock",
                 "--data-dir",
                 str(tmp_path / "data"),
             ]
         )
         captured = capsys.readouterr()
         assert rc != 0
-        assert "mock-pages" in (captured.out + captured.err).lower()
+        msg = (captured.out + captured.err).lower()
+        # The real loader's PdfLoaderError must be visible to the operator.
+        assert "pdf" in msg or "load" in msg or "not found" in msg
+
+    def test_add_with_real_loader_walks_synthetic_pdf(
+        self,
+        tmp_path: Path,
+        capsys: pytest.CaptureFixture[str],
+    ) -> None:
+        """End-to-end: real PDF on disk + real loader + mock provider."""
+        import pypdfium2 as pdfium  # type: ignore[import-untyped]
+
+        pdf_path = tmp_path / "hw1.pdf"
+        pdf = pdfium.PdfDocument.new()
+        try:
+            # Different page sizes ensure distinct page hashes (otherwise
+            # identical blank pages collapse to one cache entry).
+            pdf.new_page(612, 792)
+            pdf.new_page(612, 800)
+            pdf.save(str(pdf_path))
+        finally:
+            pdf.close()
+
+        data_dir = tmp_path / "data"
+        rc = main(
+            [
+                "add",
+                str(pdf_path),
+                "--course",
+                "machine-learning",
+                "--provider",
+                "mock",
+                "--data-dir",
+                str(data_dir),
+            ]
+        )
+        out = capsys.readouterr().out
+        assert rc == 0
+        assert "pages processed : 2" in out
+        sidecar_dir = data_dir / "sidecars" / "machine-learning" / "hw1"
+        assert (sidecar_dir / "page-1.json").exists()
+        assert (sidecar_dir / "page-2.json").exists()
 
     def test_add_with_mock_pages_writes_sidecars(
         self,
@@ -238,6 +282,64 @@ class TestAddCommand:
             ]
         )
         assert rc != 0
+
+    def test_add_respects_dpi_flag(
+        self,
+        tmp_path: Path,
+        capsys: pytest.CaptureFixture[str],
+    ) -> None:
+        """--dpi changes the rendered page-image size on disk."""
+        import io as _io
+
+        import pypdfium2 as pdfium  # type: ignore[import-untyped]
+        from PIL import Image as _PilImage
+
+        pdf_path = tmp_path / "hw1.pdf"
+        pdf = pdfium.PdfDocument.new()
+        try:
+            pdf.new_page(612, 792)
+            pdf.save(str(pdf_path))
+        finally:
+            pdf.close()
+
+        for dpi, subdir in [(100, "data-lo"), (300, "data-hi")]:
+            data_dir = tmp_path / subdir
+            rc = main(
+                [
+                    "add",
+                    str(pdf_path),
+                    "--course",
+                    "machine-learning",
+                    "--provider",
+                    "mock",
+                    "--data-dir",
+                    str(data_dir),
+                    "--dpi",
+                    str(dpi),
+                ]
+            )
+            assert rc == 0
+
+        lo_png = (
+            tmp_path
+            / "data-lo"
+            / "page-images"
+            / "machine-learning"
+            / "hw1"
+            / "page-1.png"
+        ).read_bytes()
+        hi_png = (
+            tmp_path
+            / "data-hi"
+            / "page-images"
+            / "machine-learning"
+            / "hw1"
+            / "page-1.png"
+        ).read_bytes()
+        lo_w = _PilImage.open(_io.BytesIO(lo_png)).size[0]
+        hi_w = _PilImage.open(_io.BytesIO(hi_png)).size[0]
+        # 300 DPI is 3x 100 DPI; allow ±2 px rounding.
+        assert abs(hi_w - lo_w * 3) <= 2
 
     def test_add_re_run_uses_cache(
         self,
