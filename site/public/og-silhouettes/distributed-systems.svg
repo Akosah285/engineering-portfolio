@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Distributed Systems & Fields hero silhouette — Charge Field Plotter.
+
+  Classic dipole-style field-line silhouette: a positive charge on the
+  left, a negative charge on the right, with curved field lines flowing
+  from + to - in a symmetric bundle. Evokes the hero demo where the
+  user drags charges and watches the field redraw.
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 480 480"
+  fill="none"
+  stroke="#00693e"
+  stroke-width="2.5"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <title>Electric dipole field lines between two point charges</title>
+
+  <!-- Field lines: 5 curves from + (160, 240) to - (320, 240) -->
+  <g opacity="0.85" stroke-width="2">
+    <path d="M 160 240 C 200 120, 280 120, 320 240" />
+    <path d="M 160 240 C 200 160, 280 160, 320 240" />
+    <path d="M 160 240 L 320 240" />
+    <path d="M 160 240 C 200 320, 280 320, 320 240" />
+    <path d="M 160 240 C 200 360, 280 360, 320 240" />
+  </g>
+
+  <!-- Outer return-path field lines that loop around -->
+  <g opacity="0.6" stroke-width="2">
+    <path d="M 145 220 C 110 100, 370 100, 335 220" />
+    <path d="M 145 260 C 110 380, 370 380, 335 260" />
+  </g>
+
+  <!-- Positive charge (left) — circle + plus -->
+  <g>
+    <circle cx="160" cy="240" r="26" fill="#00693e" stroke="none" />
+    <g stroke="#fcfaf6" stroke-width="3.5">
+      <line x1="146" y1="240" x2="174" y2="240" />
+      <line x1="160" y1="226" x2="160" y2="254" />
+    </g>
+  </g>
+
+  <!-- Negative charge (right) — circle + minus -->
+  <g>
+    <circle cx="320" cy="240" r="26" fill="#00693e" stroke="none" />
+    <line x1="306" y1="240" x2="334" y2="240" stroke="#fcfaf6" stroke-width="3.5" />
+  </g>
+</svg>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Discrete & Probabilistic Systems hero silhouette — Markov Chain Visualizer.
+
+  Four state nodes arranged in a diamond, with directed transition arrows
+  and a self-loop on one state. Evokes the Markov chain hero demo where
+  the current-state probability mass shifts between nodes per click.
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 480 480"
+  fill="none"
+  stroke="#00693e"
+  stroke-width="2.5"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <title>Markov chain — four states with transition arrows</title>
+
+  <defs>
+    <marker
+      id="ms-arrow"
+      viewBox="0 0 10 10"
+      refX="9"
+      refY="5"
+      markerWidth="6"
+      markerHeight="6"
+      orient="auto-start-reverse"
+    >
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#00693e" stroke="none" />
+    </marker>
+  </defs>
+
+  <!-- Four nodes: N (top), E (right), S (bottom), W (left) -->
+  <g>
+    <circle cx="240" cy="90" r="38" />
+    <circle cx="390" cy="240" r="38" />
+    <circle cx="240" cy="390" r="38" />
+    <circle cx="90" cy="240" r="38" />
+  </g>
+
+  <!-- Directed transitions (curved to avoid colliding with nodes) -->
+  <g marker-end="url(#ms-arrow)" stroke-width="2">
+    <path d="M 268 118 Q 340 145, 365 215" />        <!-- N → E -->
+    <path d="M 362 268 Q 335 340, 268 363" />        <!-- E → S -->
+    <path d="M 212 362 Q 140 335, 115 268" />        <!-- S → W -->
+    <path d="M 118 212 Q 145 140, 212 118" />        <!-- W → N -->
+    <path d="M 278 90 Q 320 70, 360 95" />           <!-- N → E short cut -->
+  </g>
+
+  <!-- Self-loop on the East node -->
+  <g stroke-width="2" marker-end="url(#ms-arrow)">
+    <path d="M 422 218 a 28 28 0 1 1 -6 50" />
+  </g>
+
+  <!-- Probability dots inside nodes (heaviest = current state, N) -->
+  <g fill="#00693e" stroke="none">
+    <circle cx="240" cy="90" r="9" />
+    <circle cx="390" cy="240" r="5" opacity="0.7" />
+    <circle cx="240" cy="390" r="4" opacity="0.55" />
+    <circle cx="90" cy="240" r="4" opacity="0.55" />
+  </g>
+</svg>

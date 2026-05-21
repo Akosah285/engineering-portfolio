@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Embedded Systems hero silhouette — Accelerometer Live Demo.
+
+  Tilted phone outline with a gravity vector pointing down and a
+  perpendicular phone-frame vector showing tilt angle. Evokes the
+  hero where the visitor tilts their phone (DeviceMotion) or scrubs
+  through a recorded motion pattern.
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 480 480"
+  fill="none"
+  stroke="#00693e"
+  stroke-width="2.5"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <title>Phone tilted with gravity vector — accelerometer demo</title>
+
+  <!-- Tilted phone body (rounded rect rotated 18°) -->
+  <g transform="rotate(-18 240 240)">
+    <rect x="170" y="100" width="140" height="280" rx="22" />
+    <!-- Screen area -->
+    <rect x="186" y="130" width="108" height="200" rx="8" opacity="0.45" />
+    <!-- Speaker slot -->
+    <line x1="220" y1="118" x2="260" y2="118" stroke-width="3" opacity="0.6" />
+    <!-- Home indicator -->
+    <line x1="216" y1="348" x2="264" y2="348" stroke-width="4" />
+  </g>
+
+  <!-- Gravity vector (always points down in world frame) -->
+  <g stroke-width="4">
+    <line x1="380" y1="160" x2="380" y2="340" />
+    <polyline points="366,326 380,348 394,326" stroke-linecap="round" />
+  </g>
+  <!-- "g" label position via a small triangle anchor -->
+  <g fill="#00693e" stroke="none" opacity="0.85">
+    <circle cx="380" cy="160" r="4" />
+  </g>
+
+  <!-- Phone-frame "down" axis (rotated with the phone) -->
+  <g stroke-width="3" stroke-dasharray="6 4" opacity="0.65" transform="rotate(-18 240 240)">
+    <line x1="240" y1="100" x2="240" y2="380" />
+  </g>
+
+  <!-- Tilt-angle arc between gravity and phone-down -->
+  <path
+    d="M 240 320 A 80 80 0 0 0 295 305"
+    opacity="0.8"
+    stroke-width="2.5"
+  />
+</svg>

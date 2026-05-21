@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Fourier Transforms hero silhouette — Epicycle Drawing Animation.
+
+  Three nested rotating circles (Fourier series of decreasing radius)
+  tracing an open curve from upper-left toward the centre. Evokes the
+  hero demo where a sum of rotating epicycles draws a target shape.
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 480 480"
+  fill="none"
+  stroke="#00693e"
+  stroke-width="2.5"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <title>Epicycles drawing a curve via Fourier series</title>
+
+  <!-- Outermost epicycle, centred -->
+  <circle cx="240" cy="240" r="140" opacity="0.55" />
+
+  <!-- Radius arm from origin to first orbit -->
+  <line x1="240" y1="240" x2="340" y2="142" opacity="0.8" stroke-width="3" />
+
+  <!-- Second epicycle around the tip of the first arm -->
+  <circle cx="340" cy="142" r="70" opacity="0.55" />
+
+  <!-- Second arm -->
+  <line x1="340" y1="142" x2="394" y2="100" opacity="0.8" stroke-width="3" />
+
+  <!-- Third (smallest) epicycle -->
+  <circle cx="394" cy="100" r="32" opacity="0.55" />
+
+  <!-- Third arm — tip is the drawing pen -->
+  <line x1="394" y1="100" x2="420" y2="118" opacity="0.8" stroke-width="3" />
+
+  <!-- Traced curve: a parametric loop from the pen back through history -->
+  <path
+    d="M 420 118 C 360 220, 200 320, 100 260 S 80 100, 200 80"
+    opacity="0.95"
+    stroke-width="3.5"
+  />
+
+  <!-- Pen tip + origin markers -->
+  <g fill="#00693e" stroke="none">
+    <circle cx="240" cy="240" r="5" opacity="0.9" />
+    <circle cx="420" cy="118" r="6" opacity="0.95" />
+  </g>
+</svg>

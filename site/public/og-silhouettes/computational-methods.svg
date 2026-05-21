@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Computational Methods hero silhouette — RK4 ODE Solver, Lorenz default.
+
+  A stylised Lorenz attractor's twin-lobe "butterfly" silhouette traced
+  in a single continuous path. Evokes the hero demo where the Runge-Kutta
+  integrator unspools the trajectory in real time across a chaotic
+  3-D vector field projected to 2-D.
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 480 480"
+  fill="none"
+  stroke="#00693e"
+  stroke-width="2.5"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <title>Lorenz attractor — twin-lobe trajectory from RK4 integration</title>
+
+  <!-- Left lobe of the butterfly: 3 nested loops decreasing in size -->
+  <g opacity="0.85" stroke-width="2.2">
+    <ellipse cx="170" cy="230" rx="100" ry="70" transform="rotate(-22 170 230)" />
+    <ellipse cx="170" cy="230" rx="74"  ry="50" transform="rotate(-22 170 230)" opacity="0.75" />
+    <ellipse cx="170" cy="230" rx="48"  ry="32" transform="rotate(-22 170 230)" opacity="0.55" />
+  </g>
+
+  <!-- Right lobe -->
+  <g opacity="0.85" stroke-width="2.2">
+    <ellipse cx="320" cy="250" rx="100" ry="70" transform="rotate(22 320 250)" />
+    <ellipse cx="320" cy="250" rx="74"  ry="50" transform="rotate(22 320 250)" opacity="0.75" />
+    <ellipse cx="320" cy="250" rx="48"  ry="32" transform="rotate(22 320 250)" opacity="0.55" />
+  </g>
+
+  <!-- Connecting transfer arc that switches between the two lobes -->
+  <path
+    d="M 130 180 C 220 100, 280 100, 360 200"
+    opacity="0.9"
+    stroke-width="3.2"
+  />
+
+  <!-- Live trajectory head + tail markers -->
+  <g fill="#00693e" stroke="none">
+    <circle cx="360" cy="200" r="6" opacity="0.95" />
+    <circle cx="130" cy="180" r="4" opacity="0.65" />
+    <circle cx="245" cy="240" r="3" opacity="0.5" />
+  </g>
+</svg>
