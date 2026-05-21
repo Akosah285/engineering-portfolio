@@ -179,7 +179,55 @@ import MathExpression from "../../components/demo-kit/MathExpression.astro";
   </p>
 </FeaturedProblem>
 
+<FeaturedProblem
+  kind="Featured Solution"
+  title="Sinc orthogonality — why band-limited signals reconstruct exactly"
+  attribution="Adapted from Dartmouth ENGS 92, FA20."
+>
+  <p>
+    Sample a signal at Shannon's rate <MathExpression latex="f_s = 2B" />
+    and the Whittaker–Shannon interpolation formula
+  </p>
+  <MathExpression
+    latex="f(t) = \sum_n f(n/f_s)\, \mathrm{sinc}\bigl( f_s(t - n/f_s) \bigr)"
+    display={true}
+  />
+  <p>
+    is exact for any signal whose Fourier transform vanishes outside
+    <MathExpression latex="[-B, B]" />. The proof reduces to a single
+    orthogonality identity:
+  </p>
+  <MathExpression
+    latex="\langle \mathrm{sinc}(2B(t - n/2B)),\ \mathrm{sinc}(2B(t - m/2B)) \rangle = \frac{1}{2B}\, \delta_{nm}"
+    display={true}
+  />
+  <p>
+    Apply Parseval. The Fourier transform of
+    <MathExpression latex="\mathrm{sinc}(2B(t - n/2B))" /> is
+    <MathExpression latex="(1/2B)\, \mathrm{rect}(v/2B)\, e^{-i 2\pi v n / 2B}" />.
+    The inner product of two such sincs in the time domain equals the
+    inner product of their Fourier transforms — and the product of
+    those transforms is the rect window (constant on
+    <MathExpression latex="[-B, B]" />, zero elsewhere) times a
+    complex exponential at frequency
+    <MathExpression latex="(n - m)/2B" />. Integrating over the rect
+    interval gives <MathExpression latex="(1/2B)\, \mathrm{sinc}(n - m)" />,
+    which is <MathExpression latex="1/2B" /> when
+    <MathExpression latex="n = m" /> and zero at every other integer.
+  </p>
+  <p>
+    So the shifted sincs are an orthogonal basis for the space of
+    band-limited <MathExpression latex="L^2" /> signals — and the
+    expansion coefficients are literally the sample values
+    <MathExpression latex="f(n/f_s)" />. That's the entire content of
+    the sampling theorem in one Parseval move. The FT-of-signals
+    visualizer above shows the sinc &harr; rect duality that makes
+    the integral collapse; the convolution-animation demo is the same
+    identity rotated 90°.
+  </p>
+</FeaturedProblem>
+
 ## What's coming
 
-The author's written reflection and 2–4 featured problems land alongside the v3
-interview. The demos above are wired and playable today.
+The author's written reflection lands alongside the v3 interview. The demos
+and featured problems above are wired and playable today.
