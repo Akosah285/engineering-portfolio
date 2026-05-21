@@ -196,7 +196,64 @@ import MathExpression from "../../components/demo-kit/MathExpression.astro";
   </p>
 </FeaturedProblem>
 
+<FeaturedProblem
+  kind="Featured Solution"
+  title="DC-motor time constant from a step-response 63% rise"
+  attribution="Adapted from Dartmouth ENGS 147, SP21."
+>
+  <p>
+    A small DC motor under constant armature voltage
+    <MathExpression latex="V_a" /> spins up with a speed
+    <MathExpression latex="\omega(t)" /> that rises from zero
+    asymptotically toward a steady-state value
+    <MathExpression latex="\omega_\infty" />. A first-order transfer
+    function
+    <MathExpression latex="G(s) = K / (\tau s + 1)" /> with
+    <MathExpression latex="K = \omega_\infty / V_a" /> captures the
+    dynamics; identifying <MathExpression latex="K" /> and
+    <MathExpression latex="\tau" /> from a single step trace is the
+    first plant-ID move in any practical controls course.
+  </p>
+  <p>
+    The step response in the time domain is
+  </p>
+  <MathExpression
+    latex="\omega(t) = \omega_\infty \bigl( 1 - e^{-t/\tau} \bigr)"
+    display={true}
+  />
+  <p>
+    so <MathExpression latex="\omega(\tau) = \omega_\infty (1 - 1/e) \approx 0.632\, \omega_\infty" />.
+    Draw a horizontal line at 63.2% of the asymptote on your scope
+    trace, drop a vertical to the time axis, and the intersection
+    reads <MathExpression latex="\tau" /> directly. No fitting, no
+    MATLAB — just geometry. The gain
+    <MathExpression latex="K" /> drops out of
+    <MathExpression latex="\omega_\infty / V_a" /> once the trace has
+    settled.
+  </p>
+  <p>
+    HW2 + Lab 1 pulled <MathExpression latex="\tau" /> and
+    <MathExpression latex="K" /> at
+    <MathExpression latex="V_a = 24\,\mathrm V" /> and
+    <MathExpression latex="V_a = 12\,\mathrm V" />. Reassuringly,
+    <MathExpression latex="\tau" /> was nearly identical at both
+    voltages — the time constant is set by armature inductance,
+    resistance, rotor inertia, and back-EMF, none of which depend on
+    input level — while <MathExpression latex="K" /> scaled linearly
+    with the applied voltage as expected.
+  </p>
+  <p>
+    This identified <MathExpression latex="G(s)" /> is what every
+    subsequent compensator (Lab 3's lead-lag design, Lab 4's PI
+    position control) closes the loop around. Get the 63%-rise
+    reading wrong and every later root-locus design points to the
+    wrong pole locations; the PID-step-response simulator above is a
+    quick way to feel how closed-loop behaviour shifts when
+    <MathExpression latex="\tau" /> is off by even 20%.
+  </p>
+</FeaturedProblem>
+
 ## What's coming
 
-The author's written reflection, the robot video reel, and 2–4 featured problems
-land alongside the v8 interview. The demos above are wired and playable today.
+The author's written reflection and the robot video reel land alongside the v8
+interview. The demos and featured problems above are wired and playable today.
