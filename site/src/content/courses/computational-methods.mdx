@@ -208,7 +208,62 @@ import MathExpression from "../../components/demo-kit/MathExpression.astro";
   </p>
 </FeaturedProblem>
 
+<FeaturedProblem
+  kind="Featured Solution"
+  title="Conjugate Gradient solves an n×n SPD system in at most n steps"
+  attribution="Adapted from Dartmouth MATH 56, SP20."
+>
+  <p>
+    Steepest Descent on an ill-conditioned SPD quadratic
+    <MathExpression latex="\phi(x) = \tfrac12 x^T A x - b^T x" />
+    zig-zags down the long axis of the contour ellipses and converges
+    geometrically with rate <MathExpression latex="(\kappa - 1)/(\kappa + 1)" />,
+    where <MathExpression latex="\kappa" /> is the condition number
+    of <MathExpression latex="A" />. Conjugate Gradient does something
+    startling: on an <MathExpression latex="n \times n" /> SPD system,
+    it produces the exact solution in at most
+    <MathExpression latex="n" /> iterations, regardless of conditioning.
+  </p>
+  <p>
+    The mechanism is a strictly enlarging Krylov subspace. After
+    <MathExpression latex="k" /> iterations, the CG iterate
+    <MathExpression latex="x_k" /> is the unique minimiser of
+    <MathExpression latex="\phi" /> (equivalently, of the
+    <MathExpression latex="A" />-energy norm
+    <MathExpression latex="\|x - x^\star\|_A" />) over the affine
+    space <MathExpression latex="x_0 + \mathcal{K}_k(A, r_0)" /> with
+  </p>
+  <MathExpression
+    latex="\mathcal{K}_k(A, r_0) = \mathrm{span}\bigl\{ r_0,\ A r_0,\ A^2 r_0,\ \ldots,\ A^{k-1} r_0 \bigr\}"
+    display={true}
+  />
+  <p>
+    where <MathExpression latex="r_0 = b - A x_0" /> is the initial
+    residual. Each CG step appends a fresh power of
+    <MathExpression latex="A" /> to the subspace. After
+    <MathExpression latex="n" /> steps the Krylov subspace fills
+    <MathExpression latex="\mathbb{R}^n" /> (or terminates earlier if
+    <MathExpression latex="r_0" /> happens to live in a smaller
+    <MathExpression latex="A" />-invariant subspace), so the
+    constrained minimiser equals the unconstrained minimiser equals
+    <MathExpression latex="x^\star" />.
+  </p>
+  <p>
+    The HW3 problem on a 3×3 SPD matrix bore this out exactly: CG
+    converged in 3 iterations, Gauss–Seidel took about 6, and
+    Steepest Descent ground through 16 before reaching comparable
+    error. Practical CG on a 10,000×10,000 sparse system never
+    actually runs <MathExpression latex="n" /> iterations — it
+    terminates much earlier on a residual tolerance, exploiting
+    clustered eigenvalues — but the
+    <MathExpression latex="\le n" /> guarantee is what removes the
+    conditioning anxiety that plagues most iterative solvers. The
+    bisection visualizer up the page is the slow-but-sure cousin; CG
+    is what you reach for when you have structure to exploit.
+  </p>
+</FeaturedProblem>
+
 ## What's coming
 
-The author's written reflection and 2–4 featured problems land alongside the v5
-interview. The demos above are wired and playable today.
+The author's written reflection lands alongside the v5 interview. The demos
+and featured problems above are wired and playable today.
