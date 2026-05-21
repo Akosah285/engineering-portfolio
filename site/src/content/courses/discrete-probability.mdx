@@ -197,7 +197,57 @@ import MathExpression from "../../components/demo-kit/MathExpression.astro";
   </p>
 </FeaturedProblem>
 
+<FeaturedProblem
+  kind="Featured Solution"
+  title="Coupon collector — n·H_n draws via the indicator-variable trick"
+  attribution="Adapted from Dartmouth ENGS 27, FA19."
+>
+  <p>
+    A cereal box contains one of <MathExpression latex="n" /> equally
+    likely coupons. On average, how many boxes must you buy to collect
+    the full set? Naïve intuition says "around <MathExpression latex="n" />",
+    but the actual answer is
+    <MathExpression latex="n H_n \approx n \ln n + \gamma n" />, which
+    grows noticeably faster.
+  </p>
+  <p>
+    Decomposition is the trick. Let
+    <MathExpression latex="T_k" /> be the additional draws needed to
+    pick up a new coupon once you already hold
+    <MathExpression latex="k - 1" /> distinct types. Each draw is
+    novel with probability
+    <MathExpression latex="(n - k + 1)/n" />, so
+    <MathExpression latex="T_k" /> is geometric with mean
+    <MathExpression latex="n / (n - k + 1)" />. Total draws:
+  </p>
+  <MathExpression
+    latex="T = T_1 + T_2 + \cdots + T_n,\qquad \mathbb{E}[T] = \sum_{k=1}^{n} \frac{n}{n - k + 1} = n \sum_{j=1}^{n} \frac{1}{j} = n H_n"
+    display={true}
+  />
+  <p>
+    Linearity of expectation collapses the sum without ever needing
+    independence (although in this problem the
+    <MathExpression latex="T_k" /> are in fact independent). For
+    <MathExpression latex="n = 100" />, the expected wait is about
+    518 draws (versus 100 if every draw magically produced a new
+    coupon); for <MathExpression latex="n = 1000" /> it's about 7485.
+  </p>
+  <p>
+    The variance is <MathExpression latex="\pi^2 n^2 / 6" /> to
+    leading order, so the typical fluctuation is on the same order as
+    the mean — coupon collection is a high-variance process. Monte
+    Carlo it on a few thousand trials (the random-process visualizer
+    above is the same indicator-variable pattern in motion) and the
+    histogram is conspicuously right-skewed, with a long tail driven
+    by the always-painful hunt for the last coupon. The result
+    generalises immediately: any time you're sampling-with-replacement
+    until you cover a set, expect a
+    <MathExpression latex="\log n" /> blow-up relative to the
+    sampling-without-replacement baseline.
+  </p>
+</FeaturedProblem>
+
 ## What's coming
 
-The author's written reflection and 2–4 featured problems land alongside the v4
-interview. The demos above are wired and playable today.
+The author's written reflection lands alongside the v4 interview. The demos
+and featured problems above are wired and playable today.
