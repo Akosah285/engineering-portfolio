@@ -12,7 +12,11 @@ const now = new Date();
 const base = import.meta.env.BASE_URL;
 ---
 
-<Layout title="Engineering Portfolio — Akwasi Akosah">
+<Layout
+  title="Engineering Portfolio — Akwasi Akosah"
+  ogImage={`https://akosah285.github.io${base}og/landing.png`}
+  ogImageAlt="Akwasi Akosah · engineering portfolio · An engineering laboratory in the browser"
+>
   <section class="hero">
     <p class="hero__eyebrow">Akwasi Akosah · Dartmouth Thayer School</p>
     <h1 class="hero__headline">An engineering laboratory in the browser.</h1>

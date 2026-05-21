@@ -16,9 +16,16 @@ if (!entry) {
 }
 const { Content } = await render(entry);
 const { title, description } = entry.data;
+const base = import.meta.env.BASE_URL;
 ---
 
-<Layout title={title} description={description} pagefindType="about">
+<Layout
+  title={title}
+  description={description}
+  pagefindType="about"
+  ogImage={`https://akosah285.github.io${base}og/about.png`}
+  ogImageAlt="About Akwasi Akosah · engineering portfolio"
+>
   <article class="about">
     <Content />
   </article>
