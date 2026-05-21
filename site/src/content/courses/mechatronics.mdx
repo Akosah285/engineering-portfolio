@@ -82,9 +82,119 @@ Step through the robot's behaviour FSM transitions, lifted from
 
 ## Featured problems
 
-_Featured-problem writeups for this course are pending the v8 author interview
-— tracked at [issue #49](https://github.com/Akosah285/engineering-portfolio/issues/49).
-Demos above stand on their own in the meantime._
+import FeaturedProblem from "../../components/FeaturedProblem.astro";
+import MathExpression from "../../components/demo-kit/MathExpression.astro";
+
+<FeaturedProblem
+  kind="Featured Solution"
+  title="Closed-loop pole placement for a PI-controlled second-order plant"
+  attribution="Adapted from Dartmouth Mechatronics, SP21."
+>
+  <p>
+    Plant
+    <MathExpression latex="G(s) = K/(s(s+a))" /> (a DC motor's
+    speed-to-voltage transfer function with viscous damping
+    <MathExpression latex="a" />) controlled by a proportional-integral
+    law
+    <MathExpression latex="C(s) = K_p + K_i/s" />. Pick the gains so
+    that the closed-loop step response has a damping ratio
+    <MathExpression latex="\zeta = 0.7" /> and a natural frequency
+    <MathExpression latex="\omega_n" /> equal to a chosen
+    bandwidth.
+  </p>
+  <p>
+    The closed-loop transfer function from reference to output is:
+  </p>
+  <MathExpression
+    latex="T(s) = \frac{C(s) G(s)}{1 + C(s) G(s)} = \frac{K(K_p s + K_i)}{s^3 + a s^2 + K K_p s + K K_i}"
+    display={true}
+  />
+  <p>
+    The third-order denominator has one slow real pole plus a complex
+    pair. Choosing the integrator pole to cancel the slow plant pole
+    (set the PI zero at <MathExpression latex="-a" />, i.e.
+    <MathExpression latex="K_i = a K_p" />) reduces the closed loop to
+    a textbook second-order system:
+  </p>
+  <MathExpression
+    latex="T(s) \approx \frac{\omega_n^2}{s^2 + 2\zeta\omega_n s + \omega_n^2}"
+    display={true}
+  />
+  <p>
+    Matching coefficients gives
+    <MathExpression latex="K K_p = 2\zeta\omega_n" /> and
+    <MathExpression latex="K K_i = \omega_n^2" />. With
+    <MathExpression latex="\zeta = 0.7" /> the step response has about
+    4.6% overshoot and settles in roughly
+    <MathExpression latex="4/(\zeta\omega_n)" /> — the textbook
+    "fast-but-not-twitchy" choice. Push <MathExpression latex="\omega_n" />
+    up and you trade ringing for speed; the PID-controller visualizer
+    above lets you slide the gains and watch the trade in real time.
+  </p>
+  <p>
+    The lesson that survived past the course: pole placement is the
+    explicit form of what Ziegler–Nichols is groping toward
+    heuristically. When you know the plant, you don't have to tune by
+    feel — you write down the closed-loop characteristic polynomial
+    and solve for the gains that put its roots where you want them.
+  </p>
+</FeaturedProblem>
+
+<FeaturedProblem
+  kind="Featured Solution"
+  title="Bode plot of a first-order low-pass — break frequency and asymptotes"
+  attribution="Adapted from Dartmouth Mechatronics, SP21."
+>
+  <p>
+    A first-order low-pass filter has transfer function
+    <MathExpression latex="H(s) = 1/(1 + s/\omega_c)" />. Sketch its
+    Bode plot — magnitude (in dB) and phase — and show why the
+    asymptotic approximations get the answer right to within 3 dB
+    everywhere.
+  </p>
+  <p>
+    Evaluate on the imaginary axis
+    <MathExpression latex="s = j\omega" />. The magnitude in decibels:
+  </p>
+  <MathExpression
+    latex="|H(j\omega)|_{\text{dB}} = -10 \log_{10}\!\left(1 + (\omega/\omega_c)^2\right)"
+    display={true}
+  />
+  <p>
+    Two regimes. For
+    <MathExpression latex="\omega \ll \omega_c" />, the bracketed
+    term is ≈ 1 and the magnitude is 0 dB — the filter passes the
+    signal unchanged. For
+    <MathExpression latex="\omega \gg \omega_c" />, the bracketed
+    term is ≈ <MathExpression latex="(\omega/\omega_c)^2" />, so
+    <MathExpression latex="|H|_{\text{dB}} \approx -20\log_{10}(\omega/\omega_c)" />
+    — a straight line on log-log paper with slope
+    <MathExpression latex="-20" /> dB/decade. The two asymptotes
+    intersect at <MathExpression latex="\omega = \omega_c" />, and the
+    true magnitude there is
+    <MathExpression latex="-10\log_{10} 2 \approx -3" /> dB. That's
+    the "break frequency" or "−3 dB point" engineers refer to.
+  </p>
+  <p>
+    Phase satisfies
+    <MathExpression latex="\angle H(j\omega) = -\arctan(\omega/\omega_c)" />,
+    which transitions from 0° at low frequency through −45° at
+    <MathExpression latex="\omega = \omega_c" /> to −90° at high
+    frequency, with the steepest slope happening right at the corner.
+  </p>
+  <p>
+    Two reasons this matters every time I touch a control loop.
+    First, the −20 dB/decade roll-off is the canonical building block
+    of all higher-order filters — an <MathExpression latex="n" />th
+    order low-pass is just <MathExpression latex="n" /> of these
+    cascaded, giving <MathExpression latex="-20n" /> dB/decade past
+    the corner. Second, the 45° of phase lag <em>at</em> the break
+    frequency is what eats your stability margin: every pole within a
+    decade of crossover steals phase. The Bode-plot visualizer above
+    is the fastest way I know to internalise where that lag actually
+    sits.
+  </p>
+</FeaturedProblem>
 
 ## What's coming
 

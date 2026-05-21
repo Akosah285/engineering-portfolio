@@ -97,9 +97,105 @@ of the transition matrix.
 
 ## Featured problems
 
-_Featured-problem writeups for this course are pending the v4 author interview
-— tracked at [issue #45](https://github.com/Akosah285/engineering-portfolio/issues/45).
-Demos above stand on their own in the meantime._
+import FeaturedProblem from "../../components/FeaturedProblem.astro";
+import MathExpression from "../../components/demo-kit/MathExpression.astro";
+
+<FeaturedProblem
+  kind="Featured Solution"
+  title="Stationary distribution of a 3-state Markov chain via the eigenvalue 1"
+  attribution="Adapted from Dartmouth Discrete & Probabilistic Systems, FA19."
+>
+  <p>
+    Given a row-stochastic transition matrix
+    <MathExpression latex="P" /> for a three-state ergodic chain, find
+    the stationary distribution <MathExpression latex="\pi" /> — the
+    long-run fraction of time spent in each state — without simulating
+    the chain.
+  </p>
+  <p>
+    By definition <MathExpression latex="\pi" /> is the left eigenvector
+    of <MathExpression latex="P" /> with eigenvalue 1, normalised to a
+    probability vector:
+  </p>
+  <MathExpression
+    latex="\pi P = \pi, \qquad \sum_i \pi_i = 1"
+    display={true}
+  />
+  <p>
+    Take the concrete weather chain from the Markov-chain visualizer
+    above (sun → rain → cloud transition probabilities):
+  </p>
+  <MathExpression
+    latex="P = \begin{pmatrix} 0.7 & 0.2 & 0.1 \\ 0.3 & 0.5 & 0.2 \\ 0.2 & 0.3 & 0.5 \end{pmatrix}"
+    display={true}
+  />
+  <p>
+    Writing out <MathExpression latex="\pi P = \pi" /> gives three
+    equations (only two are independent) plus the normalisation
+    <MathExpression latex="\pi_1+\pi_2+\pi_3 = 1" />. Solving:
+    <MathExpression latex="\pi_1 = 0.485" />,
+    <MathExpression latex="\pi_2 = 0.297" />,
+    <MathExpression latex="\pi_3 = 0.218" /> (rounded).
+  </p>
+  <p>
+    Two checks: the Perron–Frobenius theorem guarantees a unique
+    positive stationary distribution for an irreducible aperiodic chain,
+    and you can verify by iterating <MathExpression latex="P^n" /> for
+    any starting row — it converges to a matrix whose rows are exactly
+    <MathExpression latex="\pi" />. Watch the demo: no matter which
+    state you start in, the time-averaged occupancy approaches these
+    numbers. This is the bridge from "Markov chain as random walk" to
+    "Markov chain as linear operator on the simplex" — the eigenvalue
+    structure is the dynamics.
+  </p>
+</FeaturedProblem>
+
+<FeaturedProblem
+  kind="Featured Solution"
+  title="Base-rate fallacy: a 99%-accurate test for a 1%-prevalent disease"
+  attribution="Adapted from Dartmouth Discrete & Probabilistic Systems, FA19."
+>
+  <p>
+    A disease has prevalence <MathExpression latex="P(D) = 0.01" /> in
+    the screened population. A test has sensitivity
+    <MathExpression latex="P(+\!\mid D) = 0.99" /> and specificity
+    <MathExpression latex="P(-\!\mid \neg D) = 0.99" />. You test
+    positive. What is the probability you actually have the disease?
+  </p>
+  <p>
+    Bayes' rule, written for clarity:
+  </p>
+  <MathExpression
+    latex="P(D \mid +) = \frac{P(+ \mid D)\, P(D)}{P(+ \mid D)\, P(D) + P(+ \mid \neg D)\, P(\neg D)}"
+    display={true}
+  />
+  <p>
+    Plug in the numbers:
+  </p>
+  <MathExpression
+    latex="P(D \mid +) = \frac{0.99 \times 0.01}{0.99 \times 0.01 + 0.01 \times 0.99} = \frac{0.0099}{0.0198} = 0.5"
+    display={true}
+  />
+  <p>
+    Half. A "99%-accurate" positive on a disease that only 1% of the
+    population has gives you a coin flip. The intuition trap is that
+    "99% accuracy" sounds like the answer should be near 99%, but the
+    likelihood ratio
+    <MathExpression latex="P(+\!\mid D)/P(+\!\mid \neg D) = 99" /> only
+    multiplies the prior odds. Prior odds were 1:99, so posterior odds
+    are 99:99 = 1:1.
+  </p>
+  <p>
+    Drop the prevalence to 0.1% and the same test gives
+    <MathExpression latex="P(D\mid +) \approx 0.09" />. This is exactly
+    why screening guidelines target high-risk subgroups: shifting the
+    prior by an order of magnitude shifts the posterior by an order of
+    magnitude. The Bayes' theorem visualizer above lets you slide the
+    prior + sensitivity + specificity and watch the posterior move; it's
+    the most direct illustration I know of why "base rate matters" is
+    one of the highest-leverage habits this course gave me.
+  </p>
+</FeaturedProblem>
 
 ## What's coming
 

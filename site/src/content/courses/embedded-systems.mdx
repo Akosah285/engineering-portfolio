@@ -98,9 +98,113 @@ supported via the standard `DeviceMotionEvent.requestPermission()` flow).
 
 ## Featured problems
 
-_Featured-problem writeups for this course are pending the v10 author interview
-— tracked at [issue #51](https://github.com/Akosah285/engineering-portfolio/issues/51).
-Demos above stand on their own in the meantime._
+import FeaturedProblem from "../../components/FeaturedProblem.astro";
+import MathExpression from "../../components/demo-kit/MathExpression.astro";
+
+<FeaturedProblem
+  kind="Featured Solution"
+  title="Gamma-corrected PWM for perceived LED brightness"
+  attribution="Adapted from Dartmouth Embedded Systems, WI21."
+>
+  <p>
+    An LED is dimmed by pulse-width modulation on a microcontroller
+    GPIO at duty cycle <MathExpression latex="d \in [0,1]" />. A linear
+    sweep of <MathExpression latex="d" /> from 0 to 1 looks visually
+    nothing like a linear sweep of perceived brightness — most of the
+    apparent change happens in the bottom 20% of duty. Pick the
+    8-bit PWM compare value that produces a perceptually-linear
+    brightness ramp.
+  </p>
+  <p>
+    Human brightness perception follows a power law (CIE Lightness, or
+    sRGB's gamma curve, both approximate). A serviceable model:
+  </p>
+  <MathExpression
+    latex="L_{\text{perceived}} = d_{\text{linear}}^{1/\gamma}, \qquad \gamma \approx 2.2"
+    display={true}
+  />
+  <p>
+    To make perceived brightness linear in the user-facing 8-bit
+    parameter <MathExpression latex="b \in \{0, \ldots, 255\}" />, set
+    <MathExpression latex="L = b/255" /> and invert:
+  </p>
+  <MathExpression
+    latex="\mathrm{compare}(b) = \mathrm{round}\!\left( 255 \cdot \left(\tfrac{b}{255}\right)^{\!\gamma} \right)"
+    display={true}
+  />
+  <p>
+    For <MathExpression latex="b = 128" /> (halfway on the user
+    slider) and <MathExpression latex="\gamma = 2.2" />, the compare
+    value is <MathExpression latex="255 \cdot 0.5^{2.2} \approx 55" />
+    — i.e. about 22% PWM duty, not 50%. That's exactly the gap
+    between "physical halfway" and "perceptual halfway".
+  </p>
+  <p>
+    Implementation note for an MCU: precompute the 256-entry lookup
+    table in flash at build time. A runtime
+    <MathExpression latex="\mathrm{pow}" /> on an 8-bit AVR costs
+    hundreds of cycles per LED update; a table lookup is one load.
+    For multi-channel RGB the same table applies per channel — gamma
+    is the colour-space step you'd otherwise be doing in
+    floating-point sRGB conversion. The PWM visualizer above shows
+    the duty-vs-time waveform; the perceptual mapping is what
+    determines what <em>value</em> you write into that compare
+    register.
+  </p>
+</FeaturedProblem>
+
+<FeaturedProblem
+  kind="Featured Solution"
+  title="Nyquist + ISR budget for a 1 kHz audio ADC on a 16 MHz MCU"
+  attribution="Adapted from Dartmouth Embedded Systems, WI21."
+>
+  <p>
+    A 16 MHz microcontroller is sampling audio through its on-chip
+    ADC. The conversion is timer-triggered; the ADC-complete
+    interrupt service routine reads the result, runs a 16-tap FIR
+    low-pass, and writes the output to a circular DMA buffer. Pick a
+    sampling rate that respects Nyquist for a 1 kHz signal of
+    interest and verify the ISR fits in the per-sample budget.
+  </p>
+  <p>
+    Nyquist requires
+    <MathExpression latex="f_s > 2 f_{\max}" />, so for a 1 kHz
+    bandwidth the sample rate must exceed 2 kHz. With analogue
+    anti-aliasing rolling off above the passband, a practical choice
+    is <MathExpression latex="f_s = 8\,\text{kHz}" /> — a 4× margin
+    that gives the digital filter room to do its own anti-aliasing
+    without aliasing the upper transition band.
+  </p>
+  <p>
+    Per-sample budget:
+  </p>
+  <MathExpression
+    latex="T_s = \frac{1}{f_s} = 125\,\mu\text{s} = 16 \times 10^6 \cdot 125 \times 10^{-6} = 2000\ \text{CPU cycles}"
+    display={true}
+  />
+  <p>
+    The 16-tap FIR at 8-bit input and 16-bit accumulator costs roughly
+    16 multiply-accumulates × 4 cycles = 64 cycles, plus context
+    save/restore on the AVR at ~30 cycles, plus the DMA write at ~10
+    cycles. Round to 150 cycles per ISR.
+  </p>
+  <MathExpression
+    latex="\text{ISR occupancy} = \frac{150}{2000} = 7.5\%"
+    display={true}
+  />
+  <p>
+    A 7.5% interrupt load leaves 92.5% of the CPU for the rest of the
+    application — comfortable. Push <MathExpression latex="f_s" /> to
+    44.1 kHz (CD-quality audio) and the budget shrinks to
+    <MathExpression latex="\approx 363" /> cycles per sample, FIR
+    occupancy hits 41%, and you're suddenly forced to either drop the
+    tap count, move to a hardware multiply, or hand off the filter to
+    a DSP block. This is the calculation I do first on every
+    interrupt-driven signal-chain design before writing any code; the
+    ADC-sampling visualizer above is the per-sample shape that the
+    ISR is processing.
+  </p>
+</FeaturedProblem>
 
 ## What's coming
 

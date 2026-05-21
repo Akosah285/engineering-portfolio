@@ -86,9 +86,111 @@ Slide a magnet through a coil; live flux and induced EMF traces.
 
 ## Featured problems
 
-_Featured-problem writeups for this course are pending the v7 author interview
-— tracked at [issue #48](https://github.com/Akosah285/engineering-portfolio/issues/48).
-Demos above stand on their own in the meantime._
+import FeaturedProblem from "../../components/FeaturedProblem.astro";
+import MathExpression from "../../components/demo-kit/MathExpression.astro";
+
+<FeaturedProblem
+  kind="Featured Solution"
+  title="d'Alembert solution to the 1D wave equation"
+  attribution="Adapted from Dartmouth Distributed Systems & Fields, WI20."
+>
+  <p>
+    The 1D wave equation
+    <MathExpression latex="u_{tt} = c^2 u_{xx}" /> on the infinite line
+    with initial displacement <MathExpression latex="u(x,0) = \varphi(x)" />
+    and initial velocity <MathExpression latex="u_t(x,0) = \psi(x)" />.
+    Solve in closed form and read off what kinds of disturbances
+    propagate at what speed.
+  </p>
+  <p>
+    Change variables: <MathExpression latex="\xi = x - ct" />,
+    <MathExpression latex="\eta = x + ct" />. The PDE becomes
+    <MathExpression latex="u_{\xi\eta} = 0" />, which integrates twice
+    to give <em>any</em> sum of a right-moving and left-moving wave:
+  </p>
+  <MathExpression
+    latex="u(x,t) = F(x - ct) + G(x + ct)"
+    display={true}
+  />
+  <p>
+    Match the two initial conditions:
+    <MathExpression latex="F(x) + G(x) = \varphi(x)" /> and
+    <MathExpression latex="-c F'(x) + c G'(x) = \psi(x)" />. Solving
+    for <MathExpression latex="F" /> and <MathExpression latex="G" />
+    yields the d'Alembert formula:
+  </p>
+  <MathExpression
+    latex="u(x,t) = \tfrac{1}{2}\bigl[\varphi(x-ct) + \varphi(x+ct)\bigr] + \tfrac{1}{2c}\int_{x-ct}^{x+ct} \psi(s)\, ds"
+    display={true}
+  />
+  <p>
+    The geometry is striking: the value of <MathExpression latex="u" />
+    at <MathExpression latex="(x,t)" /> depends only on initial data
+    inside the past light cone
+    <MathExpression latex="[x-ct,\, x+ct]" /> — finite signal speed
+    falls out of the math. An initial displacement splits into two
+    half-amplitude copies travelling outward at speed
+    <MathExpression latex="\pm c" />. An initial velocity profile
+    contributes a smeared, integrated tail — which is why striking a
+    drumhead (impulsive velocity) makes a longer-lived disturbance than
+    plucking a string (instantaneous displacement). The Charge Field
+    Plotter above tells the static side of the same story for
+    electrostatics; the wave equation is where time enters and
+    everything starts propagating.
+  </p>
+</FeaturedProblem>
+
+<FeaturedProblem
+  kind="Featured Solution"
+  title="Magnetic field on the axis of a circular current loop"
+  attribution="Adapted from Dartmouth Distributed Systems & Fields, WI20."
+>
+  <p>
+    A circular loop of radius <MathExpression latex="R" /> carries
+    steady current <MathExpression latex="I" />. Find the magnetic
+    field <MathExpression latex="B(z)" /> on the axis, a distance
+    <MathExpression latex="z" /> from the loop's centre.
+  </p>
+  <p>
+    The Biot–Savart law for a current element
+    <MathExpression latex="I\, d\boldsymbol\ell" /> at position
+    <MathExpression latex="\mathbf r'" /> contributes
+    <MathExpression latex="d\mathbf B = (\mu_0/4\pi)\, I\, d\boldsymbol\ell \times (\mathbf r - \mathbf r')/|\mathbf r - \mathbf r'|^3" />
+    at the field point. Each loop element is distance
+    <MathExpression latex="\sqrt{R^2 + z^2}" /> from the axis point,
+    and the cross product gives a vector of magnitude
+    <MathExpression latex="R\, d\ell" /> tilted off-axis by angle
+    <MathExpression latex="\theta" /> with
+    <MathExpression latex="\sin\theta = R/\sqrt{R^2+z^2}" />.
+    Symmetry kills the perpendicular components when integrated
+    around the loop, leaving only the axial projection:
+  </p>
+  <MathExpression
+    latex="B_z(z) = \frac{\mu_0 I}{4\pi}\,\oint \frac{R}{(R^2 + z^2)^{3/2}}\, d\ell = \frac{\mu_0 I R^2}{2 (R^2 + z^2)^{3/2}}"
+    display={true}
+  />
+  <p>
+    Two limits worth checking. At the centre
+    (<MathExpression latex="z=0" />)
+    <MathExpression latex="B = \mu_0 I / (2R)" />, the standard
+    single-loop result. For
+    <MathExpression latex="z \gg R" />, expanding gives
+    <MathExpression latex="B \approx \mu_0 I R^2 / (2 z^3)" /> — the
+    far field of any planar current loop is a magnetic dipole with
+    moment <MathExpression latex="m = I \pi R^2" />, and the
+    <MathExpression latex="1/z^3" /> fall-off is the signature of a
+    dipole.
+  </p>
+  <p>
+    Stack two such loops separated by a distance equal to their
+    radius (Helmholtz coils) and the cubic non-uniformity in the
+    midplane cancels — the field is uniform to leading order over a
+    surprisingly large central region. The Biot–Savart visualizer
+    above shows this directly: drop two loops in coaxially, vary the
+    separation, and watch the central field flatten near
+    <MathExpression latex="d = R" />.
+  </p>
+</FeaturedProblem>
 
 ## What's coming
 

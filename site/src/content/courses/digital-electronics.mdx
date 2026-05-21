@@ -85,9 +85,108 @@ Lab 3 stopwatch FSM with start, stop, and reset transitions animated.
 
 ## Featured problems
 
-_Featured-problem writeups for this course are pending the v9 author interview
-— tracked at [issue #50](https://github.com/Akosah285/engineering-portfolio/issues/50).
-Demos above stand on their own in the meantime._
+import FeaturedProblem from "../../components/FeaturedProblem.astro";
+import MathExpression from "../../components/demo-kit/MathExpression.astro";
+
+<FeaturedProblem
+  kind="Featured Solution"
+  title="Karnaugh-map minimisation of a 4-variable Boolean function"
+  attribution="Adapted from Dartmouth Digital Electronics, SP20."
+>
+  <p>
+    Minimise the sum-of-products form of
+    <MathExpression latex="F(A,B,C,D)" /> where the function is
+    1 for the canonical "majority-of-three-inputs" pattern across
+    <MathExpression latex="\{A,B,C\}" /> with <MathExpression latex="D" />
+    acting as an enable: <MathExpression latex="F = D \cdot \mathrm{Maj}(A,B,C)" />.
+  </p>
+  <p>
+    The truth table has eight 1-cells where exactly two or three of
+    <MathExpression latex="A,B,C" /> are high <em>and</em>
+    <MathExpression latex="D=1" />. Arrange on a 4-variable K-map (rows
+    in <MathExpression latex="AB" /> Gray order, columns in
+    <MathExpression latex="CD" /> Gray order). The 1-cells form three
+    overlapping pairs of adjacent squares — each pair eliminates one
+    variable:
+  </p>
+  <MathExpression
+    latex="F = ABD + ACD + BCD"
+    display={true}
+  />
+  <p>
+    Three prime implicants, each a product of three literals, total
+    nine literals. Checking essentialness: cell
+    <MathExpression latex="ABCD" /> is covered by all three implicants
+    so contributes no constraint; cells
+    <MathExpression latex="ABC'D" />,
+    <MathExpression latex="AB'CD" />,
+    <MathExpression latex="A'BCD" />
+    are each covered by exactly one of the three implicants — so all
+    three are essential.
+  </p>
+  <p>
+    The cost of <em>not</em> minimising: the canonical sum-of-minterms
+    form has 8 terms × 4 literals = 32 literals, ≈ 32 transistors per
+    NAND-implementation of each AND gate. K-map minimisation gives 9
+    literals — a roughly 3.5× reduction in gate count for an identical
+    function. The K-map minimiser demo above runs this same algorithm
+    interactively; the gain extends to dozens-of-input designs where
+    hand minimisation breaks down and Quine–McCluskey or Espresso
+    takes over.
+  </p>
+</FeaturedProblem>
+
+<FeaturedProblem
+  kind="Featured Solution"
+  title="Sequence detector for '1011' — Moore vs. Mealy state count"
+  attribution="Adapted from Dartmouth Digital Electronics, SP20."
+>
+  <p>
+    Design a finite-state machine that asserts its output on every
+    occurrence of the bit pattern <code>1011</code> in a serial input
+    stream (overlapping matches allowed). Compare the Moore and Mealy
+    implementations on state count and timing.
+  </p>
+  <p>
+    The natural Moore machine tracks "how much of <code>1011</code>
+    have we matched so far?" with five states:
+    <MathExpression latex="S_0" /> (no match),
+    <MathExpression latex="S_1" /> (matched <code>1</code>),
+    <MathExpression latex="S_2" /> (matched <code>10</code>),
+    <MathExpression latex="S_3" /> (matched <code>101</code>),
+    <MathExpression latex="S_4" /> (matched <code>1011</code>, output
+    high). Transitions handle overlap: from
+    <MathExpression latex="S_4" /> on input <code>1</code> jump back
+    to <MathExpression latex="S_1" /> (the trailing <code>1</code>
+    becomes the start of a new match); on input <code>0</code> drop
+    to <MathExpression latex="S_2" /> via reusing the
+    <code>1</code> at position 3. State register width:
+    <MathExpression latex="\lceil \log_2 5 \rceil = 3" /> bits.
+  </p>
+  <p>
+    The Mealy version collapses the output-only state
+    <MathExpression latex="S_4" /> into a labelled transition. Four
+    states (<MathExpression latex="S_0, S_1, S_2, S_3" />), with the
+    output asserted on the transition
+    <MathExpression latex="S_3 \xrightarrow{1/1} S_1" />. State
+    register: 2 bits. The output now depends combinationally on the
+    current input, which means it appears one clock cycle earlier than
+    in the Moore machine — but it inherits any glitches on the input.
+  </p>
+  <MathExpression
+    latex="\text{States: Moore} = 5, \quad \text{Mealy} = 4 \quad\Rightarrow\quad \Delta\,\text{FFs} = 1"
+    display={true}
+  />
+  <p>
+    The textbook trade-off in one example. Moore costs an extra flip
+    flop but guarantees glitch-free, register-aligned outputs; Mealy
+    saves the flop and gives faster response at the price of
+    combinational outputs that need careful timing closure. The FSM
+    simulator above lets you toggle between the two encodings on this
+    exact problem; on a real datapath you pick Moore when the output
+    drives another sequential block, Mealy when latency dominates.
+  </p>
+</FeaturedProblem>
 
 ## What's coming
 

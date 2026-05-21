@@ -90,9 +90,111 @@ Tresca, von Mises, and maximum-normal-stress envelopes in σ₁–σ₂ space.
 
 ## Featured problems
 
-_Featured-problem writeups for this course are pending the v6 author interview
-— tracked at [issue #47](https://github.com/Akosah285/engineering-portfolio/issues/47).
-Demos above stand on their own in the meantime._
+import FeaturedProblem from "../../components/FeaturedProblem.astro";
+import MathExpression from "../../components/demo-kit/MathExpression.astro";
+
+<FeaturedProblem
+  kind="Featured Solution"
+  title="Maximum shear in a thin-walled pressure vessel — via Mohr's circle"
+  attribution="Adapted from Dartmouth Solid Mechanics, FA20."
+>
+  <p>
+    A closed cylindrical tank with radius <MathExpression latex="r" />,
+    wall thickness <MathExpression latex="t \ll r" />, and internal
+    gauge pressure <MathExpression latex="p" /> sits under a biaxial
+    stress state in the wall. Find the principal stresses and the
+    maximum in-plane and absolute shear.
+  </p>
+  <p>
+    Cutting the tank longitudinally and balancing pressure × projected
+    area against wall tension gives the hoop stress; cutting it
+    transversely gives the axial stress:
+  </p>
+  <MathExpression
+    latex="\sigma_{\text{hoop}} = \frac{p r}{t}, \qquad \sigma_{\text{axial}} = \frac{p r}{2 t}, \qquad \sigma_{\text{radial}} \approx 0"
+    display={true}
+  />
+  <p>
+    The wall is already at principal orientation — no shear on the
+    hoop/axial cut, so these <em>are</em> the in-plane principals.
+    Mohr's circle for the wall's surface has centre and radius:
+  </p>
+  <MathExpression
+    latex="\sigma_{\text{avg}} = \tfrac{3 p r}{4 t}, \qquad \tau_{\max,\,\text{in-plane}} = \tfrac{\sigma_{\text{hoop}} - \sigma_{\text{axial}}}{2} = \tfrac{p r}{4 t}"
+    display={true}
+  />
+  <p>
+    But the absolute maximum shear in 3D is the largest radius among
+    the three Mohr circles drawn between every pair of principal
+    stresses. Pair the hoop stress
+    <MathExpression latex="\sigma_1 = pr/t" /> with the radial
+    <MathExpression latex="\sigma_3 \approx 0" />:
+  </p>
+  <MathExpression
+    latex="\tau_{\max,\,\text{3D}} = \frac{\sigma_1 - \sigma_3}{2} = \frac{p r}{2 t}"
+    display={true}
+  />
+  <p>
+    The 3D maximum is <em>twice</em> the in-plane maximum — the failure
+    plane is oriented at 45° to the radial direction, not on the wall's
+    surface at all. This is the moment in the course when "always check
+    the 3D circle" stopped being a rote rule and started being a habit:
+    Tresca yield on a thin-walled vessel is set by the radial direction
+    you forgot existed.
+  </p>
+</FeaturedProblem>
+
+<FeaturedProblem
+  kind="Featured Solution"
+  title="Euler buckling load for a pinned-pinned column"
+  attribution="Adapted from Dartmouth Solid Mechanics, FA20."
+>
+  <p>
+    A straight slender column of length <MathExpression latex="L" />,
+    flexural rigidity <MathExpression latex="EI" />, pinned at both
+    ends, under axial compressive load <MathExpression latex="P" />.
+    Find the load at which a small lateral perturbation no longer
+    decays — the critical buckling load.
+  </p>
+  <p>
+    Imagine the column deflected by a tiny amount <MathExpression latex="y(x)" />.
+    Moment equilibrium of the deflected shape gives the linear ODE:
+  </p>
+  <MathExpression
+    latex="E I\, \frac{d^2 y}{d x^2} + P y = 0"
+    display={true}
+  />
+  <p>
+    Boundary conditions <MathExpression latex="y(0) = y(L) = 0" />.
+    Setting <MathExpression latex="k^2 = P/(EI)" />, the general
+    solution is <MathExpression latex="y(x) = A \sin kx + B \cos kx" />.
+    The <MathExpression latex="y(0)=0" /> condition kills
+    <MathExpression latex="B" />; <MathExpression latex="y(L)=0" />
+    then requires <MathExpression latex="\sin kL = 0" />, i.e.
+    <MathExpression latex="kL = n\pi" /> for some integer
+    <MathExpression latex="n \geq 1" />. The smallest non-trivial load
+    is <MathExpression latex="n = 1" />:
+  </p>
+  <MathExpression
+    latex="P_{\text{cr}} = \frac{\pi^2 E I}{L^2}"
+    display={true}
+  />
+  <p>
+    Two facts worth internalising. First, <MathExpression latex="P_{\text{cr}}" />
+    depends on <MathExpression latex="I" />, not the cross-sectional
+    area — geometry, not material quantity, controls buckling. Doubling
+    a column's radius increases <MathExpression latex="I" /> by 16×.
+    Second, the <MathExpression latex="1/L^2" /> scaling is brutal:
+    doubling the length quarters the critical load. End conditions
+    enter through an effective-length factor
+    <MathExpression latex="L_{\text{eff}}" /> — fixed-free is
+    <MathExpression latex="2L" />, fixed-fixed is <MathExpression latex="L/2" />.
+    The Euler-buckling visualizer above plots these four end-condition
+    curves side by side; the slenderness ratio
+    <MathExpression latex="L/r" /> where Euler stops applying
+    (material yields first) is where the dashed asymptote crosses.
+  </p>
+</FeaturedProblem>
 
 ## What's coming
 

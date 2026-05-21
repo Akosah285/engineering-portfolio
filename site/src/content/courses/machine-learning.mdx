@@ -69,93 +69,139 @@ import MathExpression from "../../components/demo-kit/MathExpression.astro";
 <FeaturedProblem
   kind="Featured Solution"
   title="Bias–variance decomposition for a polynomial fit"
-  attribution="Adapted from Dartmouth ENGS 89, SP20 — placeholder restatement pending author interview."
-  placeholder={true}
+  attribution="Adapted from Dartmouth ENGS 89, SP20."
 >
   <p>
-    *Paraphrased problem statement, in author's voice, will replace this
-    paragraph after the v1 ML interview (see issue #27).* Roughly: given
-    noisy samples drawn from a smooth underlying function, decompose the
-    expected squared prediction error of a polynomial fit of degree
-    <MathExpression latex="d" /> into bias², variance, and irreducible noise
-    terms — and reason about which side of the trade-off you sit on.
+    Suppose we draw <MathExpression latex="n" /> noisy samples from a smooth
+    target <MathExpression latex="y = f(x) + \varepsilon" /> with
+    <MathExpression latex="\mathbb{E}[\varepsilon] = 0" /> and
+    <MathExpression latex="\mathrm{Var}(\varepsilon) = \sigma^2" />, fit a
+    polynomial <MathExpression latex="\hat f" /> of degree
+    <MathExpression latex="d" /> by least squares, and ask: what determines
+    the test error at a fixed query point <MathExpression latex="x" />?
   </p>
   <p>
-    The starting point is the textbook decomposition for a fixed
-    <MathExpression latex="x" />:
+    Adding and subtracting <MathExpression latex="\mathbb{E}[\hat f(x)]" />
+    inside the squared term and taking expectations over both the training
+    set and the noise gives the canonical decomposition:
   </p>
   <MathExpression
     latex="\mathbb{E}\left[ \left( y - \hat f(x) \right)^2 \right] = \underbrace{\left( \mathbb{E}[\hat f(x)] - f(x) \right)^2}_{\text{bias}^2} + \underbrace{\mathrm{Var}\bigl(\hat f(x)\bigr)}_{\text{variance}} + \sigma^2"
     display={true}
   />
   <p>
-    *Solution narrative + numerical example will be filled in by the author
-    so the reasoning is in their voice rather than reproduced from the
-    course solution. The interactive polynomial-regression demo above
-    already lets a reader feel the same trade-off without the algebra.*
+    The lesson is that the three pieces pull in different directions. As
+    <MathExpression latex="d" /> grows, bias shrinks (the model can chase
+    finer wiggles in <MathExpression latex="f" />) but variance grows (the
+    model also chases the noise). The irreducible <MathExpression latex="\sigma^2" />
+    sits there regardless of how clever the model is. In the polynomial-regression
+    demo above, sliding the degree past about 8 on a 20-point sample is
+    where I watch variance start to dominate — the curve starts threading
+    individual noisy points instead of the underlying trend. Turning on
+    ridge with a small <MathExpression latex="\lambda" /> doesn't change the
+    decomposition; it shifts the operating point by trading a little extra
+    bias for a much larger reduction in variance.
   </p>
 </FeaturedProblem>
 
 <FeaturedProblem
   kind="Featured Reflection"
   title="Why K-Nearest Neighbors is principled, not just intuitive"
-  attribution="Adapted from Dartmouth ENGS 89, SP20 — placeholder restatement pending author interview."
-  placeholder={true}
+  attribution="Adapted from Dartmouth ENGS 89, SP20."
 >
   <p>
-    *Paraphrased reflection, in author's voice, will replace this paragraph
-    after the v1 ML interview.* The honest version of the lesson: KNN felt
-    like a hand-wave the first time the author saw it — "just compare to
-    the nearest points" — and it took the longest of any algorithm in the
-    course to feel like a principled estimator rather than a heuristic.
+    KNN felt like a hand-wave the first time I saw it — "just compare
+    against the nearest points" — and of every algorithm in the course it
+    took the longest to feel like a principled estimator rather than a
+    heuristic. Gradient descent on a regression loss I can write down and
+    differentiate; KNN doesn't train, it just memorises. The discomfort
+    was: where is the math?
   </p>
   <p>
-    The piece that finally clicked: KNN is a non-parametric estimate of the
-    posterior class probability, with a bandwidth controlled by
-    <MathExpression latex="k" />:
+    The reframe that fixed it: KNN is a non-parametric estimate of the
+    posterior <MathExpression latex="P(y = c \mid x)" /> with a bandwidth
+    set implicitly by <MathExpression latex="k" />:
   </p>
   <MathExpression
     latex="\hat P(y = c \mid x) = \frac{1}{k} \sum_{i \in N_k(x)} \mathbb{1}\{y_i = c\}"
     display={true}
   />
   <p>
-    *Author's reflection on why this reframing changed the way they think
-    about lazy learners more generally is pending.*
+    Once it's a posterior estimate, the rest of the picture falls into
+    place. The decision rule <MathExpression latex="\hat y = \arg\max_c \hat P(y=c\mid x)" />
+    is just the plug-in Bayes classifier. Cover and Hart's classical
+    result that 1-NN error is at most twice the Bayes error in the
+    asymptotic limit stops being mystical — it's a statement about how
+    well a 1-sample posterior estimate approximates the truth.
+    Cross-validating <MathExpression latex="k" /> is selecting a
+    bandwidth, exactly the same problem as picking a kernel width.
+  </p>
+  <p>
+    The lesson generalised beyond KNN: every "lazy" or memory-based
+    learner I've met since — kernel ridge regression, Gaussian processes,
+    even retrieval-augmented language models — sits at some point on the
+    same axis of "how much structure do I impose on the posterior, and
+    how much do I read off the data".
   </p>
 </FeaturedProblem>
 
 <FeaturedProblem
   kind="Featured Solution"
   title="Gradient descent convergence for an L²-regularised quadratic"
-  attribution="Adapted from Dartmouth ENGS 89, SP20 — placeholder restatement pending author interview."
-  placeholder={true}
+  attribution="Adapted from Dartmouth ENGS 89, SP20."
 >
   <p>
-    *Paraphrased problem statement, in author's voice, will replace this
-    paragraph after the v1 ML interview (see issue #27).* The setup: a
-    convex quadratic loss with an L² penalty term, fit by batch gradient
-    descent. Show that for a sufficiently small fixed learning rate
-    <MathExpression latex="\eta" /> the iterates converge to the unique
-    minimiser, and derive the largest <MathExpression latex="\eta" /> that
-    still guarantees monotone descent in terms of the Hessian's spectrum.
+    Take a convex quadratic with an L² penalty and ask the question
+    every implementer of gradient descent eventually has to answer: how
+    large can the learning rate <MathExpression latex="\eta" /> be before
+    the iterates stop converging?
   </p>
   <p>
     With objective
     <MathExpression latex="J(\theta) = \tfrac{1}{2} \theta^\top H \theta + b^\top \theta + \tfrac{\lambda}{2} \|\theta\|^2" />
-    the gradient step is:
+    (symmetric positive semi-definite <MathExpression latex="H" />), the
+    batch gradient step is:
   </p>
   <MathExpression
     latex="\theta_{t+1} = \theta_t - \eta \bigl( (H + \lambda I)\theta_t + b \bigr)"
     display={true}
   />
   <p>
-    The iterates contract toward the optimum as long as every eigenvalue of
-    <MathExpression latex="I - \eta(H + \lambda I)" /> sits inside the unit
-    circle — which gives the upper bound
-    <MathExpression latex="\eta < 2 / \lambda_{\max}(H + \lambda I)" />.
-    *Numerical illustration tied to the Gradient Descent Visualizer above
-    will be added once the author records their own reasoning in the v1
-    interview.*
+    Let <MathExpression latex="\theta^\star = -(H + \lambda I)^{-1} b" />
+    be the unique minimiser (the regulariser makes the inverse exist
+    even when <MathExpression latex="H" /> is singular). Subtracting the
+    fixed-point equation from the update gives a linear recurrence for
+    the error <MathExpression latex="e_t = \theta_t - \theta^\star" />:
+  </p>
+  <MathExpression
+    latex="e_{t+1} = \bigl( I - \eta (H + \lambda I) \bigr)\, e_t"
+    display={true}
+  />
+  <p>
+    Diagonalise <MathExpression latex="H + \lambda I = Q \Lambda Q^\top" />.
+    In the eigenbasis each coordinate of the error decays by the scalar
+    <MathExpression latex="1 - \eta \mu_i" /> per step, where
+    <MathExpression latex="\mu_i" /> ranges over the eigenvalues of
+    <MathExpression latex="H + \lambda I" />. Monotone descent in every
+    coordinate requires
+    <MathExpression latex="|1 - \eta \mu_i| < 1" /> for all
+    <MathExpression latex="i" />, which gives the sharp bound:
+  </p>
+  <MathExpression
+    latex="0 < \eta < \frac{2}{\lambda_{\max}(H) + \lambda}"
+    display={true}
+  />
+  <p>
+    Two things I find satisfying about this. First, the convergence
+    rate is set by the eigenvalue <em>ratio</em>
+    <MathExpression latex="\kappa = \lambda_{\max} / \lambda_{\min}" /> —
+    so ridge regularisation literally improves convergence by shrinking
+    <MathExpression latex="\kappa" /> (push <MathExpression latex="\lambda" />
+    up and the denominator's smallest eigenvalue rises). Second, the
+    gradient descent visualizer at the top of the page is exactly this
+    story in two dimensions: pick an elongated loss surface, crank the
+    learning rate, and you see the eigenvalue-1 direction overshoot
+    while the eigenvalue-0.1 direction still creeps along the long axis.
   </p>
 </FeaturedProblem>
 

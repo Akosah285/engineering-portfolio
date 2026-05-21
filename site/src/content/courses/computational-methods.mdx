@@ -102,9 +102,111 @@ Stem plots for a signal's DFT amplitude and phase, with windowing options.
 
 ## Featured problems
 
-_Featured-problem writeups for this course are pending the v5 author interview
-— tracked at [issue #46](https://github.com/Akosah285/engineering-portfolio/issues/46).
-Demos above stand on their own in the meantime._
+import FeaturedProblem from "../../components/FeaturedProblem.astro";
+import MathExpression from "../../components/demo-kit/MathExpression.astro";
+
+<FeaturedProblem
+  kind="Featured Solution"
+  title="Quadratic convergence of Newton's method near a simple root"
+  attribution="Adapted from Dartmouth Computational Methods, SP20."
+>
+  <p>
+    Newton's iteration
+    <MathExpression latex="x_{n+1} = x_n - f(x_n)/f'(x_n)" /> is famous
+    for doubling the number of correct digits each step. Show this
+    explicitly — and pin down what "near a simple root" means.
+  </p>
+  <p>
+    Let <MathExpression latex="r" /> be a simple root
+    (<MathExpression latex="f(r)=0" />, <MathExpression latex="f'(r) \neq 0" />)
+    and write <MathExpression latex="e_n = x_n - r" /> for the error at
+    step <MathExpression latex="n" />. Taylor-expand <MathExpression latex="f" />
+    around <MathExpression latex="r" />:
+  </p>
+  <MathExpression
+    latex="f(x_n) = f(r) + f'(r)\, e_n + \tfrac{1}{2} f''(\xi)\, e_n^2 = f'(r)\, e_n + \tfrac{1}{2} f''(\xi)\, e_n^2"
+    display={true}
+  />
+  <p>
+    Substitute into the Newton update:
+  </p>
+  <MathExpression
+    latex="e_{n+1} = e_n - \frac{f'(r)\, e_n + \tfrac{1}{2} f''(\xi)\, e_n^2}{f'(x_n)} = \frac{f''(\xi)}{2\, f'(x_n)}\, e_n^2"
+    display={true}
+  />
+  <p>
+    In the limit <MathExpression latex="x_n \to r" />,
+    <MathExpression latex="f'(x_n) \to f'(r)" /> and the prefactor
+    converges to <MathExpression latex="C = f''(r) / (2 f'(r))" />. So
+    asymptotically <MathExpression latex="|e_{n+1}| \approx C\, e_n^2" />.
+    Errors square per step — if <MathExpression latex="e_n = 10^{-3}" />,
+    then <MathExpression latex="e_{n+1} \approx C \cdot 10^{-6}" />.
+  </p>
+  <p>
+    The two caveats. First, "near": you need
+    <MathExpression latex="|C \cdot e_0| < 1" /> for the recursion to
+    contract — far from the root Newton can overshoot or diverge. The
+    bisection visualizer above is the always-converges-but-linearly
+    backstop you reach for when you don't have a good starting guess.
+    Second, "simple": at a multiple root <MathExpression latex="f'(r)=0" />
+    so the analysis breaks; Newton degrades to linear convergence
+    unless you reweight (modified Newton with multiplicity
+    <MathExpression latex="m" />:
+    <MathExpression latex="x_{n+1} = x_n - m\, f/f'" />).
+  </p>
+</FeaturedProblem>
+
+<FeaturedProblem
+  kind="Featured Solution"
+  title="Why RK4 is fourth-order — counting matched Taylor terms"
+  attribution="Adapted from Dartmouth Computational Methods, SP20."
+>
+  <p>
+    The classical Runge–Kutta integrator advances
+    <MathExpression latex="y' = f(t,y)" /> by:
+  </p>
+  <MathExpression
+    latex="y_{n+1} = y_n + \tfrac{h}{6}\bigl( k_1 + 2 k_2 + 2 k_3 + k_4 \bigr)"
+    display={true}
+  />
+  <p>
+    with slopes evaluated at the start, two midpoints, and the
+    endpoint. Why the
+    <MathExpression latex="1{:}2{:}2{:}1" /> weighting? And what does
+    "fourth order" actually buy us?
+  </p>
+  <p>
+    The exact solution Taylor-expanded around <MathExpression latex="t_n" />
+    gives
+  </p>
+  <MathExpression
+    latex="y(t_n + h) = y_n + h y'_n + \tfrac{h^2}{2} y''_n + \tfrac{h^3}{6} y'''_n + \tfrac{h^4}{24} y^{(4)}_n + O(h^5)"
+    display={true}
+  />
+  <p>
+    where each <MathExpression latex="y^{(k)}" /> can be rewritten in
+    terms of <MathExpression latex="f" /> and its partial derivatives
+    using the chain rule (e.g.
+    <MathExpression latex="y'' = f_t + f f_y" />). Now expand each
+    slope <MathExpression latex="k_i" /> the same way; the weights
+    <MathExpression latex="1, 2, 2, 1" /> divided by 6 are precisely
+    the unique choice that matches every Taylor coefficient up through
+    <MathExpression latex="h^4" />. The leftover error sits in the
+    <MathExpression latex="h^5" /> term, so the local truncation error
+    is <MathExpression latex="O(h^5)" /> and the global error over a
+    fixed interval is <MathExpression latex="O(h^4)" /> — halving the
+    step size cuts the error by a factor of 16.
+  </p>
+  <p>
+    This is the trade-off RK4 hits: four function evaluations per step
+    for an order-of-magnitude advantage over forward Euler at any
+    practical step size. Drop in the Lorenz system at the top of the
+    page (chaotic, sensitive to step size) and RK4 is what keeps the
+    trajectory recognisable while Euler at the same <MathExpression latex="h" />
+    blows up in a few hundred steps. The cost-vs-accuracy sweet spot
+    is the reason it's still everyone's default for non-stiff problems.
+  </p>
+</FeaturedProblem>
 
 ## What's coming
 

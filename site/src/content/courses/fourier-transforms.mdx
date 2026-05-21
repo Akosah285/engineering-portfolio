@@ -84,9 +84,100 @@ integral.
 
 ## Featured problems
 
-_Featured-problem writeups for this course are pending the v3 author interview
-— tracked at [issue #44](https://github.com/Akosah285/engineering-portfolio/issues/44).
-Demos above stand on their own in the meantime._
+import FeaturedProblem from "../../components/FeaturedProblem.astro";
+import MathExpression from "../../components/demo-kit/MathExpression.astro";
+
+<FeaturedProblem
+  kind="Featured Solution"
+  title="Gibbs phenomenon at a square-wave discontinuity"
+  attribution="Adapted from Dartmouth Fourier Transforms & Complex Variables, FA20."
+>
+  <p>
+    Sum the first <MathExpression latex="N" /> nonzero harmonics of a
+    square wave and stare at the jump at <MathExpression latex="x=0" />.
+    The partial sum overshoots the true height of the discontinuity by
+    a fixed fraction — about 8.95% — and that overshoot does not shrink
+    as <MathExpression latex="N \to \infty" />. Why?
+  </p>
+  <p>
+    Take a unit-height square wave with Fourier series:
+  </p>
+  <MathExpression
+    latex="s_N(x) = \frac{4}{\pi} \sum_{k=0}^{N-1} \frac{\sin\bigl((2k+1)x\bigr)}{2k+1}"
+    display={true}
+  />
+  <p>
+    Differentiating the partial sum gives a Dirichlet-style kernel that
+    peaks just to one side of the jump. The peak location moves toward
+    <MathExpression latex="x=0" /> as
+    <MathExpression latex="N" /> grows (it sits at roughly
+    <MathExpression latex="\pi/(2N)" />), but the <em>height</em> of the
+    first overshoot is the integral of <MathExpression latex="\sin t / t" />
+    from 0 to <MathExpression latex="\pi" />:
+  </p>
+  <MathExpression
+    latex="\lim_{N\to\infty} s_N\!\left(\tfrac{\pi}{2N}\right) = \frac{2}{\pi} \int_0^\pi \frac{\sin t}{t}\, dt \approx 1.0895"
+    display={true}
+  />
+  <p>
+    The reason the overshoot doesn't decay: as <MathExpression latex="N" />
+    increases, the wiggle gets narrower (its support scales like
+    <MathExpression latex="1/N" />), but its peak value is governed by
+    a fixed integral. So in <MathExpression latex="L^2" /> the partial
+    sums converge to the square wave just fine — the energy of the
+    overshoot vanishes — yet they fail to converge pointwise at a
+    discontinuity. The Fourier-series demo above shows this directly:
+    push the harmonic count up and the ripples narrow without
+    flattening. This is the moment in the course where I stopped
+    thinking "more harmonics = better approximation" naïvely and started
+    distinguishing the modes of convergence.
+  </p>
+</FeaturedProblem>
+
+<FeaturedProblem
+  kind="Featured Solution"
+  title="Fourier transform of e^(-|t|) by contour integration"
+  attribution="Adapted from Dartmouth Fourier Transforms & Complex Variables, FA20."
+>
+  <p>
+    Compute the Fourier transform of the two-sided exponential
+    <MathExpression latex="f(t) = e^{-|t|}" /> two ways: directly by
+    splitting the integral at zero, and via a contour integral that
+    invokes the residue theorem on the inverse transform.
+  </p>
+  <p>
+    Direct evaluation is one line of bookkeeping:
+  </p>
+  <MathExpression
+    latex="\hat f(\omega) = \int_{-\infty}^{\infty} e^{-|t|} e^{-i\omega t}\, dt = \int_0^\infty e^{-(1+i\omega)t}\, dt + \int_0^\infty e^{-(1-i\omega)t}\, dt = \frac{2}{1+\omega^2}"
+    display={true}
+  />
+  <p>
+    The result is the Lorentzian. The interesting machinery shows up
+    when you run the inversion. The inverse transform is
+  </p>
+  <MathExpression
+    latex="f(t) = \frac{1}{2\pi} \int_{-\infty}^{\infty} \frac{2 e^{i\omega t}}{1+\omega^2}\, d\omega"
+    display={true}
+  />
+  <p>
+    Treat <MathExpression latex="\omega" /> as a complex variable. The
+    integrand has simple poles at <MathExpression latex="\omega = \pm i" />.
+    For <MathExpression latex="t > 0" /> close the contour in the upper
+    half-plane (where <MathExpression latex="e^{i\omega t}" /> decays);
+    only the pole at <MathExpression latex="\omega = i" /> sits inside,
+    and the residue is
+    <MathExpression latex="\mathrm{Res}_{\omega=i} = e^{-t} / (2i)" />.
+    The residue theorem gives
+    <MathExpression latex="f(t) = (1/2\pi)(2\pi i)(e^{-t}/(2i)\cdot 2) = e^{-t}" />.
+    For <MathExpression latex="t<0" /> close in the lower half-plane,
+    pick up the <MathExpression latex="\omega = -i" /> pole, and recover
+    <MathExpression latex="e^{t}" />. Together: <MathExpression latex="e^{-|t|}" />,
+    as required. This is the example that finally made me see contour
+    integration as a <em>computational</em> tool rather than a curiosity —
+    the residue-helper demo above is the exact bookkeeping in a sandbox.
+  </p>
+</FeaturedProblem>
 
 ## What's coming
 
