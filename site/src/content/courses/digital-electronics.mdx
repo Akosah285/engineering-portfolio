@@ -188,7 +188,65 @@ import MathExpression from "../../components/demo-kit/MathExpression.astro";
   </p>
 </FeaturedProblem>
 
+<FeaturedProblem
+  kind="Featured Solution"
+  title="Why two flip-flops in series tame metastability"
+  attribution="Adapted from Dartmouth ENGS 31, SP20."
+>
+  <p>
+    Sampling an asynchronous signal — a button press, a UART receive
+    line, anything not clocked by your FPGA — can drive a flip-flop
+    into a metastable state where its output sits between the legal
+    logic levels for a random duration before resolving. A single
+    flop has unacceptable mean time between failures (MTBF) in most
+    designs; cascading two flops fixes it.
+  </p>
+  <p>
+    Let <MathExpression latex="T_w" /> be the metastability capture
+    window (a few picoseconds, set by setup/hold geometry),
+    <MathExpression latex="f_c" /> the clock frequency,
+    <MathExpression latex="f_d" /> the data toggle rate, and
+    <MathExpression latex="\tau" /> the flop's resolution time
+    constant (exponential decay of the metastable amplitude). With
+    <MathExpression latex="T_r" /> seconds available between the
+    sampling clock edge and the downstream block reading the output,
+    the probability that a single flop remains metastable past
+    <MathExpression latex="T_r" /> is
+  </p>
+  <MathExpression
+    latex="P_1 = T_w\, f_d\, f_c\, e^{-T_r / \tau},\qquad \mathrm{MTBF}_1 = \frac{1}{P_1\, f_c}"
+    display={true}
+  />
+  <p>
+    A two-flop synchroniser routes the first flop's output into a
+    second flop clocked on the next edge; the second flop only sees a
+    metastable input if the first flop failed to settle within one
+    clock period. Treating the two events as approximately
+    independent, the available settling time effectively doubles to
+    <MathExpression latex="T_r + T_c" /> where
+    <MathExpression latex="T_c = 1 / f_c" />:
+  </p>
+  <MathExpression
+    latex="\frac{\mathrm{MTBF}_2}{\mathrm{MTBF}_1} \approx e^{T_c / \tau}"
+    display={true}
+  />
+  <p>
+    For a flop with
+    <MathExpression latex="\tau \approx 30\,\mathrm{ps}" /> on a
+    100 MHz clock (<MathExpression latex="T_c = 10\,\mathrm{ns}" />),
+    the ratio is
+    <MathExpression latex="e^{10\,\mathrm{ns} / 30\,\mathrm{ps}} = e^{333}" />
+    — astronomically large. That's why the SCI Receiver in the
+    Morse-code final project used a double-flop synchroniser on the
+    raw Rx pin before feeding the FSM; a single flop would have
+    statistically failed within minutes at 9600 baud. The
+    FSM-stopwatch animation above is the deterministic side of
+    sequential logic; the synchroniser is the quietly heroic part
+    that keeps the asynchronous world from contaminating it.
+  </p>
+</FeaturedProblem>
+
 ## What's coming
 
-The author's written reflection and 2–4 featured problems land alongside the v9
-interview. The demos above are wired and playable today.
+The author's written reflection lands alongside the v9 interview. The demos
+and featured problems above are wired and playable today.
