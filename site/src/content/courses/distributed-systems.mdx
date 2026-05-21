@@ -192,7 +192,67 @@ import MathExpression from "../../components/demo-kit/MathExpression.astro";
   </p>
 </FeaturedProblem>
 
+<FeaturedProblem
+  kind="Featured Solution"
+  title="Standing-wave frequencies on a fixed-end string by separation of variables"
+  attribution="Adapted from Dartmouth ENGS 23, WI20."
+>
+  <p>
+    A string of length <MathExpression latex="L" /> with both ends
+    pinned obeys the 1D wave equation
+    <MathExpression latex="u_{tt} = c^2 u_{xx}" /> with boundary
+    conditions <MathExpression latex="u(0, t) = u(L, t) = 0" /> for
+    all time. Show that the only frequencies that can stand on this
+    string are
+    <MathExpression latex="f_n = n c / (2 L)" /> for
+    <MathExpression latex="n = 1, 2, 3, \ldots" />.
+  </p>
+  <p>
+    Assume a separated solution
+    <MathExpression latex="u(x, t) = X(x) T(t)" />. Substituting into
+    the PDE and dividing by <MathExpression latex="X(x) T(t)" />
+    gives
+  </p>
+  <MathExpression
+    latex="\frac{T''(t)}{c^2\, T(t)} = \frac{X''(x)}{X(x)} = -\lambda"
+    display={true}
+  />
+  <p>
+    The left side depends only on <MathExpression latex="t" />, the
+    right only on <MathExpression latex="x" />, so both must equal a
+    constant — call it <MathExpression latex="-\lambda" /> with the
+    sign chosen so non-decaying oscillation is possible. The spatial
+    equation <MathExpression latex="X'' + \lambda X = 0" /> with
+    <MathExpression latex="X(0) = X(L) = 0" /> is a classic
+    Sturm–Liouville problem whose only non-trivial solutions are
+    <MathExpression latex="X_n(x) = \sin(n \pi x / L)" /> with
+    eigenvalues <MathExpression latex="\lambda_n = (n \pi / L)^2" />.
+  </p>
+  <p>
+    The temporal equation
+    <MathExpression latex="T'' + c^2 \lambda_n T = 0" /> oscillates
+    at angular frequency
+    <MathExpression latex="\omega_n = c \sqrt{\lambda_n} = n \pi c / L" />,
+    i.e. linear frequency
+    <MathExpression latex="f_n = n c / (2 L)" />. The fundamental is
+    <MathExpression latex="f_1 = c / (2 L)" />; every higher mode is
+    an integer multiple of it — the harmonic series that gives
+    plucked-string instruments their consonant character.
+  </p>
+  <p>
+    Lab 3 used this exact relation in reverse. With
+    <MathExpression latex="L" /> measured directly and
+    <MathExpression latex="f_1" /> read off the spectrum analyser,
+    <MathExpression latex="c = 2 L f_1" /> recovered the wave speed
+    on the string to within a few percent of the value predicted from
+    string density and tension. The wave-equation visualizer above
+    lets you set fixed ends and pluck initial conditions, then watch
+    the d'Alembert traveling waves bounce, recombine, and self-
+    organise into the predicted standing-wave envelope.
+  </p>
+</FeaturedProblem>
+
 ## What's coming
 
-The author's written reflection and 2–4 featured problems land alongside the v7
-interview. The demos above are wired and playable today.
+The author's written reflection lands alongside the v7 interview. The demos
+and featured problems above are wired and playable today.
