@@ -196,7 +196,67 @@ import MathExpression from "../../components/demo-kit/MathExpression.astro";
   </p>
 </FeaturedProblem>
 
+<FeaturedProblem
+  kind="Featured Solution"
+  title="Cantilever-beam tip deflection v(L) = -PL³/(3EI) by double integration"
+  attribution="Adapted from Dartmouth ENGS 33, FA20."
+>
+  <p>
+    A horizontal cantilever of length <MathExpression latex="L" /> and
+    flexural rigidity <MathExpression latex="EI" /> is clamped at the
+    wall and carries a downward point load
+    <MathExpression latex="P" /> at the free tip. Show that the tip
+    deflection is
+    <MathExpression latex="v(L) = -PL^3 / (3EI)" />.
+  </p>
+  <p>
+    The reaction at the wall is an upward force
+    <MathExpression latex="P" /> plus a moment
+    <MathExpression latex="PL" /> resisting tip rotation. Cut the beam
+    at coordinate <MathExpression latex="x" /> measured from the wall;
+    equilibrium of the segment to the right gives the internal moment
+  </p>
+  <MathExpression
+    latex="M(x) = -P(L - x)"
+    display={true}
+  />
+  <p>
+    The Euler–Bernoulli beam equation
+    <MathExpression latex="EI\, v''(x) = M(x)" /> integrates twice:
+  </p>
+  <MathExpression
+    latex="EI\, v'(x) = -P L x + \tfrac{1}{2} P x^2 + C_1,\qquad EI\, v(x) = -\tfrac{1}{2} P L x^2 + \tfrac{1}{6} P x^3 + C_1 x + C_2"
+    display={true}
+  />
+  <p>
+    Apply the clamped boundary conditions
+    <MathExpression latex="v(0) = 0" /> and
+    <MathExpression latex="v'(0) = 0" /> (no displacement, no rotation
+    at the wall): both integration constants vanish. Evaluate the
+    deflection at the tip:
+  </p>
+  <MathExpression
+    latex="v(L) = \frac{1}{EI}\Bigl( -\tfrac{1}{2} P L^3 + \tfrac{1}{6} P L^3 \Bigr) = -\frac{P L^3}{3 E I}"
+    display={true}
+  />
+  <p>
+    The <MathExpression latex="L^3" /> dependence is the punchline.
+    Double the cantilever length and the same tip load gives eight
+    times the deflection — a 2× safety factor on length costs much
+    more than a 2× safety factor on stiffness. Substitute
+    <MathExpression latex="I = b h^3 / 12" /> for a rectangular
+    section and the same cubic punishes thin beams that flex in the
+    weak direction: rotate the cross-section 90° (load on the
+    long edge instead of the short one) and the deflection drops by
+    <MathExpression latex="(h/b)^2" />. The beam-deflection
+    visualizer above plots these curves directly — sweep
+    <MathExpression latex="L" />, <MathExpression latex="h" />,
+    <MathExpression latex="b" /> and watch the cubic show up
+    immediately.
+  </p>
+</FeaturedProblem>
+
 ## What's coming
 
-The author's written reflection and 2–4 featured problems land alongside the v6
-interview. The demos above are wired and playable today.
+The author's written reflection lands alongside the v6 interview. The demos
+and featured problems above are wired and playable today.
