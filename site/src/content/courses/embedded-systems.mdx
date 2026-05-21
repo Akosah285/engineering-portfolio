@@ -206,8 +206,64 @@ import MathExpression from "../../components/demo-kit/MathExpression.astro";
   </p>
 </FeaturedProblem>
 
+<FeaturedProblem
+  kind="Featured Solution"
+  title="TMP36 + 10-bit ADC — resolving 1 °C needs 2 LSBs of headroom"
+  attribution="Adapted from Dartmouth ENGS 85, WI21."
+>
+  <p>
+    A TMP36 outputs a linear voltage proportional to ambient
+    temperature:
+    <MathExpression latex="V_{\rm out}\ [\mathrm V] = 0.01\, T\ [^\circ\mathrm C] + 0.5" />.
+    Feed this into a 10-bit ADC referenced to 5 V, and the chain
+    from raw count to temperature is two arithmetic steps — but the
+    quantisation tells you the resolution you can actually trust.
+  </p>
+  <p>
+    ADC counts to voltage:
+  </p>
+  <MathExpression
+    latex="V = \frac{\mathrm{count}}{2^{10} - 1} \cdot V_{\rm ref} = \frac{\mathrm{count}}{1023} \cdot 5\ \mathrm V"
+    display={true}
+  />
+  <p>
+    Voltage to temperature, inverting the TMP36 linearisation:
+  </p>
+  <MathExpression
+    latex="T\ [^\circ\mathrm C] = (V - 0.5) / 0.01 = 100\, V - 50"
+    display={true}
+  />
+  <p>
+    The LSB is
+    <MathExpression latex="5\,\mathrm V / 1023 \approx 4.89\,\mathrm{mV}" />,
+    which the TMP36's 10 mV/°C scaling turns into a temperature
+    quantum of
+    <MathExpression latex="\approx 0.489\,^\circ\mathrm C" />.
+    Resolving a full 1 °C therefore takes 2 LSBs of headroom — fine
+    for ambient-temperature logging, marginal for a fever-screening
+    thermometer. To halve the quantum, drop
+    <MathExpression latex="V_{\rm ref}" /> from 5 V to 2.5 V (an
+    internal precision reference will do): the same 10-bit count now
+    spans 2.5 V instead of 5 V, doubling the resolution at the cost
+    of clipping any TMP36 reading above
+    <MathExpression latex="(2.5 - 0.5)/0.01 = 200\,^\circ\mathrm C" />
+    (still safely above any ambient lab condition).
+  </p>
+  <p>
+    The bigger source of error in practice was rarely the ADC — it
+    was the TMP36's ±2 °C accuracy spec at 25 °C and the supply-rail
+    noise coupling into <MathExpression latex="V_{\rm ref}" />. Lab 3
+    showed that putting a 100 nF cap right next to the TMP36 cleaned
+    up about a degree of jitter on the scope; oversampling and
+    averaging cleaned up the residual. The lesson generalises:
+    component datasheet accuracy plus power-rail integrity dominate
+    the error budget long before you start worrying about
+    sub-millivolt ADC noise.
+  </p>
+</FeaturedProblem>
+
 ## What's coming
 
-The author's written reflection, the video reel of the lab projects, and 2–4
-featured problems land alongside the v10 interview. The demos above are wired
+The author's written reflection and the video reel of the lab projects land
+alongside the v10 interview. The demos and featured problems above are wired
 and playable today.
