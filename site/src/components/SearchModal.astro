@@ -34,7 +34,7 @@ const base = import.meta.env.BASE_URL;
   </div>
 </dialog>
 
-<script define:vars={{ base }}>
+<script is:inline define:vars={{ base }}>
   const dialog = document.getElementById("search-modal");
   const closeBtn = dialog?.querySelector("[data-search-close]");
   let initialized = false;

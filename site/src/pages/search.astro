@@ -42,7 +42,7 @@ const base = import.meta.env.BASE_URL;
 </Layout>
 
 <link rel="stylesheet" href={`${base}pagefind/pagefind-ui.css`} />
-<script define:vars={{ base }}>
+<script is:inline define:vars={{ base }}>
   // Standard Pagefind UI — wires up its own input, results, filters.
   // Imported lazily so the page renders before the bundle arrives.
   window.addEventListener("DOMContentLoaded", async () => {
