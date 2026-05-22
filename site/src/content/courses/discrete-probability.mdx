@@ -247,6 +247,52 @@ import MathExpression from "../../components/demo-kit/MathExpression.astro";
   </p>
 </FeaturedProblem>
 
+<FeaturedProblem
+  kind="Featured Solution"
+  title="Birthday paradox — why 23 people gives a 50% collision probability"
+  attribution="Adapted from Dartmouth ENGS 27, FA19."
+>
+  <p>
+    Pick <MathExpression latex="k" /> people uniformly at random from
+    a year with <MathExpression latex="n = 365" /> equally likely
+    birthdays. What is the probability that at least two share a
+    birthday? Most people guess "you'd need ~180 people to get to
+    50/50". The real answer is <strong>23</strong>, and the gap
+    between intuition and arithmetic is the whole pedagogical payoff.
+  </p>
+  <p>
+    Solve the complement. Let <MathExpression latex="A_k" /> be the
+    event "all <MathExpression latex="k" /> birthdays distinct". Lay
+    the people out one at a time: person 1 lands anywhere, person 2
+    must avoid one date, person 3 must avoid two, and so on, giving
+  </p>
+  <MathExpression
+    latex="\Pr[A_k] = \prod_{j=0}^{k-1} \frac{n - j}{n} = \frac{n!}{(n-k)! \, n^{k}}"
+    display={true}
+  />
+  <p>
+    For small <MathExpression latex="k/n" /> the product is well
+    approximated by
+    <MathExpression latex="\exp\!\left(-\sum_{j=0}^{k-1} j/n\right) = \exp\!\left(-k(k-1)/(2n)\right)" />.
+    Setting that equal to <MathExpression latex="1/2" /> and solving
+    gives the famous <MathExpression latex="k \approx \sqrt{2 n \ln 2} \approx 22.49" />.
+  </p>
+  <p>
+    Plugging the exact formula in: at
+    <MathExpression latex="k = 23" /> the collision probability is
+    50.7%; at <MathExpression latex="k = 30" /> it is 70.6%; at
+    <MathExpression latex="k = 50" /> it is 97.0%. The deeper lesson
+    travels well beyond birthdays: any time you sample
+    <MathExpression latex="k" /> items uniformly from
+    <MathExpression latex="n" /> bins, expect a collision once
+    <MathExpression latex="k = O(\sqrt{n})" />. That is exactly the
+    <MathExpression latex="\sqrt{n}" /> "square-root attack" on
+    hash functions and the reason a 256-bit hash gives 128-bit
+    collision resistance — the same combinatorial accounting,
+    re-skinned for cryptography.
+  </p>
+</FeaturedProblem>
+
 ## What's coming
 
 The author's written reflection lands alongside the v4 interview. The demos
