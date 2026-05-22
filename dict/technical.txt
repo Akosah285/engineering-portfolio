@@ -108,6 +108,7 @@ executescript
 exemplar
 exemplars
 exhaustive-dep
+exponentiated
 factorisation
 fdraw
 fets
@@ -124,6 +125,7 @@ formfactor
 fourier
 freq
 freqs
+Friedrichs
 frontmatter
 ftcoefs
 gaussian
@@ -202,6 +204,7 @@ ldp
 leastsquares
 lede
 levenberg
+Lewy
 lhci
 lightbox
 lighthouserc
@@ -334,6 +337,7 @@ posthog
 prefetch
 prefetched
 prefetching
+preimage
 preorder
 prereqs
 prettifies
@@ -502,6 +506,7 @@ transpile
 transpiled
 transpiler
 travelled
+travelling
 treeshake
 treeshaken
 treeshaking

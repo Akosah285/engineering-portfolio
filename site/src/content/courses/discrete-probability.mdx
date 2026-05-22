@@ -28,6 +28,10 @@ import { GamblersRuinVisualizer } from "../../components/demos/discrete-probabil
 import { HypothesisTestingVisualizer } from "../../components/demos/discrete-probability/hypothesis-testing/HypothesisTestingVisualizer";
 import { MonteCarloPiVisualizer } from "../../components/demos/discrete-probability/monte-carlo-pi/MonteCarloPiVisualizer";
 import { PageRankVisualizer } from "../../components/demos/discrete-probability/page-rank/PageRankVisualizer";
+import Explainer from "../../components/Explainer.astro";
+import Step from "../../components/Step.astro";
+import TryThis from "../../components/TryThis.astro";
+import MathExpression from "../../components/demo-kit/MathExpression.astro";
 
 <MarkovChainVisualizer client:idle />
 
@@ -47,6 +51,108 @@ table update as you drag.
 
 Drag the room size and watch the collision probability climb past 50% near
 23 people.
+
+<Explainer demoTitle="Birthday paradox simulator">
+  <Step>
+    <p>
+      How many strangers do you need in a room before two of them share a
+      birthday with 50% odds? Your gut probably says hundreds — there are
+      365 days, after all. The actual answer is 23. The point of this demo
+      is not the trivia; it is to feel <em>why</em> intuition fails so
+      badly here.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      The trap is asking the wrong question. "What is the chance someone
+      shares <em>my</em> birthday?" grows linearly in <em>n</em>. The
+      paradox asks "what is the chance <em>any</em> two of us share a
+      birthday?" — that compares all
+      <MathExpression latex="\binom{n}{2} = \tfrac{n(n-1)}{2}" />
+      pairs at once, and pairs grow quadratically.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Easier to count the complement: probability all <em>n</em> birthdays
+      are distinct. The first person picks any day. The second avoids one
+      day, giving <MathExpression latex="(D-1)/D" />. The third avoids two,
+      giving <MathExpression latex="(D-2)/D" />. Multiply them all:
+    </p>
+    <p>
+      <MathExpression display latex="P(\text{no clash}) = \prod_{k=1}^{n-1} \left(1 - \tfrac{k}{D}\right)" />
+    </p>
+  </Step>
+  <Step>
+    <p>
+      The collision probability is just 1 minus that product. The demo
+      computes it in log-space (<MathExpression latex="\log(1-k/D)" />
+      summed, then exponentiated) so it stays numerically stable for large
+      <em>n</em> and large <em>D</em> — naive multiplication of 200 small
+      numbers would underflow to zero on you.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      For a closed-form intuition, use
+      <MathExpression latex="\log(1-x) \approx -x" /> on each factor and
+      sum: the exponent collapses to
+      <MathExpression latex="-n(n-1)/(2D)" />. That gives the textbook
+      approximation
+      <MathExpression display latex="P(\text{collision}) \approx 1 - e^{-n(n-1)/(2D)}" />
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Set that equal to <MathExpression latex="\tfrac{1}{2}" /> and solve
+      for <em>n</em>: you get <MathExpression latex="n \approx \sqrt{2D \ln 2} \approx 1.177\sqrt{D}" />.
+      For <MathExpression latex="D = 365" /> this is 22.49, so the smallest
+      integer that does the job is 23. The exact and approximate curves in
+      the chart agree to within a percent past <em>n</em> = 10.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      This <MathExpression latex="\sqrt{D}" /> threshold is the real
+      headline. Whenever you have <em>D</em> equally-likely outcomes and
+      you sample with replacement, you start seeing collisions after about
+      <MathExpression latex="\sqrt{D}" /> samples — not <em>D</em>, not
+      <em>D</em>/2. That square-root is what makes the paradox feel like
+      magic.
+    </p>
+  </Step>
+  <Step>
+    <p>Try it yourself.</p>
+    <TryThis>
+      Switch to the "Hash collision (D=256)" preset. The threshold drops to
+      about <em>n</em> = 19, since <MathExpression latex="1.177\sqrt{256} \approx 18.8" />.
+      That is also why a "128-bit" hash is only safe to about
+      <MathExpression latex="2^{64}" /> trials against birthday attacks —
+      the bit-budget halves once your adversary is hunting for any
+      collision, not a specific preimage.
+    </TryThis>
+  </Step>
+  <Step>
+    <p>
+      A subtle modelling assumption: birthdays are uniformly distributed
+      over the year. They are not — real human birthdays cluster in
+      September and bunch around weekday inductions. The true probabilities
+      land slightly higher than the uniform model. Whenever you read "the
+      birthday paradox in real data," that is the gap being patched.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      The featured problem <em>"Birthday paradox — why 23 people gives a
+      50% collision probability"</em> just below walks the algebra in full,
+      including the
+      <MathExpression latex="\sqrt{2 \ln 2}" /> constant. For other rare-
+      event counting tricks where the indicator-variable shortcut beats
+      brute enumeration, see the coupon collector featured problem in the
+      same section.
+    </p>
+  </Step>
+</Explainer>
 
 <BirthdayParadoxVisualizer client:visible />
 
@@ -98,7 +204,6 @@ of the transition matrix.
 ## Featured problems
 
 import FeaturedProblem from "../../components/FeaturedProblem.astro";
-import MathExpression from "../../components/demo-kit/MathExpression.astro";
 
 <FeaturedProblem
   kind="Featured Solution"

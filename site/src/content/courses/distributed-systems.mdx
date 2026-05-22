@@ -26,6 +26,10 @@ import RcRlVisualizer from "../../components/demos/distributed-systems/rc-rl/RcR
 import VectorFieldVisualizer from "../../components/demos/distributed-systems/vector-field/VectorFieldVisualizer";
 import Wave2DVisualizer from "../../components/demos/distributed-systems/wave-2d/Wave2DVisualizer";
 import WaveEquationVisualizer from "../../components/demos/distributed-systems/wave-equation/WaveEquationVisualizer";
+import Explainer from "../../components/Explainer.astro";
+import Step from "../../components/Step.astro";
+import TryThis from "../../components/TryThis.astro";
+import MathExpression from "../../components/demo-kit/MathExpression.astro";
 
 <ChargeFieldVisualizer client:idle />
 
@@ -37,6 +41,111 @@ track at [issue #48](https://github.com/Akosah285/engineering-portfolio/issues/4
 ## 1D wave equation (string)
 
 Plucked-string wave equation with reflective boundary conditions.
+
+<Explainer demoTitle="1D wave equation (string)">
+  <Step>
+    <p>
+      Pluck a guitar string. The shape moves, oscillates, returns,
+      oscillates again. What single equation captures every plucked string,
+      every taut wire, every acoustic-pipe mode? The 1D wave equation does,
+      and it falls out of nothing more exotic than Newton's second law
+      applied to a tiny segment of string.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      The equation itself is two lines:
+      <MathExpression display latex="\frac{\partial^2 u}{\partial t^2} = c^2 \, \frac{\partial^2 u}{\partial x^2}" />
+      where <em>u</em>(<em>x</em>,<em>t</em>) is the string's vertical
+      displacement and <em>c</em> is the wave speed (set by tension and
+      mass density). Acceleration in time equals curvature in space, scaled
+      by <MathExpression latex="c^2" />.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      The physical picture: a tiny segment of string is pulled by tension
+      on both sides. If the string is straight there
+      (<MathExpression latex="u_{xx} = 0" />), the side forces cancel and
+      nothing happens. If the string is curved upward
+      (<MathExpression latex="u_{xx} > 0" />), the segment gets yanked
+      upward proportional to the curvature. That is the acceleration
+      <MathExpression latex="u_{tt}" /> — pure Newton.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      The boundary conditions tie this physics to the demo. A string
+      clamped at both ends gives Dirichlet zero:
+      <MathExpression latex="u(0,t) = u(L,t) = 0" /> for all time. Those
+      fixed endpoints are what force discrete <em>standing-wave</em>
+      solutions to exist at all — without them you would have free
+      travelling waves and never a clean mode shape.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      The closed-form standing waves are
+      <MathExpression display latex="u(x,t) = \sin\!\left(\tfrac{m\pi x}{L}\right) \cos\!\left(\tfrac{c m \pi t}{L}\right)" />
+      for integer mode number <em>m</em> = 1, 2, 3, ... The "Fundamental"
+      preset is <em>m</em> = 1 (a single half-sine); the "Second harmonic"
+      preset is <em>m</em> = 2 with a node at the midpoint.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Numerically the demo does not use the closed form — it integrates
+      the PDE on a grid using the explicit leapfrog scheme:
+      <MathExpression display latex="u^{n+1}_i = 2 u^n_i - u^{n-1}_i + r^2 (u^n_{i+1} - 2 u^n_i + u^n_{i-1})" />
+      That parenthesised piece is the discrete second spatial derivative,
+      and <MathExpression latex="r = c \, dt / dx" /> is the ratio of
+      "physical wave speed" to "grid signal speed."
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Stability hinges on one inequality: the
+      <em>Courant-Friedrichs-Lewy</em> (CFL) condition
+      <MathExpression latex="r = c \, dt / dx \le 1" />. Violate it and the
+      leapfrog scheme explodes in a few iterations, producing wild
+      oscillations that have nothing to do with the physics. Satisfy it
+      and the numerical solution tracks the analytical standing waves to
+      well within plotting accuracy.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      The intuition for CFL is physical: each timestep, information can
+      hop at most one grid cell. If the true wave moves faster than one
+      grid cell per timestep, the numerical scheme is missing data it
+      should have used, and it diverges. So when you crank up <em>c</em>
+      or shrink <em>dx</em>, you must shrink <em>dt</em> in lockstep.
+    </p>
+  </Step>
+  <Step>
+    <p>Try it yourself.</p>
+    <TryThis>
+      Load the "High resolution (200 pts)" preset and look at <em>dt</em>:
+      it drops to 0.002 (versus 0.005 in the fundamental preset) precisely
+      because <em>dx</em> shrank. Now mentally raise <em>c</em> to 5 — the
+      CFL bound forces <em>dt</em> below 0.001. This trade is why
+      high-resolution wave simulations are so expensive.
+    </TryThis>
+  </Step>
+  <Step>
+    <p>
+      The featured problem <em>"Standing-wave frequencies on a fixed-end
+      string by separation of variables"</em> just below derives those
+      mode shapes from scratch by assuming
+      <MathExpression latex="u(x,t) = X(x) T(t)" />. For the
+      travelling-wave (rather than standing-wave) perspective, the
+      <em>"d'Alembert solution to the 1D wave equation"</em> featured
+      problem decomposes any initial pulse into a left-mover plus a
+      right-mover. To see what happens when waves on a 2D membrane meet
+      each other, jump to the 2D wave interference demo immediately below.
+    </p>
+  </Step>
+</Explainer>
 
 <WaveEquationVisualizer client:visible />
 
@@ -87,7 +196,6 @@ Slide a magnet through a coil; live flux and induced EMF traces.
 ## Featured problems
 
 import FeaturedProblem from "../../components/FeaturedProblem.astro";
-import MathExpression from "../../components/demo-kit/MathExpression.astro";
 
 <FeaturedProblem
   kind="Featured Solution"

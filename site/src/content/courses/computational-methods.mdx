@@ -197,6 +197,106 @@ Bracket-and-halve root finding with a live convergence trace.
 
 Tangent-line iteration with quadratic-convergence visualisation.
 
+<Explainer demoTitle="Newton's method">
+  <Step>
+    <p>
+      Bisection halves an interval and earns one bit of precision per step. If
+      you also know the derivative of <em>f</em>, you can do dramatically
+      better. Newton's method asks: at our current guess, what does the
+      tangent line predict the root to be? Then it jumps there and repeats.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Geometrically: at the iterate <MathExpression latex="x_n" />, draw the
+      tangent to the graph of <em>f</em>. That tangent crosses the x-axis at
+      one specific point — that crossing becomes the next iterate
+      <MathExpression latex="x_{n+1}" />. If <em>f</em> is roughly linear near
+      the root, the tangent's prediction is almost exact, and you converge in
+      a handful of steps.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      The update rule pops straight out of the tangent equation
+      <MathExpression latex="y - f(x_n) = f'(x_n)(x - x_n)" />, setting
+      <em>y</em> = 0 and solving for <em>x</em>:
+    </p>
+    <p>
+      <MathExpression display latex="x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}" />
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Near a simple root, Newton converges <em>quadratically</em>: the number
+      of correct digits roughly doubles every step. Where bisection took
+      <MathExpression latex="\log_2 10 \approx 3.32" /> iterations per
+      decimal digit, Newton typically needs one. That is the headline result
+      and the reason Newton dominates numerical libraries when a derivative
+      is available.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Try the "Square root of 2" preset: <MathExpression latex="f(x) = x^2 - 2" />,
+      seeded at <MathExpression latex="x_0 = 1.5" />. After roughly five
+      iterations you are at <MathExpression latex="\sqrt{2}" /> to a dozen
+      digits. The visualiser draws the tangent lines as you step — watch the
+      step sizes collapse geometrically once the iterates land in the
+      well-behaved region.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      The catch is what Newton needs to work: a continuous derivative, a
+      nonzero slope at the iterate, and a seed close enough to the root that
+      the tangent is a good local model. Violate any of these and the method
+      can stall, cycle, or wander off to infinity.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      The "Bad seed (cycle)" preset shows the most dramatic failure:
+      <MathExpression latex="f(x) = x^3 - 2x + 2" /> seeded at
+      <MathExpression latex="x_0 = 0" /> sends the iterates oscillating
+      between 0 and 1 forever, never converging. The function has a real
+      root, but the geometry of the tangents traps Newton in a two-cycle.
+      Bisection on the same root would just work.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Internally the demo also defends against the most embarrassing failure:
+      a derivative that goes to zero (a horizontal tangent). If
+      <MathExpression latex="|f'(x)| < 10^{-15}" /> we halt with status
+      <code>diverged</code> rather than dividing by zero and reporting
+      garbage. Numerical methods need this kind of explicit guard rail at
+      every "obvious" assumption.
+    </p>
+  </Step>
+  <Step>
+    <p>Try it yourself.</p>
+    <TryThis>
+      Run the "Quadratic convergence" preset (sine, seed 3.0). Pause after
+      each step and read off <MathExpression latex="|f(x_n)|" /> in the
+      iterate table. You should see it square-then-square: roughly
+      <MathExpression latex="10^{-2} \to 10^{-4} \to 10^{-8} \to 10^{-16}" />.
+      That doubling is the quadratic rate, made visible.
+    </TryThis>
+  </Step>
+  <Step>
+    <p>
+      So the trade is concrete: bisection gives you one bit per step always;
+      Newton gives you doubling-digits per step until it doesn't. The
+      featured problem <em>"Quadratic convergence of Newton's method near a
+      simple root"</em> below counts the convergence rate exactly via Taylor
+      expansion. For the slow-but-bulletproof counterpart that needs no
+      derivative, see the bisection demo just above. Most production root
+      finders (Brent's method) cheat by combining both.
+    </p>
+  </Step>
+</Explainer>
+
 <NewtonsMethodVisualizer client:visible />
 
 ## Numerical integration comparator
