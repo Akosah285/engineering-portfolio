@@ -48,145 +48,111 @@ Bracket-and-halve root finding with a live convergence trace.
 <Explainer demoTitle="Bisection method">
   <Step>
     <p>
-      You want to find an <em>x</em> where some function <em>f(x) = 0</em>,
-      and you can evaluate the function but you cannot solve it on paper.
-      Maybe <em>f</em> is a transcendental mash-up like <em>cos(x) − x</em>,
-      or it came out of a finite-element model with no closed form. What is
-      the most boring, most reliable algorithm that will get you a root
-      with any precision you ask for?
+      Suppose I ask you to find <em>x</em> such that
+      <em>x</em>² = 2. Your calculator returns 1.41421356... in a
+      millisecond, but how does it actually do that? You can't solve it on
+      paper. Bisection is the simplest answer — the slowest, most reliable
+      algorithm in the toolkit, and the one every "fancy" method falls back
+      to when it gets confused.
     </p>
   </Step>
   <Step>
     <p>
-      The whole idea is the intermediate value theorem in disguise. If
-      <em>f</em> is continuous on
-      <MathExpression latex="[a, b]" /> and
-      <MathExpression latex="f(a)" /> and <MathExpression latex="f(b)" />
-      have opposite signs, the graph has to cross zero somewhere between
-      them. So a root is <em>trapped</em> inside the interval — we don't
-      know where yet, but we know it cannot escape.
-    </p>
-    <MathExpression latex="f(a) \cdot f(b) < 0 \;\;\Longrightarrow\;\; \exists\, r \in (a, b) \text{ with } f(r) = 0." display={true} />
-  </Step>
-  <Step>
-    <p>
-      Cut the interval in half. Compute the midpoint
-      <MathExpression latex="m = (a + b)/2" />, evaluate
-      <MathExpression latex="f(m)" />, and check its sign. Whichever
-      half-interval still has a sign change is the half that still
-      contains a root. Throw the other half away — it has done its job by
-      not containing a root, and it is now noise.
-    </p>
-    <TryThis>
-      Load the <strong>Square root of 2</strong> preset
-      (<MathExpression latex="f(x) = x^2 - 2" /> on
-      <MathExpression latex="[0, 2]" />). The midpoint of the first
-      step is 1, where <MathExpression latex="f(1) = -1" />. Since
-      <MathExpression latex="f(0) = -2" /> and
-      <MathExpression latex="f(2) = 2" />, the sign change lives in
-      <MathExpression latex="[1, 2]" /> and the demo throws
-      <MathExpression latex="[0, 1]" /> away.
-    </TryThis>
-  </Step>
-  <Step>
-    <p>
-      Repeat the halving on the surviving sub-interval, then again, then
-      again. After <em>n</em> iterations the bracket has been cut in half
-      <em>n</em> times, so its width is the starting width divided by
-      <MathExpression latex="2^n" />. That is the engine of the whole
-      method: an exponentially shrinking cage around a root that cannot
-      escape it.
-    </p>
-    <MathExpression latex="|b_n - a_n| = \frac{b_0 - a_0}{2^n}" display={true} />
-  </Step>
-  <Step>
-    <p>
-      How fast does that actually get you to a useful answer? Each
-      iteration buys you one binary digit of precision in the location of
-      the root, because the bracket halves. To get one decimal digit you
-      need <MathExpression latex="\log_2 10 \approx 3.32" /> iterations.
-      So 10 iterations buy ~3 decimals, 20 buy ~6, 50 buy ~15 — past
-      double-precision floating-point resolution.
-    </p>
-    <TryThis>
-      Watch the iteration counter on the demo. With the square-root preset
-      at the default tolerance
-      <MathExpression latex="10^{-6}" />, the algorithm halts around
-      iteration 21 — and 21 binary digits is ~6.3 decimal digits, which
-      is exactly the precision you asked for.
-    </TryThis>
-  </Step>
-  <Step>
-    <p>
-      This is called <em>linear convergence</em>, and "linear" here is the
-      bad kind of compliment: each step shrinks the error by a constant
-      factor of one half, not by a fast-growing factor like Newton's
-      method's squaring. Bisection is the slow, dependable algorithm
-      — never spectacular, never confused, never diverges, never needs a
-      derivative. That last bit is its superpower.
+      The whole trick is one observation about continuous functions. If
+      <em>f</em>(<em>a</em>) is negative and <em>f</em>(<em>b</em>) is
+      positive, then the graph has to cross zero <em>somewhere</em> between
+      <em>a</em> and <em>b</em>. We don't know where yet, but we know the
+      root is trapped in the interval. Bisection's job is to shrink that
+      trap until it is small enough to call the answer.
     </p>
   </Step>
   <Step>
     <p>
-      The two preconditions are everything: continuity and a bracket with
-      a sign change. Lose either one and the whole argument breaks. A
-      jump discontinuity inside the interval can let
+      Look at <MathExpression latex="f(x) = x^2 - 2" /> on the interval
+      <MathExpression latex="[0, 2]" />. We have
+      <MathExpression latex="f(0) = -2" /> (negative) and
+      <MathExpression latex="f(2) = 2" /> (positive), so a root is trapped
+      inside. Cut the interval in half. The midpoint is 1, and
+      <MathExpression latex="f(1) = -1" /> is still negative. So the sign
+      change must happen between 1 and 2 — we just threw half the work
+      away.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Do it again on <MathExpression latex="[1, 2]" />: midpoint 1.5,
+      <MathExpression latex="f(1.5) = 0.25" /> (positive), so the root is
+      now in <MathExpression latex="[1, 1.5]" />. Again on
+      <MathExpression latex="[1, 1.5]" />: midpoint 1.25,
+      <MathExpression latex="f(1.25) = -0.4375" />, so root is in
+      <MathExpression latex="[1.25, 1.5]" />. Four steps in we are at
+      <MathExpression latex="[1.375, 1.4375]" /> — already two decimal
+      digits of <MathExpression latex="\sqrt{2}" />.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Every step exactly halves the width of the bracket. After 10 steps
+      the trap is 1/1024 of its original size. After 20 steps it is one in
+      a million. After 50 it is smaller than a double-precision float can
+      even represent. That is the entire convergence story — the bracket
+      width is <MathExpression latex="(b_0 - a_0) / 2^n" /> after
+      <em>n</em> steps, and you stop when it is below your tolerance.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      To get one more decimal digit of precision, you need just over three
+      more bisection steps (because 2³ = 8 and 2⁴ = 16, sandwich 10
+      between them). So 21 steps gets you 6 decimal digits, 30 gets you 9,
+      50 gets you ~15. The demo's default tolerance is
+      <MathExpression latex="10^{-6}" />, which is why it halts around
+      iteration 21.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      The catch is that bisection is <em>slow</em>. Every step buys you
+      the same constant factor of improvement — one bit. Newton's method,
+      which we will meet next, can buy you doubling-digits per step when
+      it works. But bisection's superpower is that it always works.
+      It never diverges, never oscillates, never needs a derivative.
+      It cannot fail as long as its preconditions hold.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Those preconditions are everything: <em>f</em> must be continuous,
+      and the starting interval must have a sign change. Skip either and
+      the IVT argument breaks. A jump discontinuity inside
+      <MathExpression latex="[a, b]" /> can let
       <MathExpression latex="f(a) \cdot f(b) < 0" /> be true with no
-      actual root in between — the function "crosses" the axis by
-      teleporting across it.
+      actual root in between — the graph "crosses" the axis by
+      teleporting over it.
     </p>
+  </Step>
+  <Step>
+    <p>Try it yourself.</p>
     <TryThis>
-      Open the <strong>Transcendental</strong> preset
-      (<MathExpression latex="\cos(x) - x" /> on
-      <MathExpression latex="[0, 1]" />). The endpoints have
-      <MathExpression latex="\cos(0) - 0 = 1 > 0" /> and
-      <MathExpression latex="\cos(1) - 1 \approx -0.46 < 0" />, so the
-      sign-change precondition is satisfied and bisection homes in on
-      the Dottie number <MathExpression latex="\approx 0.7391" />.
+      Load the <strong>Slow shrink</strong> preset
+      (<MathExpression latex="f(x) = (x-1)^7" />). The function sits very
+      close to zero on both sides of the root, so just checking
+      <MathExpression latex="|f(m)| < \varepsilon" /> would let the method
+      "converge" while the bracket is still huge. The demo also checks
+      that the bracket width has shrunk — that "or" keeps the
+      high-multiplicity case honest.
     </TryThis>
   </Step>
   <Step>
     <p>
-      One subtle failure mode is a root of high multiplicity. If
-      <MathExpression latex="f(x) = (x - 1)^7" />, the function spends a
-      long stretch near zero on both sides of the root, so the algorithm
-      can satisfy "midpoint value below tolerance" long before the
-      bracket itself has shrunk to anything precise. The reported root
-      may be off by orders of magnitude even though
-      <MathExpression latex="|f(m)|" /> looks tiny.
-    </p>
-    <TryThis>
-      Load the <strong>Slow shrink</strong> preset and compare two stop
-      conditions: <MathExpression latex="|f(m)| < \varepsilon" /> versus
-      <MathExpression latex="(b - a)/2 < \varepsilon" />. The demo
-      enforces both — that "or" in the convergence check is exactly what
-      keeps the high-multiplicity case honest.
-    </TryThis>
-  </Step>
-  <Step>
-    <p>
-      The deepest lesson is that bisection is the <em>bracketing
-      baseline</em> that every faster root-finder is compared to. Faster
-      methods (Newton, secant, Brent) trade reliability for speed; they
-      can race ahead with quadratic convergence when the function is
-      well-behaved, but they can also diverge or oscillate when it is
-      not. Bisection cannot. Production root-finders like Brent's method
-      keep bisection in their back pocket as a fallback whenever a
-      quadratic step misbehaves.
-    </p>
-  </Step>
-  <Step>
-    <p>
-      That hand-off is the bridge to the very next demo on this page,
-      <strong>Newton's method</strong>, which throws away bracketing in
-      exchange for using
-      <MathExpression latex="f'(x)" /> to take much bigger steps
-      — and the featured problem just below,
-      <em>"Quadratic convergence of Newton's method near a simple root"</em>,
+      So that is bisection: the bracketing baseline that every faster
+      root-finder is compared to. The very next demo, <strong>Newton's
+      method</strong>, throws away bracketing in exchange for using the
+      derivative to take much bigger steps — and the featured problem
+      <em>"Quadratic convergence of Newton's method near a simple root"</em>
       counts exactly how much faster Newton is when it works. Read them
-      back-to-back and the trade is concrete: bisection gives you one
-      bit per step always; Newton gives you doubling-digits per step
-      until it doesn't.
+      back-to-back: bisection gives you one bit per step always; Newton
+      gives you doubling-digits per step until it doesn't.
     </p>
   </Step>
 </Explainer>
@@ -200,99 +166,110 @@ Tangent-line iteration with quadratic-convergence visualisation.
 <Explainer demoTitle="Newton's method">
   <Step>
     <p>
-      Bisection halves an interval and earns one bit of precision per step. If
-      you also know the derivative of <em>f</em>, you can do dramatically
-      better. Newton's method asks: at our current guess, what does the
-      tangent line predict the root to be? Then it jumps there and repeats.
+      Bisection earns you one bit of precision per step. If you also know
+      the slope of the function, you can do much better — converging in
+      about five steps instead of twenty for the same accuracy. That is
+      Newton's method, and the leap from "one bit per step" to "doubling
+      digits per step" is one of the most useful speedups in all of
+      numerical computing.
     </p>
   </Step>
   <Step>
     <p>
-      Geometrically: at the iterate <MathExpression latex="x_n" />, draw the
-      tangent to the graph of <em>f</em>. That tangent crosses the x-axis at
-      one specific point — that crossing becomes the next iterate
-      <MathExpression latex="x_{n+1}" />. If <em>f</em> is roughly linear near
-      the root, the tangent's prediction is almost exact, and you converge in
-      a handful of steps.
+      The geometric idea: at your current guess, draw the tangent line to
+      the graph. The tangent crosses the x-axis at one specific point —
+      that crossing becomes your <em>next</em> guess. Up close, any smooth
+      function looks almost like a straight line, so the tangent's
+      prediction of where the graph hits zero is almost exactly right. Then
+      you repeat from the new spot.
     </p>
   </Step>
   <Step>
     <p>
-      The update rule pops straight out of the tangent equation
-      <MathExpression latex="y - f(x_n) = f'(x_n)(x - x_n)" />, setting
-      <em>y</em> = 0 and solving for <em>x</em>:
+      A worked example with <MathExpression latex="f(x) = x^2 - 2" /> and
+      starting guess <MathExpression latex="x_0 = 1.5" />: we have
+      <MathExpression latex="f(1.5) = 0.25" /> and slope
+      <MathExpression latex="f'(1.5) = 3" />. The tangent line crosses
+      zero at <MathExpression latex="1.5 - 0.25/3 \approx 1.4167" />.
+      That's our next guess. Check it:
+      <MathExpression latex="f(1.4167) \approx 0.0069" /> — already two
+      decimal digits closer to <MathExpression latex="\sqrt{2}" /> from
+      one step.
     </p>
+  </Step>
+  <Step>
     <p>
+      The pattern that produces is the famous Newton formula:
       <MathExpression display latex="x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}" />
+      Read it as: "from where you are now, step backward by (current
+      value) divided by (current slope)." If the value is already small,
+      the step is small. If the slope is steep, the step is small. If the
+      slope is gentle, the step is big.
     </p>
   </Step>
   <Step>
     <p>
-      Near a simple root, Newton converges <em>quadratically</em>: the number
-      of correct digits roughly doubles every step. Where bisection took
-      <MathExpression latex="\log_2 10 \approx 3.32" /> iterations per
-      decimal digit, Newton typically needs one. That is the headline result
-      and the reason Newton dominates numerical libraries when a derivative
-      is available.
+      What makes Newton fast is the famous doubling rule: each step
+      <em>squares</em> the error rather than halving it. If you start with
+      one digit of accuracy, the next step gives two, then four, then
+      eight, then sixteen. With the square-root preset, five iterations
+      take you from 1.5 to <MathExpression latex="\sqrt{2}" /> accurate
+      to a dozen digits — past anything a single-precision float could
+      represent.
     </p>
   </Step>
   <Step>
     <p>
-      Try the "Square root of 2" preset: <MathExpression latex="f(x) = x^2 - 2" />,
-      seeded at <MathExpression latex="x_0 = 1.5" />. After roughly five
-      iterations you are at <MathExpression latex="\sqrt{2}" /> to a dozen
-      digits. The visualiser draws the tangent lines as you step — watch the
-      step sizes collapse geometrically once the iterates land in the
-      well-behaved region.
+      Why does this work? Near a smooth root, the function genuinely is
+      almost a straight line, and the tangent <em>is</em> that line. So
+      the new error is roughly the previous error squared — small numbers
+      squared get tiny fast. This is what mathematicians call
+      <em>quadratic convergence</em>, and it is the gold standard for
+      iterative algorithms.
     </p>
   </Step>
   <Step>
     <p>
-      The catch is what Newton needs to work: a continuous derivative, a
-      nonzero slope at the iterate, and a seed close enough to the root that
-      the tangent is a good local model. Violate any of these and the method
-      can stall, cycle, or wander off to infinity.
+      The catch is that Newton is fragile. If your starting guess is far
+      from the root, or the slope is nearly horizontal, or the function
+      has a kink, Newton can wander off in surprising directions. It can
+      cycle. It can shoot to infinity. It can land on a different root
+      than the one you wanted. Bisection, in contrast, just slowly does
+      its job.
     </p>
   </Step>
   <Step>
     <p>
-      The "Bad seed (cycle)" preset shows the most dramatic failure:
+      The "Bad seed (cycle)" preset shows the worst case. With
       <MathExpression latex="f(x) = x^3 - 2x + 2" /> seeded at
-      <MathExpression latex="x_0 = 0" /> sends the iterates oscillating
-      between 0 and 1 forever, never converging. The function has a real
-      root, but the geometry of the tangents traps Newton in a two-cycle.
-      Bisection on the same root would just work.
-    </p>
-  </Step>
-  <Step>
-    <p>
-      Internally the demo also defends against the most embarrassing failure:
-      a derivative that goes to zero (a horizontal tangent). If
-      <MathExpression latex="|f'(x)| < 10^{-15}" /> we halt with status
-      <code>diverged</code> rather than dividing by zero and reporting
-      garbage. Numerical methods need this kind of explicit guard rail at
-      every "obvious" assumption.
+      <MathExpression latex="x_0 = 0" />: f(0) = 2, slope = -2, tangent
+      crosses zero at <MathExpression latex="0 - 2/(-2) = 1" />. Now from
+      <em>x</em> = 1: f(1) = 1, slope = 1, tangent crosses at
+      <MathExpression latex="1 - 1/1 = 0" />. We're back where we
+      started, and the iteration ping-pongs between 0 and 1 forever.
     </p>
   </Step>
   <Step>
     <p>Try it yourself.</p>
     <TryThis>
-      Run the "Quadratic convergence" preset (sine, seed 3.0). Pause after
-      each step and read off <MathExpression latex="|f(x_n)|" /> in the
-      iterate table. You should see it square-then-square: roughly
+      Run the "Quadratic convergence" preset (sine, seed 3.0). Pause
+      after each step and read off <MathExpression latex="|f(x_n)|" /> in
+      the iterate table. You should see
       <MathExpression latex="10^{-2} \to 10^{-4} \to 10^{-8} \to 10^{-16}" />.
-      That doubling is the quadratic rate, made visible.
+      That is the digit-doubling, made visible: each step squares the
+      previous error.
     </TryThis>
   </Step>
   <Step>
     <p>
-      So the trade is concrete: bisection gives you one bit per step always;
-      Newton gives you doubling-digits per step until it doesn't. The
-      featured problem <em>"Quadratic convergence of Newton's method near a
-      simple root"</em> below counts the convergence rate exactly via Taylor
-      expansion. For the slow-but-bulletproof counterpart that needs no
-      derivative, see the bisection demo just above. Most production root
-      finders (Brent's method) cheat by combining both.
+      So the trade is concrete: bisection gives you one bit per step
+      always; Newton gives you doubling-digits per step until it doesn't.
+      The featured problem <em>"Quadratic convergence of Newton's method
+      near a simple root"</em> below derives the error-squaring rule from
+      a Taylor expansion. For the slow-but-bulletproof counterpart that
+      needs no derivative, see the bisection demo just above. Production
+      root finders like Brent's method actually cheat and combine both —
+      Newton when it is racing, bisection as a safety net when it isn't.
     </p>
   </Step>
 </Explainer>

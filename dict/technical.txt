@@ -274,6 +274,7 @@ mypy
 naïve
 namespacing
 nand
+neighbour
 neighbours
 nfa
 nfas

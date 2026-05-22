@@ -45,104 +45,111 @@ Plucked-string wave equation with reflective boundary conditions.
 <Explainer demoTitle="1D wave equation (string)">
   <Step>
     <p>
-      Pluck a guitar string. The shape moves, oscillates, returns,
-      oscillates again. What single equation captures every plucked string,
-      every taut wire, every acoustic-pipe mode? The 1D wave equation does,
-      and it falls out of nothing more exotic than Newton's second law
-      applied to a tiny segment of string.
+      Pluck a guitar string and watch the shape travel, oscillate, return,
+      and oscillate again. One simple rule governs every plucked string,
+      every taut wire, every acoustic-pipe mode. That rule is the wave
+      equation, and it falls out of nothing more exotic than Newton's
+      second law applied to a tiny segment of the string.
     </p>
   </Step>
   <Step>
     <p>
-      The equation itself is two lines:
+      Here is the idea in plain English. How fast a point on the string
+      accelerates up or down depends on how <em>curved</em> the string is
+      right there. If the string is straight at that point, it doesn't
+      accelerate. If it's bent upward (like the bottom of a smile), it gets
+      yanked up. If it's bent downward (like the top of a frown), it gets
+      pushed down. Curvature creates acceleration. That's it.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Where does the curvature-acceleration rule come from? Think of a tiny
+      segment of string under tension. Tension pulls on both ends. If the
+      string is straight there, the two pulls point in opposite directions
+      and cancel — no net force. If the string is curved, both pulls have a
+      small vertical component pointing toward the "inside" of the curve.
+      Newton's <MathExpression latex="F = ma" /> turns that vertical force
+      into vertical acceleration.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      In symbols, that becomes
       <MathExpression display latex="\frac{\partial^2 u}{\partial t^2} = c^2 \, \frac{\partial^2 u}{\partial x^2}" />
-      where <em>u</em>(<em>x</em>,<em>t</em>) is the string's vertical
-      displacement and <em>c</em> is the wave speed (set by tension and
-      mass density). Acceleration in time equals curvature in space, scaled
-      by <MathExpression latex="c^2" />.
+      where <em>u</em>(<em>x</em>,<em>t</em>) is the string's height at
+      position <em>x</em> and time <em>t</em>. The left side is "how fast
+      the string is accelerating right now." The right side is "how curved
+      the string is right now," times a constant <MathExpression latex="c^2" />.
+      The constant <em>c</em> is the wave speed — bigger for tighter or
+      lighter strings.
     </p>
   </Step>
   <Step>
     <p>
-      The physical picture: a tiny segment of string is pulled by tension
-      on both sides. If the string is straight there
-      (<MathExpression latex="u_{xx} = 0" />), the side forces cancel and
-      nothing happens. If the string is curved upward
-      (<MathExpression latex="u_{xx} > 0" />), the segment gets yanked
-      upward proportional to the curvature. That is the acceleration
-      <MathExpression latex="u_{tt}" /> — pure Newton.
+      The boundary matters. A guitar string is clamped at both ends —
+      <MathExpression latex="u(0, t) = u(L, t) = 0" /> for all time. That
+      is what makes it different from a whip or a free-hanging rope. The
+      clamps mean only certain "shapes" can vibrate cleanly — the
+      <em>modes</em>. Every other initial shape is just a sum of these
+      modes, oscillating at different rates.
     </p>
   </Step>
   <Step>
     <p>
-      The boundary conditions tie this physics to the demo. A string
-      clamped at both ends gives Dirichlet zero:
-      <MathExpression latex="u(0,t) = u(L,t) = 0" /> for all time. Those
-      fixed endpoints are what force discrete <em>standing-wave</em>
-      solutions to exist at all — without them you would have free
-      travelling waves and never a clean mode shape.
+      The allowed shapes are
+      <MathExpression latex="\sin(m\pi x / L)" /> for
+      <em>m</em> = 1, 2, 3, ... The "Fundamental" preset shows mode 1: a
+      single bump from one end to the other. The "Second harmonic" preset
+      shows mode 2: a full sine wave with a node — a permanently still
+      point — in the middle. (Press a string at the 12th fret of a guitar
+      and you have forced mode 2.)
     </p>
   </Step>
   <Step>
     <p>
-      The closed-form standing waves are
-      <MathExpression display latex="u(x,t) = \sin\!\left(\tfrac{m\pi x}{L}\right) \cos\!\left(\tfrac{c m \pi t}{L}\right)" />
-      for integer mode number <em>m</em> = 1, 2, 3, ... The "Fundamental"
-      preset is <em>m</em> = 1 (a single half-sine); the "Second harmonic"
-      preset is <em>m</em> = 2 with a node at the midpoint.
+      The demo doesn't use that closed form to draw the animation, though
+      — it solves the equation directly on a grid. Replace the smooth
+      string with <em>N</em> points spaced <em>dx</em> apart. For each
+      interior point, "value next" = 2·(value now) − (value before) +
+      curvature term. The curvature term is just (left neighbour + right
+      neighbour − 2·middle), which is the discrete version of
+      <MathExpression latex="u_{xx}" />. This is the leapfrog scheme.
     </p>
   </Step>
   <Step>
     <p>
-      Numerically the demo does not use the closed form — it integrates
-      the PDE on a grid using the explicit leapfrog scheme:
-      <MathExpression display latex="u^{n+1}_i = 2 u^n_i - u^{n-1}_i + r^2 (u^n_{i+1} - 2 u^n_i + u^n_{i-1})" />
-      That parenthesised piece is the discrete second spatial derivative,
-      and <MathExpression latex="r = c \, dt / dx" /> is the ratio of
-      "physical wave speed" to "grid signal speed."
-    </p>
-  </Step>
-  <Step>
-    <p>
-      Stability hinges on one inequality: the
-      <em>Courant-Friedrichs-Lewy</em> (CFL) condition
-      <MathExpression latex="r = c \, dt / dx \le 1" />. Violate it and the
-      leapfrog scheme explodes in a few iterations, producing wild
-      oscillations that have nothing to do with the physics. Satisfy it
-      and the numerical solution tracks the analytical standing waves to
-      well within plotting accuracy.
-    </p>
-  </Step>
-  <Step>
-    <p>
-      The intuition for CFL is physical: each timestep, information can
-      hop at most one grid cell. If the true wave moves faster than one
-      grid cell per timestep, the numerical scheme is missing data it
-      should have used, and it diverges. So when you crank up <em>c</em>
-      or shrink <em>dx</em>, you must shrink <em>dt</em> in lockstep.
+      There is one inequality the numerical scheme must respect:
+      <MathExpression latex="c \cdot dt / dx \le 1" />. Physically: in
+      one timestep <em>dt</em>, the true wave moves a distance
+      <em>c</em>·<em>dt</em>. If that distance is more than one grid
+      spacing <em>dx</em>, the wave has "skipped" past data the scheme
+      needed, and the simulation blows up. This is called the CFL
+      condition, and it is the one trap every PDE solver shares.
     </p>
   </Step>
   <Step>
     <p>Try it yourself.</p>
     <TryThis>
-      Load the "High resolution (200 pts)" preset and look at <em>dt</em>:
-      it drops to 0.002 (versus 0.005 in the fundamental preset) precisely
-      because <em>dx</em> shrank. Now mentally raise <em>c</em> to 5 — the
-      CFL bound forces <em>dt</em> below 0.001. This trade is why
-      high-resolution wave simulations are so expensive.
+      Load the "High resolution (200 pts)" preset. Notice that
+      <em>dt</em> drops to 0.002 (versus 0.005 in the fundamental preset)
+      precisely because <em>dx</em> shrank by the same factor.
+      Doubling resolution roughly doubles the cost in time too. That's
+      why "just use a finer grid" is usually too easy a wish in
+      simulation work.
     </TryThis>
   </Step>
   <Step>
     <p>
       The featured problem <em>"Standing-wave frequencies on a fixed-end
-      string by separation of variables"</em> just below derives those
-      mode shapes from scratch by assuming
-      <MathExpression latex="u(x,t) = X(x) T(t)" />. For the
-      travelling-wave (rather than standing-wave) perspective, the
-      <em>"d'Alembert solution to the 1D wave equation"</em> featured
-      problem decomposes any initial pulse into a left-mover plus a
-      right-mover. To see what happens when waves on a 2D membrane meet
-      each other, jump to the 2D wave interference demo immediately below.
+      string by separation of variables"</em> just below derives the mode
+      shapes from scratch by assuming the solution factors as
+      <em>X</em>(<em>x</em>) · <em>T</em>(<em>t</em>). For the
+      travelling-wave (rather than standing-wave) picture, the featured
+      problem <em>"d'Alembert solution to the 1D wave equation"</em>
+      decomposes any initial pulse into a left-mover plus a right-mover.
+      And to see what happens when two waves meet on a 2D membrane, jump
+      to the 2D wave interference demo immediately below.
     </p>
   </Step>
 </Explainer>
