@@ -176,6 +176,125 @@ Drag-and-drop gates; auto-derive the truth table and a minimal Boolean expressio
 
 Type a Boolean expression; auto-derive the minimal SOP via K-map grouping.
 
+<Explainer demoTitle="Karnaugh map minimizer">
+  <Step>
+    <p>
+      You have just finished sketching a truth table for a 4-input Boolean
+      function. Sixteen rows, ones and zeros scattered down the right
+      column, and your job is to wire up the smallest circuit that gives
+      the same answers. Reading the table straight off gives you one AND
+      gate per "1" row plus one giant OR — sixteen gates for what feels
+      like it ought to be three. There has to be a smaller circuit hiding
+      in those ones, and the Karnaugh map is the trick for spotting it
+      with your eyes instead of with algebra.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      The aha is one piece of clever bookkeeping. Instead of listing the
+      rows of the truth table in normal binary order — 00, 01, 10, 11 — a
+      K-map lays them out in Gray-code order, so neighbouring cells always
+      differ in exactly one input bit. Two ones sitting side by side
+      therefore mean the function does not care what that bit was, so the
+      pair collapses into a smaller term. Eyeballing rectangles of ones on
+      the grid is, secretly, factoring Boolean algebra by hand.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Load the <strong>AND gate</strong> preset — two inputs, A and B,
+      with a single 1 in the cell where both are high. There is nothing
+      to merge, so the map gives back the literal term
+      <MathExpression latex="F = A \cdot B" />. Boring, but it is the
+      base case: a lone 1 cannot pair with any neighbour, so its cube
+      keeps every variable. Every K-map exercise starts with this
+      one-cell-equals-one-product rule and then looks for ways to grow.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Switch to the <strong>Majority-of-3</strong> preset. The function
+      is 1 whenever at least two of A, B, C are high, which puts four
+      ones on the 3-variable map. Pair them up: minterms
+      <MathExpression latex="m_3" /> and <MathExpression latex="m_7" />
+      share the AB=11 edge so they merge into AB,
+      <MathExpression latex="m_5" /> and <MathExpression latex="m_7" />
+      merge into AC, and <MathExpression latex="m_6" /> with
+      <MathExpression latex="m_7" /> merges into BC. Three pairs, three
+      terms, and the answer is
+      <MathExpression latex="F = AB + AC + BC" /> — three 2-input ANDs
+      into one OR instead of four 3-input ANDs. Same function, fewer
+      literals.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Under the hood the demo is not actually drawing rectangles — it
+      runs the Quine-McCluskey algorithm, the algorithmic cousin of the
+      K-map. It generates every minterm, repeatedly tries to merge pairs
+      that differ in exactly one bit (replacing the disagreeing bit with
+      a dash), and keeps merging until nothing more will combine. The
+      leftovers are the prime implicants — the largest rectangles you
+      could have drawn on the map. A greedy second pass then picks the
+      smallest set of those rectangles that still covers every 1.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Sometimes a circuit is guaranteed never to see certain input
+      combinations — maybe upstream logic stops them from ever appearing,
+      or those codes are reserved for something else. The demo marks
+      those cells with an X, and you read it as "we never input this
+      combination, so the chip is free to output whatever simplifies the
+      answer". The minimiser then treats each X as a wildcard: include
+      it in a rectangle if it lets that rectangle grow, ignore it
+      otherwise. Free optimisation, no behaviour change.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Load the <strong>4-var with don't-cares</strong> preset. The real
+      minterms —
+      <MathExpression latex="m_1, m_3, m_7, m_{11}, m_{15}" /> — are
+      scattered across the 16-cell map, and on their own they would not
+      pair up cleanly. The don't-cares at
+      <MathExpression latex="m_0, m_2, m_5" /> let the minimiser absorb
+      extra cells so the rectangles grow. Watch the literal count drop
+      in the readout: that number is roughly the cost of the circuit in
+      transistors, and don't-cares are the cheapest optimisation you
+      will ever get.
+    </p>
+  </Step>
+  <Step>
+    <p>Try it yourself.</p>
+    <TryThis>
+      Load the <strong>XOR pattern</strong> preset — two minterms,
+      <MathExpression latex="m_1" /> and <MathExpression latex="m_2" />,
+      sitting on opposite diagonal corners of the 2-variable map. They
+      are not Gray-code neighbours, so no merger is possible and the
+      answer stays at two full terms:
+      <MathExpression latex="F = \overline{A}B + A\overline{B}" />. XOR
+      is the famous example of a function that refuses to simplify on a
+      K-map, which is why real chips ship a dedicated XOR gate instead
+      of rebuilding it from ANDs and ORs every time.
+    </TryThis>
+  </Step>
+  <Step>
+    <p>
+      So a K-map is just a Gray-coded grid that turns Boolean factoring
+      into a spot-the-rectangle puzzle, with Quine-McCluskey doing the
+      same job algorithmically once the map grows too big to eyeball.
+      The <strong>Logic gate truth table builder</strong> demo above is
+      the perfect sibling — start there to generate the truth table,
+      then bring those minterms here to minimise. The featured problem
+      <em>"Karnaugh-map minimisation of a 4-variable Boolean function"</em>
+      walks that same pipeline by hand, and the next-state logic that
+      drives the <strong>FSM Simulator</strong> is exactly the kind of
+      multi-output expression this minimiser is built to shrink.
+    </p>
+  </Step>
+</Explainer>
+
 <KarnaughMinimizerVisualizer client:visible />
 
 ## VHDL → animated waveform

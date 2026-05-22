@@ -200,6 +200,125 @@ Lasso pushes most coefficients exactly to zero — sparsity for free.
 
 ## K-means image compression — clustering as quantisation
 
+<Explainer demoTitle="K-means image compression">
+  <Step>
+    <p>
+      Open a JPEG of a sunset on your phone and the file claims it uses
+      thousands of distinct colours — sweeping oranges, pinks, dusty
+      purples, near-blacks in the corners. Your eye can't actually
+      distinguish most of them. Now imagine you're only allowed to keep
+      sixteen colours, and you have to snap every pixel to whichever of
+      those sixteen it most resembles. Pick the sixteen well and the
+      image still looks like a sunset; pick them badly and it looks like
+      paint-by-numbers. K-means is the algorithm that picks them well —
+      automatically, from the image itself.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Strip the image away and start with six dots scattered on a page.
+      We want two groups; that's it. Drop two markers anywhere — call
+      them seeds. Walk to each dot in turn, ask which seed it is closer
+      to, and colour the dot to match. You've made a first guess at the
+      clustering.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Now slide each seed to the average position of the dots wearing
+      its colour — its new centre of gravity. Some dots are suddenly
+      closer to the other seed than the one they're wearing, so
+      reassign them. Recompute the two centres again. Repeat. After a
+      handful of rounds nothing changes — the seeds and the colourings
+      stop moving and the clustering has settled.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      That assign-then-update loop <em>is</em> the whole algorithm.
+      There's no derivative, no learning rate, no gradient. Each
+      iteration does two cheap things — relabel every point, then
+      recompute every centre — and the structure emerges from
+      repetition alone. It's the simplest non-trivial unsupervised
+      method in the toolkit.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      What is the loop actually optimising? Call
+      <MathExpression latex="x_i" /> a data point and
+      <MathExpression latex="\mu_{c(i)}" /> the centre of the cluster
+      it currently belongs to. Then the quantity we drive down is the
+      within-cluster sum of squares
+      <MathExpression latex="J = \sum_i \|x_i - \mu_{c(i)}\|^2" />,
+      sometimes called the <em>inertia</em> — total squared distance
+      from every point to its own centre.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Here is the aha: the loop is coordinate descent on
+      <MathExpression latex="J" />. The assignment step holds the
+      centres fixed and picks the labels that minimise
+      <MathExpression latex="J" /> — each point picks its nearest
+      centre, by definition the smallest contribution. The update step
+      holds the labels fixed and picks the centres that minimise
+      <MathExpression latex="J" /> — the mean is provably the point
+      that minimises sum of squared distances to a set. Neither step
+      can ever increase <MathExpression latex="J" />, so the algorithm
+      always converges.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Converges, yes — but not always to the best clustering. The loop
+      is greedy and gets stuck at whichever local minimum of
+      <MathExpression latex="J" /> the initial seeds happen to fall
+      into. Drop two seeds into the same dense blob and one cluster
+      will starve while the other does all the work.
+      <strong>k-means++</strong> fixes most of this by spreading the
+      seeds out — each new seed is sampled with probability
+      proportional to its squared distance from the closest seed
+      already chosen.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Now snap back to the image. Each pixel is a point in 3D RGB
+      space — red, green, blue all between 0 and 255 — so a photo with
+      thousands of unique colours is just thousands of points in a
+      cube. K-means with <MathExpression latex="K = 16" /> hunts for
+      the sixteen points in that cube whose neighbourhoods cover the
+      colours best, then every pixel is recoloured to its nearest
+      cluster centre. That is the entire compression.
+    </p>
+  </Step>
+  <Step>
+    <p>Try it yourself.</p>
+    <TryThis>
+      Load the <strong>Sunset palette</strong> sample and slide K down
+      to 2. The image collapses to two colours — a warm and a cool —
+      and the soft gradient becomes a hard band. Slide K up to 16 and
+      the bands fade back into a smooth sky. Then flip to
+      <strong>Four-color checkerboard</strong> with K = 4: K-means
+      recovers the exact four originals and the reconstruction is
+      pixel-perfect.
+    </TryThis>
+  </Step>
+  <Step>
+    <p>
+      This assign-then-update structure is more familiar than it looks.
+      The <strong>gradient descent</strong> demo at the top of the page
+      is coordinate descent in disguise once you fix the step size, and
+      the <strong>polynomial regression</strong> demo next door is yet
+      another loop that optimises a sum of squared distances — just
+      with a parameter vector instead of a label per point. The same
+      picture keeps recurring across the course: define an objective,
+      alternate the variables you minimise over, and watch it converge.
+    </p>
+  </Step>
+</Explainer>
+
 <KMeansImageCompression client:visible />
 
 Pick a sample (or upload your own image), then slide **K** between 2 and 32.

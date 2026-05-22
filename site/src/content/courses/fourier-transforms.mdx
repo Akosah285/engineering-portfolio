@@ -192,6 +192,152 @@ Side-by-side time-domain and frequency-domain plots for canonical signals.
 
 Slide one signal past another and trace the running integral of their product.
 
+<Explainer demoTitle="Convolution animation">
+  <Step>
+    <p>
+      Blur a photo, hear an echo in a cave, smooth out a noisy stock chart
+      — under the hood it is the same operation every time. Slide one
+      signal across another and accumulate the overlap as you go. That is
+      convolution. It keeps reappearing because it is the natural way to
+      ask "what does input X look like after I run it through system Y" —
+      whether Y is a lens, a room full of reflective walls, or a moving
+      average over a noisy week of trading. Get comfortable with the
+      picture and suddenly half of signal processing, image processing,
+      and probability theory looks like the same trick wearing different
+      hats.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Start small, by hand. Take the sequence 1, 2, 3, 4, 5 and a
+      three-tap moving average with weights one-third, one-third,
+      one-third. To smooth the middle of the data, average each value
+      with its two neighbours: (1+2+3)/3 = 2, (2+3+4)/3 = 3, (3+4+5)/3 =
+      4. Those three central numbers are the heart of the convolution.
+      Full linear convolution also produces small ramped values at the
+      edges where the kernel only partly overlaps the data, but the
+      central 2, 3, 4 is exactly what you would write down on paper if I
+      simply asked you to smooth the sequence.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Here is the recipe in full. For two discrete signals f and g, the
+      convolution at output index n is
+    </p>
+    <MathExpression
+      latex="(f \ast g)[n] = \sum_{k} f[k]\, g[n-k]"
+      display={true}
+    />
+    <p>
+      Read it as four moves: flip g (the index now runs as g[n-k] instead
+      of g[k]), shift it by n, multiply pointwise against f, and sum. We
+      will call this the flip-shift-multiply-sum recipe. The moving
+      average above followed exactly this recipe — the kernel just
+      happened to be symmetric, so the flip was invisible.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Why the flip? Without it the operation would not commute. With the
+      flip baked into the definition,
+      <MathExpression latex="f \ast g = g \ast f" /> drops out of a single
+      change of variable in the sum. That symmetry matches the intuition
+      we already had: the lens blurring an image is interchangeable with
+      the image being read out by the lens. The flip is the small piece
+      of algebra that makes "input convolved with system" equal to
+      "system convolved with input" — and it is why nobody has to argue
+      about which signal is the kernel.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Push the index from a discrete n to a continuous t and the sum
+      becomes an integral:
+    </p>
+    <MathExpression
+      latex="(f \ast g)(t) = \int_{-\infty}^{\infty} f(\tau)\, g(t - \tau)\, d\tau"
+      display={true}
+    />
+    <p>
+      Same recipe — flip g, slide it by t, multiply pointwise against f,
+      integrate. The visualiser draws exactly this picture. The blue
+      curve sits still, the orange curve slides left to right, the shaded
+      overlap area is the integrand, and the running area traces the
+      output curve underneath as t advances.
+    </p>
+  </Step>
+  <Step>
+    <p>Try it yourself.</p>
+    <TryThis>
+      Load the <strong>Rect ⋆ Rect (triangle)</strong> preset. Two
+      identical box pulses of width 2 slide past each other; their
+      overlap grows linearly as they come together and shrinks linearly
+      as they separate. The output traces a perfect triangle of base 4
+      and height 2. That is the smallest example in which you can read
+      off the next geometric rule by eye.
+    </TryThis>
+  </Step>
+  <Step>
+    <p>
+      Three rules of thumb fall straight out of the picture. Widths add —
+      convolve a width-w signal with a width-v signal and the result has
+      width w + v (the triangle of base 4 from two boxes of width 2 is
+      this rule made visible). Areas multiply — the total area under the
+      convolution equals the area of f times the area of g. And the
+      output at time t is a weighted average of f near t, with weights
+      given by a flipped, shifted copy of g. That last sentence is the
+      entire mental model.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Now the punchline. Take the Fourier transform of both sides of
+      <MathExpression latex="h = f \ast g" /> and the awful sliding
+      integral collapses into pointwise multiplication:
+    </p>
+    <MathExpression
+      latex="\hat{h}(\omega) = \hat{f}(\omega)\,\hat{g}(\omega)"
+      display={true}
+    />
+    <p>
+      In plain English: if you describe both signals as sums of pure
+      tones, the output tone amplitude at every frequency is just (input
+      tone amplitude) × (filter response at that tone). The complicated
+      time-domain integral becomes pointwise multiplication in frequency.
+      This is the single most-used identity in all of signal processing.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Every linear filter is secretly a convolution. A low-pass filter
+      has an impulse response — a small kernel — and applying the filter
+      to your audio is exactly convolving the signal with that kernel.
+      The frequency-domain view is the equaliser slider: multiply the
+      spectrum by a curve that is near 1 at low frequencies and near 0
+      at high. Both views compute the same output sample for sample. The
+      reverb on a vocal track is the singer's voice convolved with the
+      impulse response of the room — sometimes literally recorded with a
+      starter pistol.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      So that is convolution: slide, multiply, sum — and in the frequency
+      domain, just multiply. The next demo, <strong>Audio filter</strong>,
+      lets you hear the theorem in real time as you drag the cutoff
+      frequency; the impulse response changes and the output changes with
+      it. Pair the rect-rect triangle here with the sinc-squared spectrum
+      in <strong>Fourier transform of common signals</strong> and the
+      multiplication-in-frequency rule writes itself. The featured
+      problem <em>Gibbs phenomenon at a square-wave discontinuity</em> is
+      also secretly a convolution story — the partial-sum operator is
+      convolution with the Dirichlet kernel, and the overshoot is what
+      that kernel's side-lobes leave behind.
+    </p>
+  </Step>
+</Explainer>
+
 <ConvolutionVisualizer client:visible />
 
 ## Audio filter — Web Audio biquad

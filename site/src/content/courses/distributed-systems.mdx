@@ -168,6 +168,133 @@ separation.
 Finite-difference solver for heat diffusion along a rod; tune the boundary
 conditions and watch the profile relax.
 
+<Explainer demoTitle="1D heat equation">
+  <Step>
+    <p>
+      You pull a metal rod out of a fire and grab the cool end. The heat
+      doesn't leap to your hand — it crawls along the rod, smoothing out
+      the hot spot a little more every second. Eventually the whole rod
+      settles to one warm temperature. The heat equation is the rule that
+      governs that crawl, and it turns up wherever something diffuses:
+      temperature in a wall, ink in still water, even the price of a stock
+      option.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Forget formulas for a moment. The whole physics is this: heat flows
+      from hot to cold, and the flow is faster when the temperature gap is
+      bigger. Two beads sitting at 100° and 0° pull on each other much
+      harder than two beads at 100° and 99°. So a sharp temperature spike
+      levels out quickly at first and then more slowly as it fades. That
+      is all "Fourier's law" really says — no Greek letters required.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      To put this on a computer, chop the rod into <em>N</em> evenly-spaced
+      beads, each holding a temperature <em>u<sub>i</sub></em>. Every
+      timestep, each interior bead nudges itself toward the average of its
+      two neighbours. If a bead is already sitting at the neighbour
+      average, nothing happens — it is already "in line". If it is hotter
+      than the average it cools; cooler, it warms. That nudge-toward-the-
+      average is the discrete Laplacian, and smoothing — not wave-like
+      propagation — is the only thing the heat equation ever does.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Make it concrete. Take five beads with temperatures
+      (0, 10, 20, 30, 0) and a smoothing strength
+      <MathExpression latex="r = 0.25" />. Focus on bead <em>i</em> = 3,
+      currently at 30. Its neighbours are 20 and 0, so the discrete second
+      derivative is <MathExpression latex="(20 - 2 \cdot 30 + 0) = -40" />
+      and the new value is
+      <MathExpression latex="30 + 0.25 \cdot (-40) = 20" /> — bead 3
+      dropped ten degrees in one step, precisely because it was sticking
+      out way above the local average. Do this for every interior bead in
+      parallel, leave the pinned endpoints alone, and you have advanced
+      one timestep.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Written for any interior bead, the update rule is
+      <MathExpression
+        display
+        latex="u_i^{n+1} = u_i^n + r\,(u_{i+1}^n - 2 u_i^n + u_{i-1}^n)"
+      />
+      where the superscript <em>n</em> labels the timestep and
+      <MathExpression latex="r = \alpha\, dt / dx^2" /> is the smoothing
+      strength per step. The bracketed term is the discrete second
+      derivative — three samples reading off how "bent" the temperature
+      profile is at that point. Concave-down hot peak: the bracket is
+      negative and the bead cools. Concave-up valley: it warms. Curvature
+      drives change here too, exactly as it did for the wave equation, but
+      with a first time derivative rather than a second.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Shrink <em>dx</em> → 0 and <em>dt</em> → 0 and that update rule
+      becomes the continuous heat equation:
+      <MathExpression
+        display
+        latex="\frac{\partial u}{\partial t} = \alpha \, \frac{\partial^2 u}{\partial x^2}"
+      />
+      The constant <MathExpression latex="\alpha" /> (thermal diffusivity)
+      sets how fast smoothing happens — bigger for copper, smaller for
+      wood. Sine-shaped modes are eigenfunctions: feed the rod a clean
+      <MathExpression latex="\sin(m\pi x / L)" /> bump and it decays as
+      <MathExpression latex="\exp(-\alpha (m\pi/L)^2 t)" /> while keeping
+      its shape. Higher modes (more wiggles) decay much faster than the
+      fundamental — the rod forgets fine detail first and broad bumps
+      last.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      There is one trap. The smoothing strength
+      <MathExpression latex="r = \alpha\, dt / dx^2" /> must stay at or
+      below <MathExpression latex="1/2" /> for this explicit forward Euler
+      scheme — that is the CFL condition for diffusion. Step too big and
+      the smoothing overshoots: a bead that ought to drift toward its
+      neighbours' average instead leaps past, then leaps back further next
+      step, and the simulation explodes into ringing negative
+      temperatures inside a few iterations. Halve <em>dx</em> for
+      resolution and you must quarter <em>dt</em> — diffusion is
+      unforgiving that way.
+    </p>
+  </Step>
+  <Step>
+    <p>Try it yourself.</p>
+    <TryThis>
+      Load the <strong>Sine mode 3</strong> preset, then the
+      <strong>Gaussian bump</strong> preset. The mode-3 sine wave keeps
+      its shape and just shrinks — it is an eigenfunction, so only its
+      amplitude decays. The Gaussian bump instead spreads out and
+      flattens, because it is a sum of many sine modes and the wigglier
+      ones die first. By a few hundred steps the bump looks almost
+      identical to the mode-1 sine; every initial condition relaxes
+      toward the lowest mode and then quietly fades away.
+    </TryThis>
+  </Step>
+  <Step>
+    <p>
+      That contrast with the <em>1D wave equation (string)</em> demo just
+      above is the whole point of putting the two side by side. The wave
+      equation has a second time derivative — energy sloshes between
+      potential and kinetic and is preserved, so a pluck rings forever.
+      The heat equation has a first time derivative, so energy leaks out
+      monotonically and the rod relaxes to silence. Same Laplacian on the
+      right-hand side, very different behaviour on the left. The
+      <em>Laplace in a rectangle</em> demo immediately below is what is
+      left when even the time derivative is zero — the steady state the
+      heat equation generalises toward as <em>t</em> → ∞.
+    </p>
+  </Step>
+</Explainer>
+
 <HeatEquationVisualizer client:visible />
 
 ## Laplace in a rectangle

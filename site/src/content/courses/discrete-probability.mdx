@@ -33,6 +33,129 @@ import Step from "../../components/Step.astro";
 import TryThis from "../../components/TryThis.astro";
 import MathExpression from "../../components/demo-kit/MathExpression.astro";
 
+<Explainer demoTitle="Markov Chain Visualizer">
+  <Step>
+    <p>
+      Suppose today is sunny. What's tomorrow? It might be sunny again, it
+      might rain — but here's the assumption that makes the whole machinery
+      work: tomorrow depends only on today, not on whether it rained last
+      Tuesday or stayed sunny all of June. The past doesn't matter once you
+      know where you are <em>right now</em>. That memoryless property is
+      the entire Markov trick, and the surprising payoff is that whole
+      systems of weather, gamblers' bankrolls, and even the web graph fall
+      neatly into the same little bit of algebra.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      So how do you write that down? You list the states (Sun, Rain) and
+      give a transition probability for each ordered pair. From Sun: stay
+      sunny with probability 0.8, switch to rain with 0.2. From Rain: dry
+      out with probability 0.3, stay wet with 0.7. Stack those rows and you
+      have a transition matrix <MathExpression latex="P" /> — each row sums
+      to 1 because <em>something</em> has to happen tomorrow.
+    </p>
+    <MathExpression
+      latex="P = \begin{pmatrix} 0.8 & 0.2 \\ 0.3 & 0.7 \end{pmatrix}"
+      display={true}
+    />
+  </Step>
+  <Step>
+    <p>
+      Now walk one day forward. Today is definitely sunny, so the
+      distribution is <MathExpression latex="\pi_0 = (1, 0)" />. Tomorrow's
+      sun probability is "chance I started in Sun × chance Sun→Sun" plus
+      "chance I started in Rain × chance Rain→Sun", which is
+      <MathExpression latex="1 \cdot 0.8 + 0 \cdot 0.3 = 0.8" />. The rain
+      half works the same way and lands on 0.2. So
+      <MathExpression latex="\pi_1 = (0.8, 0.2)" />. That whole
+      calculation is just the row-vector matrix product
+      <MathExpression latex="\pi_1 = \pi_0 P" />.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Do it again. <MathExpression latex="\pi_2 = \pi_1 P" /> gives
+      <MathExpression latex="(0.8 \cdot 0.8 + 0.2 \cdot 0.3,\; 0.8 \cdot 0.2 + 0.2 \cdot 0.7) = (0.70, 0.30)" />.
+      One more step lands on <MathExpression latex="(0.65, 0.35)" />, then
+      <MathExpression latex="(0.625, 0.375)" />, then
+      <MathExpression latex="(0.6125, 0.3875)" />. The numbers are clearly
+      crawling towards something — and that something is
+      <MathExpression latex="(0.6, 0.4)" />. Sixty percent sun, forty
+      percent rain, forever, regardless of what happens this afternoon.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      That limit is called the <strong>stationary distribution</strong>,
+      written <MathExpression latex="\pi" />. It's the unique mix of states
+      the chain settles into no matter where you started. The defining
+      property is the cleanest equation in the course: applying one more
+      step changes nothing.
+    </p>
+    <MathExpression latex="\pi P = \pi" display={true} />
+    <p>
+      Read literally, that says <MathExpression latex="\pi" /> is a left
+      eigenvector of <MathExpression latex="P" /> with eigenvalue 1. The
+      probabilistic story (long-run occupancy) and the linear-algebra
+      story (special eigenvector) are the same story.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Why does the algebra promise a unique answer? Because for "nice"
+      chains, a theorem (Perron–Frobenius) guarantees exactly one
+      stationary distribution with all-positive entries. "Nice" means two
+      things in plain English: you can get from any state to any other
+      given enough time (no isolated islands), and the chain isn't stuck
+      in a clockwork cycle that revisits states only on multiples of some
+      period. Weather satisfies both — sun and rain are reachable from
+      each other, and the self-loops break any rigid periodicity.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Not every chain mixes like that. Swap to the <strong>Absorbing
+      chain</strong> preset: state Sink has a row of <MathExpression
+      latex="(0, 0, 1)" /> — once you enter, you never leave. There's no
+      unique stationary distribution that forgets the start; everything
+      eventually piles up at the sink with probability 1. Absorbing chains
+      are how you model "gambler goes broke" or "particle reaches the
+      boundary" — the interesting question shifts from "long-run mix" to
+      "how long until I'm absorbed, and from which non-sink state?"
+    </p>
+  </Step>
+  <Step>
+    <p>Try it yourself.</p>
+    <TryThis>
+      Load the <strong>Random walk on 5-node ring</strong> preset and
+      start the chain in state S0. Watch the distribution sweep around the
+      ring for the first few steps, then flatten out — the stationary
+      distribution is uniform <MathExpression latex="(0.2, 0.2, 0.2, 0.2, 0.2)" />
+      by symmetry. Now restart from the uniform distribution: it doesn't
+      move at all. That's what "stationary" literally means — the
+      distribution is a fixed point of one step of the dynamics, even
+      though individual walkers keep wandering.
+    </TryThis>
+  </Step>
+  <Step>
+    <p>
+      So what is this good for? Anywhere you have a system that bounces
+      between states with fixed transition probabilities. The
+      <strong>Gamblers' ruin</strong> demo further down is a Markov chain
+      on bankrolls with two absorbing states (broke, target). And the
+      <strong>PageRank toy</strong> at the bottom of this page is the
+      headline application — it models a random surfer clicking links on
+      the web, and the PageRank of a page is literally its entry in the
+      stationary distribution of that chain. The featured solution
+      <em>"Stationary distribution of a 3-state Markov chain via the
+      eigenvalue 1"</em> works the <MathExpression latex="\pi P = \pi" />
+      arithmetic on a three-state weather model end-to-end; read it next
+      to see the same machinery one dimension up.
+    </p>
+  </Step>
+</Explainer>
+
 <MarkovChainVisualizer client:idle />
 
 ## Reflection

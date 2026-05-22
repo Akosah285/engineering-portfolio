@@ -199,6 +199,124 @@ Elastic, yield, plastic, and necking regions for common engineering materials.
 
 Drag the stress element; watch the Mohr's circle and principal stresses update.
 
+<Explainer demoTitle="Mohr's circle">
+  <Step>
+    <p>
+      Pull a bolt straight up and you know the tensile stress — load over
+      area, end of story. But what is actually happening on a slanted
+      plane cut through the bolt at thirty degrees? Hidden inside the
+      rod is a different combination of normal-and-shear stress on every
+      possible angle, and those combinations are what crack bolts, snap
+      drive shafts, and bring down beams. Mohr's circle is the single
+      picture that shows all of them at once.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Take a concrete stress state at one point in a body:
+      <MathExpression latex="\sigma_x = 80" /> MPa pulling the element
+      rightwards, <MathExpression latex="\sigma_y = 20" /> MPa pulling
+      it upwards, and a shear of <MathExpression latex="\tau_{xy} = 30" />
+      MPa twisting the faces. Three numbers describe the stress
+      completely. We want to know what σ and τ a tiny face would feel
+      if we rotated that element to some other orientation. The
+      brute-force way is to plug angles into the transformation
+      equations. Mohr's trick is to plot, not plug.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Plot the σ-axis horizontally and the τ-axis downwards. The centre
+      of the circle sits at the average normal stress,
+      <MathExpression latex="C = (\sigma_x + \sigma_y)/2 = 50" /> MPa,
+      always on the σ-axis. The radius comes from the half-difference
+      and the shear,
+      <MathExpression latex="R = \sqrt{((\sigma_x - \sigma_y)/2)^2 + \tau_{xy}^2} = \sqrt{30^2 + 30^2} \approx 42.4" />
+      MPa. That single circle, centre (50, 0) and radius 42.4, contains
+      every (σ', τ') pair this point can ever feel — one circle, all
+      orientations.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Mark the x-face at
+      <MathExpression latex="(\sigma_x, \tau_{xy}) = (80, 30)" /> and
+      the y-face at
+      <MathExpression latex="(\sigma_y, -\tau_{xy}) = (20, -30)" />. They
+      sit on opposite ends of a diameter — exactly as they should,
+      because the x-face and the y-face are physically ninety degrees
+      apart on the element. Check it: their midpoint is (50, 0), and
+      each lies 42.4 from that centre. Same circle, drawn from two
+      different starting faces.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Here is the aha. Rotate the physical element by an angle θ, and
+      the corresponding point on the circle walks around the centre by
+      <em>2θ</em>. The diameter stays rigid; it just spins. To read off
+      the stress on any new orientation, find the angle 2θ around the
+      circle and look at the coordinates of that point — those are your
+      σ' and τ'. Doubling the angle is the price you pay for getting a
+      circle instead of an ellipse, and it is a bargain.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Walk the diameter until shear vanishes — that is, until it lies
+      flat on the σ-axis. The two endpoints there are the
+      <em>principal stresses</em>: the orientation where shear is zero
+      and the stress is purely normal, giving the largest and smallest
+      normal stress any face through this point will ever see. For our
+      numbers, <MathExpression latex="\sigma_1 = C + R \approx 92.4" />
+      MPa and <MathExpression latex="\sigma_2 = C - R \approx 7.6" />
+      MPa. The element is physically rotated by half of that 2θ — here
+      about 22.5° — to reach the principal orientation.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Now walk the diameter another ninety degrees around the circle
+      (so 45° on the element) and you arrive at the top and bottom of
+      the circle. Those points have τ equal to the radius itself, so
+      <MathExpression latex="\tau_{\max} = R \approx 42.4" /> MPa, on
+      faces whose normal stress is the centre value, 50 MPa. Maximum
+      shear and pure-normal stress live a quarter-turn apart on the
+      circle, exactly 45° apart on the element — the same 45° you see
+      on the slip lines of a ductile tensile specimen.
+    </p>
+  </Step>
+  <Step>
+    <p>Try it yourself.</p>
+    <TryThis>
+      Load the <strong>Pure shear</strong> preset
+      (<MathExpression latex="\sigma_x = \sigma_y = 0" />,
+      <MathExpression latex="\tau_{xy} = 50" />). The centre collapses
+      to the origin and the radius is 50, so the principal stresses are
+      <MathExpression latex="+50" /> and <MathExpression latex="-50" />
+      MPa — equal tension and compression on faces rotated 45° from the
+      shear faces. That is why a chalk stick twisted in your hands
+      fractures on a clean diagonal: pure torsion creates a tensile
+      principal stress that pulls the brittle fibres apart along the
+      spiral.
+    </TryThis>
+  </Step>
+  <Step>
+    <p>
+      So Mohr's circle is the compact picture of every stress
+      orientation at one point. The very next demo, the
+      <strong>3D stress state visualizer</strong>, generalises the
+      same trick to three principal stresses and three circles instead
+      of one. Then <strong>failure criteria</strong> takes those
+      principal stresses and asks the next question — at what
+      combination does the material actually yield? — and the featured
+      problem <em>"Maximum shear in a thin-walled pressure vessel — via
+      Mohr's circle"</em> walks an end-to-end design calculation along
+      exactly that path.
+    </p>
+  </Step>
+</Explainer>
+
 <MohrCircleVisualizer client:visible />
 
 ## 3D stress state visualizer

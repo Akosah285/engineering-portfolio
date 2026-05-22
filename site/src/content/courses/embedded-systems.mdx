@@ -191,6 +191,125 @@ Nyquist.
 Tune duty cycle and frequency; watch the average-voltage approximation drive a
 load.
 
+<Explainer demoTitle="Pulse-width modulation">
+  <Step>
+    <p>
+      You want to dim an LED, but your microcontroller pin can only
+      output two voltages — fully on at 5 V or fully off at 0 V. There
+      is no "2.5 V" setting in the silicon, no analogue dial, no
+      in-between. So how do you make the LED look half as bright? The
+      answer is one of the most useful tricks in embedded systems, and
+      it shows up every time you set a servo angle, control a fan, or
+      fade an indicator.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      The trick is to cheat with time. Instead of trying to hold the
+      pin at 2.5 V, flick it between 5 V and 0 V very quickly, spending
+      half of every tick at 5 V and half at 0 V. Your eye cannot follow
+      individual flickers above roughly 100 per second, so it sees the
+      time-average instead. The LED looks as if it were sitting at
+      half-brightness — even though the actual voltage is always either
+      fully on or fully off.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Load the <strong>Motor</strong> preset: 5 V high, 0 V low,
+      switching 1000 times a second, on for half of each cycle. The
+      average voltage the LED feels is just
+      <MathExpression latex="5\,\text{V} \times 0.5 = 2.5\,\text{V}" />.
+      Drop the on-fraction to 0.25 and the average becomes
+      <MathExpression latex="5\,\text{V} \times 0.25 = 1.25\,\text{V}" /> —
+      a dimmer LED, with no analogue circuitry anywhere. That
+      on-fraction is the <strong>duty</strong>: the fraction of each
+      cycle the pin is ON.
+    </p>
+    <MathExpression
+      latex="V_\text{avg} = V_\text{low} + D \cdot (V_\text{high} - V_\text{low})"
+      display={true}
+    />
+  </Step>
+  <Step>
+    <p>
+      The whole thing only works because the load has <em>inertia</em>.
+      An LED's brightness, a motor's shaft speed, a fan's airflow —
+      none of them can change as fast as the pin can flip. They smooth
+      out the rapid pulses into a steady average, the same way your ear
+      hears a tone instead of individual speaker-cone wiggles. Switch
+      faster than the load can react, and physics does the averaging
+      for you.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      How many on/off pulses per second do you need? It depends on the
+      load. An LED needs ~100 Hz or above so the eye stops seeing
+      flicker. A small DC motor likes a few kHz, fast enough that the
+      motor's coil-inductance averages the current. A servo wants
+      exactly 50 Hz — its electronics decode the on-time itself, not
+      the average voltage. Go too slow and the load follows each pulse;
+      go too fast and the switching transistor wastes energy in every
+      transition.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      For a brushed DC motor, torque is proportional to current, and
+      current follows the average voltage across the coils. So 50% duty
+      at 12 V gives roughly the same torque as a constant 6 V supply —
+      but the H-bridge driver only ever sees ON or OFF, which is what a
+      switching transistor is actually good at. That is why every cheap
+      cordless drill, RC car, and laptop fan controls speed by PWM
+      rather than by an analogue dimmer.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Resistive heaters break the average-voltage rule. A heater
+      dissipates power as <MathExpression latex="V^2/R" />, which is
+      non-linear in V, so you have to use the
+      <strong>RMS</strong> (root-mean-square) voltage instead. For the
+      <strong>Heater</strong> preset (12 V, 20% duty) the average is
+      only 2.4 V, but the RMS works out to about 5.4 V — and it is the
+      RMS that sets the heat output. Same waveform, two different
+      "effective" voltages, picked by what the load cares about.
+    </p>
+    <MathExpression
+      latex="V_\text{rms} = \sqrt{D \cdot V_\text{high}^2 + (1 - D) \cdot V_\text{low}^2}"
+      display={true}
+    />
+  </Step>
+  <Step>
+    <p>Try it yourself.</p>
+    <TryThis>
+      Load the <strong>Servo</strong> preset (50 Hz, 10% duty). Now
+      drag the duty up to 20%. The average voltage doubles from 0.5 V
+      to 1.0 V — but a real servo would swing its arm from one limit
+      to the other. Servos do not care about the average; their
+      internal electronics decode the on-time directly (1 ms pulse =
+      full left, 2 ms = full right). Same PWM waveform, completely
+      different interpretation depending on what is wired to the pin.
+    </TryThis>
+  </Step>
+  <Step>
+    <p>
+      So that is PWM: a fake analogue output built from fast digital
+      pulses, with the load's own inertia doing the smoothing. The
+      pattern recurs across the rest of the course — the
+      <strong>solar tracker</strong>'s servo is driven by exactly the
+      50 Hz pulse train above, the <strong>rpm</strong> demo measures
+      the output of a PWM-driven motor by counting encoder edges, and
+      the <strong>interrupt vs polling</strong> demo is the same idea
+      in reverse: reacting to a pulse train instead of generating one.
+      Paired with the <strong>adc sampling</strong> visualiser, which
+      turns analogue voltages back into digital numbers, PWM closes the
+      loop between digital pin and physical world.
+    </p>
+  </Step>
+</Explainer>
+
 <PwmVisualizer client:visible />
 
 ## I²C protocol visualizer

@@ -181,6 +181,130 @@ inertia.
 
 Compose poles and zeros; live magnitude and phase Bode plots.
 
+<Explainer demoTitle="Bode plot">
+  <Step>
+    <p>
+      You turn the bass knob on a stereo and the low notes boost. Turn
+      the treble knob and the highs come up. A Bode plot is the
+      picture of exactly what every knob does — how much each
+      frequency is amplified, and how much it is delayed. Every audio
+      filter, every control loop, every mechanical resonance has one,
+      and once you can read it you can tune any of them.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Pick the simplest example: a low-pass filter with a single pole
+      at <MathExpression latex="\omega = 10" /> rad/s, transfer
+      function <MathExpression latex="H(s) = 1/(1 + s/10)" />. Forget
+      the algebra for a moment — we will plug three frequencies in
+      and watch what comes out. One well below the corner, one at the
+      corner, one well above it. Those three points already pin down
+      the shape of the entire curve.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      At <MathExpression latex="\omega = 1" />, well below the corner,
+      <MathExpression latex="|H| \approx 1" /> — the input passes
+      through unchanged, 0 dB. At <MathExpression latex="\omega = 10" />,
+      right at the corner, <MathExpression latex="|H| = 1/\sqrt{2} \approx 0.707" />,
+      or −3 dB. At <MathExpression latex="\omega = 100" />, a decade
+      above, <MathExpression latex="|H| \approx 0.1" />, which is
+      −20 dB. Push another decade to
+      <MathExpression latex="\omega = 1000" /> and you get −40 dB.
+      The roll-off settles into a clean 20 dB per decade — every
+      factor of ten in frequency, the output shrinks by a factor of
+      ten.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Here is the aha. On log-log axes the magnitude of
+      <MathExpression latex="1/(1 + s/\omega_c)" /> becomes flat at
+      0 dB below the corner and a straight line of slope
+      −20 dB/decade above it — two asymptotes joined by a 3 dB hiccup
+      right at the corner. Stack more poles or add zeros and you just
+      stack more straight-line segments on top of each other. The
+      Bode plot turns multiplying complex transfer functions into
+      adding piecewise-linear pieces, which is why generations of
+      engineers sketched them by hand on graph paper without a
+      calculator.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Magnitude is only half the story. The phase plot tracks how
+      much the output lags behind the input at each frequency. Our
+      low-pass starts at 0° lag well below the corner, hits −45° right
+      at <MathExpression latex="\omega_c" />, and asymptotes to −90°
+      far above it. Each extra pole adds another 90° of lag in the
+      same staircase pattern, while zeros pull phase the other way.
+      That accumulated lag is what eventually bites you in a feedback
+      loop.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      The general recipe: every pole subtracts 20 dB/decade and 90°
+      of phase past its corner; every zero adds the same back. A lead
+      compensator <MathExpression latex="(s+1)/(s+10)" /> plants a
+      zero at <MathExpression latex="\omega = 1" /> and a pole at
+      <MathExpression latex="\omega = 10" />, so between those
+      frequencies the magnitude climbs at +20 dB/decade and the phase
+      bumps positive — a phase boost exactly where the loop needs
+      one. A lag compensator does the mirror image. Once you see the
+      asymptotes, you can design either by hand.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Two terms you will meet immediately: phase margin and gain
+      margin. Phase margin is just how much extra phase lag the loop
+      can absorb before it tips into oscillation, measured at the
+      frequency where the open-loop magnitude crosses 0 dB. Gain
+      margin is the mirror — how much extra gain before the same
+      thing — measured where the phase hits −180°. A healthy design
+      wants roughly 30°–60° of phase margin and 6–12 dB of gain
+      margin, and the Bode plot makes both numbers something you
+      literally read off the axes.
+    </p>
+  </Step>
+  <Step>
+    <p>Try it yourself.</p>
+    <TryThis>
+      Load the <strong>Lead compensator</strong> preset. Between
+      <MathExpression latex="\omega = 1" /> and
+      <MathExpression latex="\omega = 10" /> the magnitude climbs at
+      +20 dB/decade and the phase bulges up by nearly +55° — a phase
+      boost you would drop into a sluggish loop to stabilise it. Now
+      switch to the <strong>Notch filter</strong> preset: a deep
+      magnitude dip at <MathExpression latex="\omega = 5" /> with a
+      sharp ±90° phase swing through the centre. Two completely
+      different jobs — boosting phase to stabilise a loop versus
+      killing a single resonance — built from the same pole-zero
+      language.
+    </TryThis>
+  </Step>
+  <Step>
+    <p>
+      So that is the Bode plot: poles add lag and shrink high
+      frequencies, zeros add lead and boost them, and log-log axes
+      make the whole thing a sketch instead of a calculation. Paired
+      with the <strong>PID controller</strong> demo above, this is
+      exactly how you tune those gains in practice — plot the loop's
+      open-loop response, slide <MathExpression latex="K_p" /> until
+      the 0 dB crossover lands where you want, then check that you
+      still have 45° of phase margin. The featured solution
+      <em>"Bode plot of a first-order low-pass — break frequency and
+      asymptotes"</em> below walks the same first-order example
+      through the asymptote arithmetic, so the −20 dB/decade and
+      −45°-at-corner numbers you just played with become things you
+      can derive on paper.
+    </p>
+  </Step>
+</Explainer>
+
 <BodePlotVisualizer client:visible />
 
 ## Step position control

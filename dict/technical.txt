@@ -24,6 +24,7 @@ biot
 biot-savart
 bitstream
 bode
+boldsymbol
 browsable
 bursty
 cand
@@ -42,6 +43,7 @@ colormap
 colormaps
 colour
 colouring
+colourings
 colours
 combinational
 combinationally
@@ -105,6 +107,7 @@ endgenerate
 endif
 endmodule
 endprocess
+equaliser
 equispaced
 erdos
 erdős
@@ -134,6 +137,7 @@ fourier
 freq
 freqs
 friedrichs
+frobenius
 frontmatter
 ftcoefs
 gaussian
@@ -206,6 +210,7 @@ keyup
 kiwi
 kmeans
 korean
+krylov
 laggard
 lambda
 lambdas
@@ -226,6 +231,7 @@ linearisation
 lineterm
 linkable
 linkages
+liouville
 lipschitz
 lipsync
 logspace
@@ -247,6 +253,7 @@ markovian
 materialises
 mathbb
 mathbf
+mathcal
 mathrm
 matplotlib
 mavg
@@ -256,18 +263,22 @@ mdx
 mealy
 mechatronics
 memorises
+memorising
+memoryless
 microcontroller
 microcontrollers
 microformats
 microservice
 microservices
 midheight
+midplane
 midspan
 millimetres
 millis
 minimisation
 minimise
 minimiser
+minimises
 minimising
 mins
 minterm
@@ -297,6 +308,9 @@ naïvely
 namespacing
 nand
 neighbour
+neighbourhood
+neighbourhoods
+neighbouring
 neighbours
 nfa
 nfas
@@ -323,7 +337,10 @@ openapi
 openml
 opentype
 optimisation
+optimise
+optimises
 optimising
+organise
 overcorrecting
 overfit
 overscan
@@ -352,6 +369,7 @@ plancherel
 playbook
 playbooks
 playwright
+pmatrix
 pointwise
 poisson
 polya
@@ -362,6 +380,7 @@ postbuild
 posterised
 postfix
 posthog
+prefactor
 prefetch
 prefetched
 prefetching
@@ -402,11 +421,13 @@ ratelimited
 ratelimits
 rcrl
 rdbu
+realising
 realtime
 recognisable
 recognise
 recognised
 recognising
+recoloured
 regs
 regularisation
 regularised
@@ -420,6 +441,7 @@ repr
 requestanimationframe
 restyling
 retina
+reweight
 rfc
 rl
 rlc
@@ -488,11 +510,13 @@ stabilise
 starlight
 stoplist
 storybook
+strang
 stringified
 stringify
 strncmp
 struct
 structs
+sturm
 stylelint
 stylised
 subarray
@@ -525,6 +549,7 @@ tanh
 tcp
 tctx
 techtags
+teleporting
 testid
 threejs
 thresholding
@@ -631,6 +656,7 @@ visualisation
 visualise
 visualised
 visualiser
+visualisers
 visualises
 visualizers
 vitest
