@@ -1,0 +1,119 @@
+---
+/**
+ * <Explainer> — collapsible Khan-Academy-style step-by-step walkthrough
+ * placed directly under a demo's <Visualizer />.
+ *
+ * Authoring shape (locked in design grill Q9, Q10, Q11, Q12):
+ *
+ *   <Explainer demoTitle="Bisection method">
+ *     <Step>
+ *       <p>Hook: a single question worth answering. No math, no TryThis.</p>
+ *     </Step>
+ *     <Step>
+ *       <p>Body paragraph (3–5 sentences, cap 150 words).</p>
+ *       <MathExpression latex="..." />
+ *       <TryThis>Concrete instruction tied to the demo above.</TryThis>
+ *     </Step>
+ *     ...
+ *     <Step>
+ *       <p>Connect: references another demo on the site by title, or one
+ *          of the course's Featured Problems by title.</p>
+ *     </Step>
+ *   </Explainer>
+ *
+ * Ships closed by default. Native <details>/<summary> = zero JS, accessible.
+ * Auto-numbers <Step> children via the <ol> the slot is wrapped in.
+ *
+ * Contract enforced by site/src/content/__tests__/explainers.test.ts.
+ */
+
+interface Props {
+  /**
+   * Plain-text name of the demo this explainer walks through.
+   * Used in the accordion summary so readers know what they're opening.
+   */
+  demoTitle: string;
+}
+
+const { demoTitle } = Astro.props;
+---
+
+<details
+  class="explainer"
+  aria-label={`Walkthrough for ${demoTitle}`}
+>
+  <summary class="explainer__summary">
+    <span class="explainer__cta">Walk me through this step by step</span>
+    <span class="explainer__chevron" aria-hidden="true">↓</span>
+  </summary>
+  <ol class="explainer__steps">
+    <slot />
+  </ol>
+</details>
+
+<style>
+  .explainer {
+    margin: 1.25rem 0 2rem;
+    border: 1px solid color-mix(in srgb, var(--color-accent) 25%, var(--color-text-muted));
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--color-accent) 2%, var(--color-surface));
+  }
+  .explainer[open] {
+    background: color-mix(in srgb, var(--color-accent) 5%, var(--color-surface));
+  }
+  .explainer__summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.75rem 1.25rem;
+    cursor: pointer;
+    list-style: none;
+    font-family: "Inter Variable", sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--color-accent);
+    user-select: none;
+  }
+  .explainer__summary::-webkit-details-marker {
+    display: none;
+  }
+  .explainer__summary:hover {
+    background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+  }
+  .explainer__summary:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: -2px;
+  }
+  .explainer__chevron {
+    transition: transform 200ms ease;
+    display: inline-block;
+  }
+  .explainer[open] .explainer__chevron {
+    transform: rotate(180deg);
+  }
+  .explainer__steps {
+    margin: 0;
+    padding: 0.5rem 1.5rem 1.5rem 3rem;
+    list-style: decimal;
+    color: var(--color-text);
+    font-family: "Source Serif 4 Variable", Georgia, serif;
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+  .explainer__steps :global(li.explainer__step) {
+    margin: 1.25rem 0;
+    padding-left: 0.5rem;
+  }
+  .explainer__steps :global(li.explainer__step::marker) {
+    color: var(--color-accent);
+    font-family: "Inter Variable", sans-serif;
+    font-weight: 600;
+  }
+  .explainer__steps :global(li.explainer__step > p) {
+    margin: 0 0 0.75rem;
+  }
+  .explainer__steps :global(li.explainer__step > p:last-child) {
+    margin-bottom: 0;
+  }
+</style>

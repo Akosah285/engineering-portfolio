@@ -1,0 +1,20 @@
+---
+/**
+ * <Step> — one numbered beat inside an <Explainer>.
+ *
+ * Auto-numbered via the parent <ol class="explainer__steps">. Authors
+ * never type "1.", "2." etc. — re-ordering steps is safe.
+ *
+ * Per the contract (explainers.test.ts):
+ *   - every step has at least one <p> paragraph
+ *   - no step's paragraph text exceeds 150 words
+ *   - the first step contains no <MathExpression> and no <TryThis>
+ *     (it is the hook)
+ *   - the last step contains at least one cross-reference (another
+ *     demo title or Featured Problem title from the same course)
+ */
+---
+
+<li class="explainer__step">
+  <slot />
+</li>
