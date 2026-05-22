@@ -252,6 +252,55 @@ import MathExpression from "../../components/demo-kit/MathExpression.astro";
   </p>
 </FeaturedProblem>
 
+<FeaturedProblem
+  kind="Featured Solution"
+  title="Method of images — a point charge above a grounded conducting plane"
+  attribution="Adapted from Dartmouth ENGS 23, WI20."
+>
+  <p>
+    A point charge <MathExpression latex="+q" /> sits a distance
+    <MathExpression latex="d" /> above an infinite grounded
+    conducting plane at <MathExpression latex="z = 0" />. Find the
+    electrostatic potential in the upper half-space, the induced
+    surface charge on the conductor, and the force pulling the real
+    charge towards the plane. Solving Laplace's equation directly with
+    the boundary condition
+    <MathExpression latex="\Phi(x, y, 0) = 0" /> is painful. Solving it
+    by the <em>method of images</em> is two lines.
+  </p>
+  <p>
+    Replace the conductor with a fictitious image charge
+    <MathExpression latex="-q" /> at <MathExpression latex="(0, 0, -d)" />,
+    in the empty half-space below. The superposition of real and image
+    potentials,
+  </p>
+  <MathExpression
+    latex="\Phi(x, y, z) = \frac{q}{4\pi\varepsilon_0}\left[\frac{1}{\sqrt{x^2 + y^2 + (z-d)^2}} - \frac{1}{\sqrt{x^2 + y^2 + (z+d)^2}}\right]"
+    display={true}
+  />
+  <p>
+    is identically zero on <MathExpression latex="z = 0" />, satisfies
+    Laplace's equation everywhere in <MathExpression latex="z > 0" />
+    (the only singularity is the real charge), and matches the
+    physical configuration at infinity. By the uniqueness theorem for
+    Laplace's equation with Dirichlet boundary data, <em>this is the
+    answer</em>. The induced surface charge follows from
+    <MathExpression latex="\sigma = -\varepsilon_0 \, \partial \Phi / \partial z|_{z=0} = -q d / [2\pi (r^2 + d^2)^{3/2}]" />,
+    which integrates to a total of <MathExpression latex="-q" /> on
+    the plane.
+  </p>
+  <p>
+    The force on the real charge is the force exerted by the image
+    charge alone (the conductor is just a mathematical fiction):
+    <MathExpression latex="F = -q^2 / (16 \pi \varepsilon_0 d^2)" />,
+    attractive, falling off as <MathExpression latex="1/d^2" /> as if
+    the charge were attracted by a single mirror partner. The wave-
+    and field-visualisers on this page run the same uniqueness logic
+    in motion — replace a boundary with the right virtual source, and
+    the messy PDE collapses into a free-space superposition.
+  </p>
+</FeaturedProblem>
+
 ## What's coming
 
 The author's written reflection lands alongside the v7 interview. The demos
