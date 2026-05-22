@@ -25,6 +25,141 @@ import SensorFusionVisualizer from "../../components/demos/mechatronics/sensor-f
 import { StateMachineVisualizer } from "../../components/demos/mechatronics/state-machine/StateMachineVisualizer";
 import StepPositionVisualizer from "../../components/demos/mechatronics/step-position/StepPositionVisualizer";
 import { TwoLinkIkVisualizer } from "../../components/demos/mechatronics/two-link-ik/TwoLinkIkVisualizer";
+import Explainer from "../../components/Explainer.astro";
+import Step from "../../components/Step.astro";
+import TryThis from "../../components/TryThis.astro";
+import MathExpression from "../../components/demo-kit/MathExpression.astro";
+
+<Explainer demoTitle="PID controller">
+  <Step>
+    <p>
+      Picture cruise control on a hill. You set 60 mph, the road tilts
+      up, and the car slows to 55. Something has to notice that gap and
+      push the throttle harder — and back it off again before you
+      overshoot 60 down the far side. PID is the three-line rule a
+      controller follows to do that smoothly, and the same rule shows
+      up in a shower thermostat, a drone holding altitude, and a 3D
+      printer keeping its hot end at 210 °C.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Everything starts with one number: the <em>error</em>. That is
+      just <em>where you want to be</em> minus <em>where you are</em>.
+      If the setpoint is 60 and you are at 55, the error is +5. If you
+      overshoot to 62, the error is −2. The controller's only job each
+      tick is to look at the error and decide how hard to push the
+      actuator. Everything else is bookkeeping on top of that.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      The first idea is the obvious one: push proportional to how wrong
+      you are right now. That is the <em>P term</em>:
+      <MathExpression latex="u_P = K_p \cdot e" />. With
+      <MathExpression latex="K_p = 2" /> and an error of 0.5, you
+      command an output of 1.0. Bigger error, harder push. Tiny error,
+      tiny push. It is the same instinct as easing the steering wheel
+      proportional to how far off the lane you are.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Load the <strong>P only (offset)</strong> preset and watch what
+      goes wrong. The output rises, the plant catches up, the error
+      shrinks — and then it parks slightly below the setpoint and
+      stays there. The push needed to <em>hold</em> against the hill is
+      non-zero, but P only pushes when there is error, so it settles
+      at whatever small error produces exactly the holding push it
+      needs. That stubborn gap is called <em>steady-state offset</em>.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      The fix is to remember. The <em>I term</em> keeps a running total
+      of every error you have seen, scaled by how long you saw it:
+      <MathExpression latex="u_I = K_i \int e \, dt" />. If the error
+      sits at +0.1 for a full second with
+      <MathExpression latex="K_i = 1" />, the integral grows by 0.1 and
+      adds 0.1 to the command. As long as <em>any</em> error remains,
+      the integral keeps creeping up and pushing harder, until the
+      error is genuinely zero.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Switch to <strong>PI (no offset, oscillates)</strong>. The offset
+      vanishes — but the trace ripples up and down through the
+      setpoint before settling. Memory is a double-edged sword: by the
+      time the plant reaches the target, the integral has already
+      built up enough push to sail past it, and now it has to unwind
+      the other way. That is the I term overcorrecting, and it is why
+      pure PI rings.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      The <em>D term</em> is the brake. It looks at how fast the error
+      is changing — <MathExpression latex="u_D = K_d \cdot de/dt" /> —
+      and pushes <em>against</em> rapid change. If the error was 0.5
+      one tick ago and is 0.3 now (with
+      <MathExpression latex="dt = 0.1" /> and
+      <MathExpression latex="K_d = 0.5" />), then
+      <MathExpression latex="de/dt = -2" /> and the D term contributes
+      −1. You are closing the gap fast, so D quietly says "ease off."
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Load <strong>Tuned PID</strong>:
+      <MathExpression latex="K_p = 2,\ K_i = 1,\ K_d = 0.5" />. P
+      drives the bulk of the response, I erases the leftover offset, D
+      damps the overshoot before it happens. The trace climbs to the
+      setpoint, kisses it, and stays. That is the whole recipe:
+      <MathExpression latex="u(t) = K_p e + K_i \int e \, dt + K_d \, de/dt" />,
+      three terms each fixing what the previous one cannot.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      One more failure mode worth seeing by hand. Suppose the actuator
+      saturates — the throttle is already at 100% but the integral
+      keeps accumulating error. When you finally reach the setpoint,
+      the integral is enormous and refuses to let go, so you overshoot
+      badly while it unwinds. That is <em>integral wind-up</em>. The
+      fix in this demo is to freeze the integral whenever the output
+      hits its clamp, so memory only grows while the controller still
+      has authority to act.
+    </p>
+  </Step>
+  <Step>
+    <p>Try it yourself.</p>
+    <TryThis>
+      Load <strong>Aggressive (overshoots)</strong>
+      (<MathExpression latex="K_p = 5,\ K_i = 3,\ K_d = 0" />) and
+      watch the trace launch past the setpoint and ring. Now nudge
+      <MathExpression latex="K_d" /> up from zero in small steps. Each
+      bump of derivative gain trims a little more overshoot, until the
+      response settles cleanly. That is the tuning loop every controls
+      engineer runs in their head: more P for speed, more I to erase
+      offset, more D to tame the ringing they just bought.
+    </TryThis>
+  </Step>
+  <Step>
+    <p>
+      So that is PID: one rule that turns "where am I vs where do I
+      want to be" into a smooth push on an actuator. The very next
+      demo, the <strong>DC motor model</strong>, is the plant a PID
+      loop most often drives — paired with this controller, you can
+      see how the motor's time constant sets the ceiling on how
+      aggressively you can tune. The <em>"Closed-loop pole placement
+      for a PI-controlled second-order plant"</em> featured solution
+      then generalises the same intuition into pole placement: when
+      you know the plant, you can solve for the gains instead of
+      tuning by feel.
+    </p>
+  </Step>
+</Explainer>
 
 <PidControllerVisualizer client:idle />
 
@@ -83,7 +218,6 @@ Step through the robot's behaviour FSM transitions, lifted from
 ## Featured problems
 
 import FeaturedProblem from "../../components/FeaturedProblem.astro";
-import MathExpression from "../../components/demo-kit/MathExpression.astro";
 
 <FeaturedProblem
   kind="Featured Solution"

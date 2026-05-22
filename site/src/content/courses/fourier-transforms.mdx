@@ -27,6 +27,146 @@ import DomainColoringVisualizer from "../../components/demos/fourier-transforms/
 import { FourierSeriesVisualizer } from "../../components/demos/fourier-transforms/fourier-series/FourierSeriesVisualizer";
 import { FtSignalsVisualizer } from "../../components/demos/fourier-transforms/ft-signals/FtSignalsVisualizer";
 import ResidueHelperVisualizer from "../../components/demos/fourier-transforms/residue-helper/ResidueHelperVisualizer";
+import Explainer from "../../components/Explainer.astro";
+import Step from "../../components/Step.astro";
+import TryThis from "../../components/TryThis.astro";
+import MathExpression from "../../components/demo-kit/MathExpression.astro";
+import FeaturedProblem from "../../components/FeaturedProblem.astro";
+
+<Explainer demoTitle="Epicycle drawing">
+  <Step>
+    <p>
+      You've seen this trick before, even if you didn't know its name. A
+      Spirograph is a small gear rolling inside a bigger one, with a pen
+      sitting on the small gear that traces an intricate flower-shaped
+      curve. Astronomers from Ptolemy onwards modelled the planets as
+      circles rolling on circles — "epicycles" — to fit the wandering
+      paths they saw in the night sky. The viral video of Homer Simpson's
+      outline drawn by a chain of rotating arms is the same recipe. This
+      demo runs that recipe backwards: hand it any closed shape and it
+      works out which arms you need.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      The claim is bold: any closed planar curve — heart, square,
+      signature, cartoon outline — can be traced by stacking rotating
+      arms. One arm spins at one revolution per cycle. The next is
+      mounted on the tip of the first and spins at two revolutions, the
+      next at three, and so on (plus the same set spinning backwards).
+      Pick the right length and starting angle for each arm and their
+      combined tip draws your shape exactly. The slider labelled
+      <em>Num terms</em> is how many arms you let the chain use.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Treat the canvas as the complex plane, so a point on the curve is
+      <MathExpression latex="z = x + iy" />. The recipe is the Fourier
+      series of a closed curve:
+    </p>
+    <MathExpression
+      latex="z(t) = \sum_{k} c_k\, e^{i\, 2\pi k t}"
+      display={true}
+    />
+    <p>
+      Each term <MathExpression latex="c_k e^{i\, 2\pi k t}" /> is exactly
+      one rotating arm: its length is <MathExpression latex="|c_k|" />,
+      its starting angle is <MathExpression latex="\arg c_k" />, and the
+      integer <em>k</em> says how many turns it makes per loop. Adding
+      the terms is tip-to-tail vector addition — the rotating chain you
+      watch on the canvas.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Start with the simplest preset: load <strong>Circle</strong> and
+      pull <em>Num terms</em> down to 1. The shape is already a pure
+      rotation, so the analysis puts everything in
+      <MathExpression latex="c_1" /> and nothing anywhere else. One arm
+      of length 1 spinning once per cycle traces the circle exactly.
+      Push <em>Num terms</em> back up and the extra arms have amplitude
+      zero, so they sit invisibly at the joint — no approximation, no
+      leftover wiggle.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Now load <strong>Heart</strong>. The visualiser doesn't see your
+      curve as a formula — it samples 128 evenly-spaced points along it,
+      one per parameter
+      <MathExpression latex="t \in \{0/128, 1/128, \ldots, 127/128\}" />.
+      Those 128 complex samples go into a discrete Fourier transform,
+      which returns 128 complex coefficients <MathExpression latex="c_k" />.
+      Each one is a length and a starting angle for an arm at integer
+      frequency <em>k</em>. Crank the <em>Sample points</em> slider up
+      and you get more frequencies to choose from.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Out of 128 coefficients, the heart's energy lives in just a
+      handful of low frequencies. The demo sorts them by
+      <MathExpression latex="|c_k|" /> — biggest arm first — and the
+      largest dozen already give a recognisable heart. With 1 arm the
+      tip traces a circle. With 4 it's a lumpy oval. By 12 it's clearly
+      a heart, and by 24 the wobble is gone. Each new arm is a smaller
+      correction sitting on top of the previous fit.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Why does the transform recover the right arm lengths? Because the
+      complex exponentials are orthogonal: averaging
+      <MathExpression latex="e^{i\, 2\pi j t}\, \overline{e^{i\, 2\pi k t}}" />
+      over one full cycle gives zero unless <MathExpression latex="j = k" />,
+      and 1 when they match. So multiplying your samples by
+      <MathExpression latex="e^{-i\, 2\pi k t}" /> and averaging picks out
+      only the <MathExpression latex="c_k" /> component — every other arm
+      cancels itself out in the integral. That is the entire DFT,
+      summarised in one orthogonality identity.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      You'll notice the chain uses both positive and negative
+      frequencies. A positive-<em>k</em> arm spins anti-clockwise; a
+      negative-<em>k</em> arm spins clockwise. You need both because a
+      real-valued curve forces a symmetry on the coefficients,
+      <MathExpression latex="c_{-k} = \overline{c_k}" />, and the
+      imaginary parts of the two paired arms cancel only when the
+      clockwise twin is present. Drop the negative-frequency arms and
+      the heart tilts off into a spiral.
+    </p>
+  </Step>
+  <Step>
+    <p>Try it yourself.</p>
+    <TryThis>
+      Load the <strong>Square wave</strong> preset and slide
+      <em>Num terms</em> from 1 up to 32. The straight edges fall into
+      place with just a few arms, but each corner is a discontinuity in
+      the derivative that needs many high-frequency arms to sharpen.
+      Watch the residual wobble near each corner refuse to flatten
+      cleanly — that overshoot is the same Gibbs phenomenon analysed in
+      the featured problem
+      <em>"Gibbs phenomenon at a square-wave discontinuity"</em> below,
+      drawn on a closed loop instead of a flat line.
+    </TryThis>
+  </Step>
+  <Step>
+    <p>
+      This is the same idea as the <strong>Fourier series builder</strong>
+      below, rotated into the complex plane: real sines and cosines
+      become complex exponentials, and "sum of harmonics" becomes "chain
+      of rotating arms." The two demos are paired — one stacks harmonics
+      vertically against a waveform, the other stacks them tip-to-tail
+      around the origin. The convolution animation and the FT-of-signals
+      demo then extend the same machinery from periodic loops to
+      non-periodic signals, which is where the featured problems pick
+      the story up.
+    </p>
+  </Step>
+</Explainer>
 
 <EpicycleVisualizer client:idle />
 
@@ -83,9 +223,6 @@ integral.
 <ResidueHelperVisualizer client:visible />
 
 ## Featured problems
-
-import FeaturedProblem from "../../components/FeaturedProblem.astro";
-import MathExpression from "../../components/demo-kit/MathExpression.astro";
 
 <FeaturedProblem
   kind="Featured Solution"

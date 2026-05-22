@@ -4,6 +4,8 @@ adc
 aio
 alu
 aluminium
+analysed
+arctan
 arduino
 astar
 astro
@@ -20,6 +22,7 @@ binom
 biome
 biot
 biot-savart
+bitstream
 bode
 browsable
 bursty
@@ -41,6 +44,7 @@ colour
 colouring
 colours
 combinational
+combinationally
 combinator
 combinatorial
 combinatorics
@@ -73,6 +77,7 @@ devicemotion
 dfa
 dft
 dfts
+diagonalise
 discretised
 discretising
 dom
@@ -81,6 +86,7 @@ dtype
 dtypes
 eeprom
 eigen
+eigenbasis
 eigenfunction
 eigenfunctions
 eigenpair
@@ -108,6 +114,7 @@ executescript
 exemplar
 exemplars
 exhaustive-dep
+exponentials
 exponentiated
 factorisation
 fdraw
@@ -118,6 +125,7 @@ filterable
 fixmes
 fixture
 fixtures
+flexural
 fontset
 fontsource
 fonttype
@@ -125,11 +133,13 @@ formfactor
 fourier
 freq
 freqs
-Friedrichs
+friedrichs
 frontmatter
 ftcoefs
 gaussian
 generalise
+generalised
+generalises
 ghdl
 gibbs
 gid
@@ -162,12 +172,16 @@ idl
 idr
 ietf
 implicant
+implicants
 imu
 imus
 inequalities
+infty
 initialisation
 initialise
 inputmode
+internalise
+internalising
 intl
 intnl
 ioctl
@@ -204,10 +218,11 @@ ldp
 leastsquares
 lede
 levenberg
-Lewy
+lewy
 lhci
 lightbox
 lighthouserc
+linearisation
 lineterm
 linkable
 linkages
@@ -231,6 +246,7 @@ markov
 markovian
 materialises
 mathbb
+mathbf
 mathrm
 matplotlib
 mavg
@@ -239,6 +255,7 @@ mcq
 mdx
 mealy
 mechatronics
+memorises
 microcontroller
 microcontrollers
 microformats
@@ -248,7 +265,10 @@ midheight
 midspan
 millimetres
 millis
+minimisation
+minimise
 minimiser
+minimising
 mins
 minterm
 minterms
@@ -262,6 +282,7 @@ monorepo
 montecarlo
 moore
 mqtt
+mtbf
 mult
 multiline
 multiplexed
@@ -272,6 +293,7 @@ mux
 mvp
 mypy
 naïve
+naïvely
 namespacing
 nand
 neighbour
@@ -301,6 +323,8 @@ openapi
 openml
 opentype
 optimisation
+optimising
+overcorrecting
 overfit
 overscan
 pagefind
@@ -314,6 +338,7 @@ parametrize
 parametrized
 parens
 parentheses
+parseval
 pathfind
 pathfinding
 pdfium
@@ -323,9 +348,11 @@ piecewise
 piecewisely
 pipeline
 pipelining
+plancherel
 playbook
 playbooks
 playwright
+pointwise
 poisson
 polya
 polylog
@@ -376,9 +403,14 @@ ratelimits
 rcrl
 rdbu
 realtime
+recognisable
+recognise
 recognised
+recognising
 regs
+regularisation
 regularised
+regulariser
 rendere
 renderer
 reocr
@@ -406,6 +438,7 @@ rxjs
 saml
 savart
 schroeder
+schwarz
 scikit
 scipy
 scrollable
@@ -438,6 +471,7 @@ sigmoids
 simd
 simulink
 sinc
+sincs
 skeuomorphic
 sklearn
 slugified
@@ -450,6 +484,7 @@ sparkline
 splinify
 sqlite
 ssr
+stabilise
 starlight
 stoplist
 storybook
@@ -478,8 +513,10 @@ substr
 substring
 substrings
 subtransitions
+summarised
 summarising
 sympy
+synchroniser
 synthesise
 syscall
 syscalls
@@ -520,6 +557,7 @@ tsx
 typesafe
 typescript
 typewriter
+uart
 ucs
 udls
 udp
@@ -607,6 +645,9 @@ webp
 whitelist
 whitelisted
 whitespace
+whittaker
+wideband
+widehat
 wifi
 wordmark
 writeup
@@ -627,3 +668,4 @@ zarr
 zk
 zod
 zsh
+

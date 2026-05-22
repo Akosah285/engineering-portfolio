@@ -25,6 +25,143 @@ import ShearMomentVisualizer from "../../components/demos/solid-mechanics/shear-
 import Stress3dVisualizer from "../../components/demos/solid-mechanics/stress-3d/Stress3dVisualizer";
 import { StressStrainVisualizer } from "../../components/demos/solid-mechanics/stress-strain/StressStrainVisualizer";
 import { TorsionVisualizer } from "../../components/demos/solid-mechanics/torsion/TorsionVisualizer";
+import Explainer from "../../components/Explainer.astro";
+import Step from "../../components/Step.astro";
+import TryThis from "../../components/TryThis.astro";
+import MathExpression from "../../components/demo-kit/MathExpression.astro";
+
+<Explainer demoTitle="Method of joints">
+  <Step>
+    <p>
+      Picture the metal triangles you can see inside a railway bridge,
+      or the crisscrossing bars above the ceiling of an old gymnasium.
+      Those are trusses — structures that carry surprisingly large loads
+      using only thin, straight members. The trick is geometric: arrange
+      the bars into triangles, bolt them together at the corners, and
+      the whole lattice becomes stiff. This demo lets you load any joint
+      of a few classic trusses and watch every bar's internal force fall
+      out of one tidy calculation.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      A truss has two strong assumptions baked in. First, every joint is
+      a frictionless pin — it transmits force but not moment. Second,
+      all loads are applied <em>only</em> at those joints, never along a
+      bar's length. Those two together mean every member is loaded only
+      by an axial pull or push from each end: no bending, no shear
+      inside a bar — just a single number per member, tension if
+      positive and compression if negative. That is the whole aha — the
+      most intimidating-looking lattice collapses to one scalar per bar.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Load the <strong>Simple Triangle</strong> preset: joints A(0,0),
+      B(4,0), C(2,2), with a pin at A, a y-roller at B, and a 4 kN
+      downward load at the apex C. By symmetry the vertical reactions
+      are 2 kN up at each support. Walk to joint C and write force
+      balance — <MathExpression latex="\sum F_x = 0" /> and
+      <MathExpression latex="\sum F_y = 0" /> — for the two diagonals
+      AC and BC plus the applied load. Both diagonals share the same
+      axial force by symmetry; they pull C downward and outward to add
+      to zero with the 4 kN load.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      The two diagonals come out the same:
+      <MathExpression latex="F_{AC} = F_{BC} \approx -2.83 \text{ kN}" />,
+      i.e. each is in compression carrying roughly 2.83 kN. Now drop to
+      joint A: the bottom chord AB pulls A rightward with tension
+      <MathExpression latex="F_{AB}" />, while AC pushes A leftward and
+      downward. Horizontal balance gives
+      <MathExpression latex="F_{AB} = +2 \text{ kN}" /> — a tension.
+      The bottom chord is stretching outward to stop the apex from
+      spreading the supports apart, which is exactly what you would
+      guess by squeezing a paper triangle flat on the table.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Now generalise. At each of J joints you write two scalar
+      equations, one for x and one for y, giving 2J equations in total.
+      Your unknowns are the M member forces plus R reaction components
+      from the supports — a pin contributes 2 reactions, a roller 1.
+      The system is exactly solvable when
+      <MathExpression latex="M + R = 2J" />. That is what statics
+      textbooks call <em>statically determinate</em> — translated, you
+      have exactly as many equations as unknowns, so there is one
+      answer and no guesswork about material stiffness.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Add a member without adding a joint and you have more unknowns
+      than equations: the truss is statically <em>indeterminate</em>,
+      and equilibrium alone cannot pin down the forces — you would need
+      material stiffness and a deformation-compatibility argument too.
+      Take a member away and the count tips the other way: too few
+      unknowns, the system is unsolvable, and the geometry usually
+      flops into a mechanism. This demo's solver checks the count up
+      front and surfaces an "unsolvable" badge instead of returning
+      nonsense.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Doing every joint by hand the way we did C and A works for a
+      triangle, but the <strong>Warren Truss</strong> preset already
+      has five joints and seven members — chasing the algebra by hand
+      gets tedious fast. The demo instead stacks every joint's two
+      equilibrium equations into one matrix system
+      <MathExpression latex="A \mathbf{x} = \mathbf{b}" />, where
+      <MathExpression latex="A" /> is a 2J × (M+R) geometry matrix of
+      direction cosines and <MathExpression latex="\mathbf{x}" />
+      packs the unknown member forces and reactions. LU decomposition
+      solves it in one shot.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Some bars carry no force at all under a given load. They are
+      still there because they stabilise the truss under different
+      load cases, but for this load they do nothing. Two giveaway
+      patterns: a joint with only two non-collinear members and no
+      load applied to it, or a joint with three members where two are
+      collinear. Toggle <strong>Show zero-force members</strong> on
+      the Warren preset and you will see a diagonal or two quietly
+      drop to zero — the geometry is doing the work without them.
+    </p>
+  </Step>
+  <Step>
+    <p>Try it yourself.</p>
+    <TryThis>
+      Switch to the <strong>Cantilever</strong> preset and slide the
+      load between joints J3 and J4. The top chord flips between
+      tension and compression as the load moves above or below the
+      neutral line — exactly the same sign change you will see later
+      when you reach <strong>Bending stress distribution</strong> and
+      watch <MathExpression latex="\sigma = My/I" /> change sign across
+      the neutral axis. A truss is doing in discrete bars what a beam
+      does in continuous fibres.
+    </TryThis>
+  </Step>
+  <Step>
+    <p>
+      So that is the method of joints: the simplest statics problem
+      where geometry alone — once you commit to pin-joints and
+      joint-only loads — gives you every internal force. The very next
+      demo, <strong>Beam deflection calculator</strong>, drops the
+      pin-joint assumption and lets bars bend, which is where moment,
+      curvature, and the flexural rigidity
+      <MathExpression latex="EI" /> enter the story. Read them
+      back-to-back: trusses count axial-only forces in discrete bars;
+      beams generalise the same equilibrium logic to a continuous
+      member that resists bending too.
+    </p>
+  </Step>
+</Explainer>
 
 <TrussAnalyzerVisualizer client:idle />
 
@@ -91,7 +228,6 @@ Tresca, von Mises, and maximum-normal-stress envelopes in σ₁–σ₂ space.
 ## Featured problems
 
 import FeaturedProblem from "../../components/FeaturedProblem.astro";
-import MathExpression from "../../components/demo-kit/MathExpression.astro";
 
 <FeaturedProblem
   kind="Featured Solution"

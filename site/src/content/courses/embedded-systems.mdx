@@ -27,6 +27,142 @@ import MqttVisualizer from "../../components/demos/embedded-systems/mqtt/MqttVis
 import { PwmVisualizer } from "../../components/demos/embedded-systems/pwm/PwmVisualizer";
 import RpmVisualizer from "../../components/demos/embedded-systems/rpm/RpmVisualizer";
 import { SevenSegmentVisualizer } from "../../components/demos/embedded-systems/seven-segment/SevenSegmentVisualizer";
+import Explainer from "../../components/Explainer.astro";
+import Step from "../../components/Step.astro";
+import TryThis from "../../components/TryThis.astro";
+import MathExpression from "../../components/demo-kit/MathExpression.astro";
+
+<Explainer demoTitle="Solar tracker">
+  <Step>
+    <p>
+      A sunflower follows the sun across the sky all day. Now picture
+      a solar panel doing the same — not because it looks pretty, but
+      because a panel pointed straight at the sun gathers roughly 40%
+      more energy than one bolted flat to a roof. The question is how
+      to make a £5 microcontroller do this without GPS, without an
+      astronomical clock, and without knowing what time it is. The
+      answer is wonderfully cheap: bolt two tiny light sensors to the
+      panel, one on each side, and let them argue.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      The sensors are LDRs — light-dependent resistors. Each one
+      returns a number that grows when more light hits it. Mount one
+      on the east edge of the panel and one on the west edge, and the
+      brighter sensor tells you which way the sun is. If east reads
+      higher, the sun is east of straight-ahead, so nudge the panel
+      east. If west reads higher, nudge west. Repeat forever. That is
+      the entire algorithm, and it does not care what hour it is or
+      what latitude you are at.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Pick the <strong>Morning east</strong> preset. The east LDR
+      reads 900, the west reads 200. Compute the difference:
+      <MathExpression latex="\Delta = E - W = 900 - 200 = 700" />.
+      Positive and large, so step east. The servo rotates by a small
+      fixed amount — the demo uses 2° per step. After one step the
+      panel sits 2° closer to the sun, both sensor readings shift
+      slightly, and the next iteration recomputes from there.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Run this loop many times and the panel walks toward the sun in
+      tiny steps. Early on the difference is huge, the algorithm
+      steps every iteration, and the panel sweeps quickly. As the
+      panel aligns, the east and west readings converge — the
+      difference shrinks toward zero. Eventually the sensors disagree
+      so little that stepping further would overshoot. That is when
+      the controller should stop, not because it ran out of power,
+      but because there is nothing useful left to do.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      That "stop when it is close enough" rule is the deadband.
+      Concretely: <MathExpression latex="|\Delta| \le d \;\Rightarrow\; \text{hold}" />.
+      With deadband <MathExpression latex="d = 5" />, the
+      <strong>Noon balanced</strong> preset (E=600, W=600,
+      <MathExpression latex="\Delta = 0" />) holds — obvious. But the
+      <strong>Slightly east</strong> preset (E=505, W=500,
+      <MathExpression latex="\Delta = 5" />) also holds, because 5 is
+      right at the threshold. Without a deadband the panel would
+      jitter east-west all day chasing one-unit sensor noise, draining
+      the battery and grinding the servo for no measurable energy
+      gain.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      The full decision rule is just three branches:
+    </p>
+    <MathExpression
+      latex="\text{dir} = \begin{cases} \text{hold} & |\Delta| \le d \\ \text{east} & \Delta > d \\ \text{west} & \Delta < -d \end{cases}"
+      display={true}
+    />
+    <p>
+      Two sensor reads, a subtraction, two comparisons, and a servo
+      write. The whole microcontroller program is maybe twenty lines
+      of C. No PID loop, no Kalman filter, no astronomical model — and
+      yet a real garden-lamp tracker uses exactly this.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Two more knobs keep it well-behaved in the real world. The step
+      size — 2° per iteration in the demo — sets how aggressively the
+      panel chases the sun; smaller steps are smoother but slower,
+      bigger steps overshoot and oscillate around the deadband. The
+      angle is also clamped to <MathExpression latex="\pm 90°" /> so
+      the panel cannot try to point at the ground when sunset confuses
+      the sensors. The demo flags clamped steps in the angle history
+      so you can see where the rule wanted to go versus where physics
+      let it.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      What makes this work is that the two sensors <em>are</em> a
+      gradient estimate. The difference <MathExpression latex="E - W" />
+      is a finite-difference approximation to the spatial derivative
+      of brightness across the panel, and stepping in its direction is
+      the cheapest possible gradient ascent. You are optimising
+      without ever writing down a cost function. In control-theory
+      language it is a bang-bang controller with a dead zone — the
+      same family as a thermostat that clicks the boiler on at 18°C
+      and off at 20°C.
+    </p>
+  </Step>
+  <Step>
+    <p>Try it yourself.</p>
+    <TryThis>
+      Load the <strong>Slightly east</strong> preset (E=505, W=500).
+      With the default deadband of 5 the controller holds and the
+      panel rests. Now drag the deadband slider down to 0. The same
+      sensor readings now trigger an "east" decision every iteration,
+      and the angle history starts crawling. That is the difference
+      between a battery that lasts a year and one that dies in a
+      month — decided by a single threshold value.
+    </TryThis>
+  </Step>
+  <Step>
+    <p>
+      So that is the tracker: two LDRs, a subtraction, a deadband, and
+      a servo. The same bang-bang-with-deadband pattern recurs across
+      the course — the <strong>traffic light</strong> FSM holds each
+      phase until a timer or sensor fires, and the
+      <strong>interrupt polling</strong> demo is the same "react when
+      the signal crosses a threshold" idea pushed down into the CPU.
+      Paired with the <strong>pwm</strong> visualiser, which is what
+      actually drives the servo into motion, this demo is the front
+      end of the embedded toolkit: turning a noisy analogue world into
+      one of three discrete decisions.
+    </p>
+  </Step>
+</Explainer>
 
 <SolarTrackerVisualizer client:idle />
 
@@ -99,7 +235,6 @@ supported via the standard `DeviceMotionEvent.requestPermission()` flow).
 ## Featured problems
 
 import FeaturedProblem from "../../components/FeaturedProblem.astro";
-import MathExpression from "../../components/demo-kit/MathExpression.astro";
 
 <FeaturedProblem
   kind="Featured Solution"

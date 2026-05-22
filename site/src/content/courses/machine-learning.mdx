@@ -21,6 +21,152 @@ draft: false
 import { GradientDescentVisualizer } from "../../components/demos/machine-learning/gradient-descent/GradientDescentVisualizer";
 import { PolynomialRegression } from "../../components/demos/machine-learning/polynomial-regression/PolynomialRegression";
 import { KMeansImageCompression } from "../../components/demos/machine-learning/k-means/KMeansImageCompression";
+import Explainer from "../../components/Explainer.astro";
+import Step from "../../components/Step.astro";
+import TryThis from "../../components/TryThis.astro";
+import MathExpression from "../../components/demo-kit/MathExpression.astro";
+
+<Explainer demoTitle="Gradient descent">
+  <Step>
+    <p>
+      Imagine you're hiking down into a valley wrapped in thick fog. You
+      can't see the bottom, you can't see ten metres ahead — but you can
+      feel the slope of the ground under your boots. So you do the only
+      sensible thing: turn to face whichever way is steepest downhill,
+      take a step, and repeat. Eventually, if the valley is well-behaved,
+      you reach the lowest point. That is gradient descent. The whole
+      algorithm. Every other detail is figuring out how big the step
+      should be, and what to do when the terrain misbehaves.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      To turn that picture into maths, you need three things. The terrain
+      is the loss function <MathExpression latex="L(x, y)" /> — every
+      point in the plane has a height, and we want the lowest. The slope
+      under your feet is the gradient <MathExpression latex="\nabla L" /> —
+      it points in the direction of steepest <em>increase</em>, so the
+      negative gradient points downhill. And the learning rate
+      <MathExpression latex="\eta" /> sets how big a step you take. The
+      update is one line:
+    </p>
+    <MathExpression
+      latex="x_{t+1} = x_t - \eta\, \nabla L(x_t)"
+      display={true}
+    />
+  </Step>
+  <Step>
+    <p>
+      Let's do one step by hand on the simplest surface. The
+      <strong> Bowl</strong> is <MathExpression latex="L(x, y) = x^2 + y^2" />,
+      shaped like the inside of a salad bowl with its minimum at the
+      origin. Its gradient is <MathExpression latex="\nabla L = (2x, 2y)" />.
+      Start at (2.5, 1.8); the gradient there is (5.0, 3.6). With
+      <MathExpression latex="\eta = 0.05" /> the update subtracts
+      0.05·(5.0, 3.6) = (0.25, 0.18). Your new position is (2.25, 1.62).
+      The loss dropped from 9.49 to 7.69. One step closer to the bottom.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Repeat that update and the trajectory walks straight into (0, 0).
+      On a bowl the negative gradient always points roughly toward the
+      centre, so every step gets you closer. Load the
+      <strong> Bowl (vanilla)</strong> preset and watch the green dot do
+      exactly this — it slows down as it approaches the minimum because
+      the gradient itself shrinks. Near the bottom the slope is gentle,
+      so the steps shrink in proportion and the iterates settle in.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      The single most important knob is <MathExpression latex="\eta" />.
+      Drag the <strong>Learning rate</strong> slider on the Bowl preset.
+      At <MathExpression latex="\eta = 0.001" /> the dot crawls — each
+      step is so timid it barely moves. At
+      <MathExpression latex="\eta = 0.05" /> it lands neatly. Past about
+      <MathExpression latex="\eta = 0.5" /> the step is so long it
+      overshoots the bottom and lands on the <em>opposite</em> wall of
+      the bowl, higher than it started. Crank it further and every step
+      is longer than the last; the iterates fling off to infinity.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Vanilla gradient descent treats each step independently — every
+      iteration restarts from rest. <strong>Momentum</strong> keeps a
+      running velocity <MathExpression latex="v" /> that the gradient
+      nudges, with coefficient <MathExpression latex="\beta" /> recycling
+      the previous velocity:
+    </p>
+    <MathExpression
+      latex="v_t = \beta\, v_{t-1} - \eta\, \nabla L(x_{t-1}), \quad x_t = x_{t-1} + v_t"
+      display={true}
+    />
+    <p>
+      A consistent downhill direction builds speed; transient zig-zags
+      cancel. Compare <strong>Bowl (vanilla)</strong>
+      (<MathExpression latex="\beta = 0" />) with
+      <strong> Bowl (momentum)</strong>
+      (<MathExpression latex="\beta = 0.9" />) — momentum reaches the
+      minimum in roughly a quarter of the steps.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Where momentum really pays off: load the
+      <strong> Rosenbrock valley</strong> preset. The surface is a
+      narrow, curving canyon with the minimum at (1, 1). The gradient
+      mostly points <em>across</em> the canyon walls — there's barely
+      any slope along the long axis. Vanilla GD bounces wall-to-wall
+      and crawls toward the minimum at a snail's pace. Momentum lets
+      the long-axis component build up while the cross-wall
+      oscillations cancel themselves out, so the dot threads the
+      canyon at speed.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      The other failure modes are on display in the remaining presets.
+      <strong> Saddle escape</strong> drops you near a saddle point where
+      the gradient is almost zero — vanilla GD stalls there indefinitely;
+      momentum eventually drifts off the ridge.
+      <strong> Vanishing plateau</strong> is the deep-learning nightmare:
+      far from the minimum the gradient shrinks to almost nothing, so
+      each step is tiny no matter what <MathExpression latex="\eta" /> you
+      pick. Cranking the learning rate or adding momentum is what
+      unsticks you.
+    </p>
+  </Step>
+  <Step>
+    <p>Try it yourself.</p>
+    <TryThis>
+      Load <strong>Rosenbrock valley</strong>, then drag momentum
+      <MathExpression latex="\beta" /> down to 0 while keeping
+      <MathExpression latex="\eta" /> at 0.001. Watch the dot pin itself
+      ricocheting between the canyon walls and barely move along the
+      valley floor. Now push <MathExpression latex="\beta" /> back up to
+      0.95 with the same <MathExpression latex="\eta" /> and the dot
+      suddenly threads the canyon — the gradient hasn't changed, you've
+      just stopped throwing away the history of where you were going.
+    </TryThis>
+  </Step>
+  <Step>
+    <p>
+      This same update is the engine underneath almost every model on
+      this page. The <strong>polynomial regression</strong> demo below
+      fits its coefficients by gradient descent on a least-squares loss,
+      and the K-means image compression demo runs an analogous
+      alternating minimisation that descends a clustering objective at
+      each pass. The Featured Solution
+      <em> Gradient descent convergence for an L²-regularised quadratic </em>
+      makes the η story from step 5 precise — it proves the sharp bound
+      on how large the learning rate can be before the iterates bounce
+      instead of converging, and generalises everything you just watched
+      to any convex quadratic.
+    </p>
+  </Step>
+</Explainer>
 
 <GradientDescentVisualizer client:idle />
 
@@ -64,7 +210,6 @@ palette under the panes is the K colours K-means picked.
 ## Featured problems
 
 import FeaturedProblem from "../../components/FeaturedProblem.astro";
-import MathExpression from "../../components/demo-kit/MathExpression.astro";
 
 <FeaturedProblem
   kind="Featured Solution"

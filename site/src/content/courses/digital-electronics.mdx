@@ -25,6 +25,139 @@ import LatchVsFfVisualizer from "../../components/demos/digital-electronics/latc
 import StopwatchFsmVisualizer from "../../components/demos/digital-electronics/stopwatch-fsm/StopwatchFsmVisualizer";
 import TruthTableVisualizer from "../../components/demos/digital-electronics/truth-table/TruthTableVisualizer";
 import VhdlWaveformVisualizer from "../../components/demos/digital-electronics/vhdl-waveform/VhdlWaveformVisualizer";
+import Explainer from "../../components/Explainer.astro";
+import Step from "../../components/Step.astro";
+import TryThis from "../../components/TryThis.astro";
+import MathExpression from "../../components/demo-kit/MathExpression.astro";
+
+<Explainer demoTitle="FSM Simulator">
+  <Step>
+    <p>
+      Every traffic light, every microwave timer, every dishwasher cycle is
+      built from the same small idea. There is a tiny brain inside that
+      knows which mode it is currently in, and which buttons or signals are
+      allowed to push it into a different mode. Press start on a microwave
+      and it goes from idle to cooking. Open the door and it pauses. Press
+      start again and it resumes. That decision-maker has a name — a
+      finite-state machine — and once you have seen one, you start
+      recognising them everywhere.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      This demo wraps a stopwatch — the same one from Lab 3. It has three
+      modes it can be in: <em>stopped</em> (waiting for you),
+      <em>ticking</em> (counting time up), and <em>paused</em> (frozen
+      mid-count, remembering where it left off). The buttons it understands
+      are start, pause, resume, reset, and a clock tick that fires every
+      time the crystal oscillator pulses. That is the entire vocabulary of
+      the machine — three states, five inputs, nothing else.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Load the <strong>Start then pause</strong> preset and step through it
+      by hand. The stopwatch begins in <em>stopped</em>. The first input is
+      start — it moves to <em>ticking</em>. The next input is a clock tick
+      — it stays in <em>ticking</em> (time is passing). Another tick —
+      still <em>ticking</em>. The final input is pause — it moves to
+      <em>paused</em>. Four button presses, and the machine landed exactly
+      where you expected. That is the whole loop: read an input, look up
+      the next mode, repeat.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Here is the punchline that makes state machines worth their name.
+      Press <strong>pause</strong> while the stopwatch is in
+      <em>stopped</em> — nothing happens. Press <strong>resume</strong>
+      while it is in <em>ticking</em> — nothing happens. The same button
+      does different things depending on where the machine currently is.
+      That is the difference between this and a calculator: the answer
+      depends not only on what you just pressed, but on the history of
+      everything you pressed before it, collapsed down into the current
+      mode.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      That lookup rule has a name. Write it as
+      <MathExpression latex="\delta(s, i) = s'" /> — given current state
+      <em>s</em> and input <em>i</em>, the function δ returns the next
+      state <em>s'</em>. For the stopwatch,
+      <MathExpression latex="\delta(\text{stopped}, \text{start}) = \text{ticking}" />
+      and
+      <MathExpression latex="\delta(\text{ticking}, \text{pause}) = \text{paused}" />,
+      and so on. Anything not in the table — like pressing pause from
+      stopped — simply maps the state back to itself:
+      <MathExpression latex="\delta(s, i) = s" />. A real FSM is just this
+      table plus an initial state.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      The stopwatch is what is called a <em>Moore</em> machine: the only
+      thing it shows to the outside world — the indicator light reading
+      stopped, ticking, or paused — depends purely on which state it is
+      in. The light only changes once the state has changed. The
+      alternative, a <em>Mealy</em> machine, would let the output depend
+      on the input as well, so a label could light the instant you press a
+      button without waiting for the next clock edge. Moore behaviour is
+      calmer and easier to time; Mealy is faster but jumpier.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Three states means the machine needs
+      <MathExpression latex="\lceil \log_2 3 \rceil = 2" /> bits to
+      remember where it is — say <code>00</code> for stopped,
+      <code>01</code> for ticking, <code>10</code> for paused. The fourth
+      pattern <code>11</code> is unused, which is a free defensive
+      feature: if a glitch or a bad reset ever flips the register into
+      <code>11</code>, you can route that case straight to a fallback
+      transition back to stopped. Two flip-flops, three legal states, and
+      one paranoid spare.
+    </p>
+  </Step>
+  <Step>
+    <p>
+      Reset is the one input that ignores everything else. From
+      <em>stopped</em>, from <em>ticking</em>, from <em>paused</em> —
+      pressing reset always sends the machine back to <em>stopped</em>
+      with the count cleared. Load the <strong>Reset from running</strong>
+      preset to watch the stopwatch tick for a beat and then snap straight
+      to idle. Most real digital systems wire a synchronous reset like
+      this onto every register, so a single power-on pulse drops the
+      entire chip into a known starting position before the first useful
+      clock cycle.
+    </p>
+  </Step>
+  <Step>
+    <p>Try it yourself.</p>
+    <TryThis>
+      Load the <strong>Never started</strong> preset. The input sequence
+      is just tick, tick, reset — clock pulses arriving before anyone has
+      pressed start. Watch what happens: the stopwatch sits in
+      <em>stopped</em> and ignores every tick. The clock is wired up and
+      running, but the machine refuses to count until you tell it to.
+      That is the difference between a clock and an enable; an FSM only
+      reacts to the inputs that its current state actually listens for.
+    </TryThis>
+  </Step>
+  <Step>
+    <p>
+      So a finite-state machine is just three things: a current mode, a
+      table of <MathExpression latex="\delta(s, i) \to s'" /> arrows, and
+      a rule for what to output once you land. The <strong>Stopwatch FSM
+      animation</strong> demo further down the page paints those same
+      transitions onto a circle-and-arrow diagram and lets you walk the
+      clock yourself; the featured problem on the <em>1011 sequence
+      detector</em> builds on the same machinery to recognise patterns in
+      a bitstream, and shows how a Mealy encoding can shave a flip-flop
+      off the design. Same algorithm, different jobs.
+    </p>
+  </Step>
+</Explainer>
 
 <FsmSimulatorVisualizer client:idle />
 
@@ -86,7 +219,6 @@ Lab 3 stopwatch FSM with start, stop, and reset transitions animated.
 ## Featured problems
 
 import FeaturedProblem from "../../components/FeaturedProblem.astro";
-import MathExpression from "../../components/demo-kit/MathExpression.astro";
 
 <FeaturedProblem
   kind="Featured Solution"
