@@ -38,9 +38,7 @@ interface Course {
 const COURSES_DIR = resolve(__dirname, "..", "courses");
 const DEMOS_DIR = resolve(__dirname, "..", "..", "components", "demos");
 
-const PUBLISHED_COURSES = (coursesData as Course[]).filter(
-  (c) => c.publishedAt !== null,
-);
+const PUBLISHED_COURSES = (coursesData as Course[]).filter((c) => c.publishedAt !== null);
 
 function readMdx(slug: string): string {
   return readFileSync(resolve(COURSES_DIR, `${slug}.mdx`), "utf8");
@@ -50,9 +48,7 @@ function readMdx(slug: string): string {
  * Extract every <Explainer ...>...</Explainer> block from raw MDX.
  * Returns the opening tag and the body for each.
  */
-function extractExplainers(
-  mdx: string,
-): Array<{ openTag: string; body: string }> {
+function extractExplainers(mdx: string): Array<{ openTag: string; body: string }> {
   const results: Array<{ openTag: string; body: string }> = [];
   const openPattern = /<Explainer\b/g;
   let match: RegExpExecArray | null;
@@ -148,7 +144,7 @@ function extractH2Titles(mdx: string): string[] {
   const titles: string[] = [];
   for (const line of mdx.split(/\r?\n/)) {
     const match = line.match(/^##\s+(.+?)\s*$/);
-    if (match && match[1]) titles.push(match[1]);
+    if (match?.[1]) titles.push(match[1]);
   }
   return titles;
 }
@@ -174,9 +170,7 @@ describe.each(PUBLISHED_COURSES)("explainers — $slug", (course: Course) => {
     expect(mdx).toMatch(
       /import\s+Explainer\s+from\s+"\.\.\/\.\.\/components\/Explainer\.astro"/,
     );
-    expect(mdx).toMatch(
-      /import\s+Step\s+from\s+"\.\.\/\.\.\/components\/Step\.astro"/,
-    );
+    expect(mdx).toMatch(/import\s+Step\s+from\s+"\.\.\/\.\.\/components\/Step\.astro"/);
     expect(mdx).toMatch(
       /import\s+TryThis\s+from\s+"\.\.\/\.\.\/components\/TryThis\.astro"/,
     );
@@ -250,12 +244,8 @@ describe.each(PUBLISHED_COURSES)("explainers — $slug", (course: Course) => {
       it("(e+h) last step references another demo or FP on the site", () => {
         const last = steps[steps.length - 1];
         if (last === undefined) throw new Error("no last step");
-        const otherDemoSlugs = ALL_DEMO_SLUGS.filter(
-          (s) => !openTag.includes(`"${s}"`),
-        );
-        const otherH2 = h2Titles.filter(
-          (t) => !openTag.includes(`demoTitle="${t}"`),
-        );
+        const otherDemoSlugs = ALL_DEMO_SLUGS.filter((s) => !openTag.includes(`"${s}"`));
+        const otherH2 = h2Titles.filter((t) => !openTag.includes(`demoTitle="${t}"`));
 
         const referencesOtherDemoSlug = otherDemoSlugs.some((s) =>
           last.toLowerCase().includes(s.toLowerCase().replace(/-/g, " ")),
@@ -266,18 +256,14 @@ describe.each(PUBLISHED_COURSES)("explainers — $slug", (course: Course) => {
         const referencesFp = fpTitles.some((t) =>
           last.toLowerCase().includes(t.toLowerCase()),
         );
-        const hasConnectVerb = /\b(see|next|paired? with|builds? on|same|connects?|generalis(?:e|es)|extends?)\b/i.test(
-          last,
-        );
+        const hasConnectVerb =
+          /\b(see|next|paired? with|builds? on|same|connects?|generalis(?:e|es)|extends?)\b/i.test(
+            last,
+          );
 
         expect(
-          referencesOtherDemoSlug ||
-            referencesOtherH2 ||
-            referencesFp ||
-            hasConnectVerb,
-          `last step lacks a cross-reference; ` +
-            `expected mention of a same-site demo, an H2 demo title, a Featured Problem title, ` +
-            `or a connective verb. Got: ${last.slice(0, 200)}...`,
+          referencesOtherDemoSlug || referencesOtherH2 || referencesFp || hasConnectVerb,
+          `last step lacks a cross-reference; expected mention of a same-site demo, an H2 demo title, a Featured Problem title, or a connective verb. Got: ${last.slice(0, 200)}...`,
         ).toBe(true);
       });
     },
