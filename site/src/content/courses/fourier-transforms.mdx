@@ -227,6 +227,59 @@ import MathExpression from "../../components/demo-kit/MathExpression.astro";
   </p>
 </FeaturedProblem>
 
+<FeaturedProblem
+  kind="Featured Solution"
+  title="Time-bandwidth product — why the Gaussian saturates Δt · Δω ≥ 1/2"
+  attribution="Adapted from Dartmouth ENGS 32, FA20."
+>
+  <p>
+    Define the time- and frequency-domain spreads of a normalised
+    signal <MathExpression latex="f(t)" /> with transform
+    <MathExpression latex="\hat{f}(\omega)" /> by the second moments
+  </p>
+  <MathExpression
+    latex="(\Delta t)^2 = \int t^2 |f(t)|^2 \, dt,\qquad (\Delta \omega)^2 = \int \omega^2 |\hat{f}(\omega)|^2 \, \frac{d\omega}{2\pi}"
+    display={true}
+  />
+  <p>
+    (assuming the signal is centred at the origin in both domains and
+    normalised by Plancherel). The Fourier uncertainty principle
+    asserts
+    <MathExpression latex="\Delta t \cdot \Delta \omega \geq \tfrac{1}{2}" />
+    with equality only for Gaussian pulses. The proof is the
+    Cauchy–Schwarz inequality applied to
+    <MathExpression latex="\langle t f, f' \rangle" /> plus one
+    integration by parts.
+  </p>
+  <p>
+    Write <MathExpression latex="i \omega \hat{f} = \widehat{f'}" />,
+    so by Plancherel
+    <MathExpression latex="\Delta \omega^2 = \int |f'(t)|^2 \, dt" />.
+    Cauchy–Schwarz gives
+    <MathExpression latex="\left| \int t f(t) \overline{f'(t)} \, dt \right|^2 \leq \Delta t^2 \cdot \Delta \omega^2" />.
+    The left-hand side equals
+    <MathExpression latex="\left| \tfrac{1}{2} \int t \, (|f|^2)' \, dt \right|^2 = \tfrac{1}{4} \left| \int |f|^2 \, dt \right|^2 = \tfrac{1}{4}" />
+    after one integration by parts on the assumption
+    <MathExpression latex="|f|^2 \to 0" /> at infinity. Combining:
+    <MathExpression latex="\Delta t^2 \cdot \Delta \omega^2 \geq 1/4" />.
+  </p>
+  <p>
+    Equality in Cauchy–Schwarz requires
+    <MathExpression latex="f'(t) = -k t f(t)" /> for some
+    <MathExpression latex="k > 0" />, whose only square-integrable
+    solution is the Gaussian
+    <MathExpression latex="f(t) \propto e^{-kt^2/2}" />. That single
+    inequality re-skins as the Heisenberg uncertainty principle in
+    quantum mechanics (where it becomes
+    <MathExpression latex="\Delta x \cdot \Delta p \geq \hbar / 2" />),
+    as the diffraction limit in optics, and as the time–frequency
+    trade-off that forces a short pulse to be wideband (and vice
+    versa). The spectrogram demo on this page is the same inequality
+    drawn on a screen — squeeze the analysis window to sharpen onset
+    timing and you'll watch frequency resolution blur in lockstep.
+  </p>
+</FeaturedProblem>
+
 ## What's coming
 
 The author's written reflection lands alongside the v3 interview. The demos
